@@ -163,6 +163,16 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
+	OpenWindow = true;
+
+	ImGui::Begin("QUIT WINDOW", &OpenWindow);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+	ImGui::Text("PRESS ME TO EXIT!");
+	if (ImGui::Button("QUIT"))
+	{
+		return UPDATE_STOP;
+	}
+	ImGui::End();
+
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	ImGui::ShowDemoWindow();
 
