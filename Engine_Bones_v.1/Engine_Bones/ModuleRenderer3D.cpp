@@ -205,6 +205,8 @@ bool ModuleRenderer3D::ImGuiWindows()
 	// Window Demo from ImGuy
 	ImGui::ShowDemoWindow();
 
+	//Sonia Toolbar
+
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	// Rendering
