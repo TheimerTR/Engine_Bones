@@ -206,6 +206,37 @@ bool ModuleRenderer3D::ImGuiWindows()
 	ImGui::ShowDemoWindow();
 
 	//Sonia Toolbar
+	bool ShowMenu; 
+
+	ImGui::Begin("Tool bar", &ShowMenu, ImGuiWindowFlags_MenuBar);
+
+	if (ImGui::BeginMenuBar()) {
+
+		if (ImGui::BeginMenu("Menu")) {
+
+			if (ImGui::MenuItem("New")) {}
+			if (ImGui::MenuItem("Open")) {}
+			if (ImGui::MenuItem("Save")) {}
+
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Settings")) {
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar(); 
+	}
+
+	ImGui::Text("Lo logree :D"); 
+
+	ImGui::End();
+ 
+   
+
+
+	
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
