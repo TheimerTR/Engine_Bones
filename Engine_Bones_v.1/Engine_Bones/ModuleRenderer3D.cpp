@@ -210,10 +210,10 @@ bool ModuleRenderer3D::ImGuiWindows()
 
 	ImGui::Begin("Tool bar", &ShowMenu, ImGuiWindowFlags_MenuBar);
 
-	if (ImGui::BeginMenuBar()) {
-
-		if (ImGui::BeginMenu("Menu")) {
-
+	if (ImGui::BeginMenuBar()) 
+	{
+		if (ImGui::BeginMenu("Menu")) 
+		{
 			if (ImGui::MenuItem("New")) {}
 			if (ImGui::MenuItem("Open")) {}
 			if (ImGui::MenuItem("Save")) {}
@@ -221,8 +221,8 @@ bool ModuleRenderer3D::ImGuiWindows()
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Settings")) {
-
+		if (ImGui::BeginMenu("Settings"))
+		{
 			ImGui::EndMenu();
 		}
 
