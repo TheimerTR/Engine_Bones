@@ -42,6 +42,8 @@ bool Application::Init()
 {
 	bool ret = true;
 
+	max_FPS = 60;
+
 	// Call Init() in all modules
 	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret; ++it)
 	{
@@ -49,7 +51,7 @@ bool Application::Init()
 	}
 
 	// After all Init calls we call Start() in all modules
-	LOG("Application Start --------------");
+	LOG(LogTypeCase::L_CASUAL, "Application Start --------------");
 	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret; ++it)
 	{
 		(*it)->Start();
@@ -69,6 +71,19 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	Uint32 last_frame_ms = ms_timer.Read();
+	float wait_time = (1000.f / (float)max_FPS) - (float)last_frame_ms;
+	SDL_Delay(static_cast<Uint32>(fabs(wait_time)));
+}
+
+float Application::GetDeltaTime() const
+{
+	return dt;
+}
+
+float Application::GetFrameRate() const
+{
+	return 1.f / dt;
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules

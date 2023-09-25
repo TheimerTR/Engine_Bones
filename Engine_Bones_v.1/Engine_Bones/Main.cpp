@@ -6,6 +6,8 @@
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
 
+#include "mmgr/mmgr.h"
+
 enum main_states
 {
 	MAIN_CREATION,
@@ -17,7 +19,7 @@ enum main_states
 
 int main(int argc, char ** argv)
 {
-	LOG("Starting game '%s'...", TITLE);
+	LOG(LogTypeCase::L_CASUAL, "Starting game '%s'...", TITLE);
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
@@ -29,23 +31,23 @@ int main(int argc, char ** argv)
 		{
 		case MAIN_CREATION:
 
-			LOG("-------------- Application Creation --------------");
+			LOG(LogTypeCase::L_CASUAL, "-------------- Application Creation --------------");
 			App = new Application();
 			state = MAIN_START;
 			break;
 
 		case MAIN_START:
 
-			LOG("-------------- Application Init --------------");
+			LOG(LogTypeCase::L_CASUAL, "-------------- Application Init --------------");
 			if (App->Init() == false)
 			{
-				LOG("Application Init exits with ERROR");
+				LOG(LogTypeCase::L_CASUAL, "Application Init exits with ERROR");
 				state = MAIN_EXIT;
 			}
 			else
 			{
 				state = MAIN_UPDATE;
-				LOG("-------------- Application Update --------------");
+				LOG(LogTypeCase::L_CASUAL, "-------------- Application Update --------------");
 			}
 
 			break;
@@ -56,7 +58,7 @@ int main(int argc, char ** argv)
 
 			if (update_return == UPDATE_ERROR)
 			{
-				LOG("Application Update exits with ERROR");
+				LOG(LogTypeCase::L_CASUAL, "Application Update exits with ERROR");
 				state = MAIN_EXIT;
 			}
 
@@ -67,10 +69,10 @@ int main(int argc, char ** argv)
 
 		case MAIN_FINISH:
 
-			LOG("-------------- Application CleanUp --------------");
+			LOG(LogTypeCase::L_CASUAL, "-------------- Application CleanUp --------------");
 			if (App->CleanUp() == false)
 			{
-				LOG("Application CleanUp exits with ERROR");
+				LOG(LogTypeCase::L_CASUAL, "Application CleanUp exits with ERROR");
 			}
 			else
 				main_return = EXIT_SUCCESS;
@@ -82,7 +84,9 @@ int main(int argc, char ** argv)
 		}
 	}
 
+	int leaks = MAX(0, m_getMemoryStatistics().totalAllocUnitCount - 23);
 	delete App;
-	LOG("Exiting game '%s'...\n", TITLE);
+	LOG(LogTypeCase::L_CASUAL, "With %d memory leaks!\n", (leaks > 0) ? leaks : 0);
+	LOG(LogTypeCase::L_CASUAL, "Exiting game '%s'...\n", TITLE);
 	return main_return;
 }

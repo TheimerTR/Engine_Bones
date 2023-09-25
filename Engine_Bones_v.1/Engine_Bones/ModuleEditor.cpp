@@ -14,14 +14,16 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "C_Math.h"
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-
+	mFPSLOG.reserve(MAX_LOG_FPS);
 }
 
 ModuleEditor::~ModuleEditor()
 {
+	mFPSLOG.clear();
 }
 
 bool ModuleEditor::Init()
@@ -74,8 +76,15 @@ bool ModuleEditor::DrawEditor()
 
 	if(ImGui::Begin("Configuration"))
 	{
-		//ImGui::PlotHistogram("FPS", &mFPSLOG.data(), mFPS.size());
+		float c_FPS = floorf(App->GetFrameRate());
+		C_Math::VectorPushBack(mFPSLOG, c_FPS);
 
+		ImGui::PlotHistogram("FPS", &mFPSLOG[0], mFPSLOG.size(), 0, NULL, 0.0f, 100.0f, ImVec2(300, 100));
+
+		if (ImGui::SliderInt("Select the MaxFPS", &App->max_FPS, -1, 200, NULL))
+		{
+			App->max_FPS = App->max_FPS;
+		}
 	}
 	ImGui::End();
 

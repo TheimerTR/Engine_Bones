@@ -36,6 +36,11 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	float GetDeltaTime() const;
+	float GetFrameRate() const;
+
+	int max_FPS = 60;
+
 private:
 
 	void AddModule(Module* mod);

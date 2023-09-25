@@ -40,6 +40,12 @@
     <Filter Include="Sources\ImGui">
       <UniqueIdentifier>{7054f6f9-8292-4300-af61-897c4e50abe6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\mmgr">
+      <UniqueIdentifier>{fdc2daa1-0d9c-4886-bc7a-dcf3c202baa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Parson">
+      <UniqueIdentifier>{888e2bf1-364a-49e0-b30a-e91241629756}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -288,6 +294,18 @@
     <ClInclude Include="ModuleEditor.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="mmgr\mmgr.h">
+      <Filter>Sources\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\nommgr.h">
+      <Filter>Sources\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Parson\parson.h">
+      <Filter>Sources\Parson</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Math.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -445,6 +463,12 @@
     </ClCompile>
     <ClCompile Include="ModuleEditor.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="mmgr\mmgr.cpp">
+      <Filter>Sources\mmgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Parson\parson.c">
+      <Filter>Sources\Parson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
