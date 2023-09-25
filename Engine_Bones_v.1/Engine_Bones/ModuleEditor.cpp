@@ -3,6 +3,13 @@
 #include "ImGui/imgui.h"
 #include "ImGui/backends/imgui_impl_sdl2.h"
 #include "ImGui/backends/imgui_impl_opengl3.h"
+#include <stdio.h>
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+#include <SDL_opengles2.h>
+#else
+#include "SDL/include/SDL_opengl.h"
+#endif
+
 
 #include "Application.h"
 #include "ModuleWindow.h"
@@ -32,15 +39,13 @@ bool ModuleEditor::Init()
 
 	// Init SDL2 and OPENGL3 to render 
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
-	ImGui_ImplOpenGL3_Init();
+	ImGui_ImplOpenGL3_Init("#version 130");
 
 	return true;
 }
 
 bool ModuleEditor::DrawEditor()
 {
-
-
 	// Create a New frame for ImGuy
 	ImGui_ImplSDL2_NewFrame();
 	ImGui_ImplOpenGL3_NewFrame();
@@ -63,15 +68,16 @@ bool ModuleEditor::DrawEditor()
 			ImGui::Text("Hello World!");
 			ImGui::EndMenu();
 		}
-		ImGui::EndMainMenuBar();
 	}
+
+	ImGui::EndMainMenuBar();
 
 	if(ImGui::Begin("Configuration"))
 	{
 		//ImGui::PlotHistogram("FPS", &mFPSLOG.data(), mFPS.size());
 
-		ImGui::End();
 	}
+	ImGui::End();
 
 	////Simple box to close the app
 	//OpenWindow = true;
@@ -116,14 +122,13 @@ bool ModuleEditor::DrawEditor()
 	//ImGui::End();
 
 
-	//ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-	//// Rendering
-	//ImGui::Render();
-	//glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+	// Rendering
+	ImGui::Render();
+	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
-	//ImGui::Render();
-	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	return true;
 }

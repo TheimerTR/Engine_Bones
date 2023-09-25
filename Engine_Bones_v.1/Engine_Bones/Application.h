@@ -7,6 +7,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleInput.h"
 #include "ModuleWindow.h"
 
 #include<vector>

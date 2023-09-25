@@ -8,7 +8,7 @@
 #include "ModuleEditor.h"
 
 #include "ImGui/imgui.h"
-#include "ImGui/backends/imgui_impl_sdl.h"
+#include "ImGui/backends/imgui_impl_sdl2.h"
 #include "ImGui/backends/imgui_impl_opengl3.h"
 #include <stdio.h>
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -118,8 +118,6 @@ bool ModuleRenderer3D::Init()
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-	App->editor->Init();
 
 	Grid.axis = true;
 
