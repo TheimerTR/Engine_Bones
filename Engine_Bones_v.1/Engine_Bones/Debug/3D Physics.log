@@ -1,5 +1,33 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(491,5): warning MSB8028: El directorio intermedio (Debug\) contiene archivos compartidos de otro proyecto (3D Physics - class5.vcxproj, 3D Physics.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
-  ModuleRenderer3D.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_math_defines.h(22,1): warning C4005: 'M_PI': redefinición de macro
-C:\Users\Alber\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\SDL\include\SDL_stdinc.h(619): message : vea la definición anterior de 'M_PI'
-  3D Physics.vcxproj -> C:\Users\Alber\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Debug\Engine_Bones.exe
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (3D Physics - class5.vcxproj, 3D Physics.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Application.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\corecrt_math_defines.h(28,1): warning C4005: 'M_PI': macro redefinition
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\SDL\include\SDL_stdinc.h(619): message : see previous definition of 'M_PI'
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Application.cpp(12,31): error C2027: use of undefined type 'ModuleInput'
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Application.h(18): message : see declaration of 'ModuleInput'
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Application.cpp(24,17): error C2664: 'void Application::AddModule(Module *)': cannot convert argument 1 from 'ModuleInput *' to 'Module *'
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Application.cpp(24,12): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Application.h(40,7): message : see declaration of 'Application::AddModule'
+  imgui_impl_opengl3.cpp
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\ImGui\backends\imgui_impl_opengl3.cpp(106,10): fatal error C1083: Cannot open include file: 'ImGui/imgui.h': No such file or directory
+  ModuleCamera3D.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\corecrt_math_defines.h(28,1): warning C4005: 'M_PI': macro redefinition
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\SDL\include\SDL_stdinc.h(619): message : see previous definition of 'M_PI'
+  ModuleEditor.cpp
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Module.h(30,24): error C3646: 'PreUpdate': unknown override specifier
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Module.h(30,34): error C2062: type 'float' unexpected
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Module.h(31,2): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Module.h(35,24): error C3646: 'Update': unknown override specifier
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Module.h(35,31): error C2062: type 'float' unexpected
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Module.h(36,2): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Module.h(40,24): error C3646: 'PostUpdate': unknown override specifier
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Module.h(40,35): error C2062: type 'float' unexpected
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\Module.h(41,2): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\corecrt_math_defines.h(28,1): warning C4005: 'M_PI': macro redefinition
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\SDL\include\SDL_stdinc.h(619): message : see previous definition of 'M_PI'
+  ModuleInput.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\corecrt_math_defines.h(28,1): warning C4005: 'M_PI': macro redefinition
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\SDL\include\SDL_stdinc.h(619): message : see previous definition of 'M_PI'
+  ModuleWindow.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\corecrt_math_defines.h(28,1): warning C4005: 'M_PI': macro redefinition
+C:\Users\albertohg\Documents\GitHub\Engine_Bones\Engine_Bones_v.1\Engine_Bones\SDL\include\SDL_stdinc.h(619): message : see previous definition of 'M_PI'
+  Generating Code...
