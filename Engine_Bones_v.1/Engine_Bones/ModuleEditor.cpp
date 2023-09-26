@@ -10,6 +10,7 @@
 #include "SDL/include/SDL_opengl.h"
 #endif
 
+#include "ImGuiCandy/candy.h"
 
 #include "Application.h"
 #include "ModuleWindow.h"
@@ -58,11 +59,42 @@ bool ModuleEditor::DrawEditor()
 	{
 		if (ImGui::BeginMenu("Editor"))
 		{
-			ImGui::Text("Hello World!");
-
 			if (ImGui::MenuItem("QUIT"))
 			{
 				App->QuitApp();
+			}
+			if (ImGui::BeginMenu("Theme"))
+			{
+				if (ImGui::MenuItem("Classic"))
+				{
+					ImGui::StyleColorsClassic();
+				}
+				if (ImGui::MenuItem("Ligth"))
+				{
+					ImGui::StyleColorsLight();
+				}
+				if (ImGui::MenuItem("Dark"))
+				{
+					ImGui::StyleColorsDark();
+				}
+				if (ImGui::MenuItem("Nord"))
+				{
+					ImCandy::Theme_Nord();
+				}
+				if (ImGui::MenuItem("Blender Dark"))
+				{
+					ImCandy::Theme_Blender();
+				}
+				if (ImGui::MenuItem("Cyberpunk Neon"))
+				{
+					ImCandy::Theme_Cyberpunk();
+				}	
+				/*if (ImGui::MenuItem("Rainbow"))
+				{
+					static double s1 = 0.0;
+					ImGui::PushStyleColor(ImGuiCol_Border, ImCandy::Rainbow(s1));
+				}*/
+				ImGui::EndMenu();
 			}
 			ImGui::EndMenu();
 		}

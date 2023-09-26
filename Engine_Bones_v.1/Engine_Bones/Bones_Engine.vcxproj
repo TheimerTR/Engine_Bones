@@ -84,6 +84,8 @@
     <ClInclude Include="C_Math.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="ImGuiCandy\candy.h" />
+    <ClInclude Include="ImGuiCandy\gradient.h" />
     <ClInclude Include="ImGui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="ImGui\backends\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="ImGui\backends\imgui_impl_sdl.h" />
