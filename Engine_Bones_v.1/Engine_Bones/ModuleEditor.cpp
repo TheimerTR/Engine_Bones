@@ -55,8 +55,16 @@ bool ModuleEditor::DrawEditor()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui::NewFrame();
 
+	ImGui::ShowDemoWindow(); 
+
 	if (ImGui::BeginMainMenuBar())
 	{
+		if (ImGui::BeginMenu("File"))
+		{
+			ImGui::Text("Hello World!");
+			ImGui::EndMenu();
+		}
+
 		if (ImGui::BeginMenu("Editor"))
 		{
 			if (ImGui::MenuItem("QUIT"))
@@ -98,21 +106,40 @@ bool ModuleEditor::DrawEditor()
 			}
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("File"))
-		{
-			ImGui::Text("Hello World!");
-			ImGui::EndMenu();
-		}
+		
 		if (ImGui::BeginMenu("Assets"))
 		{
 			ImGui::Text("Hello World!");
 			ImGui::EndMenu();
 		}
+
 		if (ImGui::BeginMenu("Help"))
 		{
-			ImGui::Text("Hello World!");
+
+			if (ImGui::Button("About"))
+			{
+				ImGui::OpenPopup("About");
+			}
+
+			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+			bool close = true; 
+
+			if(ImGui::BeginPopupModal("About", &close, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				ImGui::Text("Bones Engine\n");
+				ImGui::Text("An Incredible 3D Game Engine which was made by a dinosaur :O");
+				ImGui::Separator(); 
+				ImGui::Text("Authors:\n");
+				ImGui::Text("Alberto Hidalgo Garcia\nSonia Cristina Ojeda Lanz");
+				ImGui::Text("\nThird Party Libraries used:"); 
+				ImGui::Text("\nLisence:\n MIT Lisence ");
+				ImGui::EndPopup();
+			}
 			ImGui::EndMenu();
 		}
+
 	}
 	ImGui::EndMainMenuBar();
 
