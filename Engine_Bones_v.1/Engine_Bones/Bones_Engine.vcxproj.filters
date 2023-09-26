@@ -276,7 +276,7 @@
     <ClInclude Include="ImGui\backends\imgui_impl_opengl3_loader.h">
       <Filter>Sources\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="ImGui\backends\imgui_impl_sdl.h">
+    <ClInclude Include="ImGui\backends\imgui_impl_sdl2.h">
       <Filter>Sources\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imgui_internal.h">
@@ -452,7 +452,7 @@
     <ClCompile Include="ImGui\backends\imgui_impl_opengl3.cpp">
       <Filter>Sources\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="ImGui\backends\imgui_impl_sdl.cpp">
+    <ClCompile Include="ImGui\backends\imgui_impl_sdl2.cpp">
       <Filter>Sources\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_tables.cpp">

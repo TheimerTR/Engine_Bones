@@ -34,7 +34,8 @@ bool ModuleEditor::Init()
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // IF using Docking Branch
 
 	// Select the color of the UI
 	ImGui::StyleColorsDark();
@@ -70,6 +71,11 @@ bool ModuleEditor::DrawEditor()
 			ImGui::Text("Hello World!");
 			ImGui::EndMenu();
 		}
+		/*if (ImGui::Button("Quit"))
+		{
+			return UPDATE_STOP;
+			ImGui::EndMenu();
+		}*/
 	}
 
 	ImGui::EndMainMenuBar();
