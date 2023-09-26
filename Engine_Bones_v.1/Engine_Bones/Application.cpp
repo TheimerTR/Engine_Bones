@@ -43,6 +43,7 @@ bool Application::Init()
 	bool ret = true;
 
 	max_FPS = 60;
+	QuitApplication = false;
 
 	// Call Init() in all modules
 	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret; ++it)
@@ -86,6 +87,11 @@ float Application::GetFrameRate() const
 	return 1.f / dt;
 }
 
+void Application::QuitApp() 
+{
+	QuitApplication = true;
+}
+
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
@@ -105,6 +111,11 @@ update_status Application::Update()
 	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret == UPDATE_CONTINUE; ++it)
 	{
 		ret = (*it)->PostUpdate(dt);
+	}
+
+	if(QuitApplication)
+	{
+		ret = UPDATE_STOP;
 	}
 
 	FinishUpdate();

@@ -56,6 +56,16 @@ bool ModuleEditor::DrawEditor()
 
 	if (ImGui::BeginMainMenuBar())
 	{
+		if (ImGui::BeginMenu("Editor"))
+		{
+			ImGui::Text("Hello World!");
+
+			if (ImGui::MenuItem("QUIT"))
+			{
+				App->QuitApp();
+			}
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("File"))
 		{
 			ImGui::Text("Hello World!");
@@ -71,13 +81,7 @@ bool ModuleEditor::DrawEditor()
 			ImGui::Text("Hello World!");
 			ImGui::EndMenu();
 		}
-		/*if (ImGui::Button("Quit"))
-		{
-			return UPDATE_STOP;
-			ImGui::EndMenu();
-		}*/
 	}
-
 	ImGui::EndMainMenuBar();
 
 	if(ImGui::Begin("Configuration"))

@@ -27,6 +27,8 @@ private:
 	float	dt;
 	std::vector<Module*> list_modules;
 
+	bool QuitApplication;
+
 public:
 
 	Application();
@@ -38,6 +40,8 @@ public:
 
 	float GetDeltaTime() const;
 	float GetFrameRate() const;
+
+	void QuitApp();
 
 	int max_FPS = 60;
 
