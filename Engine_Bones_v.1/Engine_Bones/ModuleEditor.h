@@ -21,8 +21,16 @@ public:
 	void AddFPS(const float aFPS);
 
 	std::vector<float> mFPSLOG;
+	
+	std::vector<std::string> l_Logs;
 
 	bool AboutWindow;
+	bool LogOutput;
+	bool GotToBottom;
+
+   
+
+
 };
 
 #endif

@@ -160,8 +160,32 @@ bool ModuleEditor::DrawEditor()
 	}
 	ImGui::End();
 
-		
+	if (LogOutput)
+	{
+		ImGui::Begin("Log Output", &LogOutput);
 
+		if (ImGui::Button("Clear")) ClearLogs(l_Logs);
+		//ImGui::SameLine();
+		//bool copyButton = ImGui::Button("Copy");
+		ImGui::Separator();
+		ImGui::BeginChild("scrolling");
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1));
+		//if (copyButton) ImGui::LogToClipboard();
+
+		for (int i = 0; i < l_Logs.size(); i++)
+		{
+			ImGui::Text("%s", l_Logs[i].c_str());
+		}
+		ImGui::End();
+
+		if (GotToBottom)
+			ImGui::SetScrollHereY(1.0f);
+		GotToBottom = false;
+
+		ImGui::PopStyleVar();
+		ImGui::EndChild();
+		ImGui::End();
+	}
 
 	
 

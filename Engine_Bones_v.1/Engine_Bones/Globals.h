@@ -6,6 +6,8 @@
 
 #include <windows.h>
 #include <stdio.h>
+#include <vector>
+#include <string>
 
 enum class LogTypeCase
 {
@@ -15,6 +17,10 @@ enum class LogTypeCase
 #define LOG(_type, format, ...) log(__FILE__, __LINE__, _type, format, __VA_ARGS__);
 
 void log(const char file[], int line, LogTypeCase _type, const char* format, ...);
+
+void ClearLogs(std::vector<std::string> l_Logs, ...);
+
+void AddLog(std::vector<std::string> l_Logs, std::string logText);
 
 #define CAP(n) ((n <= 0.0f) ? n=0.0f : (n >= 1.0f) ? n=1.0f : n=n)
 
