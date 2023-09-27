@@ -20,7 +20,7 @@ void log(const char file[], int line, LogTypeCase _type, const char* format, ...
 
 void ClearLogs(std::vector<std::string> l_Logs, ...);
 
-void AddLog(std::vector<std::string> l_Logs, std::string logText);
+void AddLog(std::string logText);
 
 #define CAP(n) ((n <= 0.0f) ? n=0.0f : (n >= 1.0f) ? n=1.0f : n=n)
 

@@ -24,7 +24,8 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 
 ModuleEditor::~ModuleEditor()
 {
-	mFPSLOG.clear();
+	ClearLogs(l_Logs);
+	C_Math::ClearInt(mFPSLOG);
 }
 
 bool ModuleEditor::Init()

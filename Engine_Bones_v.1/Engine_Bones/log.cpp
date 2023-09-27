@@ -23,7 +23,6 @@ void ClearLogs(std::vector<std::string> l_Logs, ...) //This method will remove t
 	for (int i = 0; i < l_Logs.size() - 1; i++) 
 	{
 		l_Logs.pop_back();
-		l_Logs[i] = " ";
 	}
 
 	l_Logs.clear();

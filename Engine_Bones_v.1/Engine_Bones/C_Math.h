@@ -32,6 +32,16 @@ namespace C_Math
 			vector.push_back(value);
 		}
 	}
+
+	void ClearInt(std::vector<float>& vector)
+	{
+		for (int i = 0; i < vector.size() - 1; i++)
+		{
+			vector.pop_back();
+		}
+
+		vector.clear();
+	}
 }
 
 #endif // _C_MATH_H_
