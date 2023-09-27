@@ -118,10 +118,27 @@ bool ModuleEditor::DrawEditor()
 		if (ImGui::BeginMenu("Help"))
 		{
 
-			if (ImGui::MenuItem("About"))
+			if (ImGui::Button("About"))
 			{
-				AboutWindow = !AboutWindow;
+				ImGui::OpenPopup("About");
 			}
+				ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+				ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+				bool close = true; 
+
+				if (ImGui::BeginPopupModal("About", &close, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+					ImGui::Text("Bones Engine\n");
+					ImGui::Text("An Incredible 3D Game Engine which was made by a dinosaur :O");
+					ImGui::Separator();
+					ImGui::Text("Authors:\n");
+					ImGui::Text("Alberto Hidalgo Garcia\nSonia Cristina Ojeda Lanz");
+					ImGui::Text("\nThird Party Libraries used:");
+					ImGui::Text("\nLisence:\n MIT Lisence ");
+
+					ImGui::EndPopup();
+				}
 			
 			ImGui::EndMenu();
 		}
@@ -143,23 +160,10 @@ bool ModuleEditor::DrawEditor()
 	}
 	ImGui::End();
 
-	if(AboutWindow)
-	{
-		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+		
 
-		ImGui::Begin("About", &AboutWindow, ImGuiWindowFlags_AlwaysAutoResize);
 
-		ImGui::Text("Bones Engine\n");
-		ImGui::Text("An Incredible 3D Game Engine which was made by a dinosaur :O");
-		ImGui::Separator();
-		ImGui::Text("Authors:\n");
-		ImGui::Text("Alberto Hidalgo Garcia\nSonia Cristina Ojeda Lanz");
-		ImGui::Text("\nThird Party Libraries used:");
-		ImGui::Text("\nLisence:\n MIT Lisence ");
-
-		ImGui::End();
-	}
+	
 
 	////Simple box to close the app
 	//OpenWindow = true;
