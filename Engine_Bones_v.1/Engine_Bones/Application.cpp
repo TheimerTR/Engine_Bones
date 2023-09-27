@@ -7,7 +7,7 @@
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
 
-extern Application* EngineExternal = nullptr;
+extern Application* app = nullptr;
 Application::Application()
 {
 	window = new ModuleWindow(this);
@@ -43,7 +43,7 @@ bool Application::Init()
 {
 	bool ret = true;
 
-	EngineExternal = this;
+	app = this;
 
 	max_FPS = 60;
 	QuitApplication = false;

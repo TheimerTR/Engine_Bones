@@ -30,6 +30,7 @@ ModuleEditor::~ModuleEditor()
 bool ModuleEditor::Init()
 {
 	AboutWindow = false;
+	LogOutput = false;
 
 	// Cheking Version of ImGuI and Init the Context
 	IMGUI_CHECKVERSION();
@@ -114,6 +115,17 @@ bool ModuleEditor::DrawEditor()
 			ImGui::Text("Hello World!");
 			ImGui::EndMenu();
 		}
+		
+		if (ImGui::BeginMenu("Windows"))
+		{
+			if (ImGui::MenuItem("Log Console"))
+			{
+				LogOutput = !LogOutput;
+				GotToBottom = !GotToBottom;
+			}
+
+			ImGui::EndMenu();
+		}
 
 		if (ImGui::BeginMenu("Help"))
 		{
@@ -157,37 +169,45 @@ bool ModuleEditor::DrawEditor()
 		{
 			App->max_FPS = App->max_FPS;
 		}
+
+		ImGui::End();
 	}
-	ImGui::End();
 
 	if (LogOutput)
 	{
-		ImGui::Begin("Log Output", &LogOutput);
+		ImGui::Begin("Log Output", &LogOutput); 
 
-		if (ImGui::Button("Clear")) ClearLogs(l_Logs);
-		//ImGui::SameLine();
-		//bool copyButton = ImGui::Button("Copy");
-		ImGui::Separator();
-		ImGui::BeginChild("scrolling");
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1));
-		//if (copyButton) ImGui::LogToClipboard();
+		//ImGui::Separator();
 
 		for (int i = 0; i < l_Logs.size(); i++)
 		{
 			ImGui::Text("%s", l_Logs[i].c_str());
 		}
+
+		ClearLogs(l_Logs);
+
+		//if (ImGui::Button("Clear"))
+		//{
+		//	ClearLogs(l_Logs);
+		//}
+
 		ImGui::End();
 
-		if (GotToBottom)
+		//ImGui::SameLine();
+		//bool copyButton = ImGui::Button("Copy");
+		/*ImGui::BeginChild("scrolling");*/
+		//ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1)); 
+		//if (copyButton) ImGui::LogToClipboard();
+
+		/*if (GotToBottom)
+		{
 			ImGui::SetScrollHereY(1.0f);
-		GotToBottom = false;
+			GotToBottom = false;
+		}*/
+		//ImGui::EndChild();
 
-		ImGui::PopStyleVar();
-		ImGui::EndChild();
-		ImGui::End();
+		//ImGui::PopStyleVar();
 	}
-
-	
 
 	////Simple box to close the app
 	//OpenWindow = true;

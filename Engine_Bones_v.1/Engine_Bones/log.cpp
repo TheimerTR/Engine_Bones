@@ -10,20 +10,26 @@
 #include <vector>
 #include <string>
 
-void AddLog(std::vector<std::string> l_Logs, std::string logText)
+void AddLog(std::string logText)
 {
-	if (&l_Logs != NULL)
+	if (&app->editor->l_Logs != NULL)
 	{
-		l_Logs.push_back(logText);
+		app->editor->l_Logs.push_back(logText);
 	}
 }
 
-void ClearLogs(std::vector<std::string> l_Logs, ...)
-{
+void ClearLogs(std::vector<std::string> l_Logs, ...) //This method will remove the last element 
+{            
+	for (int i = 0; i < l_Logs.size() - 1; i++) 
+	{
+		l_Logs.pop_back();
+		l_Logs[i] = " ";
+	}
+
 	l_Logs.clear();
 }
 
-std::string  RetLogs(std::string text)
+std::string RetLogs(std::string text)
 {
 	return text;
 }
@@ -42,10 +48,15 @@ void log(const char file[], int line, LogTypeCase _type, const char* format, ...
 	OutputDebugString(tmp_string2);
 
 	std::string log_text = std::string(tmp_string2);
-	//AddLog(EngineExternal->editor->l_Logs, log_text);
 
-	RetLogs(log_text);
-
+	if (app != nullptr)
+	{
+		if (app->editor != nullptr)
+		{
+			AddLog(log_text);
+			//RetLogs(log_text);
+		}
+	}
 }
 
 
