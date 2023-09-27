@@ -31,6 +31,7 @@ bool ModuleEditor::Init()
 {
 	AboutWindow = false;
 	LogOutput = false;
+	ThemeSelector = 2;
 
 	// Cheking Version of ImGuI and Init the Context
 	IMGUI_CHECKVERSION();
@@ -78,26 +79,32 @@ bool ModuleEditor::DrawEditor()
 			{
 				if (ImGui::MenuItem("Classic"))
 				{
+					ThemeSelector = 0;
 					ImGui::StyleColorsClassic();
 				}
 				if (ImGui::MenuItem("Ligth"))
 				{
+					ThemeSelector = 1;
 					ImGui::StyleColorsLight();
 				}
 				if (ImGui::MenuItem("Dark"))
 				{
+					ThemeSelector = 2;
 					ImGui::StyleColorsDark();
 				}
 				if (ImGui::MenuItem("Nord"))
 				{
+					ThemeSelector = 3;
 					ImCandy::Theme_Nord();
 				}
 				if (ImGui::MenuItem("Blender Dark"))
 				{
+					ThemeSelector = 4;
 					ImCandy::Theme_Blender();
 				}
 				if (ImGui::MenuItem("Cyberpunk Neon"))
 				{
+					ThemeSelector = 5;
 					ImCandy::Theme_Cyberpunk();
 				}	
 				/*if (ImGui::MenuItem("Rainbow"))
@@ -192,21 +199,6 @@ bool ModuleEditor::DrawEditor()
 		//}
 
 		ImGui::End();
-
-		//ImGui::SameLine();
-		//bool copyButton = ImGui::Button("Copy");
-		/*ImGui::BeginChild("scrolling");*/
-		//ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1)); 
-		//if (copyButton) ImGui::LogToClipboard();
-
-		/*if (GotToBottom)
-		{
-			ImGui::SetScrollHereY(1.0f);
-			GotToBottom = false;
-		}*/
-		//ImGui::EndChild();
-
-		//ImGui::PopStyleVar();
 	}
 
 	////Simple box to close the app
@@ -251,6 +243,29 @@ bool ModuleEditor::DrawEditor()
 
 	//ImGui::End();
 
+	switch (ThemeSelector)
+	{
+	case 0:
+		ImGui::StyleColorsClassic();
+		break;
+	case 1:
+		ImGui::StyleColorsLight();
+		break;
+	case 2:
+		ImGui::StyleColorsDark();
+		break;
+	case 3:
+		ImCandy::Theme_Nord();
+		break;
+	case 4:
+		ImCandy::Theme_Blender();
+		break;
+	case 5:
+		ImCandy::Theme_Cyberpunk();
+		break;
+	default:
+		break;
+	}
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -265,6 +280,8 @@ bool ModuleEditor::DrawEditor()
 
 bool ModuleEditor::CleanUp()
 {
+	ClearLogs(l_Logs);
+
 	// Cleanup of ImGui
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();

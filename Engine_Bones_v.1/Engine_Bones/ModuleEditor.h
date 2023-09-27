@@ -28,9 +28,7 @@ public:
 	bool LogOutput;
 	bool GotToBottom;
 
-   
-
-
+	int ThemeSelector;
 };
 
 #endif
