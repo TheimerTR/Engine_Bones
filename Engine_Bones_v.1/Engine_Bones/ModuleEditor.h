@@ -17,18 +17,21 @@ public:
 	bool Init() override;
 	bool DrawEditor();
 	bool CleanUp() override;
+	void DefaultConfig();
 
-	void AddFPS(const float aFPS);
-
+public:
 	std::vector<float> mFPSLOG;
 	
 	std::vector<std::string> l_Logs;
 
 	bool AboutWindow;
+	bool OpenPreferences;
 	bool LogOutput;
 	bool GotToBottom;
 
 	int ThemeSelector;
+	float WinBright;
+	int item_current_idx;
 };
 
 #endif

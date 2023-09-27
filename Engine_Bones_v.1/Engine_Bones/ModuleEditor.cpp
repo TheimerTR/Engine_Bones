@@ -31,8 +31,11 @@ ModuleEditor::~ModuleEditor()
 bool ModuleEditor::Init()
 {
 	AboutWindow = false;
-	LogOutput = false;
+	LogOutput = false; 
+	OpenPreferences = false;
 	ThemeSelector = 2;
+	WinBright = 0.5f;
+	item_current_idx = 3; // Here we store our selection data as an index.
 
 	// Cheking Version of ImGuI and Init the Context
 	IMGUI_CHECKVERSION();
@@ -72,10 +75,6 @@ bool ModuleEditor::DrawEditor()
 
 		if (ImGui::BeginMenu("Editor"))
 		{
-			if (ImGui::MenuItem("QUIT"))
-			{
-				App->QuitApp();
-			}
 			if (ImGui::BeginMenu("Theme"))
 			{
 				if (ImGui::MenuItem("Classic"))
@@ -107,14 +106,26 @@ bool ModuleEditor::DrawEditor()
 				{
 					ThemeSelector = 5;
 					ImCandy::Theme_Cyberpunk();
-				}	
+				}
 				/*if (ImGui::MenuItem("Rainbow"))
 				{
 					static double s1 = 0.0;
 					ImGui::PushStyleColor(ImGuiCol_Border, ImCandy::Rainbow(s1));
 				}*/
+
 				ImGui::EndMenu();
 			}
+
+			if (ImGui::MenuItem("Preferences"))
+			{
+				OpenPreferences = !OpenPreferences;
+			}
+
+			if (ImGui::MenuItem("QUIT"))
+			{
+				App->QuitApp();
+			}
+
 			ImGui::EndMenu();
 		}
 		
@@ -147,7 +158,8 @@ bool ModuleEditor::DrawEditor()
 
 				bool close = true; 
 
-				if (ImGui::BeginPopupModal("About", &close, ImGuiWindowFlags_AlwaysAutoResize)) {
+				if (ImGui::BeginPopupModal("About", &close, ImGuiWindowFlags_AlwaysAutoResize)) 
+				{
 
 					ImGui::Text("Bones Engine\n");
 					ImGui::Text("An Incredible 3D Game Engine which was made by a dinosaur :O");
@@ -165,21 +177,6 @@ bool ModuleEditor::DrawEditor()
 
 	}
 	ImGui::EndMainMenuBar();
-
-	if(ImGui::Begin("Configuration"))
-	{
-		float c_FPS = floorf(App->GetFrameRate());
-		C_Math::VectorPushBack(mFPSLOG, c_FPS);
-
-		ImGui::PlotHistogram("FPS", &mFPSLOG[0], mFPSLOG.size(), 0, NULL, 0.0f, 100.0f, ImVec2(300, 100));
-
-		if (ImGui::SliderInt("Select the MaxFPS", &App->max_FPS, -1, 200, NULL))
-		{
-			App->max_FPS = App->max_FPS;
-		}
-
-		ImGui::End();
-	}
 
 	if (LogOutput)
 	{
@@ -201,6 +198,121 @@ bool ModuleEditor::DrawEditor()
 
 		ImGui::End();
 	}
+
+	if(OpenPreferences)
+	{
+		ImGui::OpenPopup("Preferences");
+	}
+	
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+	if (ImGui::BeginPopupModal("Preferences", &OpenPreferences, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		//Brightness modulator
+		if (ImGui::SliderFloat("Brightness", &WinBright, 0.f, 1.f))
+		{
+			SDL_SetWindowBrightness(App->window->window, WinBright);
+		}
+
+		//Frame rounding
+		ImGuiStyle& style = ImGui::GetStyle();
+
+		if (ImGui::SliderFloat("FrameRounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f"))
+		{
+			style.GrabRounding = style.FrameRounding; // Make GrabRounding always the same value as FrameRounding
+		}
+
+		//Checkbox of window size
+		static ImGuiComboFlags flags = 0;
+		ImGui::CheckboxFlags("ImGuiComboFlags_PopupAlignLeft", &flags, ImGuiComboFlags_PopupAlignLeft);
+		if (ImGui::CheckboxFlags("ImGuiComboFlags_NoArrowButton", &flags, ImGuiComboFlags_NoArrowButton))
+			flags &= ~ImGuiComboFlags_NoPreview;     // Clear the other flag, as we cannot combine both
+		if (ImGui::CheckboxFlags("ImGuiComboFlags_NoPreview", &flags, ImGuiComboFlags_NoPreview))
+			flags &= ~ImGuiComboFlags_NoArrowButton; // Clear the other flag, as we cannot combine both
+
+		// Using the generic BeginCombo() API, you have full control over how to display the combo contents.
+		// (your selection data could be an index, a pointer to the object, an id for the object, a flag intrusively
+		// stored in the object itself, etc.)
+		const char* items[] = { "1920-1080", "1536-864", "1366-768", "1280-720", "360-800" };
+		const char* combo_preview_value = items[item_current_idx];  // Pass in the preview value visible before opening the combo (it could be anything)
+		if (ImGui::BeginCombo("Window Size", combo_preview_value, flags))
+		{
+			for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+			{
+				const bool is_selected = (item_current_idx == n);
+
+				if (ImGui::Selectable(items[n], is_selected))
+				{
+					item_current_idx = n;
+
+					int w, h;
+					switch (item_current_idx)
+					{
+					case 0:
+						w = 1920;
+						h = 1080;
+						break;
+					case 1:
+						w = 1536;
+						h = 864;
+						break;
+					case 2:
+						w = 1366;
+						h = 768;
+						break;
+					case 3:
+						w = 1280;
+						h = 720;
+						break;
+					case 4:
+						w = 360;
+						h = 800;
+						break;
+					default:
+						break;
+					}
+
+
+					SDL_SetWindowSize(App->window->window, w, h);
+				}
+
+				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+
+		//FPS_Graph
+		ImGui::Text("FPS Limiter");
+		float c_FPS = floorf(App->GetFrameRate());
+		C_Math::VectorPushBack(mFPSLOG, c_FPS);
+
+		ImGui::PlotHistogram("FPS", &mFPSLOG[0], mFPSLOG.size(), 0, NULL, 0.0f, 100.0f, ImVec2(300, 100));
+
+		if (ImGui::SliderInt("Select the MaxFPS", &App->max_FPS, -1, 200, NULL))
+		{
+			App->max_FPS = App->max_FPS;
+		}
+
+		//Default Config
+		if (ImGui::Button("Default"))
+		{
+			DefaultConfig();
+		}
+
+		//Close Preferences
+		if (ImGui::Button("CLOSE"))
+		{
+			OpenPreferences = false;
+		}
+
+		ImGui::EndPopup();
+	}
+
 
 	////Simple box to close the app
 	//OpenWindow = true;
@@ -279,6 +391,22 @@ bool ModuleEditor::DrawEditor()
 	return true;
 }
 
+void ModuleEditor::DefaultConfig()
+{
+	WinBright =	1.0f;
+	SDL_SetWindowBrightness(App->window->window, WinBright);
+	SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	ImGuiStyle& style = ImGui::GetStyle();
+
+	style.FrameRounding = 0.0f;
+	style.GrabRounding = style.FrameRounding; // Make GrabRounding always the same value as FrameRounding
+
+	item_current_idx = 3; // Here we store our selection data as an index.
+
+	App->max_FPS = 60;
+}
+
 bool ModuleEditor::CleanUp()
 {
 	ClearLogs(l_Logs);
@@ -289,9 +417,4 @@ bool ModuleEditor::CleanUp()
 	ImGui::DestroyContext();
 
 	return true;
-}
-
-void ModuleEditor::AddFPS(const float aFPS)
-{
-
 }
