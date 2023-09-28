@@ -11,6 +11,7 @@
 #endif
 
 #include "ImGuiCandy/candy.h"
+#include "SDL_mixer/include/SDL_mixer.h"
 
 #include "Application.h"
 #include "ModuleWindow.h"
@@ -37,6 +38,7 @@ bool ModuleEditor::Init()
 	ThemeSelector = 2;
 	WinBright = 0.5f;
 	item_current_idx = 3; // Here we store our selection data as an index.
+	Volume = 50;
 
 	// Cheking Version of ImGuI and Init the Context
 	IMGUI_CHECKVERSION();
@@ -179,6 +181,7 @@ bool ModuleEditor::DrawEditor()
 	}
 	ImGui::EndMainMenuBar();
 
+	//Output Window
 	if (LogOutput)
 	{
 		ImGui::Begin("Log Output", &LogOutput); 
@@ -200,6 +203,7 @@ bool ModuleEditor::DrawEditor()
 		ImGui::End();
 	}
 
+	//Open preferences window
 	if(OpenPreferences)
 	{
 		ImGui::OpenPopup("Preferences");
@@ -318,6 +322,12 @@ bool ModuleEditor::DrawEditor()
 			}
 		}
 
+		//Volume modulator
+		if (ImGui::SliderFloat("General Volume", &Volume, 0.0f, SDL_MIX_MAXVOLUME))
+		{
+			ChangeGeneralVolume((int)Volume);
+		}
+
 		//Default Config
 		if (ImGui::Button("Default"))
 		{
@@ -434,6 +444,10 @@ void ModuleEditor::DefaultConfig()
 	//Quit Vsync
 	Vsync = false;
 	SDL_GL_SetSwapInterval(0);
+
+	//General Volume
+	Volume = 50;
+	ChangeGeneralVolume((int)Volume);
 }
 
 bool ModuleEditor::CleanUp()
@@ -446,5 +460,22 @@ bool ModuleEditor::CleanUp()
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
+	ChangeGeneralVolume(50);
+
 	return true;
+}
+
+bool ModuleEditor::ChangeGeneralVolume(int vol)
+{
+	if (vol >= 0 && vol <= SDL_MIX_MAXVOLUME)
+	{
+		//Mix_VolumeMusic(vol);
+		//Mix_Volume(-1, vol);
+
+		App->volume_general = vol;
+
+		return true;
+	}
+
+	return false;
 }

@@ -17,7 +17,9 @@ public:
 	bool Init() override;
 	bool DrawEditor();
 	bool CleanUp() override;
+
 	void DefaultConfig();
+	bool ChangeGeneralVolume(int vol);
 
 public:
 	std::vector<float> mFPSLOG;
@@ -33,6 +35,7 @@ public:
 	int ThemeSelector;
 	float WinBright;
 	int item_current_idx;
+	float Volume;
 };
 
 #endif

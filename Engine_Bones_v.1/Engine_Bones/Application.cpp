@@ -46,6 +46,7 @@ bool Application::Init()
 	app = this;
 
 	max_FPS = 60;
+	volume_general = 50;
 	QuitApplication = false;
 
 	// Call Init() in all modules

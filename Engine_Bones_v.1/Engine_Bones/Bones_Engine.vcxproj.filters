@@ -49,6 +49,9 @@
     <Filter Include="Sources\ImGuiCandy">
       <UniqueIdentifier>{ac913b7c-269b-4c61-95b4-b5480e02225a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\SDL_mixer">
+      <UniqueIdentifier>{065f72b2-e1bd-4a9b-bdb9-7b2b918989f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -314,6 +317,9 @@
     </ClInclude>
     <ClInclude Include="ImGuiCandy\candy.h">
       <Filter>Sources\ImGuiCandy</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL_mixer\include\SDL_mixer.h">
+      <Filter>Sources\SDL_mixer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

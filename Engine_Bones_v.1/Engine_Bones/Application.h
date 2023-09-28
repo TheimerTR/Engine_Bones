@@ -45,6 +45,8 @@ public:
 
 	int max_FPS = 60;
 
+	int volume_general = 50;
+
 private:
 
 	void AddModule(Module* mod);
