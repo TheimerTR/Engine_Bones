@@ -25,7 +25,7 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 ModuleEditor::~ModuleEditor()
 {
 	ClearLogs(l_Logs);
-	C_Math::ClearInt(mFPSLOG);
+	C_Math::ClearFloat(mFPSLOG);
 }
 
 bool ModuleEditor::Init()
@@ -33,6 +33,7 @@ bool ModuleEditor::Init()
 	AboutWindow = false;
 	LogOutput = false; 
 	OpenPreferences = false;
+	Vsync = false;
 	ThemeSelector = 2;
 	WinBright = 0.5f;
 	item_current_idx = 3; // Here we store our selection data as an index.
@@ -286,6 +287,22 @@ bool ModuleEditor::DrawEditor()
 			ImGui::EndCombo();
 		}
 
+		//Vsync
+		if(ImGui::Checkbox("Vsync", &Vsync))
+		{
+			if (Vsync)
+			{
+				if (SDL_GL_SetSwapInterval(1) < 0)
+				{
+					LOG(LogTypeCase::L_WARNING, "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+				}
+			}
+			else
+			{
+				SDL_GL_SetSwapInterval(0);
+			}
+		}
+
 		//FPS_Graph
 		ImGui::Text("FPS Limiter");
 		float c_FPS = floorf(App->GetFrameRate());
@@ -293,9 +310,12 @@ bool ModuleEditor::DrawEditor()
 
 		ImGui::PlotHistogram("FPS", &mFPSLOG[0], mFPSLOG.size(), 0, NULL, 0.0f, 100.0f, ImVec2(300, 100));
 
-		if (ImGui::SliderInt("Select the MaxFPS", &App->max_FPS, -1, 200, NULL))
+		if (!Vsync)
 		{
-			App->max_FPS = App->max_FPS;
+			if (ImGui::SliderInt("Select the MaxFPS", &App->max_FPS, -1, 200, NULL))
+			{
+				App->max_FPS = App->max_FPS;
+			}
 		}
 
 		//Default Config
@@ -393,23 +413,33 @@ bool ModuleEditor::DrawEditor()
 
 void ModuleEditor::DefaultConfig()
 {
+	//Set Brightness of desk to 1.0f
 	WinBright =	1.0f;
 	SDL_SetWindowBrightness(App->window->window, WinBright);
+
+	//Window size to 1280-720
 	SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	//Frame Rounding to 0
 	ImGuiStyle& style = ImGui::GetStyle();
-
 	style.FrameRounding = 0.0f;
 	style.GrabRounding = style.FrameRounding; // Make GrabRounding always the same value as FrameRounding
 
+	//Window size toolbar to 1280-720
 	item_current_idx = 3; // Here we store our selection data as an index.
 
+	//Reset FPS to 60
 	App->max_FPS = 60;
+
+	//Quit Vsync
+	Vsync = false;
+	SDL_GL_SetSwapInterval(0);
 }
 
 bool ModuleEditor::CleanUp()
 {
 	ClearLogs(l_Logs);
+	C_Math::ClearFloat(mFPSLOG);
 
 	// Cleanup of ImGui
 	ImGui_ImplOpenGL3_Shutdown();

@@ -30,6 +30,7 @@ void AddLog(std::string logText);
 
 #define MAX(a,b) ((a)>(b)) ? (a) : (b)
 #define MAX_LOG_FPS 100
+#define MAX_FPS 100
 
 
 

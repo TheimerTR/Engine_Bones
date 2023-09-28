@@ -28,6 +28,7 @@ public:
 	bool OpenPreferences;
 	bool LogOutput;
 	bool GotToBottom;
+	bool Vsync;
 
 	int ThemeSelector;
 	float WinBright;

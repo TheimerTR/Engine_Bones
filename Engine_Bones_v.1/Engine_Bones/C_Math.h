@@ -33,7 +33,7 @@ namespace C_Math
 		}
 	}
 
-	void ClearInt(std::vector<float>& vector)
+	void ClearFloat(std::vector<float>& vector)
 	{
 		for (int i = 0; i < vector.size() - 1; i++)
 		{
