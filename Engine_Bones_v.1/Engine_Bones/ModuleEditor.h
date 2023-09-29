@@ -19,6 +19,7 @@ public:
 	bool CleanUp() override;
 
 	void DefaultConfig();
+	void ThemeUpdate();
 	bool ChangeGeneralVolume(int vol);
 
 public:

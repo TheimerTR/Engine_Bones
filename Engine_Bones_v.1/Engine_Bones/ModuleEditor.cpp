@@ -121,6 +121,7 @@ bool ModuleEditor::DrawEditor()
 
 			if (ImGui::MenuItem("Preferences"))
 			{
+				ThemeUpdate();
 				OpenPreferences = !OpenPreferences;
 			}
 
@@ -151,11 +152,12 @@ bool ModuleEditor::DrawEditor()
 
 		if (ImGui::BeginMenu("Help"))
 		{
-
 			if (ImGui::Button("About"))
 			{
 				ImGui::OpenPopup("About");
 			}
+				ThemeUpdate();
+
 				ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 				ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
@@ -184,6 +186,7 @@ bool ModuleEditor::DrawEditor()
 	//Output Window
 	if (LogOutput)
 	{
+		ThemeUpdate();
 		ImGui::Begin("Log Output", &LogOutput); 
 
 		//ImGui::Separator();
@@ -343,73 +346,6 @@ bool ModuleEditor::DrawEditor()
 		ImGui::EndPopup();
 	}
 
-
-	////Simple box to close the app
-	//OpenWindow = true;
-
-	//ImGui::Begin("QUIT WINDOW", &OpenWindow);
-	//ImGui::Text("PRESS ME TO EXIT!");
-	//if (ImGui::Button("QUIT"))
-	//{
-	//	return UPDATE_STOP;
-	//}
-	//ImGui::End();
-
-	//// Window Demo from ImGuy
-	//ImGui::ShowDemoWindow();
-
-	////Sonia Toolbar
-	//bool ShowMenu;
-
-	//ImGui::Begin("Tool bar", &ShowMenu, ImGuiWindowFlags_MenuBar);
-
-	//if (ImGui::BeginMenuBar())
-	//{
-	//	if (ImGui::BeginMenu("Menu"))
-	//	{
-	//		if (ImGui::MenuItem("New")) {}
-	//		if (ImGui::MenuItem("Open")) {}
-	//		if (ImGui::MenuItem("Save")) {}
-
-	//		ImGui::EndMenu();
-	//	}
-
-	//	if (ImGui::BeginMenu("Settings"))
-	//	{
-	//		ImGui::EndMenu();
-	//	}
-
-	//	ImGui::EndMenuBar();
-	//}
-
-	//ImGui::Text("Lo logree :D");
-
-	//ImGui::End();
-
-	switch (ThemeSelector)
-	{
-	case 0:
-		ImGui::StyleColorsClassic();
-		break;
-	case 1:
-		ImGui::StyleColorsLight();
-		break;
-	case 2:
-		ImGui::StyleColorsDark();
-		break;
-	case 3:
-		ImCandy::Theme_Nord();
-		break;
-	case 4:
-		ImCandy::Theme_Blender();
-		break;
-	case 5:
-		ImCandy::Theme_Cyberpunk();
-		break;
-	default:
-		break;
-	}
-
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	// Rendering
@@ -478,4 +414,31 @@ bool ModuleEditor::ChangeGeneralVolume(int vol)
 	}
 
 	return false;
+}
+
+void ModuleEditor::ThemeUpdate()
+{
+	switch (ThemeSelector)
+	{
+	case 0:
+		ImGui::StyleColorsClassic();
+		break;
+	case 1:
+		ImGui::StyleColorsLight();
+		break;
+	case 2:
+		ImGui::StyleColorsDark();
+		break;
+	case 3:
+		ImCandy::Theme_Nord();
+		break;
+	case 4:
+		ImCandy::Theme_Blender();
+		break;
+	case 5:
+		ImCandy::Theme_Cyberpunk();
+		break;
+	default:
+		break;
+	}
 }
