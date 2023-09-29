@@ -18,7 +18,7 @@ enum class LogTypeCase
 
 void log(const char file[], int line, LogTypeCase _type, const char* format, ...);
 
-void ClearLogs(std::vector<std::string> l_Logs, ...);
+void ClearLogs(std::vector<std::string>& l_Logs);
 
 void AddLog(std::string logText);
 
@@ -53,3 +53,23 @@ enum update_status
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
 #define TITLE "Bones Engine :D"
+
+// Deletes a buffer
+#define RELEASE( x )\
+    {\
+       if( x != nullptr )\
+       {\
+         delete x;\
+	     x = nullptr;\
+       }\
+    }
+
+// Deletes an array of buffers
+#define RELEASE_ARRAY( x )\
+	{\
+       if( x != nullptr )\
+       {\
+           delete[] x;\
+	       x = nullptr;\
+		 }\
+	 }

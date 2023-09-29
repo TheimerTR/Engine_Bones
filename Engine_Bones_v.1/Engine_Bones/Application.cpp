@@ -76,7 +76,7 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-	if (!editor->Vsync)
+	if (editor->Vsync)
 	{
 		Uint32 last_frame_ms = ms_timer.Read();
 		float wait_time = (1000.f / (float)max_FPS) - (float)last_frame_ms;
@@ -136,6 +136,10 @@ bool Application::CleanUp()
 	{
 		ret = (*it)->CleanUp();
 	}
+
+	editor = nullptr;
+	app = nullptr;
+
 	return ret;
 }
 

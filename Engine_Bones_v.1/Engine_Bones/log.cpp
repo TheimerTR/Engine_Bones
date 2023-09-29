@@ -18,11 +18,11 @@ void AddLog(std::string logText)
 	}
 }
 
-void ClearLogs(std::vector<std::string> l_Logs, ...) //This method will remove the last element 
+void ClearLogs(std::vector<std::string>& l_Logs) //This method will remove the last element 
 {            
-	for (int i = 0; i < l_Logs.size() - 1; i++) 
+	for (int i = 0; i < l_Logs.size() - 1; i++)
 	{
-		l_Logs.pop_back();
+		l_Logs[i].clear();
 	}
 
 	l_Logs.clear();

@@ -166,7 +166,6 @@
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="Parson\parson.h" />
     <ClInclude Include="Primitive.h" />
-    <ClInclude Include="SDL_mixer\include\SDL_mixer.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>

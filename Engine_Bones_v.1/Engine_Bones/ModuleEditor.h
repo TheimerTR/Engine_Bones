@@ -20,7 +20,6 @@ public:
 
 	void DefaultConfig();
 	void ThemeUpdate();
-	bool ChangeGeneralVolume(int vol);
 
 public:
 	std::vector<float> mFPSLOG;
