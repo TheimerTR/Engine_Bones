@@ -4,7 +4,6 @@
 #include "Module.h"
 #include "Application.h"
 #include "ModuleEditor.h"
-#include "ModuleEditor.h"
 
 #include <stdio.h>
 #include <vector>
@@ -14,7 +13,8 @@ void AddLog(std::string logText)
 {
 	if (&app->editor->l_Logs != NULL)
 	{
-		app->editor->l_Logs.push_back(logText);
+		//app->editor->l_Logs.push_back(logText);
+		VectorStringPushBack(app->editor->l_Logs, MAX_LOG_FPS, logText);
 	}
 }
 
@@ -58,4 +58,26 @@ void log(const char file[], int line, LogTypeCase _type, const char* format, ...
 	}
 }
 
+void VectorStringPushBack(std::vector<std::string>& vector, int MaxValue, std::string Log)
+{
+	if (vector.size() == vector.capacity())
+	{
+		//If the Vectir is full capacity, deletes the most old element of the list, and move all the rest elementes one pos back.
 
+		for (size_t i = 0; i < vector.size(); i++)
+		{
+			if (i + 1 < vector.size())
+			{
+				vector[i] = vector[i + 1];
+			}
+		}
+
+		//Put the last element at the back
+		vector[vector.capacity() - 1] = Log;
+	}
+	else
+	{
+		//If vec is not full so put new elements
+		vector.push_back(Log);
+	}
+}

@@ -20,6 +20,7 @@
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	mFPSLOG.reserve(MAX_LOG_FPS);
+	l_Logs.reserve(MAX_LOG_FPS);
 }
 
 ModuleEditor::~ModuleEditor()

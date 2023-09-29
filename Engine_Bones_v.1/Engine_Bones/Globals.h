@@ -22,6 +22,8 @@ void ClearLogs(std::vector<std::string>& l_Logs);
 
 void AddLog(std::string logText);
 
+void VectorStringPushBack(std::vector<std::string>& vector, int MaxValue, std::string Log);
+
 #define CAP(n) ((n <= 0.0f) ? n=0.0f : (n >= 1.0f) ? n=1.0f : n=n)
 
 #define DEGTORAD 0.0174532925199432957f
