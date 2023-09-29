@@ -20,9 +20,12 @@ void AddLog(std::string logText)
 
 void ClearLogs(std::vector<std::string>& l_Logs) //This method will remove the last element 
 {            
-	for (int i = 0; i < l_Logs.size() - 1; i++)
+	if (l_Logs.size() > 0)
 	{
-		l_Logs[i].clear();
+		for (int i = 0; i < l_Logs.size() - 1; i++)
+		{
+			l_Logs[i].clear();
+		}
 	}
 
 	l_Logs.clear();

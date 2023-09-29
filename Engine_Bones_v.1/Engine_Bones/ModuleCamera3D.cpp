@@ -3,6 +3,10 @@
 #include "ModuleCamera3D.h"
 #include "MathGeoLib/include/Math/Quat.h"
 #include "ModuleInput.h"
+#include "Glew/include/glew.h" // extension lib
+#include "SDL\include\SDL_opengl.h"
+#include "ImGui/backends/imgui_impl_opengl3.h"
+#include <gl/GL.h>
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -35,6 +39,23 @@ bool ModuleCamera3D::CleanUp()
 	LOG(LogTypeCase::L_CASUAL, "Cleaning camera");
 
 	return true;
+}
+
+update_status ModuleCamera3D::PreUpdate(float dt)
+{
+	Color c = {0.0f, 0.0f, 0.0f, 1.0f};
+	glClearColor(c.r, c.g, c.b, c.a);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf((GLfloat*)ViewMatrixOpenGL().v);
+
+	return UPDATE_CONTINUE;
+}
+
+float4x4 ModuleCamera3D::ViewMatrixOpenGL()
+{
+	math::float4x4 mat = F_Camera.ViewMatrix();
+	return mat.Transposed();
 }
 
 // -----------------------------------------------------------------
