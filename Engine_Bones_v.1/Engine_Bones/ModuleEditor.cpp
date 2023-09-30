@@ -194,11 +194,7 @@ bool ModuleEditor::DrawEditor()
 					ImGui::Text("Authors:\n");
 					ImGui::Text("Alberto Hidalgo Garcia\nSonia Cristina Ojeda Lanz");
 					ImGui::Text("\nThird Party Libraries used:");
-										ImGui::Text("Bones Engine\n");
-					ImGui::Text("An Incredible 3D Game Engine which was made by a dinosaur :O");
-
-					ImGui::Separator();
-
+		
 					ImGui::Text("Authors:\n");
 					ImGui::Text("Alberto Hidalgo Garcia\nSonia Cristina Ojeda Lanz");
 
@@ -290,8 +286,17 @@ bool ModuleEditor::DrawEditor()
 						ImGui::LogFinish();
 					}
 
-					ImGui::Text("\nLisence:\n MIT Lisence ");
+					ImGui::Text("\nLisence: MIT Lisence ");
 
+					ImGui::Text("Copyright (c) 2023 TheimerTR\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this softwareand associated documentation files(the Software), to deal\n");
+					ImGui::Text("in the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and /or sell\n"); 
+					ImGui::Text("copies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :\n");
+					ImGui::Text("The above copyright noticeand this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\n");
+					ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n");
+					ImGui::Text("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n");
+					ImGui::Text("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n");
+					ImGui::Text("SOFTWARE.");
+					
 					ImGui::EndPopup();
 				}
 			
