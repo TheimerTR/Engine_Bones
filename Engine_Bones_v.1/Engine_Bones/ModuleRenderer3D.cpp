@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "Primitive.h"
+
 #include "Glew\include\glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
@@ -29,7 +31,7 @@
 #endif // _DEBUG
 
 
-ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled), context()
+ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled), context(), Wireframe(false)
 {
 }
 
@@ -157,6 +159,10 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	(Wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	RenderPrimitive((PrimitiveType)App->editor->SelectPrimitive);
+
 	Grid.Render();
 
 	App->editor->DrawEditor();
@@ -190,4 +196,22 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+void ModuleRenderer3D::RenderPrimitive(PrimitiveType Type)
+{
+	switch (Type)
+	{
+	case PrimitiveType::CUBE:
+		Cube::Cube().InnerRender();
+		break;
+	case PrimitiveType::CYLINDER:
+		CCylinder::CCylinder().InnerRender();
+		break;
+	case PrimitiveType::PLANE:
+		CLine::CLine().InnerRender();
+		break;
+	default:
+		break;
+	}
 }

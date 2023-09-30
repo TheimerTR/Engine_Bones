@@ -1,4 +1,5 @@
 #include "ModuleEditor.h"
+#include "ModuleRenderer3D.h"
 
 #include "ImGui/imgui.h"
 #include "ImGui/backends/imgui_impl_sdl2.h"
@@ -39,6 +40,7 @@ bool ModuleEditor::Init()
 	WinBright = 0.5f;
 	item_current_idx = 3; // Here we store our selection data as an index.
 	Volume = 50;
+	SelectPrimitive = 0;
 
 	// Cheking Version of ImGuI and Init the Context
 	IMGUI_CHECKVERSION();
@@ -135,7 +137,28 @@ bool ModuleEditor::DrawEditor()
 		
 		if (ImGui::BeginMenu("Assets"))
 		{
-			ImGui::Text("Hello World!");
+			if (ImGui::BeginMenu("Render Primitive"))
+			{
+				if (ImGui::MenuItem("Cube"))
+				{
+					SelectPrimitive = (int)PrimitiveType::CUBE;
+				}
+				if (ImGui::MenuItem("Esphere"))
+				{
+					SelectPrimitive = (int)PrimitiveType::CYLINDER;
+				}
+				if (ImGui::MenuItem("Plane"))
+				{
+					SelectPrimitive = (int)PrimitiveType::PLANE;
+				}	
+				if (ImGui::MenuItem("Delete"))
+				{
+					SelectPrimitive = (int)PrimitiveType::NONE;
+				}
+
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMenu();
 		}
 		
@@ -234,10 +257,19 @@ bool ModuleEditor::DrawEditor()
 		//Checkbox of window size
 		static ImGuiComboFlags flags = 0;
 		ImGui::CheckboxFlags("ImGuiComboFlags_PopupAlignLeft", &flags, ImGuiComboFlags_PopupAlignLeft);
+
+		ImGui::SameLine();
+
 		if (ImGui::CheckboxFlags("ImGuiComboFlags_NoArrowButton", &flags, ImGuiComboFlags_NoArrowButton))
+		{
 			flags &= ~ImGuiComboFlags_NoPreview;     // Clear the other flag, as we cannot combine both
+		}
+		ImGui::SameLine();
+
 		if (ImGui::CheckboxFlags("ImGuiComboFlags_NoPreview", &flags, ImGuiComboFlags_NoPreview))
+		{
 			flags &= ~ImGuiComboFlags_NoArrowButton; // Clear the other flag, as we cannot combine both
+		}
 
 		// Using the generic BeginCombo() API, you have full control over how to display the combo contents.
 		// (your selection data could be an index, a pointer to the object, an id for the object, a flag intrusively
@@ -331,6 +363,9 @@ bool ModuleEditor::DrawEditor()
 			//ChangeGeneralVolume((int)Volume);
 		}
 
+		//Wireframe Mode
+		ImGui::Checkbox("Wireframe Rendering Mode", &App->renderer3D->Wireframe);
+
 		//Default Config
 		if (ImGui::Button("Default"))
 		{
@@ -393,6 +428,9 @@ void ModuleEditor::DefaultConfig()
 	//General Volume
 	Volume = 50;
 	//ChangeGeneralVolume((int)Volume);
+
+	//Wireframe Rendering
+	App->renderer3D->Wireframe = false;
 }
 
 bool ModuleEditor::CleanUp()

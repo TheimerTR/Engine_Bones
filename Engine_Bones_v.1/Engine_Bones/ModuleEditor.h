@@ -36,6 +36,7 @@ public:
 	float WinBright;
 	int item_current_idx;
 	float Volume;
+	int SelectPrimitive;
 };
 
 #endif
