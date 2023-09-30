@@ -1,5 +1,6 @@
 #include "ModuleEditor.h"
 
+#include "Glew/include/glew.h"
 #include "ImGui/imgui.h"
 #include "ImGui/backends/imgui_impl_sdl2.h"
 #include "ImGui/backends/imgui_impl_opengl3.h"
@@ -16,6 +17,7 @@
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "C_Math.h"
+
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -168,14 +170,105 @@ bool ModuleEditor::DrawEditor()
 
 					ImGui::Text("Bones Engine\n");
 					ImGui::Text("An Incredible 3D Game Engine which was made by a dinosaur :O");
+
 					ImGui::Separator();
+
 					ImGui::Text("Authors:\n");
 					ImGui::Text("Alberto Hidalgo Garcia\nSonia Cristina Ojeda Lanz");
+
 					ImGui::Text("\nThird Party Libraries used:");
+
+					std::string strVer; 
+					SDL_version version;
+					SDL_GetVersion(&version); 
+
+					strVer = std::to_string(version.major) + '.' + std::to_string(version.minor) + '.' + std::to_string(version.patch);
+					ImGui::Text("SDL v %s ", strVer.c_str());
+
+					copy = ImGui::Button("Copy Link SDL"); 
+
+					if (copy) {
+
+						ImGui::LogToClipboard();
+						ImGui::LogText("https://www.libsdl.org/");
+						ImGui::LogFinish(); 
+					}
+
+			
+					std::string gui = (ImGui::GetVersion()); 
+					ImGui::Text("ImGui v %s", gui.c_str());
+
+					copy = ImGui::Button("Copy Link ImGui");
+
+					if (copy) {
+
+						ImGui::LogToClipboard();
+						ImGui::LogText("https://github.com/ocornut/imgui");
+						ImGui::LogFinish();
+					}
+
+					std::string gl = (const char*)glGetString(GL_VERSION); 
+					ImGui::Text("OpenGL v %s", gl.c_str());
+
+					copy = ImGui::Button("Copy Link OpenGL");
+
+					if (copy) {
+
+						ImGui::LogToClipboard();
+						ImGui::LogText("https://www.opengl.org/");
+						ImGui::LogFinish();
+					}
+
+					std::string glew = (const char*)glewGetString(GLEW_VERSION); 
+					ImGui::Text("Glew v %s", glew.c_str()); 
+
+					copy = ImGui::Button("Copy Link Glew");
+
+					if (copy) {
+
+						ImGui::LogToClipboard();
+						ImGui::LogText("https://glew.sourceforge.net/");
+						ImGui::LogFinish();
+					}
+
+					ImGui::Text("ImGuiCandy"); 
+
+					copy = ImGui::Button("Copy Link Candy");
+
+					if (copy) {
+
+						ImGui::LogToClipboard();
+						ImGui::LogText("https://github.com/Raais/ImguiCandy");
+						ImGui::LogFinish();
+					}
+
+					ImGui::Text("MathGeoLib");
+
+					copy = ImGui::Button("Copy Link MathGeoLib");
+
+					if (copy) {
+
+						ImGui::LogToClipboard();
+						ImGui::LogText("https://github.com/juj/MathGeoLib");
+						ImGui::LogFinish();
+					}
+
+					ImGui::Text("Parson"); 
+
+					copy = ImGui::Button("Copy Link Parson");
+
+					if (copy) {
+
+						ImGui::LogToClipboard();
+						ImGui::LogText("https://github.com/kgabis/parson");
+						ImGui::LogFinish();
+					}
+
 					ImGui::Text("\nLisence:\n MIT Lisence ");
 
 					ImGui::EndPopup();
 				}
+
 			
 			ImGui::EndMenu();
 		}
