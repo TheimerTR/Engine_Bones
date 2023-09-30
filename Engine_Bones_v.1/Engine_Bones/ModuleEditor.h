@@ -26,6 +26,8 @@ public:
 	
 	std::vector<std::string> l_Logs;
 
+	bool copy; 
+
 	bool AboutWindow;
 	bool OpenPreferences;
 	bool LogOutput;
