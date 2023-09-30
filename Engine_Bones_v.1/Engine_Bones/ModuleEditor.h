@@ -32,14 +32,6 @@ public:
 	bool GotToBottom;
 	bool Vsync;
 
-	bool copy; 
-	bool copy2; 
-	bool copy3; 
-	bool copy4; 
-	bool copy5; 
-	bool copy6; 
-	bool copy7; 
-
 	int ThemeSelector;
 	float WinBright;
 	int item_current_idx;
