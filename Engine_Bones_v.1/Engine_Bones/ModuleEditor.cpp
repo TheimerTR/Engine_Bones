@@ -1,4 +1,5 @@
 #include "ModuleEditor.h"
+#include "ModuleRenderer3D.h"
 
 #include "ImGui/imgui.h"
 #include "ImGui/backends/imgui_impl_sdl2.h"
@@ -34,11 +35,8 @@ bool ModuleEditor::Init()
 	AboutWindow = false;
 	LogOutput = false; 
 	OpenPreferences = false;
-	Vsync = true;
 	ThemeSelector = 2;
-	WinBright = 0.5f;
-	item_current_idx = 3; // Here we store our selection data as an index.
-	Volume = 50;
+	SelectPrimitive = 0;
 
 	// Cheking Version of ImGuI and Init the Context
 	IMGUI_CHECKVERSION();
@@ -55,6 +53,8 @@ bool ModuleEditor::Init()
 	// Init SDL2 and OPENGL3 to render 
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL3_Init("#version 130");
+
+	DefaultConfig();
 
 	return true;
 }
@@ -135,7 +135,28 @@ bool ModuleEditor::DrawEditor()
 		
 		if (ImGui::BeginMenu("Assets"))
 		{
-			ImGui::Text("Hello World!");
+			if (ImGui::BeginMenu("Render Primitive"))
+			{
+				if (ImGui::MenuItem("Cube"))
+				{
+					SelectPrimitive = (int)PrimitiveType::CUBE;
+				}
+				if (ImGui::MenuItem("Esphere"))
+				{
+					SelectPrimitive = (int)PrimitiveType::CYLINDER;
+				}
+				if (ImGui::MenuItem("Plane"))
+				{
+					SelectPrimitive = (int)PrimitiveType::PLANE;
+				}	
+				if (ImGui::MenuItem("Delete"))
+				{
+					SelectPrimitive = (int)PrimitiveType::NONE;
+				}
+
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMenu();
 		}
 		
@@ -234,10 +255,19 @@ bool ModuleEditor::DrawEditor()
 		//Checkbox of window size
 		static ImGuiComboFlags flags = 0;
 		ImGui::CheckboxFlags("ImGuiComboFlags_PopupAlignLeft", &flags, ImGuiComboFlags_PopupAlignLeft);
+
+		ImGui::SameLine();
+
 		if (ImGui::CheckboxFlags("ImGuiComboFlags_NoArrowButton", &flags, ImGuiComboFlags_NoArrowButton))
+		{
 			flags &= ~ImGuiComboFlags_NoPreview;     // Clear the other flag, as we cannot combine both
+		}
+		ImGui::SameLine();
+
 		if (ImGui::CheckboxFlags("ImGuiComboFlags_NoPreview", &flags, ImGuiComboFlags_NoPreview))
+		{
 			flags &= ~ImGuiComboFlags_NoArrowButton; // Clear the other flag, as we cannot combine both
+		}
 
 		// Using the generic BeginCombo() API, you have full control over how to display the combo contents.
 		// (your selection data could be an index, a pointer to the object, an id for the object, a flag intrusively
@@ -331,6 +361,118 @@ bool ModuleEditor::DrawEditor()
 			//ChangeGeneralVolume((int)Volume);
 		}
 
+		//Wireframe Mode
+		ImGui::Checkbox("Wireframe Rendering Mode", &App->renderer3D->Wireframe);
+		
+		//GL_DEPTH_TEST
+		if(ImGui::Checkbox("GL_DEPTH_TEST", &Gl_DepthTest))
+		{
+			if (Gl_DepthTest)
+			{
+				glEnable(GL_DEPTH_TEST);
+			}
+			else 
+			{
+				glDisable(GL_DEPTH_TEST);
+			}
+		}
+
+		ImGui::SameLine();
+
+		if(ImGui::Checkbox("GL_CULL_FACE", &Gl_CullFace))
+		{
+			if (Gl_CullFace)
+			{
+				glEnable(GL_CULL_FACE);
+			}
+			else 
+			{
+				glDisable(GL_CULL_FACE);
+			}
+		}
+		
+		ImGui::SameLine();
+
+		if(ImGui::Checkbox("GL_LIGHTING", &Gl_Ligthing))
+		{
+			if (Gl_Ligthing)
+			{
+				glEnable(GL_LIGHTING);
+			}
+			else 
+			{
+				glDisable(GL_LIGHTING);
+			}
+		}
+		
+		ImGui::SameLine();
+
+		if(ImGui::Checkbox("GL_COLOR_MATERIAL", &Gl_ColorMaterial))
+		{
+			if (Gl_ColorMaterial)
+			{
+				glEnable(GL_COLOR_MATERIAL);
+			}
+			else 
+			{
+				glDisable(GL_COLOR_MATERIAL);
+			}
+		}
+		
+		ImGui::SameLine();
+
+		if(ImGui::Checkbox("GL_TEXTURE_2D", &Gl_Texture2D))
+		{
+			if (Gl_Texture2D)
+			{
+				glEnable(GL_TEXTURE_2D);
+			}
+			else 
+			{
+				glDisable(GL_TEXTURE_2D);
+			}
+		}
+		
+		if(ImGui::Checkbox("GL_LINE_SMOOTH", &Gl_LineSmooth))
+		{
+			if (Gl_LineSmooth)
+			{
+				glEnable(GL_LINE_SMOOTH);
+			}
+			else 
+			{
+				glDisable(GL_LINE_SMOOTH);
+			}
+		}
+		
+		ImGui::SameLine();
+
+		if(ImGui::Checkbox("GL_POLYGON_SMOOTH", &Gl_PolygonSmooth))
+		{
+			if (Gl_PolygonSmooth)
+			{
+				glEnable(GL_POLYGON_SMOOTH);
+			}
+			else 
+			{
+				glDisable(GL_POLYGON_SMOOTH);
+			}
+		}
+		
+		ImGui::SameLine();
+
+		if(ImGui::Checkbox("GL_ALPHA_TEST", &Gl_AlphaTest))
+		{
+			if (Gl_AlphaTest)
+			{
+				glEnable(GL_ALPHA_TEST);
+			}
+			else 
+			{
+				glDisable(GL_ALPHA_TEST);
+			}
+		}
+
 		//Default Config
 		if (ImGui::Button("Default"))
 		{
@@ -393,6 +535,41 @@ void ModuleEditor::DefaultConfig()
 	//General Volume
 	Volume = 50;
 	//ChangeGeneralVolume((int)Volume);
+
+	//Wireframe Rendering
+	App->renderer3D->Wireframe = false;
+
+	//GL_DEPTH_TEST
+	Gl_DepthTest = true;
+	glEnable(GL_DEPTH_TEST);
+	
+	//GL_CULL_FACE
+	Gl_CullFace = true;
+	glEnable(GL_CULL_FACE);
+	
+	//GL_Ligthing
+	Gl_Ligthing = true;
+	glEnable(GL_LIGHTING);
+	
+	//Gl_ColorMaterial
+	Gl_ColorMaterial = true;
+	glEnable(GL_COLOR_MATERIAL);
+	
+	//Gl_Texture2D
+	Gl_Texture2D = true;
+	glEnable(GL_TEXTURE_2D);
+
+	//Gl_LineSmooth
+	Gl_LineSmooth = true;
+	glEnable(GL_LINE_SMOOTH);
+	
+	//Gl_LineSmooth
+	Gl_PolygonSmooth = true;
+	glEnable(Gl_PolygonSmooth);
+	
+	//Gl_AlphaTest
+	Gl_AlphaTest = true;
+	glEnable(GL_ALPHA_TEST);
 }
 
 bool ModuleEditor::CleanUp()

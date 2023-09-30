@@ -31,11 +31,21 @@ public:
 	bool LogOutput;
 	bool GotToBottom;
 	bool Vsync;
+	bool Gl_DepthTest;
+	bool Gl_CullFace;
+	bool Gl_Ligthing;
+	bool Gl_ColorMaterial;
+	bool Gl_Texture2D;
+	bool Gl_LineSmooth;
+	bool Gl_PolygonSmooth;
+	bool Gl_AlphaTest;
 
 	int ThemeSelector;
-	float WinBright;
 	int item_current_idx;
+	int SelectPrimitive;
+
 	float Volume;
+	float WinBright;
 };
 
 #endif

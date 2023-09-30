@@ -7,10 +7,18 @@
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
 
+#include <vector>
+#include <stdio.h>
+
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
 
 #define MAX_LIGHTS 8
+
+enum class PrimitiveType
+{
+	NONE, CUBE, CYLINDER, PLANE
+};
 
 class ModuleRenderer3D : public Module
 {
@@ -25,13 +33,16 @@ public:
 
 	void OnResize(int width, int height);
 
+	void RenderPrimitive(PrimitiveType Type);
+
 public:
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	CPlane Grid;
 
-	bool OpenWindow;
+	bool OpenWindow; 
+	bool Wireframe;
 	
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;
