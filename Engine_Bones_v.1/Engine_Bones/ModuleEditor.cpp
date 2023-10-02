@@ -36,6 +36,7 @@ bool ModuleEditor::Init()
 	AboutWindow = false;
 	LogOutput = false; 
 	OpenPreferences = false;
+	DemoWindow = false;
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 
@@ -67,13 +68,11 @@ bool ModuleEditor::DrawEditor()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::ShowDemoWindow(); 
-
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			ImGui::Text("Hello World!");
+			//ImGui::Text("Hello World!");
 			ImGui::EndMenu();
 		}
 
@@ -166,7 +165,11 @@ bool ModuleEditor::DrawEditor()
 			if (ImGui::MenuItem("Log Console"))
 			{
 				LogOutput = !LogOutput;
-				GotToBottom = !GotToBottom;
+			}	
+			
+			if (ImGui::MenuItem("GUI Demo Window"))
+			{
+				DemoWindow = !DemoWindow;
 			}
 
 			ImGui::EndMenu();
@@ -305,6 +308,12 @@ bool ModuleEditor::DrawEditor()
 
 	}
 	ImGui::EndMainMenuBar();
+
+	//Demo Window
+	if(DemoWindow)
+	{
+		ImGui::ShowDemoWindow();
+	}
 
 	//Output Window
 	if (LogOutput)

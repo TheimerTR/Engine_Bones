@@ -31,7 +31,6 @@ public:
 	bool AboutWindow;
 	bool OpenPreferences;
 	bool LogOutput;
-	bool GotToBottom;
 	bool Vsync;
 	bool Gl_DepthTest;
 	bool Gl_CullFace;
@@ -41,6 +40,7 @@ public:
 	bool Gl_LineSmooth;
 	bool Gl_PolygonSmooth;
 	bool Gl_AlphaTest;
+	bool DemoWindow;
 
 	int ThemeSelector;
 	int item_current_idx;
