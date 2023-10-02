@@ -33,7 +33,8 @@ namespace C_Math
 		}
 	}
 
-	void ClearFloat(std::vector<float>& vector)
+	template <class T>
+	void ClearVec(std::vector<T>& vector)
 	{
 		if (vector.size() > 0)
 		{

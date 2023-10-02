@@ -9,12 +9,16 @@
 #include <vector>
 #include <string>
 
-void AddLog(std::string logText)
+void AddLog(std::string logText, LogTypeCase _type)
 {
-	if (&app->editor->l_Logs != NULL)
+	if (&app->editor->l_Logs.Log != NULL)
 	{
 		//app->editor->l_Logs.push_back(logText);
-		VectorStringPushBack(app->editor->l_Logs, MAX_LOG_FPS, logText);
+		VectorLogsPushBack(app->editor->l_Logs.Log, MAX_LOG_FPS, logText);
+	}
+	if (&app->editor->l_Logs.Type != NULL)
+	{
+		VectorLogsPushBack(app->editor->l_Logs.Type, MAX_LOG_FPS, _type);
 	}
 }
 
@@ -55,13 +59,14 @@ void log(const char file[], int line, LogTypeCase _type, const char* format, ...
 	{
 		if (app->editor != nullptr)
 		{
-			AddLog(log_text);
+			AddLog(log_text, _type);
 			//RetLogs(log_text);
 		}
 	}
 }
 
-void VectorStringPushBack(std::vector<std::string>& vector, int MaxValue, std::string Log)
+template <class T>
+void VectorLogsPushBack(std::vector<T>& vector, int MaxValue, T& Log)
 {
 	if (vector.size() == vector.capacity())
 	{

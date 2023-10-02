@@ -19,16 +19,20 @@
 #include "ModuleRenderer3D.h"
 #include "C_Math.h"
 
+static ImGuiComboFlags flags;
+
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	mFPSLOG.reserve(MAX_LOG_FPS);
-	l_Logs.reserve(MAX_LOG_FPS);
+	l_Logs.Log.reserve(MAX_LOG_FPS);
+	l_Logs.Type.reserve(MAX_LOG_FPS);
 }
 
 ModuleEditor::~ModuleEditor()
 {
-	ClearLogs(l_Logs);
-	C_Math::ClearFloat(mFPSLOG);
+	ClearLogs(l_Logs.Log);
+	C_Math::ClearVec(mFPSLOG);
+	C_Math::ClearVec(l_Logs.Type);
 }
 
 bool ModuleEditor::Init()
@@ -40,6 +44,7 @@ bool ModuleEditor::Init()
 	OpenAbout = false;
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
+	Log_current_idx = 3;
 
 	// Cheking Version of ImGuI and Init the Context
 	IMGUI_CHECKVERSION();
@@ -213,20 +218,86 @@ bool ModuleEditor::DrawEditor()
 	if (LogOutput)
 	{
 		ThemeUpdate();
-		ImGui::Begin("Log Output", &LogOutput); 
 
 		//ImGui::Separator();
 
-		for (int i = 0; i < l_Logs.size(); i++)
+		ImGui::Begin("Log Output", &LogOutput);
+
+		switch ((LogTypeCase)Log_current_idx)
 		{
-			ImGui::Text("%s", l_Logs[i].c_str());
+			case LogTypeCase::L_CASUAL:
+
+				for (int i = 0; i < l_Logs.Log.size(); i++)
+				{
+					if (l_Logs.Type[i] == LogTypeCase::L_CASUAL)
+					{
+						ImGui::Text("%s", l_Logs.Log[i].c_str());
+					}
+				}
+				break;
+
+			case LogTypeCase::L_WARNING:
+
+				for (int i = 0; i < l_Logs.Log.size(); i++)
+				{
+					if (l_Logs.Type[i] == LogTypeCase::L_WARNING)
+					{
+						ImGui::Text("%s", l_Logs.Log[i].c_str());
+					}
+				}
+				break;
+
+			case LogTypeCase::L_ERROR:
+
+				for (int i = 0; i < l_Logs.Log.size(); i++)
+				{
+					if (l_Logs.Type[i] == LogTypeCase::L_ERROR)
+					{
+						ImGui::Text("%s", l_Logs.Log[i].c_str());
+					}
+				}
+				break;
+
+			case LogTypeCase::L_ALL:
+
+				for (int i = 0; i < l_Logs.Log.size(); i++)
+				{
+					ImGui::Text("%s", l_Logs.Log[i].c_str());
+				}
+				break;
+
+				default:
+					break;
+		}
+
+		const char* items[] = { "NORMAL", "WARNING", "ERROR", "ALL" };
+		const char* combo_preview_value = items[Log_current_idx];  // Pass in the preview value visible before opening the combo (it could be anything)
+		if (ImGui::BeginCombo("Log Selector", combo_preview_value, flags))
+		{
+			for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+			{
+				const bool is_selected = (Log_current_idx == n);
+
+				if (ImGui::Selectable(items[n], is_selected))
+				{
+					Log_current_idx = n;
+				}
+
+				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
 		}
 
 		//ClearLogs(l_Logs);
 
 		if (ImGui::Button("Clear"))
 		{
-			ClearLogs(l_Logs);
+			ClearLogs(l_Logs.Log);
+			C_Math::ClearVec(l_Logs.Type);
 		}
 
 		ImGui::End();
@@ -379,7 +450,7 @@ bool ModuleEditor::DrawEditor()
 		}
 
 		//Checkbox of window size
-		static ImGuiComboFlags flags = 0;
+		flags = 0;
 		ImGui::CheckboxFlags("ImGuiComboFlags_PopupAlignLeft", &flags, ImGuiComboFlags_PopupAlignLeft);
 
 		ImGui::SameLine();
@@ -436,7 +507,6 @@ bool ModuleEditor::DrawEditor()
 					default:
 						break;
 					}
-
 
 					SDL_SetWindowSize(App->window->window, w, h);
 				}
@@ -647,6 +717,7 @@ void ModuleEditor::DefaultConfig()
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.FrameRounding = 0.0f;
 	style.GrabRounding = style.FrameRounding; // Make GrabRounding always the same value as FrameRounding
+	flags = 0;
 
 	//Window size toolbar to 1280-720
 	item_current_idx = 3; // Here we store our selection data as an index.
@@ -700,8 +771,9 @@ void ModuleEditor::DefaultConfig()
 
 bool ModuleEditor::CleanUp()
 {
-	ClearLogs(l_Logs);
-	C_Math::ClearFloat(mFPSLOG);
+	ClearLogs(l_Logs.Log);
+	C_Math::ClearVec(mFPSLOG);
+	C_Math::ClearVec(l_Logs.Type);
 
 	// Cleanup of ImGui
 	ImGui_ImplOpenGL3_Shutdown();

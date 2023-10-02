@@ -11,7 +11,7 @@
 
 enum class LogTypeCase
 {
-	L_CASUAL, L_WARNING, L_ERROR
+	L_CASUAL, L_WARNING, L_ERROR, L_ALL
 };
 
 #define LOG(_type, format, ...) log(__FILE__, __LINE__, _type, format, __VA_ARGS__);
@@ -20,9 +20,10 @@ void log(const char file[], int line, LogTypeCase _type, const char* format, ...
 
 void ClearLogs(std::vector<std::string>& l_Logs);
 
-void AddLog(std::string logText);
+void AddLog(std::string logText, LogTypeCase _type);
 
-void VectorStringPushBack(std::vector<std::string>& vector, int MaxValue, std::string Log);
+template <class T>
+void VectorLogsPushBack(std::vector<T>& vector, int MaxValue, T& Log);
 
 #define CAP(n) ((n <= 0.0f) ? n=0.0f : (n >= 1.0f) ? n=1.0f : n=n)
 

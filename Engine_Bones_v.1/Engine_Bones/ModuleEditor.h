@@ -22,9 +22,15 @@ public:
 	void ThemeUpdate();
 
 public:
+
+	struct l_Logs
+	{
+	public:
+		std::vector<std::string> Log;
+		std::vector<LogTypeCase> Type;
+	}l_Logs;
+
 	std::vector<float> mFPSLOG;
-	
-	std::vector<std::string> l_Logs;
 
 	bool copy; 
 
@@ -45,6 +51,7 @@ public:
 
 	int ThemeSelector;
 	int item_current_idx;
+	int Log_current_idx;
 	int SelectPrimitive;
 
 	float Volume;
