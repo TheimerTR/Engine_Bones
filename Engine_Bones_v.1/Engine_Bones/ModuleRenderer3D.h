@@ -10,6 +10,8 @@
 #include <vector>
 #include <stdio.h>
 
+#include <iostream>
+
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
 
@@ -43,6 +45,10 @@ public:
 
 	bool OpenWindow; 
 	bool Wireframe;
+
+	uint VBO;
+	uint EBO;
+	uint VAO;
 	
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;

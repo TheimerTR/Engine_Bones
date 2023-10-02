@@ -657,8 +657,8 @@ void ModuleEditor::DefaultConfig()
 	glEnable(GL_DEPTH_TEST);
 	
 	//GL_CULL_FACE
-	Gl_CullFace = true;
-	glEnable(GL_CULL_FACE);
+	Gl_CullFace = false;
+	glDisable(GL_CULL_FACE);
 	
 	//GL_Ligthing
 	Gl_Ligthing = true;

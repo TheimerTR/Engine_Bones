@@ -31,6 +31,27 @@
 #endif // _DEBUG
 
 
+static const float CubeVertex[] = {
+	-1, -1, -1,
+	1, -1, -1,
+	1, 1, -1,
+	-1, 1, -1,
+	-1, -1, 1,
+	1, -1, 1,
+	1, 1, 1,
+	-1, 1, 1
+};
+
+static unsigned CubeIndices[] =
+{
+	0, 1, 3, 3, 1, 2,
+	1, 5, 2, 2, 5, 6,
+	5, 4, 6, 6, 4, 7,
+	4, 0, 7, 7, 0, 3,
+	3, 2, 7, 7, 2, 6,
+	4, 5, 0, 0, 5, 1
+};
+
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled), context(), Wireframe(false)
 {
 }
@@ -135,6 +156,37 @@ bool ModuleRenderer3D::Init()
 
 	Grid.axis = true;
 
+	EBO = 0;
+	glGenBuffers(1, &EBO);
+
+	VBO = 0;
+	glGenBuffers(1, &VBO);
+	
+	VAO = 0;
+	glGenBuffers(1, &VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertex), CubeVertex, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	//glBindVertexArray(VAO);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(0);
+	//glBindVertexArray(0);
+
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
+	//
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(6 * sizeof(float)));
+	//glEnableVertexAttribArray(2);
+	//
+	//glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(8 * sizeof(float)));
+	//glEnableVertexAttribArray(2);
+
 	return ret;
 }
 
@@ -180,6 +232,19 @@ bool ModuleRenderer3D::CleanUp()
 {
 	LOG(LogTypeCase::L_CASUAL, "Destroying 3D Renderer");
 
+	if (VBO != 0)
+	{
+		glDeleteBuffers(1, &VBO);
+	}
+	if (VAO != 0)
+	{
+		glDeleteBuffers(1, &VAO);
+	}
+	if (EBO != 0)
+	{
+		glDeleteBuffers(1, &EBO);
+	}
+
 	SDL_GL_DeleteContext(context);
 
 	return true;
@@ -206,7 +271,33 @@ void ModuleRenderer3D::RenderPrimitive(PrimitiveType Type)
 	switch (Type)
 	{
 	case PrimitiveType::CUBE:
-		Cube::Cube().InnerRender();
+
+		//glLineWidth(2.0f);
+
+		//glBegin(GL_TRIANGLES);
+		//glVertex3d(0, 0, 0); glVertex3d(1, 1, 0); glVertex3d(1, 0, 0);
+		//glVertex3d(0, 0, 0); glVertex3d(0, 1, 0); glVertex3d(1, 1, 0);
+		//
+		//glVertex3d(0, 0, 0); glVertex3d(0, 1, 1); glVertex3d(0, 1, 0);
+		//glVertex3d(0, 0, 1); glVertex3d(0, 1, 1); glVertex3d(0, 0, 0);
+		//
+		//glVertex3d(0, 0, 1); glVertex3d(1, 1, 1); glVertex3d(0, 1, 1);
+		//glVertex3d(0, 0, 1); glVertex3d(1, 0, 1); glVertex3d(1, 1, 1);
+		//
+		//glVertex3d(1, 1, 0); glVertex3d(1, 1, 0); glVertex3d(1, 1, 1);
+		//glVertex3d(1, 1, 0); glVertex3d(1, 0, 1); glVertex3d(1, 1, 1);
+
+		//glEnd();
+
+		//glLineWidth(1.0f);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+
+		//Cube::Cube().InnerRender();
 		break;
 	case PrimitiveType::CYLINDER:
 		CCylinder::CCylinder().InnerRender();
