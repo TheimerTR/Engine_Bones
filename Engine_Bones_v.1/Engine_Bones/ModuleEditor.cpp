@@ -442,39 +442,6 @@ bool ModuleEditor::DrawEditor()
 
 			//Brightness modulator
 			if (ImGui::SliderFloat("Brightness", &WinBright, 0.f, 1.f))
-		//Frame rounding
-		ImGuiStyle& style = ImGui::GetStyle();
-
-		if (ImGui::SliderFloat("Frame Rounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f"))
-		{
-			style.GrabRounding = style.FrameRounding; // Make GrabRounding always the same value as FrameRounding
-		}
-
-		//Checkbox of window size
-		flags = 0;
-		ImGui::CheckboxFlags("ImGuiComboFlags_PopupAlignLeft", &flags, ImGuiComboFlags_PopupAlignLeft);
-
-		ImGui::SameLine();
-
-		if (ImGui::CheckboxFlags("ImGuiComboFlags_NoArrowButton", &flags, ImGuiComboFlags_NoArrowButton))
-		{
-			flags &= ~ImGuiComboFlags_NoPreview;     // Clear the other flag, as we cannot combine both
-		}
-		ImGui::SameLine();
-
-		if (ImGui::CheckboxFlags("ImGuiComboFlags_NoPreview", &flags, ImGuiComboFlags_NoPreview))
-		{
-			flags &= ~ImGuiComboFlags_NoArrowButton; // Clear the other flag, as we cannot combine both
-		}
-
-		// Using the generic BeginCombo() API, you have full control over how to display the combo contents.
-		// (your selection data could be an index, a pointer to the object, an id for the object, a flag intrusively
-		// stored in the object itself, etc.)
-		const char* items[] = { "1920-1080", "1536-864", "1366-768", "1280-720", "360-800" };
-		const char* combo_preview_value = items[item_current_idx];  // Pass in the preview value visible before opening the combo (it could be anything)
-		if (ImGui::BeginCombo("Window Size", combo_preview_value, flags))
-		{
-			for (int n = 0; n < IM_ARRAYSIZE(items); n++)
 			{
 				SDL_SetWindowBrightness(App->window->window, WinBright);
 			}
@@ -488,7 +455,7 @@ bool ModuleEditor::DrawEditor()
 			//Frame rounding
 			ImGuiStyle& style = ImGui::GetStyle();
 
-			if (ImGui::SliderFloat("FrameRounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f"))
+			if (ImGui::SliderFloat("Frame Rounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f"))
 			{
 				style.GrabRounding = style.FrameRounding; // Make GrabRounding always the same value as FrameRounding
 			}
@@ -515,219 +482,257 @@ bool ModuleEditor::DrawEditor()
 			// stored in the object itself, etc.)
 			const char* items[] = { "1920-1080", "1536-864", "1366-768", "1280-720", "360-800" };
 			const char* combo_preview_value = items[item_current_idx];  // Pass in the preview value visible before opening the combo (it could be anything)
-
 			if (ImGui::BeginCombo("Window Size", combo_preview_value, flags))
 			{
 				for (int n = 0; n < IM_ARRAYSIZE(items); n++)
 				{
-					const bool is_selected = (item_current_idx == n);
+					SDL_SetWindowBrightness(App->window->window, WinBright);
+				}
 
-					if (ImGui::Selectable(items[n], is_selected))
+				//Frame rounding
+				ImGuiStyle& style = ImGui::GetStyle();
+
+				if (ImGui::SliderFloat("FrameRounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f"))
+				{
+					style.GrabRounding = style.FrameRounding; // Make GrabRounding always the same value as FrameRounding
+				}
+
+				//Checkbox of window size
+				flags = 0;
+				ImGui::CheckboxFlags("ImGuiComboFlags_PopupAlignLeft", &flags, ImGuiComboFlags_PopupAlignLeft);
+
+				ImGui::SameLine();
+
+				if (ImGui::CheckboxFlags("ImGuiComboFlags_NoArrowButton", &flags, ImGuiComboFlags_NoArrowButton))
+				{
+					flags &= ~ImGuiComboFlags_NoPreview;     // Clear the other flag, as we cannot combine both
+				}
+				ImGui::SameLine();
+
+				if (ImGui::CheckboxFlags("ImGuiComboFlags_NoPreview", &flags, ImGuiComboFlags_NoPreview))
+				{
+					flags &= ~ImGuiComboFlags_NoArrowButton; // Clear the other flag, as we cannot combine both
+				}
+
+				// Using the generic BeginCombo() API, you have full control over how to display the combo contents.
+				// (your selection data could be an index, a pointer to the object, an id for the object, a flag intrusively
+				// stored in the object itself, etc.)
+				const char* items[] = { "1920-1080", "1536-864", "1366-768", "1280-720", "360-800" };
+				const char* combo_preview_value = items[item_current_idx];  // Pass in the preview value visible before opening the combo (it could be anything)
+
+				if (ImGui::BeginCombo("Window Size", combo_preview_value, flags))
+				{
+					for (int n = 0; n < IM_ARRAYSIZE(items); n++)
 					{
-						item_current_idx = n;
+						const bool is_selected = (item_current_idx == n);
 
-						int w, h;
-						switch (item_current_idx)
+						if (ImGui::Selectable(items[n], is_selected))
 						{
-						case 0:
-							w = 1920;
-							h = 1080;
-							break;
-						case 1:
-							w = 1536;
-							h = 864;
-							break;
-						case 2:
-							w = 1366;
-							h = 768;
-							break;
-						case 3:
-							w = 1280;
-							h = 720;
-							break;
-						case 4:
-							w = 360;
-							h = 800;
-							break;
-						default:
-							break;
+							item_current_idx = n;
+
+							int w, h;
+							switch (item_current_idx)
+							{
+							case 0:
+								w = 1920;
+								h = 1080;
+								break;
+							case 1:
+								w = 1536;
+								h = 864;
+								break;
+							case 2:
+								w = 1366;
+								h = 768;
+								break;
+							case 3:
+								w = 1280;
+								h = 720;
+								break;
+							case 4:
+								w = 360;
+								h = 800;
+								break;
+							default:
+								break;
+							}
+
+							SDL_SetWindowSize(App->window->window, w, h);
 						}
 
-						SDL_SetWindowSize(App->window->window, w, h);
+						// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+						if (is_selected)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
 					}
-
-					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-					if (is_selected)
-					{
-						ImGui::SetItemDefaultFocus();
-					}
+					ImGui::EndCombo();
 				}
-				ImGui::EndCombo();
-			}
 
-			ImGui::Separator();
+				ImGui::Separator();
+			}
 		}
 
-		if (ImGui::CollapsingHeader("Render Options"))
-		{
-
-			if (ImGui::TreeNode("FPS##2"))
+			if (ImGui::CollapsingHeader("Render Options"))
 			{
-				//Vsync
-				if (ImGui::Checkbox("Vsync", &Vsync))
+
+				if (ImGui::TreeNode("FPS##2"))
 				{
+					//Vsync
+					if (ImGui::Checkbox("Vsync", &Vsync))
+					{
+						if (Vsync)
+						{
+							if (SDL_GL_SetSwapInterval(1) < 0)
+							{
+								LOG(LogTypeCase::L_WARNING, "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+							}
+						}
+						else
+						{
+							SDL_GL_SetSwapInterval(0);
+						}
+					}
+
+					//FPS_Graph
+					ImGui::Text("FPS Limiter");
+					float c_FPS = floorf(App->GetFrameRate());
+					C_Math::VectorPushBack(mFPSLOG, c_FPS);
+
+					ImGui::PlotHistogram("FPS", &mFPSLOG[0], mFPSLOG.size(), 0, NULL, 0.0f, 100.0f, ImVec2(300, 100));
+
 					if (Vsync)
 					{
-						if (SDL_GL_SetSwapInterval(1) < 0)
+						if (ImGui::SliderInt("Select the MaxFPS", &App->max_FPS, -1, 200, NULL))
 						{
-							LOG(LogTypeCase::L_WARNING, "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+							App->max_FPS = App->max_FPS;
 						}
 					}
-					else
-					{
-						SDL_GL_SetSwapInterval(0);
-					}
+
+					ImGui::TreePop();
+					ImGui::Separator();
+
 				}
 
-				//FPS_Graph
-				ImGui::Text("FPS Limiter");
-				float c_FPS = floorf(App->GetFrameRate());
-				C_Math::VectorPushBack(mFPSLOG, c_FPS);
-
-				ImGui::PlotHistogram("FPS", &mFPSLOG[0], mFPSLOG.size(), 0, NULL, 0.0f, 100.0f, ImVec2(300, 100));
-
-				if (Vsync)
+				if (ImGui::TreeNode("General##2"))
 				{
-					if (ImGui::SliderInt("Select the MaxFPS", &App->max_FPS, -1, 200, NULL))
-					{
-						App->max_FPS = App->max_FPS;
-					}
-				}
+					//Wireframe Mode
+					ImGui::Checkbox("Wireframe Rendering Mode", &App->renderer3D->Wireframe);
 
-				ImGui::TreePop(); 
-				ImGui::Separator(); 
+					//GL_DEPTH_TEST
+					if (ImGui::Checkbox("GL_DEPTH_TEST", &Gl_DepthTest))
+					{
+						if (Gl_DepthTest)
+						{
+							glEnable(GL_DEPTH_TEST);
+						}
+						else
+						{
+							glDisable(GL_DEPTH_TEST);
+						}
+					}
+
+					ImGui::SameLine();
+
+					if (ImGui::Checkbox("GL_CULL_FACE", &Gl_CullFace))
+					{
+						if (Gl_CullFace)
+						{
+							glEnable(GL_CULL_FACE);
+						}
+						else
+						{
+							glDisable(GL_CULL_FACE);
+						}
+					}
+
+					ImGui::SameLine();
+
+					if (ImGui::Checkbox("GL_LIGHTING", &Gl_Ligthing))
+					{
+						if (Gl_Ligthing)
+						{
+							glEnable(GL_LIGHTING);
+						}
+						else
+						{
+							glDisable(GL_LIGHTING);
+						}
+					}
+
+					ImGui::SameLine();
+
+					if (ImGui::Checkbox("GL_COLOR_MATERIAL", &Gl_ColorMaterial))
+					{
+						if (Gl_ColorMaterial)
+						{
+							glEnable(GL_COLOR_MATERIAL);
+						}
+						else
+						{
+							glDisable(GL_COLOR_MATERIAL);
+						}
+					}
+
+					ImGui::SameLine();
+
+					if (ImGui::Checkbox("GL_TEXTURE_2D", &Gl_Texture2D))
+					{
+						if (Gl_Texture2D)
+						{
+							glEnable(GL_TEXTURE_2D);
+						}
+						else
+						{
+							glDisable(GL_TEXTURE_2D);
+						}
+					}
+
+					if (ImGui::Checkbox("GL_LINE_SMOOTH", &Gl_LineSmooth))
+					{
+						if (Gl_LineSmooth)
+						{
+							glEnable(GL_LINE_SMOOTH);
+						}
+						else
+						{
+							glDisable(GL_LINE_SMOOTH);
+						}
+					}
+
+					ImGui::SameLine();
+
+					if (ImGui::Checkbox("GL_POLYGON_SMOOTH", &Gl_PolygonSmooth))
+					{
+						if (Gl_PolygonSmooth)
+						{
+							glEnable(GL_POLYGON_SMOOTH);
+						}
+						else
+						{
+							glDisable(GL_POLYGON_SMOOTH);
+						}
+					}
+
+					ImGui::SameLine();
+
+					if (ImGui::Checkbox("GL_ALPHA_TEST", &Gl_AlphaTest))
+					{
+						if (Gl_AlphaTest)
+						{
+							glEnable(GL_ALPHA_TEST);
+						}
+						else
+						{
+							glDisable(GL_ALPHA_TEST);
+						}
+					}
+
+					ImGui::TreePop();
+					ImGui::Separator();
+				}
 
 			}
-
-			if (ImGui::TreeNode("General##2"))
-			{
-				//Wireframe Mode
-				ImGui::Checkbox("Wireframe Rendering Mode", &App->renderer3D->Wireframe);
-
-				//GL_DEPTH_TEST
-				if (ImGui::Checkbox("GL_DEPTH_TEST", &Gl_DepthTest))
-				{
-					if (Gl_DepthTest)
-					{
-						glEnable(GL_DEPTH_TEST);
-					}
-					else
-					{
-						glDisable(GL_DEPTH_TEST);
-					}
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Checkbox("GL_CULL_FACE", &Gl_CullFace))
-				{
-					if (Gl_CullFace)
-					{
-						glEnable(GL_CULL_FACE);
-					}
-					else
-					{
-						glDisable(GL_CULL_FACE);
-					}
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Checkbox("GL_LIGHTING", &Gl_Ligthing))
-				{
-					if (Gl_Ligthing)
-					{
-						glEnable(GL_LIGHTING);
-					}
-					else
-					{
-						glDisable(GL_LIGHTING);
-					}
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Checkbox("GL_COLOR_MATERIAL", &Gl_ColorMaterial))
-				{
-					if (Gl_ColorMaterial)
-					{
-						glEnable(GL_COLOR_MATERIAL);
-					}
-					else
-					{
-						glDisable(GL_COLOR_MATERIAL);
-					}
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Checkbox("GL_TEXTURE_2D", &Gl_Texture2D))
-				{
-					if (Gl_Texture2D)
-					{
-						glEnable(GL_TEXTURE_2D);
-					}
-					else
-					{
-						glDisable(GL_TEXTURE_2D);
-					}
-				}
-
-				if (ImGui::Checkbox("GL_LINE_SMOOTH", &Gl_LineSmooth))
-				{
-					if (Gl_LineSmooth)
-					{
-						glEnable(GL_LINE_SMOOTH);
-					}
-					else
-					{
-						glDisable(GL_LINE_SMOOTH);
-					}
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Checkbox("GL_POLYGON_SMOOTH", &Gl_PolygonSmooth))
-				{
-					if (Gl_PolygonSmooth)
-					{
-						glEnable(GL_POLYGON_SMOOTH);
-					}
-					else
-					{
-						glDisable(GL_POLYGON_SMOOTH);
-					}
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Checkbox("GL_ALPHA_TEST", &Gl_AlphaTest))
-				{
-					if (Gl_AlphaTest)
-					{
-						glEnable(GL_ALPHA_TEST);
-					}
-					else
-					{
-						glDisable(GL_ALPHA_TEST);
-					}
-				}
-
-				ImGui::TreePop(); 
-				ImGui::Separator(); 
-			}
-
-		}
 
 			//Default Config
 			if (ImGui::Button("Default"))
@@ -742,7 +747,9 @@ bool ModuleEditor::DrawEditor()
 			}
 
 			ImGui::EndPopup();
-		}
+		
+
+	}
 
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -761,7 +768,9 @@ bool ModuleEditor::DrawEditor()
 
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-	return true;
+		return true;
+
+	
 }
 
 void ModuleEditor::DefaultConfig()
