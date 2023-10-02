@@ -41,6 +41,7 @@ public:
 	bool Gl_PolygonSmooth;
 	bool Gl_AlphaTest;
 	bool DemoWindow;
+	bool OpenAbout; 
 
 	int ThemeSelector;
 	int item_current_idx;

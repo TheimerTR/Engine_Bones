@@ -37,6 +37,7 @@ bool ModuleEditor::Init()
 	LogOutput = false; 
 	OpenPreferences = false;
 	DemoWindow = false;
+	OpenAbout = false;
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 
@@ -177,131 +178,11 @@ bool ModuleEditor::DrawEditor()
 
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::Button("About"))
+			if (ImGui::MenuItem("About"))
 			{
-				ImGui::OpenPopup("About");
-			}
 				ThemeUpdate();
-
-				ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-				ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
-				bool close = true; 
-
-				if (ImGui::BeginPopupModal("About", &close, ImGuiWindowFlags_AlwaysAutoResize)) 
-				{
-
-					ImGui::Text("Bones Engine\n");
-					ImGui::Text("An Incredible 3D Game Engine which was made by a dinosaur :O");
-					ImGui::Separator();
-					ImGui::Text("Authors:\n");
-					ImGui::Text("Alberto Hidalgo Garcia\nSonia Cristina Ojeda Lanz");
-					ImGui::Text("\nThird Party Libraries used:");
-		
-					ImGui::Text("Authors:\n");
-					ImGui::Text("Alberto Hidalgo Garcia\nSonia Cristina Ojeda Lanz");
-
-					ImGui::Text("\nThird Party Libraries used:");
-
-					std::string strVer; 
-					SDL_version version;
-					SDL_GetVersion(&version); 
-
-					strVer = std::to_string(version.major) + '.' + std::to_string(version.minor) + '.' + std::to_string(version.patch);
-					ImGui::Text("SDL v %s ", strVer.c_str());
-
-					copy = ImGui::Button("Copy Link SDL"); 
-
-					if (copy) {
-
-						ImGui::LogToClipboard();
-						ImGui::LogText("https://www.libsdl.org/");
-						ImGui::LogFinish(); 
-					}
-
-			
-					std::string gui = (ImGui::GetVersion()); 
-					ImGui::Text("ImGui v %s", gui.c_str());
-
-					copy = ImGui::Button("Copy Link ImGui");
-
-					if (copy) {
-
-						ImGui::LogToClipboard();
-						ImGui::LogText("https://github.com/ocornut/imgui");
-						ImGui::LogFinish();
-					}
-
-					std::string gl = (const char*)glGetString(GL_VERSION); 
-					ImGui::Text("OpenGL v %s", gl.c_str());
-
-					copy = ImGui::Button("Copy Link OpenGL");
-
-					if (copy) {
-
-						ImGui::LogToClipboard();
-						ImGui::LogText("https://www.opengl.org/");
-						ImGui::LogFinish();
-					}
-
-					std::string glew = (const char*)glewGetString(GLEW_VERSION); 
-					ImGui::Text("Glew v %s", glew.c_str()); 
-
-					copy = ImGui::Button("Copy Link Glew");
-
-					if (copy) {
-
-						ImGui::LogToClipboard();
-						ImGui::LogText("https://glew.sourceforge.net/");
-						ImGui::LogFinish();
-					}
-
-					ImGui::Text("ImGuiCandy"); 
-
-					copy = ImGui::Button("Copy Link Candy");
-
-					if (copy) {
-
-						ImGui::LogToClipboard();
-						ImGui::LogText("https://github.com/Raais/ImguiCandy");
-						ImGui::LogFinish();
-					}
-
-					ImGui::Text("MathGeoLib");
-
-					copy = ImGui::Button("Copy Link MathGeoLib");
-
-					if (copy) {
-
-						ImGui::LogToClipboard();
-						ImGui::LogText("https://github.com/juj/MathGeoLib");
-						ImGui::LogFinish();
-					}
-
-					ImGui::Text("Parson"); 
-
-					copy = ImGui::Button("Copy Link Parson");
-
-					if (copy) {
-
-						ImGui::LogToClipboard();
-						ImGui::LogText("https://github.com/kgabis/parson");
-						ImGui::LogFinish();
-					}
-
-					ImGui::Text("\nLisence: MIT Lisence ");
-
-					ImGui::Text("Copyright (c) 2023 TheimerTR\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this softwareand associated documentation files(the Software), to deal\n");
-					ImGui::Text("in the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and /or sell\n"); 
-					ImGui::Text("copies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :\n");
-					ImGui::Text("The above copyright noticeand this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\n");
-					ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n");
-					ImGui::Text("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n");
-					ImGui::Text("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n");
-					ImGui::Text("SOFTWARE.");
-					
-					ImGui::EndPopup();
-				}
+				OpenAbout = !OpenAbout;
+			}
 			
 			ImGui::EndMenu();
 		}
@@ -338,14 +219,135 @@ bool ModuleEditor::DrawEditor()
 		ImGui::End();
 	}
 
+	if (OpenAbout)
+	{
+		ImGui::OpenPopup("About");
+	}
+
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+	bool close = true;
+
+	if (ImGui::BeginPopupModal("About", &OpenAbout, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+
+		ImGui::Text("Bones Engine\n");
+		ImGui::Text("An Incredible 3D Game Engine which was made by a dinosaur :O");
+		ImGui::Separator();
+		ImGui::Text("Authors:\n");
+		ImGui::Text("Alberto Hidalgo Garcia\nSonia Cristina Ojeda Lanz");
+		ImGui::Text("\nThird Party Libraries used:");
+
+		std::string strVer;
+		SDL_version version;
+		SDL_GetVersion(&version);
+
+		strVer = std::to_string(version.major) + '.' + std::to_string(version.minor) + '.' + std::to_string(version.patch);
+		ImGui::Text("SDL v %s ", strVer.c_str());
+
+		copy = ImGui::Button("Copy Link SDL");
+
+		if (copy) {
+
+			ImGui::LogToClipboard();
+			ImGui::LogText("https://www.libsdl.org/");
+			ImGui::LogFinish();
+		}
+
+
+		std::string gui = (ImGui::GetVersion());
+		ImGui::Text("ImGui v %s", gui.c_str());
+
+		copy = ImGui::Button("Copy Link ImGui");
+
+		if (copy) {
+
+			ImGui::LogToClipboard();
+			ImGui::LogText("https://github.com/ocornut/imgui");
+			ImGui::LogFinish();
+		}
+
+		std::string gl = (const char*)glGetString(GL_VERSION);
+		ImGui::Text("OpenGL v %s", gl.c_str());
+
+		copy = ImGui::Button("Copy Link OpenGL");
+
+		if (copy) {
+
+			ImGui::LogToClipboard();
+			ImGui::LogText("https://www.opengl.org/");
+			ImGui::LogFinish();
+		}
+
+		std::string glew = (const char*)glewGetString(GLEW_VERSION);
+		ImGui::Text("Glew v %s", glew.c_str());
+
+		copy = ImGui::Button("Copy Link Glew");
+
+		if (copy) {
+
+			ImGui::LogToClipboard();
+			ImGui::LogText("https://glew.sourceforge.net/");
+			ImGui::LogFinish();
+		}
+
+		ImGui::Text("ImGuiCandy");
+
+		copy = ImGui::Button("Copy Link Candy");
+
+		if (copy) {
+
+			ImGui::LogToClipboard();
+			ImGui::LogText("https://github.com/Raais/ImguiCandy");
+			ImGui::LogFinish();
+		}
+
+		ImGui::Text("MathGeoLib");
+
+		copy = ImGui::Button("Copy Link MathGeoLib");
+
+		if (copy) {
+
+			ImGui::LogToClipboard();
+			ImGui::LogText("https://github.com/juj/MathGeoLib");
+			ImGui::LogFinish();
+		}
+
+		ImGui::Text("Parson");
+
+		copy = ImGui::Button("Copy Link Parson");
+
+		if (copy) {
+
+			ImGui::LogToClipboard();
+			ImGui::LogText("https://github.com/kgabis/parson");
+			ImGui::LogFinish();
+		}
+
+		ImGui::Text("\nLisence: MIT Lisence ");
+
+		ImGui::Text("Copyright (c) 2023 TheimerTR\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this softwareand associated documentation files(the Software), to deal\n");
+		ImGui::Text("in the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and /or sell\n");
+		ImGui::Text("copies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :\n");
+		ImGui::Text("The above copyright noticeand this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\n");
+		ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n");
+		ImGui::Text("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n");
+		ImGui::Text("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n");
+		ImGui::Text("SOFTWARE.");
+
+		ImGui::EndPopup();
+
+	}
+
 	//Open preferences window
-	if(OpenPreferences)
+	if (OpenPreferences)
 	{
 		ImGui::OpenPopup("Preferences");
 	}
 	
-	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+	ImVec2 center2 = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center2, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
 	if (ImGui::BeginPopupModal("Preferences", &OpenPreferences, ImGuiWindowFlags_AlwaysAutoResize))
 	{
