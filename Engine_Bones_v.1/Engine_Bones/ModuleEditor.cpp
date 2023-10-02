@@ -160,7 +160,7 @@ bool ModuleEditor::DrawEditor()
 					ImGui::EndMenu();
 				}
 
-				if (ImGui::MenuItem("Esphere"))
+				if (ImGui::MenuItem("Cylinder"))
 				{
 					SelectPrimitive = (int)PrimitiveType::CYLINDER;
 				}
@@ -444,7 +444,7 @@ bool ModuleEditor::DrawEditor()
 		//Frame rounding
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		if (ImGui::SliderFloat("FrameRounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f"))
+		if (ImGui::SliderFloat("Frame Rounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f"))
 		{
 			style.GrabRounding = style.FrameRounding; // Make GrabRounding always the same value as FrameRounding
 		}
