@@ -246,7 +246,7 @@ bool ModuleEditor::DrawEditor()
 	{
 
 		ImGui::Text("Bones Engine\n");
-		ImGui::Text("An Incredible 3D Game Engine which was made by a dinosaur :O");
+		ImGui::Text("An amazing 3D Engine for your amazing 3D games");
 		ImGui::Separator();
 		ImGui::Text("Authors:\n");
 		ImGui::Text("Alberto Hidalgo Garcia\nSonia Cristina Ojeda Lanz");
@@ -340,7 +340,7 @@ bool ModuleEditor::DrawEditor()
 
 		ImGui::Text("\nLisence: MIT Lisence ");
 
-		ImGui::Text("Copyright (c) 2023 TheimerTR\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this softwareand associated documentation files(the Software), to deal\n");
+		ImGui::Text("Copyright (c) 2023 TheimerTR & SoniaOL\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this softwareand associated documentation files(the Software), to deal\n");
 		ImGui::Text("in the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and /or sell\n");
 		ImGui::Text("copies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :\n");
 		ImGui::Text("The above copyright noticeand this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\n");
