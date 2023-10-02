@@ -160,7 +160,7 @@ bool ModuleEditor::DrawEditor()
 					ImGui::EndMenu();
 				}
 
-				if (ImGui::MenuItem("Esphere"))
+				if (ImGui::MenuItem("Cylinder"))
 				{
 					SelectPrimitive = (int)PrimitiveType::CYLINDER;
 				}
@@ -442,6 +442,39 @@ bool ModuleEditor::DrawEditor()
 
 			//Brightness modulator
 			if (ImGui::SliderFloat("Brightness", &WinBright, 0.f, 1.f))
+		//Frame rounding
+		ImGuiStyle& style = ImGui::GetStyle();
+
+		if (ImGui::SliderFloat("Frame Rounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f"))
+		{
+			style.GrabRounding = style.FrameRounding; // Make GrabRounding always the same value as FrameRounding
+		}
+
+		//Checkbox of window size
+		flags = 0;
+		ImGui::CheckboxFlags("ImGuiComboFlags_PopupAlignLeft", &flags, ImGuiComboFlags_PopupAlignLeft);
+
+		ImGui::SameLine();
+
+		if (ImGui::CheckboxFlags("ImGuiComboFlags_NoArrowButton", &flags, ImGuiComboFlags_NoArrowButton))
+		{
+			flags &= ~ImGuiComboFlags_NoPreview;     // Clear the other flag, as we cannot combine both
+		}
+		ImGui::SameLine();
+
+		if (ImGui::CheckboxFlags("ImGuiComboFlags_NoPreview", &flags, ImGuiComboFlags_NoPreview))
+		{
+			flags &= ~ImGuiComboFlags_NoArrowButton; // Clear the other flag, as we cannot combine both
+		}
+
+		// Using the generic BeginCombo() API, you have full control over how to display the combo contents.
+		// (your selection data could be an index, a pointer to the object, an id for the object, a flag intrusively
+		// stored in the object itself, etc.)
+		const char* items[] = { "1920-1080", "1536-864", "1366-768", "1280-720", "360-800" };
+		const char* combo_preview_value = items[item_current_idx];  // Pass in the preview value visible before opening the combo (it could be anything)
+		if (ImGui::BeginCombo("Window Size", combo_preview_value, flags))
+		{
+			for (int n = 0; n < IM_ARRAYSIZE(items); n++)
 			{
 				SDL_SetWindowBrightness(App->window->window, WinBright);
 			}
