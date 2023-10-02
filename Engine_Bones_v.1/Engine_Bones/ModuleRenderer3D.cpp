@@ -52,6 +52,16 @@ static unsigned CubeIndices[] =
 	4, 5, 0, 0, 5, 1
 };
 
+GLubyte CubeByteIndices[] = 
+{ 
+	0,1,2, 2,3,0,   // 36 of indices
+	0,3,4, 4,5,0,
+	0,5,6, 6,1,0,
+	1,6,7, 7,2,1,
+	7,4,3, 3,2,7,
+	4,7,6, 6,5,4 
+};
+
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled), context(), Wireframe(false)
 {
 }
@@ -270,35 +280,59 @@ void ModuleRenderer3D::RenderPrimitive(PrimitiveType Type)
 {
 	switch (Type)
 	{
-	case PrimitiveType::CUBE:
+	case PrimitiveType::CUBE_DIRECT_MODE:
 
-		//glLineWidth(2.0f);
+		glLineWidth(2.0f);
 
-		//glBegin(GL_TRIANGLES);
-		//glVertex3d(0, 0, 0); glVertex3d(1, 1, 0); glVertex3d(1, 0, 0);
-		//glVertex3d(0, 0, 0); glVertex3d(0, 1, 0); glVertex3d(1, 1, 0);
-		//
-		//glVertex3d(0, 0, 0); glVertex3d(0, 1, 1); glVertex3d(0, 1, 0);
-		//glVertex3d(0, 0, 1); glVertex3d(0, 1, 1); glVertex3d(0, 0, 0);
-		//
-		//glVertex3d(0, 0, 1); glVertex3d(1, 1, 1); glVertex3d(0, 1, 1);
-		//glVertex3d(0, 0, 1); glVertex3d(1, 0, 1); glVertex3d(1, 1, 1);
-		//
-		//glVertex3d(1, 1, 0); glVertex3d(1, 1, 0); glVertex3d(1, 1, 1);
-		//glVertex3d(1, 1, 0); glVertex3d(1, 0, 1); glVertex3d(1, 1, 1);
+		glBegin(GL_TRIANGLES);
+		glVertex3d(0, 0, 0); glVertex3d(1, 1, 0); glVertex3d(1, 0, 0);
+		glVertex3d(0, 0, 0); glVertex3d(0, 1, 0); glVertex3d(1, 1, 0);
+		
+		glVertex3d(0, 0, 0); glVertex3d(0, 1, 1); glVertex3d(0, 1, 0);
+		glVertex3d(0, 0, 1); glVertex3d(0, 1, 1); glVertex3d(0, 0, 0);
+		
+		glVertex3d(0, 0, 1); glVertex3d(1, 1, 1); glVertex3d(0, 1, 1);
+		glVertex3d(0, 0, 1); glVertex3d(1, 0, 1); glVertex3d(1, 1, 1);
+		
+		glVertex3d(1, 1, 0); glVertex3d(1, 1, 0); glVertex3d(1, 1, 1);
+		glVertex3d(1, 1, 0); glVertex3d(1, 0, 1); glVertex3d(1, 1, 1);
+		
+		glVertex3d(0, 1, 0); glVertex3d(1, 1, 1); glVertex3d(1, 1, 0);
+		glVertex3d(0, 1, 0); glVertex3d(0, 1, 1); glVertex3d(1, 1, 1);		
+		
+		glVertex3d(0, 0, 0); glVertex3d(1, 0, 1); glVertex3d(0, 0, 1);
+		glVertex3d(0, 0, 0); glVertex3d(1, 0, 0); glVertex3d(1, 0, 1);
 
-		//glEnd();
+		glEnd();
 
-		//glLineWidth(1.0f);
-
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+		glLineWidth(1.0f);
 
 		//Cube::Cube().InnerRender();
+
 		break;
+		case PrimitiveType::CUBE_ARRAY:
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glVertexPointer(3, GL_FLOAT, 0, NULL);
+			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+
+			break;	
+		
+		case PrimitiveType::CUBE_ELEMENT:
+
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glVertexPointer(3, GL_FLOAT, 0, CubeVertex);
+
+			// draw a cube
+			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, CubeByteIndices);
+
+			// deactivate vertex arrays after drawing
+			glDisableClientState(GL_VERTEX_ARRAY);
+
+			break;
+
 	case PrimitiveType::CYLINDER:
 		CCylinder::CCylinder().InnerRender();
 		break;

@@ -35,9 +35,12 @@ namespace C_Math
 
 	void ClearFloat(std::vector<float>& vector)
 	{
-		for (int i = 0; i < vector.size() - 1; i++)
+		if (vector.size() > 0)
 		{
-			vector.pop_back();
+			for (int i = 0; i < vector.size() - 1; i++)
+			{
+				vector.pop_back();
+			}
 		}
 
 		vector.clear();

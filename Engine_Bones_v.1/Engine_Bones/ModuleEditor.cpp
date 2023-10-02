@@ -138,10 +138,23 @@ bool ModuleEditor::DrawEditor()
 		{
 			if (ImGui::BeginMenu("Render Primitive"))
 			{
-				if (ImGui::MenuItem("Cube"))
+				if (ImGui::BeginMenu("Cubes"))
 				{
-					SelectPrimitive = (int)PrimitiveType::CUBE;
+					if (ImGui::MenuItem("Cube Direct"))
+					{
+						SelectPrimitive = (int)PrimitiveType::CUBE_DIRECT_MODE;
+					}
+					if (ImGui::MenuItem("Cube Array"))
+					{
+						SelectPrimitive = (int)PrimitiveType::CUBE_ARRAY;
+					}
+					if (ImGui::MenuItem("Cube Element"))
+					{
+						SelectPrimitive = (int)PrimitiveType::CUBE_ELEMENT;
+					}
+					ImGui::EndMenu();
 				}
+
 				if (ImGui::MenuItem("Esphere"))
 				{
 					SelectPrimitive = (int)PrimitiveType::CYLINDER;

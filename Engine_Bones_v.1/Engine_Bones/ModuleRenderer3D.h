@@ -19,7 +19,7 @@
 
 enum class PrimitiveType
 {
-	NONE, CUBE, CYLINDER, PLANE
+	NONE, CUBE_DIRECT_MODE, CUBE_ARRAY, CUBE_ELEMENT, CYLINDER, PLANE
 };
 
 class ModuleRenderer3D : public Module

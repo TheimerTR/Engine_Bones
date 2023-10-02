@@ -30,6 +30,8 @@ bool ModuleCamera3D::Start()
 	LOG(LogTypeCase::L_CASUAL, "Setting up the camera");
 	bool ret = true;
 
+	LookAt(Reference);
+
 	return ret;
 }
 
@@ -69,12 +71,11 @@ update_status ModuleCamera3D::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 8.0f * dt;
 
-	if(App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
-	if(App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
+	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) newPos.y += speed;
+	if(App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) newPos.y -= speed;
+	
 	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
-
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
 
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
 	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
@@ -91,7 +92,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 		float Sensitivity = 0.35f * dt;
 
-		Position -= Reference;
+		//Position -= Reference;
 
 		if(dx != 0)
 		{
@@ -121,10 +122,12 @@ update_status ModuleCamera3D::Update(float dt)
 			}
 		}
 
-		Position = Reference + Z * Position.Length();
+		Reference = Z * Reference.Length();
 	}
 
-	LookAt(Reference);
+	//Activar si selección de objeto, asignar Reference a centro de obj
+	//LookAt(Reference);
+
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
