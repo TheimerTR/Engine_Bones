@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Application.h"
+#include "AssimpManager.h"
 
 #include <vector>
 #include <stdio.h>

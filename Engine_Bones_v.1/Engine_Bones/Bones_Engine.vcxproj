@@ -80,6 +80,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="AssimpManager.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="C_Math.h" />
     <ClInclude Include="glmath.h" />

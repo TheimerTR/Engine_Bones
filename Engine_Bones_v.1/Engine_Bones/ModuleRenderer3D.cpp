@@ -9,6 +9,7 @@
 #include <gl/GLU.h>
 
 #include "ModuleEditor.h"
+#include "AssimpManager.h"
 
 #include "ImGui/imgui.h"
 #include "ImGui/backends/imgui_impl_sdl2.h"
@@ -29,7 +30,6 @@
 #else
 #pragma comment (lib, "MathGeoLib/libx86/LibRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
-
 
 static const float CubeVertex[] = {
 	-1, -1, -1,
@@ -255,6 +255,10 @@ bool ModuleRenderer3D::CleanUp()
 		glDeleteBuffers(1, &EBO);
 	}
 
+
+	AssimpManager::ClearAssimpVec(meshes);
+	aiDetachAllLogStreams();
+
 	SDL_GL_DeleteContext(context);
 
 	return true;
@@ -285,23 +289,23 @@ void ModuleRenderer3D::RenderPrimitive(PrimitiveType Type)
 		glLineWidth(2.0f);
 
 		glBegin(GL_TRIANGLES);
-		glVertex3d(0, 0, 0); glVertex3d(1, 1, 0); glVertex3d(1, 0, 0);
-		glVertex3d(0, 0, 0); glVertex3d(0, 1, 0); glVertex3d(1, 1, 0);
+		glVertex3d(0, 0, 0); glVertex3d(2, 0, 0); glVertex3d(2, 2, 0);
+		glVertex3d(0, 0, 0); glVertex3d(0, 2, 0); glVertex3d(2, 2, 0);
 		
-		glVertex3d(0, 0, 0); glVertex3d(0, 1, 1); glVertex3d(0, 1, 0);
-		glVertex3d(0, 0, 1); glVertex3d(0, 1, 1); glVertex3d(0, 0, 0);
+		glVertex3d(0, 0, 0); glVertex3d(0, 2, 2); glVertex3d(0, 2, 0);
+		glVertex3d(0, 0, 2); glVertex3d(0, 2, 2); glVertex3d(0, 0, 0);
 		
-		glVertex3d(0, 0, 1); glVertex3d(1, 1, 1); glVertex3d(0, 1, 1);
-		glVertex3d(0, 0, 1); glVertex3d(1, 0, 1); glVertex3d(1, 1, 1);
+		glVertex3d(0, 0, 2); glVertex3d(2, 2, 2); glVertex3d(0, 2, 2);
+		glVertex3d(0, 0, 2); glVertex3d(2, 0, 2); glVertex3d(2, 2, 2);
 		
-		glVertex3d(1, 1, 0); glVertex3d(1, 1, 0); glVertex3d(1, 1, 1);
-		glVertex3d(1, 1, 0); glVertex3d(1, 0, 1); glVertex3d(1, 1, 1);
+		glVertex3d(2, 0, 0); glVertex3d(2, 2, 0); glVertex3d(2, 2, 2);
+		glVertex3d(2, 0, 0); glVertex3d(2, 2, 2); glVertex3d(2, 0, 2);
 		
-		glVertex3d(0, 1, 0); glVertex3d(1, 1, 1); glVertex3d(1, 1, 0);
-		glVertex3d(0, 1, 0); glVertex3d(0, 1, 1); glVertex3d(1, 1, 1);		
+		glVertex3d(0, 2, 0); glVertex3d(2, 2, 2); glVertex3d(2, 2, 0);
+		glVertex3d(0, 2, 0); glVertex3d(0, 2, 2); glVertex3d(2, 2, 2);		
 		
-		glVertex3d(0, 0, 0); glVertex3d(1, 0, 1); glVertex3d(0, 0, 1);
-		glVertex3d(0, 0, 0); glVertex3d(1, 0, 0); glVertex3d(1, 0, 1);
+		glVertex3d(0, 0, 0); glVertex3d(2, 0, 2); glVertex3d(0, 0, 2);
+		glVertex3d(0, 0, 0); glVertex3d(2, 0, 0); glVertex3d(2, 0, 2);
 
 		glEnd();
 

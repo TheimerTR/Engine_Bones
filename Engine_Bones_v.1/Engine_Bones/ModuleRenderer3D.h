@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <stdio.h>
+#include "AssimpManager.h"
 
 #include <iostream>
 
@@ -38,6 +39,8 @@ public:
 	void RenderPrimitive(PrimitiveType Type);
 
 public:
+
+	std::vector<AssimpManager::Meshes> meshes;
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;

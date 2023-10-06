@@ -148,6 +148,8 @@ bool ModuleEditor::DrawEditor()
 					if (ImGui::MenuItem("Cube Direct"))
 					{
 						SelectPrimitive = (int)PrimitiveType::CUBE_DIRECT_MODE;
+
+						//AssimpManager::AssimpLoader(meshes, );
 					}
 					if (ImGui::MenuItem("Cube Array"))
 					{
@@ -183,11 +185,13 @@ bool ModuleEditor::DrawEditor()
 		{
 			if (ImGui::MenuItem("Log Console"))
 			{
+				ThemeUpdate();
 				LogOutput = !LogOutput;
 			}	
 			
 			if (ImGui::MenuItem("GUI Demo Window"))
 			{
+				ThemeUpdate();
 				DemoWindow = !DemoWindow;
 			}
 
@@ -217,8 +221,6 @@ bool ModuleEditor::DrawEditor()
 	//Output Window
 	if (LogOutput)
 	{
-		ThemeUpdate();
-
 		//ImGui::Separator();
 
 		ImGui::Begin("Log Output", &LogOutput);

@@ -315,6 +315,9 @@
     <ClInclude Include="ImGuiCandy\candy.h">
       <Filter>Sources\ImGuiCandy</Filter>
     </ClInclude>
+    <ClInclude Include="AssimpManager.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
