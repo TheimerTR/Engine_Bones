@@ -21,7 +21,7 @@
 
 enum class PrimitiveType
 {
-	NONE, CUBE_DIRECT_MODE, CUBE_ARRAY, CUBE_ELEMENT, CYLINDER, PLANE
+	NONE, CUBE, CYLINDER, PLANE
 };
 
 class ModuleRenderer3D : public Module
@@ -37,13 +37,9 @@ public:
 
 	void OnResize(int width, int height);
 
-	void RenderPrimitive(PrimitiveType Type);
-
-	void PathAssimp(const char* path);
+	void RenderPrimitive(Mesh* Meshes);
 
 public:
-
-	std::string paths;
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;

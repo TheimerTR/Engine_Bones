@@ -144,35 +144,40 @@ bool ModuleEditor::DrawEditor()
 		{
 			if (ImGui::BeginMenu("Render Primitive"))
 			{
-				if (ImGui::BeginMenu("Cubes"))
+				if (ImGui::MenuItem("Cube"))
 				{
-					if (ImGui::MenuItem("Cube Direct"))
-					{
-						SelectPrimitive = (int)PrimitiveType::CUBE_DIRECT_MODE;
-					}
-					if (ImGui::MenuItem("Cube Array"))
-					{
-						AssimpManager::AssimpLoader("Primitives/Cube.fbx");
-						SelectPrimitive = (int)PrimitiveType::CUBE_ARRAY;
-					}
-					if (ImGui::MenuItem("Cube Element"))
-					{
-						SelectPrimitive = (int)PrimitiveType::CUBE_ELEMENT;
-					}
-					ImGui::EndMenu();
+					AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx");
 				}
 
 				if (ImGui::MenuItem("Cylinder"))
 				{
-					SelectPrimitive = (int)PrimitiveType::CYLINDER;
+					AssimpManager::AssimpLoader("Assets/Primitives/Cylinder.fbx");
 				}
-				if (ImGui::MenuItem("Plane"))
+				if (ImGui::MenuItem("Pyramid"))
 				{
-					SelectPrimitive = (int)PrimitiveType::PLANE;
+					AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
 				}	
 				if (ImGui::MenuItem("Delete"))
 				{
 					SelectPrimitive = (int)PrimitiveType::NONE;
+				}
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Render Obj"))
+			{
+				if (ImGui::MenuItem("House"))
+				{
+					AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx");
+				}
+				if (ImGui::MenuItem("Warrior"))
+				{
+					AssimpManager::AssimpLoader("Assets/Obj/warrior.fbx");
+				}
+				if (ImGui::MenuItem("Walk"))
+				{
+					AssimpManager::AssimpLoader("Assets/Obj/walk.fbx");
 				}
 
 				ImGui::EndMenu();

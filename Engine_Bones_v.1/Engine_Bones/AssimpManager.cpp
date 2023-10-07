@@ -66,8 +66,6 @@ void AssimpManager::AssimpLoader(const char* path)
 			CM->SetMesh(M_mesh);
 			CM->SetPath(path);
 
-			Meshes.push_back(M_mesh);
-
 			VBO = (uint)M_mesh->num_vertex;
 			EBO = (uint)M_mesh->num_index;
 
@@ -79,9 +77,7 @@ void AssimpManager::AssimpLoader(const char* path)
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * M_mesh->num_index, M_mesh->index, GL_STATIC_DRAW);
 
-			glBindVertexArray(0);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			Meshes.push_back(M_mesh);
 		}
 
 		aiReleaseImport(scene);

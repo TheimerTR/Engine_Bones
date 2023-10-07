@@ -209,11 +209,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	int pass = 0;
-
-
-	RenderPrimitive((PrimitiveType)App->editor->SelectPrimitive);
-
+	for (int i = 0; i < AssimpManager::Meshes.size(); i++)
+	{
+		RenderPrimitive(AssimpManager::Meshes.at(i));
+	}
 
 	Grid.Render();
 
@@ -254,80 +253,26 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::RenderPrimitive(PrimitiveType Type)
+void ModuleRenderer3D::RenderPrimitive(Mesh* Meshes)
 {
-	switch (Type)
+	if (!AssimpManager::Meshes.empty())
 	{
-	case PrimitiveType::CUBE_DIRECT_MODE:
+		glEnableClientState(GL_VERTEX_ARRAY);
 
-		glLineWidth(2.0f);
+		glBindBuffer(GL_ARRAY_BUFFER, AssimpManager::VBO);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		glBegin(GL_TRIANGLES);
-		glVertex3d(0, 0, 0); glVertex3d(2, 0, 0); glVertex3d(2, 2, 0);
-		glVertex3d(0, 0, 0); glVertex3d(0, 2, 0); glVertex3d(2, 2, 0);
-		
-		glVertex3d(0, 0, 0); glVertex3d(0, 2, 2); glVertex3d(0, 2, 0);
-		glVertex3d(0, 0, 2); glVertex3d(0, 2, 2); glVertex3d(0, 0, 0);
-		
-		glVertex3d(0, 0, 2); glVertex3d(2, 2, 2); glVertex3d(0, 2, 2);
-		glVertex3d(0, 0, 2); glVertex3d(2, 0, 2); glVertex3d(2, 2, 2);
-		
-		glVertex3d(2, 0, 0); glVertex3d(2, 2, 0); glVertex3d(2, 2, 2);
-		glVertex3d(2, 0, 0); glVertex3d(2, 2, 2); glVertex3d(2, 0, 2);
-		
-		glVertex3d(0, 2, 0); glVertex3d(2, 2, 2); glVertex3d(2, 2, 0);
-		glVertex3d(0, 2, 0); glVertex3d(0, 2, 2); glVertex3d(2, 2, 2);		
-		
-		glVertex3d(0, 0, 0); glVertex3d(2, 0, 2); glVertex3d(0, 0, 2);
-		glVertex3d(0, 0, 0); glVertex3d(2, 0, 0); glVertex3d(2, 0, 2);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, AssimpManager::EBO);
+		glDrawElements(GL_TRIANGLES, Meshes->num_index, GL_UNSIGNED_INT, NULL);
 
-		glEnd();
+		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		glLineWidth(1.0f);
-
-		//Cube::Cube().InnerRender();
-
-		break;
-		case PrimitiveType::CUBE_ARRAY:
-			if (!AssimpManager::Meshes.empty())
-			{
-				glEnableClientState(GL_VERTEX_ARRAY);
-
-				glBindBuffer(GL_ARRAY_BUFFER, AssimpManager::VBO);
-				glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, AssimpManager::EBO);
-				glDrawElements(GL_TRIANGLES, AssimpManager::Meshes.at(0)->num_index, GL_UNSIGNED_INT, NULL);
-
-				glDisableClientState(GL_VERTEX_ARRAY);
-			}
-			else
-			{
-				LOG(LogTypeCase::L_ERROR, "Unable to render meshes (No meshes loaded)");
-			}
-
-			break;	
-		
-		case PrimitiveType::CUBE_ELEMENT:
-
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glVertexPointer(3, GL_FLOAT, 0, CubeVertex);
-
-			// draw a cube
-			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, CubeByteIndices);
-
-			// deactivate vertex arrays after drawing
-			glDisableClientState(GL_VERTEX_ARRAY);
-
-			break;
-
-	case PrimitiveType::CYLINDER:
-		CCylinder::CCylinder().InnerRender();
-		break;
-	case PrimitiveType::PLANE:
-		CLine::CLine().InnerRender();
-		break;
-	default:
-		break;
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
+	else
+	{
+		LOG(LogTypeCase::L_ERROR, "Unable to render meshes (No meshes loaded)");
 	}
 }
