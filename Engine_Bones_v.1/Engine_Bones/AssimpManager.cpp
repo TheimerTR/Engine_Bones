@@ -62,12 +62,34 @@ void AssimpManager::AssimpLoader(const char* path)
 				LOG(LogTypeCase::L_CASUAL, "With %d indices", M_mesh->num_index);
 			}
 
+			if (scene->mMeshes[i]->HasNormals())
+			{
+				M_mesh->num_normals = scene->mMeshes[i]->mNumVertices;
+				M_mesh->normals = new float[M_mesh->num_normals * 3];
+				memcpy(M_mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * M_mesh->num_normals * 3);
+			}
+
+			if (scene->mMeshes[i]->HasTextureCoords(0))
+			{
+				M_mesh->num_Tex = scene->mMeshes[i]->mNumVertices;
+				M_mesh->textures = new float[scene->mMeshes[i]->mNumVertices * 2];
+
+				for (int j = 0; j < M_mesh->num_Tex; j++)
+				{
+					int a = j * 2;
+					M_mesh->textures[a] = scene->mMeshes[i]->mTextureCoords[0][j].x;
+					M_mesh->textures[a + 1] = scene->mMeshes[i]->mTextureCoords[0][j].y;
+				}
+			}
+
 			CM = new C_Mesh();
 			CM->SetMesh(M_mesh);
 			CM->SetPath(path);
 
 			VBO = (uint)M_mesh->num_vertex;
 			EBO = (uint)M_mesh->num_index;
+			VN = (uint)M_mesh->num_normals;
+			VT = (uint)M_mesh->num_Tex;
 
 			glGenBuffers(1, (GLuint*)&(VBO));
 			glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -76,6 +98,14 @@ void AssimpManager::AssimpLoader(const char* path)
 			glGenBuffers(1, (GLuint*)&(EBO));
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * M_mesh->num_index, M_mesh->index, GL_STATIC_DRAW);
+			
+			glGenBuffers(1, (GLuint*)&(VN));
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VN);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals, M_mesh->normals, GL_STATIC_DRAW);
+			
+			glGenBuffers(1, (GLuint*)&(VT));
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VT);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex, M_mesh->textures, GL_STATIC_DRAW);
 
 			Meshes.push_back(M_mesh);
 		}
