@@ -7,9 +7,10 @@
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
 
+#include "AssimpManager.h"
+
 #include <vector>
 #include <stdio.h>
-#include "AssimpManager.h"
 
 #include <iostream>
 
@@ -38,9 +39,11 @@ public:
 
 	void RenderPrimitive(PrimitiveType Type);
 
+	void PathAssimp(const char* path);
+
 public:
 
-	std::vector<AssimpManager::Meshes> meshes;
+	std::string paths;
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
@@ -49,10 +52,6 @@ public:
 	bool OpenWindow; 
 	bool Wireframe;
 
-	uint VBO;
-	uint EBO;
-	uint VAO;
-	
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;
 };

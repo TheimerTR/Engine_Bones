@@ -18,6 +18,7 @@
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "C_Math.h"
+#include "AssimpManager.h"
 
 static ImGuiComboFlags flags;
 
@@ -148,11 +149,10 @@ bool ModuleEditor::DrawEditor()
 					if (ImGui::MenuItem("Cube Direct"))
 					{
 						SelectPrimitive = (int)PrimitiveType::CUBE_DIRECT_MODE;
-
-						//AssimpManager::AssimpLoader(meshes, );
 					}
 					if (ImGui::MenuItem("Cube Array"))
 					{
+						AssimpManager::AssimpLoader("Primitives/Cube.fbx");
 						SelectPrimitive = (int)PrimitiveType::CUBE_ARRAY;
 					}
 					if (ImGui::MenuItem("Cube Element"))

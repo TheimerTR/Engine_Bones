@@ -166,23 +166,6 @@ bool ModuleRenderer3D::Init()
 
 	Grid.axis = true;
 
-	EBO = 0;
-	glGenBuffers(1, &EBO);
-
-	VBO = 0;
-	glGenBuffers(1, &VBO);
-	
-	VAO = 0;
-	glGenBuffers(1, &VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertex), CubeVertex, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
 	//glBindVertexArray(VAO);
 	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	//glEnableVertexAttribArray(0);
@@ -226,7 +209,11 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+	int pass = 0;
+
+
 	RenderPrimitive((PrimitiveType)App->editor->SelectPrimitive);
+
 
 	Grid.Render();
 
@@ -242,21 +229,8 @@ bool ModuleRenderer3D::CleanUp()
 {
 	LOG(LogTypeCase::L_CASUAL, "Destroying 3D Renderer");
 
-	if (VBO != 0)
-	{
-		glDeleteBuffers(1, &VBO);
-	}
-	if (VAO != 0)
-	{
-		glDeleteBuffers(1, &VAO);
-	}
-	if (EBO != 0)
-	{
-		glDeleteBuffers(1, &EBO);
-	}
+	//Assim->ClearAssimpVec(Assim->meshes);
 
-
-	AssimpManager::ClearAssimpVec(meshes);
 	aiDetachAllLogStreams();
 
 	SDL_GL_DeleteContext(context);
@@ -315,12 +289,22 @@ void ModuleRenderer3D::RenderPrimitive(PrimitiveType Type)
 
 		break;
 		case PrimitiveType::CUBE_ARRAY:
+			if (!AssimpManager::Meshes.empty())
+			{
+				glEnableClientState(GL_VERTEX_ARRAY);
 
-			glBindBuffer(GL_ARRAY_BUFFER, VBO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glVertexPointer(3, GL_FLOAT, 0, NULL);
-			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+				glBindBuffer(GL_ARRAY_BUFFER, AssimpManager::VBO);
+				glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, AssimpManager::EBO);
+				glDrawElements(GL_TRIANGLES, AssimpManager::Meshes.at(0)->num_index, GL_UNSIGNED_INT, NULL);
+
+				glDisableClientState(GL_VERTEX_ARRAY);
+			}
+			else
+			{
+				LOG(LogTypeCase::L_ERROR, "Unable to render meshes (No meshes loaded)");
+			}
 
 			break;	
 		
