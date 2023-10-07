@@ -37,7 +37,7 @@ public:
 
 	void OnResize(int width, int height);
 
-	void RenderDraw(Mesh* Meshes);
+	void RenderPrimitive(Mesh* Meshes);
 
 public:
 
