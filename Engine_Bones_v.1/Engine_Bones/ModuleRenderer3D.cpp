@@ -213,7 +213,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	{
 		RenderPrimitive(AssimpManager::Meshes.at(i));
 	}
-
+	
 	Grid.Render();
 
 	App->editor->DrawEditor();

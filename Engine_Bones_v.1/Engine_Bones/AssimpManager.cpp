@@ -44,7 +44,7 @@ void AssimpManager::AssimpLoader(const char* path)
 
 			if (scene->mMeshes[i]->HasFaces())
 			{
-				M_mesh->num_index = scene->mMeshes[i]->mNumVertices * 3;
+				M_mesh->num_index = scene->mMeshes[i]->mNumFaces * 3;
 				M_mesh->index = new uint[M_mesh->num_index]; // assume each face is a triangle
 
 				for (uint d = 0; d < scene->mMeshes[i]->mNumFaces; ++d)
