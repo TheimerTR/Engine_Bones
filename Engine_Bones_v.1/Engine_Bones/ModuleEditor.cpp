@@ -592,6 +592,15 @@ bool ModuleEditor::DrawEditor()
 					//Wireframe Mode
 					ImGui::Checkbox("Wireframe Rendering Mode", &App->renderer3D->Wireframe);
 
+					//Normals Mode
+					ImGui::Checkbox("Normals Rendering Mode", &DR_Normals);
+
+					//Debug Mode
+					if (ImGui::Checkbox("Debug Rendering Mode", &changeDebug))
+					{
+						AssimpManager::ChangeDebugMode(changeDebug);
+					};
+
 					//GL_DEPTH_TEST
 					if (ImGui::Checkbox("GL_DEPTH_TEST", &Gl_DepthTest))
 					{
@@ -777,6 +786,12 @@ void ModuleEditor::DefaultConfig()
 
 	//Wireframe Rendering
 	App->renderer3D->Wireframe = false;
+
+	//Normals Rendering
+	DR_Normals = false;
+
+	//Debug Rendering
+	changeDebug = false;
 
 	//GL_DEPTH_TEST
 	Gl_DepthTest = true;

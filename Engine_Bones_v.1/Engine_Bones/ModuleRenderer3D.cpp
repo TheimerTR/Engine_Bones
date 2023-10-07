@@ -31,37 +31,6 @@
 #pragma comment (lib, "MathGeoLib/libx86/LibRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
 
-static const float CubeVertex[] = {
-	-1, -1, -1,
-	1, -1, -1,
-	1, 1, -1,
-	-1, 1, -1,
-	-1, -1, 1,
-	1, -1, 1,
-	1, 1, 1,
-	-1, 1, 1
-};
-
-static unsigned CubeIndices[] =
-{
-	0, 1, 3, 3, 1, 2,
-	1, 5, 2, 2, 5, 6,
-	5, 4, 6, 6, 4, 7,
-	4, 0, 7, 7, 0, 3,
-	3, 2, 7, 7, 2, 6,
-	4, 5, 0, 0, 5, 1
-};
-
-GLubyte CubeByteIndices[] = 
-{ 
-	0,1,2, 2,3,0,   // 36 of indices
-	0,3,4, 4,5,0,
-	0,5,6, 6,1,0,
-	1,6,7, 7,2,1,
-	7,4,3, 3,2,7,
-	4,7,6, 6,5,4 
-};
-
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled), context(), Wireframe(false)
 {
 }
@@ -166,20 +135,6 @@ bool ModuleRenderer3D::Init()
 
 	Grid.axis = true;
 
-	//glBindVertexArray(VAO);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	//glEnableVertexAttribArray(0);
-	//glBindVertexArray(0);
-
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(3 * sizeof(float)));
-	//glEnableVertexAttribArray(1);
-	//
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(6 * sizeof(float)));
-	//glEnableVertexAttribArray(2);
-	//
-	//glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(8 * sizeof(float)));
-	//glEnableVertexAttribArray(2);
-
 	return ret;
 }
 
@@ -211,7 +166,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	for (int i = 0; i < AssimpManager::Meshes.size(); i++)
 	{
-		RenderPrimitive(AssimpManager::Meshes.at(i));
+		RenderDraw(AssimpManager::Meshes.at(i));
 	}
 	
 	Grid.Render();
@@ -253,10 +208,25 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::RenderPrimitive(Mesh* Meshes)
+void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 {
 	if (!AssimpManager::Meshes.empty())
 	{
+		if (App->editor->DR_Normals)
+		{
+			glBegin(GL_LINES);
+			glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+
+			for (uint i = 0; i < Meshes->num_normals * 3; i += 3)
+			{
+				glVertex3f(Meshes->vertex[i], Meshes->vertex[i + 1], Meshes->vertex[i + 2]);
+				glVertex3f(Meshes->vertex[i] + Meshes->normals[i], Meshes->vertex[i + 1] + Meshes->normals[i + 1], Meshes->vertex[i + 2] + Meshes->normals[i + 2]);
+			}
+
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			glEnd();
+		}
+
 		glEnableClientState(GL_VERTEX_ARRAY);
 
 		glBindBuffer(GL_ARRAY_BUFFER, AssimpManager::VBO);
@@ -264,6 +234,12 @@ void ModuleRenderer3D::RenderPrimitive(Mesh* Meshes)
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, AssimpManager::EBO);
 		glDrawElements(GL_TRIANGLES, Meshes->num_index, GL_UNSIGNED_INT, NULL);
+
+		glBindBuffer(GL_ARRAY_BUFFER, AssimpManager::VN);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ARRAY_BUFFER, AssimpManager::VT);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
