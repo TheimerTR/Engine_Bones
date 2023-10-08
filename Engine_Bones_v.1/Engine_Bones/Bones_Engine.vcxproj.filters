@@ -318,6 +318,9 @@
     <ClInclude Include="AssimpManager.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="FileSystemManager.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -482,7 +485,12 @@
     <ClCompile Include="ImGui\backends\imgui_impl_sdl.cpp">
       <Filter>Sources\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="AssimpManager.cpp" />
+    <ClCompile Include="AssimpManager.cpp">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystemManager.cpp">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">

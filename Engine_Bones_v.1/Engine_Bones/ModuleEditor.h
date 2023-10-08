@@ -33,7 +33,7 @@ public:
 
 	std::vector<float> mFPSLOG;
 
-	bool copy, AboutWindow, OpenPreferences, LogOutput, Vsync, Gl_DepthTest, Gl_CullFace, Gl_Ligthing, Gl_ColorMaterial, Gl_Texture2D,
+	bool copy, AboutWindow, OpenPreferences, LogOutput, Vsync, Gl_Grid, Gl_DepthTest, Gl_CullFace, Gl_Ligthing, Gl_ColorMaterial, Gl_Texture2D,
 		Gl_LineSmooth, Gl_PolygonSmooth, Gl_AlphaTest, DemoWindow, OpenAbout, DR_Normals, changeDebug;
 
 	int ThemeSelector;

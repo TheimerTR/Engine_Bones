@@ -84,6 +84,7 @@
     <ClInclude Include="AssimpManager.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="C_Math.h" />
+    <ClInclude Include="FileSystemManager.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="ImGuiCandy\candy.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="AssimpManager.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="FileSystemManager.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="ImGui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="ImGui\backends\imgui_impl_sdl.cpp" />

@@ -169,7 +169,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		RenderDraw(AssimpManager::Meshes.at(i));
 	}
 	
-	Grid.Render();
+	if (App->editor->Gl_Grid)
+	{
+		Grid.Render();
+	}
 
 	App->editor->DrawEditor();
 

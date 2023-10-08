@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ImGui/backends/imgui_impl_sdl2.h"
+#include "FileSystemManager.h"
 
 #define MAX_KEYS 300
 
@@ -93,6 +94,12 @@ update_status ModuleInput::PreUpdate(float dt)
 
 		switch(e.type)
 		{
+			case SDL_DROPFILE:
+				LOG(LogTypeCase::L_CASUAL, "File To Import path: %s", e.drop.file);
+				FileSystem::ReadFyleType(e.drop.file);
+				SDL_free(e.drop.file);
+			break;
+
 			case SDL_MOUSEWHEEL:
 			mouse_z = e.wheel.y;
 			break;

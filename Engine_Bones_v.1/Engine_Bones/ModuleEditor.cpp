@@ -601,6 +601,14 @@ bool ModuleEditor::DrawEditor()
 						AssimpManager::ChangeDebugMode(changeDebug);
 					};
 
+					//Gl_Grid
+					if (ImGui::Checkbox("Gl_GRID", &Gl_Grid))
+					{
+						Gl_Grid != Gl_Grid;
+					}
+
+					ImGui::SameLine();
+					
 					//GL_DEPTH_TEST
 					if (ImGui::Checkbox("GL_DEPTH_TEST", &Gl_DepthTest))
 					{
@@ -792,6 +800,9 @@ void ModuleEditor::DefaultConfig()
 
 	//Debug Rendering
 	changeDebug = false;
+
+	//GL_GRID
+	Gl_Grid = true;
 
 	//GL_DEPTH_TEST
 	Gl_DepthTest = true;
