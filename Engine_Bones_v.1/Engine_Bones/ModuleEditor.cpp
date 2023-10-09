@@ -158,10 +158,6 @@ bool ModuleEditor::DrawEditor()
 				{
 					AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
 				}	
-				if (ImGui::MenuItem("Delete"))
-				{
-					SelectPrimitive = (int)PrimitiveType::NONE;
-				}
 
 				ImGui::EndMenu();
 			}
@@ -232,6 +228,9 @@ bool ModuleEditor::DrawEditor()
 
 	if(Hierarchy)
 	{
+		ImVec2 size3 = { 200, 500 };
+		ImGui::SetNextWindowSize(size3);
+
 		ImGui::Begin("Hierarchy", &Hierarchy);
 		
 		for(int i = 0; i < AssimpManager::Meshes.size(); i++)
@@ -241,7 +240,7 @@ bool ModuleEditor::DrawEditor()
 
 		if (ImGui::Button("Delete Last Object"))
 		{
-			//AssimpManager::Clear_Mesh(Meshes.cend());
+			AssimpManager::Clear_Mesh(AssimpManager::Meshes[AssimpManager::Meshes.size() - 1]);
 		}
 
 		ImGui::End();

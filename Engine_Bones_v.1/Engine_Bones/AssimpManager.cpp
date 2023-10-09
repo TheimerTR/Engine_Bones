@@ -203,7 +203,20 @@ void  AssimpManager::Clear_Mesh(Mesh* mesh)
 		glDeleteBuffers(1, &mesh->VT);
 	}
 
-	//ClearLogs()
+	mesh->Name = "";
+
+	mesh->num_index = 0;
+	mesh->index = nullptr;
+	mesh->num_vertex = 0;
+	mesh->vertex = nullptr;
+
+	mesh->num_normals = 0;
+	mesh->normals = nullptr;
+
+	mesh->num_Tex = 0;
+	mesh->textures = nullptr;
+
+	Meshes.pop_back();
 }
 
 C_Mesh::C_Mesh()
