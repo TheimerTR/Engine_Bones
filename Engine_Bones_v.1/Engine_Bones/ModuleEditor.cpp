@@ -149,11 +149,10 @@ bool ModuleEditor::DrawEditor()
 				{
 					AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx");
 				}
-
-				if (ImGui::MenuItem("Cylinder"))
+				/*if (ImGui::MenuItem("Cylinder"))
 				{
 					AssimpManager::AssimpLoader("Assets/Primitives/Cylinder.fbx");
-				}
+				}*/
 				if (ImGui::MenuItem("Pyramid"))
 				{
 					AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
