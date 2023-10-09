@@ -5,8 +5,8 @@
 #include<vector>
 #include<string>
 
-#include "Glew\include\glew.h"
-#include "SDL\include\SDL_opengl.h"
+#include "External\Glew\include\glew.h"
+#include "External\SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -18,11 +18,11 @@
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
 #else
-#include "SDL/include/SDL_opengl.h"
+#include "External/SDL/include/SDL_opengl.h"
 #endif
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
-#pragma comment (lib, "Glew/libx86/glew32.lib")
+#pragma comment (lib, "External/Glew/libx86/glew32.lib")
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
 
 extern C_Mesh* CM = nullptr;

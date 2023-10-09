@@ -4,11 +4,11 @@
 #include "Globals.h"
 #include<vector>
 
-#include "Assimp/include/mesh.h"
-#include "Assimp/include/cimport.h"
-#include "Assimp/include/scene.h"
-#include "Assimp/include/postprocess.h"
-#pragma comment (lib, "Assimp/libx86/assimp.lib")
+#include "External/Assimp/include/mesh.h"
+#include "External/Assimp/include/cimport.h"
+#include "External/Assimp/include/scene.h"
+#include "External/Assimp/include/postprocess.h"
+#pragma comment (lib, "External/Assimp/libx86/assimp.lib")
 
 using namespace std;
 

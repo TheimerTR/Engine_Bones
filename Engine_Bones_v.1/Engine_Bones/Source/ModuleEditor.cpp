@@ -1,18 +1,18 @@
 #include "ModuleEditor.h"
 #include "ModuleRenderer3D.h"
 
-#include "Glew/include/glew.h"
-#include "ImGui/imgui.h"
-#include "ImGui/backends/imgui_impl_sdl2.h"
-#include "ImGui/backends/imgui_impl_opengl3.h"
+#include "External/Glew/include/glew.h"
+#include "External/ImGui/imgui.h"
+#include "External/ImGui/backends/imgui_impl_sdl2.h"
+#include "External/ImGui/backends/imgui_impl_opengl3.h"
 #include <stdio.h>
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
 #else
-#include "SDL/include/SDL_opengl.h"
+#include "External/SDL/include/SDL_opengl.h"
 #endif
 
-#include "ImGuiCandy/candy.h"
+#include "External/ImGuiCandy/candy.h"
 
 #include "Application.h"
 #include "ModuleWindow.h"

@@ -1,7 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
-#include "ImGui/backends/imgui_impl_sdl2.h"
+#include "External/ImGui/backends/imgui_impl_sdl2.h"
 #include "FileSystemManager.h"
 
 #define MAX_KEYS 300

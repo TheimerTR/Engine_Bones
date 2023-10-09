@@ -3,32 +3,32 @@
 #include "ModuleRenderer3D.h"
 #include "Primitive.h"
 
-#include "Glew\include\glew.h"
-#include "SDL\include\SDL_opengl.h"
+#include "External\Glew\include\glew.h"
+#include "External\SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
 #include "ModuleEditor.h"
 #include "AssimpManager.h"
 
-#include "ImGui/imgui.h"
-#include "ImGui/backends/imgui_impl_sdl2.h"
-#include "ImGui/backends/imgui_impl_opengl3.h"
+#include "External/ImGui/imgui.h"
+#include "External/ImGui/backends/imgui_impl_sdl2.h"
+#include "External/ImGui/backends/imgui_impl_opengl3.h"
 #include <stdio.h>
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
 #else
-#include "SDL/include/SDL_opengl.h"
+#include "External/SDL/include/SDL_opengl.h"
 #endif
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
-#pragma comment (lib, "Glew/libx86/glew32.lib")
+#pragma comment (lib, "External/Glew/libx86/glew32.lib")
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
 
 #ifdef _DEBUG
-#pragma comment (lib, "MathGeoLib/libx86/LibDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
+#pragma comment (lib, "External/MathGeoLib/libx86/LibDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #else
-#pragma comment (lib, "MathGeoLib/libx86/LibRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
+#pragma comment (lib, "External/MathGeoLib/libx86/LibRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled), context(), Wireframe(false)

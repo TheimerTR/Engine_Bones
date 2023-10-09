@@ -1,11 +1,11 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
-#include "MathGeoLib/include/Math/Quat.h"
+#include "External/MathGeoLib/include/Math/Quat.h"
 #include "ModuleInput.h"
-#include "Glew/include/glew.h" // extension lib
-#include "SDL\include\SDL_opengl.h"
-#include "ImGui/backends/imgui_impl_opengl3.h"
+#include "External/Glew/include/glew.h" // extension lib
+#include "External\SDL\include\SDL_opengl.h"
+#include "External/ImGui/backends/imgui_impl_opengl3.h"
 #include <gl/GL.h>
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
