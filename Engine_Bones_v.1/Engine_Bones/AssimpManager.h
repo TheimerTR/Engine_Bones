@@ -32,7 +32,6 @@ struct Mesh
 	uint VAO;
 	uint VN;
 	uint VT;
-
 };
 
 namespace AssimpManager

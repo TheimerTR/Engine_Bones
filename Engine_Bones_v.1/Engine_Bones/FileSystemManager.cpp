@@ -26,7 +26,8 @@ void FileSystem::ReadFyleType(const char* Path)
 		{
 		case FileType::MODEL_3D:
 			file = "Assets/Obj/" + file;
-			AssimpManager::AssimpLoader(file.data());
+			//AssimpManager::AssimpLoader(file.data());
+			AssimpManager::AssimpLoader(Path);
 			LOG(LogTypeCase::L_CASUAL, "Model Type: MODEL 3D");
 			break;
 		case FileType::TEXTURE:

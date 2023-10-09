@@ -147,6 +147,14 @@ void AssimpManager::CleanUp()
 		{
 			glDeleteBuffers(1, &Meshes[i]->EBO);
 		}
+		if (Meshes[i]->VN != 0)
+		{
+			glDeleteBuffers(1, &Meshes[i]->VN);
+		}
+		if (Meshes[i]->VT != 0)
+		{
+			glDeleteBuffers(1, &Meshes[i]->VT);
+		}
 	}
 }
 
