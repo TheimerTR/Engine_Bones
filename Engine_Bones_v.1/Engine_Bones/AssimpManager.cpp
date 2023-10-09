@@ -86,25 +86,25 @@ void AssimpManager::AssimpLoader(const char* path)
 			CM->SetMesh(M_mesh);
 			CM->SetPath(path);
 
-			VBO = (uint)M_mesh->num_vertex;
-			EBO = (uint)M_mesh->num_index;
-			VN = (uint)M_mesh->num_normals;
-			VT = (uint)M_mesh->num_Tex;
+			M_mesh->VBO = 0;
+			M_mesh->EBO = 0;
+			M_mesh->VN = 0;
+			M_mesh->VT = 0;
 
-			glGenBuffers(1, (GLuint*)&(VBO));
-			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glGenBuffers(1, (GLuint*)&(M_mesh->VBO));
+			glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VBO);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->vertex, GL_STATIC_DRAW);
 
-			glGenBuffers(1, (GLuint*)&(EBO));
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+			glGenBuffers(1, (GLuint*)&(M_mesh->EBO));
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->EBO);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * M_mesh->num_index, M_mesh->index, GL_STATIC_DRAW);
 
-			glGenBuffers(1, (GLuint*)&(VN));
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VN);
+			glGenBuffers(1, (GLuint*)&(M_mesh->VN));
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals, M_mesh->normals, GL_STATIC_DRAW);
 
-			glGenBuffers(1, (GLuint*)&(VT));
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VT);
+			glGenBuffers(1, (GLuint*)&(M_mesh->VT));
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VT);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex, M_mesh->textures, GL_STATIC_DRAW);
 
 			Meshes.push_back(M_mesh);
@@ -133,17 +133,20 @@ void AssimpManager::ChangeDebugMode(bool type)
 
 void AssimpManager::CleanUp()
 {
-	if (VBO != 0)
+	for (int i = 0; i < Meshes.size(); i++)
 	{
-		glDeleteBuffers(1, &VBO);
-	}
-	if (VAO != 0)
-	{
-		glDeleteBuffers(1, &VAO);
-	}
-	if (EBO != 0)
-	{
-		glDeleteBuffers(1, &EBO);
+		if (Meshes[i]->VBO != 0)
+		{
+			glDeleteBuffers(1, &Meshes[i]->VBO);
+		}
+		if (Meshes[i]->VAO != 0)
+		{
+			glDeleteBuffers(1, &Meshes[i]->VAO);
+		}
+		if (Meshes[i]->EBO != 0)
+		{
+			glDeleteBuffers(1, &Meshes[i]->EBO);
+		}
 	}
 }
 

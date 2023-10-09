@@ -238,7 +238,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (l_Logs.Type[i] == LogTypeCase::L_CASUAL)
 					{
-						ImGui::Text("%s", l_Logs.Log[i].c_str());
+                          						ImGui::Text("%s", l_Logs.Log[i].c_str());
 					}
 				}
 				break;

@@ -26,6 +26,13 @@ struct Mesh
 
 	uint num_Tex = 0;
 	float* textures = nullptr;
+
+	uint VBO;
+	uint EBO;
+	uint VAO;
+	uint VN;
+	uint VT;
+
 };
 
 namespace AssimpManager
@@ -42,12 +49,6 @@ namespace AssimpManager
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
 
 	vector<Mesh*> Meshes;
-
-	uint VBO;
-	uint EBO;
-	uint VAO;
-	uint VN;
-	uint VT;
 };
 
 class C_Mesh

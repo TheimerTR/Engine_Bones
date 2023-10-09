@@ -232,16 +232,16 @@ void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 
-		glBindBuffer(GL_ARRAY_BUFFER, AssimpManager::VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, Meshes->VBO);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, AssimpManager::EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Meshes->EBO);
 		glDrawElements(GL_TRIANGLES, Meshes->num_index, GL_UNSIGNED_INT, NULL);
 
-		glBindBuffer(GL_ARRAY_BUFFER, AssimpManager::VN);
+		glBindBuffer(GL_ARRAY_BUFFER, Meshes->VN);
 		glNormalPointer(GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ARRAY_BUFFER, AssimpManager::VT);
+		glBindBuffer(GL_ARRAY_BUFFER, Meshes->VT);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 		glBindVertexArray(0);
