@@ -40,6 +40,7 @@ bool ModuleEditor::Init()
 {
 	AboutWindow = false;
 	LogOutput = false; 
+	Hierarchy = false;
 	OpenPreferences = false;
 	DemoWindow = false;
 	OpenAbout = false;
@@ -194,6 +195,12 @@ bool ModuleEditor::DrawEditor()
 				LogOutput = !LogOutput;
 			}	
 			
+			if (ImGui::MenuItem("Hierarchy"))
+			{
+				ThemeUpdate();
+				Hierarchy = !Hierarchy;
+			}	
+			
 			if (ImGui::MenuItem("GUI Demo Window"))
 			{
 				ThemeUpdate();
@@ -223,6 +230,23 @@ bool ModuleEditor::DrawEditor()
 		ImGui::ShowDemoWindow();
 	}
 
+	if(Hierarchy)
+	{
+		ImGui::Begin("Hierarchy", &Hierarchy);
+		
+		for(int i = 0; i < AssimpManager::Meshes.size(); i++)
+		{
+			ImGui::Text("%s", AssimpManager::Meshes[i]->Name.c_str());
+		}
+
+		if (ImGui::Button("Delete Last Object"))
+		{
+			//AssimpManager::Clear_Mesh(Meshes.cend());
+		}
+
+		ImGui::End();
+	}
+
 	//Output Window
 	if (LogOutput)
 	{
@@ -238,7 +262,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (l_Logs.Type[i] == LogTypeCase::L_CASUAL)
 					{
-                          						ImGui::Text("%s", l_Logs.Log[i].c_str());
+                         ImGui::Text("%s", l_Logs.Log[i].c_str());
 					}
 				}
 				break;

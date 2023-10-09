@@ -12,6 +12,7 @@
 
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "FileSystemManager.h"
 #include "Globals.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -82,14 +83,21 @@ void AssimpManager::AssimpLoader(const char* path)
 				}
 			}
 
+			FileSystem::StringDivide(path, &M_mesh->Name, nullptr);
+
 			CM = new C_Mesh();
 			CM->SetMesh(M_mesh);
 			CM->SetPath(path);
 
+			M_mesh->VAO = 0;
 			M_mesh->VBO = 0;
 			M_mesh->EBO = 0;
 			M_mesh->VN = 0;
 			M_mesh->VT = 0;
+
+			glGenVertexArrays(1, &M_mesh->VAO);
+			glBindVertexArray(M_mesh->VAO);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 			glGenBuffers(1, (GLuint*)&(M_mesh->VBO));
 			glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VBO);
@@ -170,6 +178,32 @@ void AssimpManager::ClearAssimpVec(std::vector<T>& vector)
 	}
 
 	vector.clear();
+}
+
+void  AssimpManager::Clear_Mesh(Mesh* mesh)
+{
+	if (mesh->VBO != 0)
+	{
+		glDeleteBuffers(1, &mesh->VBO);
+	}
+	if (mesh->VAO != 0)
+	{
+		glDeleteBuffers(1, &mesh->VAO);
+	}
+	if (mesh->EBO != 0)
+	{
+		glDeleteBuffers(1, &mesh->EBO);
+	}
+	if (mesh->VN != 0)
+	{
+		glDeleteBuffers(1, &mesh->VN);
+	}
+	if (mesh->VT != 0)
+	{
+		glDeleteBuffers(1, &mesh->VT);
+	}
+
+	//ClearLogs()
 }
 
 C_Mesh::C_Mesh()

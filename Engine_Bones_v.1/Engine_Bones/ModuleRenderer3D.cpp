@@ -232,6 +232,8 @@ void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 
+		glBindVertexArray(Meshes->VAO);
+
 		glBindBuffer(GL_ARRAY_BUFFER, Meshes->VBO);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
@@ -247,6 +249,7 @@ void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glEnableVertexAttribArray(0);
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 	}

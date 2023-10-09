@@ -14,6 +14,8 @@ using namespace std;
 
 struct Mesh
 {
+	string Name = "";
+
 	//uint id_index = 0; // index in VRAM
 	uint num_index = 0;
 	uint* index = nullptr;
@@ -27,9 +29,9 @@ struct Mesh
 	uint num_Tex = 0;
 	float* textures = nullptr;
 
+	uint VAO;
 	uint VBO;
 	uint EBO;
-	uint VAO;
 	uint VN;
 	uint VT;
 };
@@ -44,6 +46,8 @@ namespace AssimpManager
 
 	template <class T>
 	void ClearAssimpVec(vector<T>& vector);
+
+	void Clear_Mesh(Mesh* mesh);
 
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
 
