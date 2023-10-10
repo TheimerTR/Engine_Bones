@@ -29,7 +29,6 @@
 #pragma comment (lib, "External/Devil/libx86/ILU.lib")
 #pragma comment (lib, "External/Devil/libx86/ILUT.lib")
 
-
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "External/Glew/libx86/glew32.lib")
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
@@ -141,10 +140,10 @@ bool ModuleRenderer3D::Init()
 		//glEnable(GL_MULTISAMPLE);
 	}
 
-	/*ilInit();
+	ilInit();
 	iluInit();
 	ilutInit();
-	ilutRenderer(ILUT_OPENGL);*/
+	ilutRenderer(ILUT_OPENGL);
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);

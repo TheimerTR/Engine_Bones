@@ -40,7 +40,7 @@ struct Mesh
 
 namespace AssimpManager
 {
-	void AssimpLoader(const char* path/*, const char* pathTexture = nullptr*/);
+	void AssimpLoader(const char* path, const char* pathTexture = nullptr);
 
 	void ChangeDebugMode(bool type);
 
