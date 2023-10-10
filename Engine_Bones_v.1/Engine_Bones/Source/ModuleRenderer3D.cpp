@@ -256,8 +256,6 @@ void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		glBindVertexArray(Meshes->VAO);
 
@@ -278,9 +276,7 @@ void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glEnableVertexAttribArray(0);
 
-		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisable(GL_TEXTURE_2D);
 	}
 	else

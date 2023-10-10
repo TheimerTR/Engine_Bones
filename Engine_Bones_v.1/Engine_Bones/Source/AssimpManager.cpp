@@ -78,7 +78,7 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 				memcpy(M_mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * M_mesh->num_normals * 3);
 			}
 
-			TextureLoader(pathTexture, &M_mesh->textureID);
+			M_mesh->textureID = TextureLoader(pathTexture);
 
 			if (scene->mMeshes[i]->HasTextureCoords(0))
 			{
@@ -158,10 +158,11 @@ void AssimpManager::SetCheckerTexture()
 		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
 }
 
-uint AssimpManager::TextureLoader(const char* path, uint* textureID)
+uint AssimpManager::TextureLoader(const char* path)
 {
 	ILboolean success;
 	ILuint image;
+	uint _id;
 
 	ilGenImages(1, &image);
 	ilBindImage(image);
@@ -181,10 +182,10 @@ uint AssimpManager::TextureLoader(const char* path, uint* textureID)
 		}
 	}
 
-	*textureID = ilutGLBindTexImage();
+	_id = ilutGLBindTexImage();
 	ilDeleteImages(1, &image);
 
-	return *textureID;
+	return _id;
 }
 
 void AssimpManager::ChangeDebugMode(bool type)

@@ -51,7 +51,7 @@ namespace AssimpManager
 
 	void Clear_Mesh(Mesh* mesh);
 
-	uint TextureLoader(const char* path, uint* textureID);
+	uint TextureLoader(const char* path);
 
 	void SetCheckerTexture();
 
