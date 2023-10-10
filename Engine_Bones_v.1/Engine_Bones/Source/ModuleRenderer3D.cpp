@@ -21,6 +21,15 @@
 #include "External/SDL/include/SDL_opengl.h"
 #endif
 
+#include "External/Devil/Include/ilut.h"
+#include "External/Devil/Include/ilu.h"
+#include "External/Devil/Include/il.h"
+
+#pragma comment (lib, "External/Devil/libx86/DevIL.lib")
+#pragma comment (lib, "External/Devil/libx86/ILU.lib")
+#pragma comment (lib, "External/Devil/libx86/ILUT.lib")
+
+
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "External/Glew/libx86/glew32.lib")
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
