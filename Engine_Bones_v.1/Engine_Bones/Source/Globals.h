@@ -57,6 +57,9 @@ enum update_status
 #define VSYNC true
 #define TITLE "Bones Engine :D"
 
+#define CHECKERS_HEIGHT 64
+#define CHECKERS_WIDTH 64
+
 // Deletes a buffer
 #define RELEASE( x )\
     {\

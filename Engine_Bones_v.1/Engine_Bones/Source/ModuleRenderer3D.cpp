@@ -129,15 +129,22 @@ bool ModuleRenderer3D::Init()
 
 		GLfloat MaterialDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MaterialDiffuse);
-		
+
+		lights[0].Active(true);
+
+		//OpenGL Enable
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
-		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
 		//glEnable(GL_MULTISAMPLE);
 	}
+
+	/*ilInit();
+	iluInit();
+	ilutInit();
+	ilutRenderer(ILUT_OPENGL);*/
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -194,8 +201,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	LOG(LogTypeCase::L_CASUAL, "Destroying 3D Renderer");
+	glBindTexture(GL_TEXTURE_2D, 0);
 
-	//Assim->ClearAssimpVec(Assim->meshes);
+	AssimpManager::CleanUp();
 
 	aiDetachAllLogStreams();
 
@@ -239,7 +247,18 @@ void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 			glEnd();
 		}
 
+		glEnable(GL_TEXTURE_2D);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glGenTextures(1, &Meshes->textureID);
+		glBindTexture(GL_TEXTURE_2D, Meshes->textureID);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
 		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		glBindVertexArray(Meshes->VAO);
 
@@ -260,7 +279,10 @@ void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glEnableVertexAttribArray(0);
 
+		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisable(GL_TEXTURE_2D);
 	}
 	else
 	{

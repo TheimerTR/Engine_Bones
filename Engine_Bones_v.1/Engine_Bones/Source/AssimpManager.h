@@ -29,6 +29,8 @@ struct Mesh
 	uint num_Tex = 0;
 	float* textures = nullptr;
 
+	uint textureID;
+
 	uint VAO;
 	uint VBO;
 	uint EBO;
@@ -38,7 +40,7 @@ struct Mesh
 
 namespace AssimpManager
 {
-	void AssimpLoader(const char* path);
+	void AssimpLoader(const char* path/*, const char* pathTexture = nullptr*/);
 
 	void ChangeDebugMode(bool type);
 
@@ -49,9 +51,15 @@ namespace AssimpManager
 
 	void Clear_Mesh(Mesh* mesh);
 
+	uint TextureLoader(const char* path, uint* textureID);
+
+	void SetCheckerTexture();
+
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
 
 	vector<Mesh*> Meshes;
+
+	uint CheckerTextureID;
 };
 
 class C_Mesh

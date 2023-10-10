@@ -21,13 +21,21 @@
 #include "External/SDL/include/SDL_opengl.h"
 #endif
 
+#include "External/Devil/Include/ilut.h"
+#include "External/Devil/Include/ilu.h"
+#include "External/Devil/Include/il.h"
+
+#pragma comment (lib, "External/Devil/libx86/DevIL.lib")
+#pragma comment (lib, "External/Devil/libx86/ILU.lib")
+#pragma comment (lib, "External/Devil/libx86/ILUT.lib")
+
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "External/Glew/libx86/glew32.lib")
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
 
 extern C_Mesh* CM = nullptr;
 
-void AssimpManager::AssimpLoader(const char* path)
+void AssimpManager::AssimpLoader(const char* path/*, const char* pathTexture*/)
 {
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 
@@ -69,6 +77,8 @@ void AssimpManager::AssimpLoader(const char* path)
 				M_mesh->normals = new float[M_mesh->num_normals * 3];
 				memcpy(M_mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * M_mesh->num_normals * 3);
 			}
+
+			//TextureLoader(pathTexture, &M_mesh->textureID);
 
 			if (scene->mMeshes[i]->HasTextureCoords(0))
 			{
@@ -123,6 +133,59 @@ void AssimpManager::AssimpLoader(const char* path)
 	else
 		LOG(LogTypeCase::L_ERROR, "Error loading scene % s", path);
 }
+
+//void AssimpManager::SetCheckerTexture()
+//{
+//	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+//	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+//		for (int j = 0; j < CHECKERS_WIDTH; j++) {
+//			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+//			checkerImage[i][j][0] = (GLubyte)c;
+//			checkerImage[i][j][1] = (GLubyte)c;
+//			checkerImage[i][j][2] = (GLubyte)c;
+//			checkerImage[i][j][3] = (GLubyte)255;
+//		}
+//	}
+//
+//	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+//	glGenTextures(1, &(GLuint)CheckerTextureID);
+//	glBindTexture(GL_TEXTURE_2D, (GLuint)CheckerTextureID);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+//		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+//}
+//
+//uint AssimpManager::TextureLoader(const char* path, uint* textureID)
+//{
+//	ILboolean success;
+//	ILuint image;
+//
+//	ilGenImages(1, &image);
+//	ilBindImage(image);
+//	success = ilLoadImage(path);
+//
+//	if (success)
+//	{
+//		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+//
+//		if (!success || image == NULL)
+//		{
+//			LOG(LogTypeCase::L_ERROR, "DEVIL can't load Image");
+//		}
+//		else 
+//		{
+//			LOG(LogTypeCase::L_CASUAL, "DEVIL load Image!");
+//		}
+//	}
+//
+//	*textureID = ilutGLBindTexImage();
+//	ilDeleteImages(1, &image);
+//
+//	return *textureID;
+//}
 
 void AssimpManager::ChangeDebugMode(bool type)
 {

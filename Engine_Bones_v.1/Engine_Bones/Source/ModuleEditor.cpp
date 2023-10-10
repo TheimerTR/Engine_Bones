@@ -166,7 +166,7 @@ bool ModuleEditor::DrawEditor()
 			{
 				if (ImGui::MenuItem("House"))
 				{
-					AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx");
+					AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx"/*, "Assets/Textures/Baker_house.dds"*/);
 				}
 				if (ImGui::MenuItem("Warrior"))
 				{
