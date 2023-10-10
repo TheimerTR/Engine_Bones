@@ -60,6 +60,10 @@ namespace AssimpManager
 	vector<Mesh*> Meshes;
 
 	uint CheckerTextureID;
+
+	unsigned char checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+
+	uint _id;
 };
 
 class C_Mesh

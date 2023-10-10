@@ -148,7 +148,7 @@ bool ModuleEditor::DrawEditor()
 			{
 				if (ImGui::MenuItem("Cube"))
 				{
-					AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx");
+					AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx", "Assets/Textures/Grass.dds");
 				}
 				/*if (ImGui::MenuItem("Cylinder"))
 				{
