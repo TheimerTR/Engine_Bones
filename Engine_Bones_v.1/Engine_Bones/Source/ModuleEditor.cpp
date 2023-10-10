@@ -19,6 +19,7 @@
 #include "ModuleRenderer3D.h"
 #include "C_Math.h"
 #include "AssimpManager.h"
+#include"External/Assimp/include/version.h"
 
 static ImGuiComboFlags flags;
 
@@ -435,6 +436,40 @@ bool ModuleEditor::DrawEditor()
 
 			ImGui::LogToClipboard();
 			ImGui::LogText("https://github.com/kgabis/parson");
+			ImGui::LogFinish();
+		}
+
+		ImGui::Text("Parson");
+
+		copy = ImGui::Button("Copy Link Parson");
+
+		if (copy) {
+
+			ImGui::LogToClipboard();
+			ImGui::LogText("https://github.com/kgabis/parson");
+			ImGui::LogFinish();
+		}
+
+		ImGui::Text("Devil v1.8.0");
+
+		copy = ImGui::Button("Copy Link Devil");
+
+		if (copy) {
+
+			ImGui::LogToClipboard();
+			ImGui::LogText("https://openil.sourceforge.net/");
+			ImGui::LogFinish();
+		}
+
+		std::string assimp = std::to_string(aiGetVersionMajor()) + '.' + std::to_string(aiGetVersionMinor()) + '.' + std::to_string(aiGetVersionRevision());
+		ImGui::Text("Assimp v %s", gl.c_str());
+
+		copy = ImGui::Button("Copy Link Assimp");
+
+		if (copy) {
+
+			ImGui::LogToClipboard();
+			ImGui::LogText("https://www.assimp.org/");
 			ImGui::LogFinish();
 		}
 
