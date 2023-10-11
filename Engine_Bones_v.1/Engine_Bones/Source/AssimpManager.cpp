@@ -87,9 +87,8 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 
 				for (int j = 0; j < M_mesh->num_Tex; j++)
 				{
-					int a = j * 2;
-					M_mesh->textures[a] = scene->mMeshes[i]->mTextureCoords[0][j].x;
-					M_mesh->textures[a + 1] = scene->mMeshes[i]->mTextureCoords[0][j].y;
+					M_mesh->textures[j * 2] = scene->mMeshes[i]->mTextureCoords[0][j].x;
+					M_mesh->textures[j * 2 + 1] = scene->mMeshes[i]->mTextureCoords[0][j].y;
 				}
 			}
 

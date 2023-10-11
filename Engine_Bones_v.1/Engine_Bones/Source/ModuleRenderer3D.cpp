@@ -144,9 +144,10 @@ bool ModuleRenderer3D::Init()
 	iluInit();
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
+
 	AssimpManager::SetCheckerTexture();
 
-	AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
+	AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx", "Assets/Textures/Lenna.dds");
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -249,15 +250,17 @@ void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 			glEnd();
 		}
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glEnable(GL_TEXTURE_2D);
-
+		/*glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, Meshes->textureID);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);*/
+
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(GL_TEXTURE_2D, Meshes->textureID);
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -274,7 +277,6 @@ void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Meshes->EBO);
 		glDrawElements(GL_TRIANGLES, Meshes->num_index, GL_UNSIGNED_INT, NULL);
-
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);

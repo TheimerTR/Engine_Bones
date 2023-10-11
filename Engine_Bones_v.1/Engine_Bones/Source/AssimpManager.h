@@ -53,6 +53,7 @@ namespace AssimpManager
 
 	uint TextureLoader(const char* path);
 
+	
 	void SetCheckerTexture();
 
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
