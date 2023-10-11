@@ -122,8 +122,8 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals, M_mesh->normals, GL_STATIC_DRAW);
 
 			glGenBuffers(1, (GLuint*)&(M_mesh->VT));
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VT);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex, M_mesh->textures, GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex * 2, M_mesh->textures, GL_STATIC_DRAW);
 
 			Meshes.push_back(M_mesh);
 		}
@@ -153,23 +153,25 @@ void AssimpManager::SetCheckerTexture()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
 }
 
 uint AssimpManager::TextureLoader(const char* path)
 {
 	ILboolean success;
+	ILuint Devil_Texure;
+	uint _id;
 
-	ilGenImages(1, &_id);
-	ilBindImage(_id);
-	ilLoadL(IL_TYPE_UNKNOWN, path, _id);
+	ilGenImages(1, &Devil_Texure);
+	ilBindImage(Devil_Texure);
+	//ilLoadL(IL_TYPE_UNKNOWN, path, _id);
 	success = ilLoadImage(path);
 	_id = ilutGLBindTexImage();
+	ilDeleteImages(1, &Devil_Texure);
 
 	if (success)
 	{
-		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+		//success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 
 		if (!success || _id == NULL)
 		{
@@ -201,8 +203,6 @@ void AssimpManager::ChangeDebugMode(bool type)
 
 void AssimpManager::CleanUp()
 {
-	ilDeleteImages(1, &_id);
-
 	for (int i = 0; i < Meshes.size(); i++)
 	{
 		if (Meshes[i]->VBO != 0)

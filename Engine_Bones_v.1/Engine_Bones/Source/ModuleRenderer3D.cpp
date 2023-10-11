@@ -252,9 +252,12 @@ void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glEnable(GL_TEXTURE_2D);
 
-		glBindTexture(GL_TEXTURE_2D, 0);
-
 		glBindTexture(GL_TEXTURE_2D, Meshes->textureID);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -263,14 +266,15 @@ void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 		glBindBuffer(GL_ARRAY_BUFFER, Meshes->VBO);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Meshes->EBO);
-		glDrawElements(GL_TRIANGLES, Meshes->num_index, GL_UNSIGNED_INT, NULL);
-
 		glBindBuffer(GL_ARRAY_BUFFER, Meshes->VN);
 		glNormalPointer(GL_FLOAT, 0, NULL);
 
 		glBindBuffer(GL_ARRAY_BUFFER, Meshes->VT);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Meshes->EBO);
+		glDrawElements(GL_TRIANGLES, Meshes->num_index, GL_UNSIGNED_INT, NULL);
+
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);

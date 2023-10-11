@@ -61,9 +61,7 @@ namespace AssimpManager
 
 	uint CheckerTextureID;
 
-	unsigned char checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
-
-	uint _id;
+	byte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 };
 
 class C_Mesh
