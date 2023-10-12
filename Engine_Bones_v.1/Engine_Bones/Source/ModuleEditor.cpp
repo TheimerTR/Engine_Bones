@@ -233,7 +233,6 @@ bool ModuleEditor::DrawEditor()
 
 		ImGui::Begin("Hierarchy", &Hierarchy);
 		
-		//ImGui::Begin("Hierarchy", &Hierarchy);
 		if (ImGui::CollapsingHeader("Scene"))
 		{
 			for (int i = 0; i < AssimpManager::Meshes.size(); i++)
@@ -847,6 +846,11 @@ void ModuleEditor::InfoGameObjectWindow(Mesh* Mesh)
 		ImGui::Text("Texture ID: %d", Mesh->textureID);
 		ImGui::Text("Number of index: %d", Mesh->num_index);
 		ImGui::Text("Number of vertex: %d", Mesh->num_vertex);
+
+		if(app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
+		{
+			AssimpManager::Clear_Mesh(Mesh);
+		}
 
 		if (ImGui::Button("Delete Object"))
 		{
