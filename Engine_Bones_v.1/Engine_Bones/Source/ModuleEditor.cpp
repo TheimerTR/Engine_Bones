@@ -45,6 +45,7 @@ bool ModuleEditor::Init()
 	OpenPreferences = false;
 	DemoWindow = false;
 	OpenAbout = false;
+	InfoGWindow = false;
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 	Log_current_idx = 3;
@@ -216,7 +217,6 @@ bool ModuleEditor::DrawEditor()
 			
 			ImGui::EndMenu();
 		}
-
 	}
 	ImGui::EndMainMenuBar();
 
@@ -233,14 +233,23 @@ bool ModuleEditor::DrawEditor()
 
 		ImGui::Begin("Hierarchy", &Hierarchy);
 		
-		for(int i = 0; i < AssimpManager::Meshes.size(); i++)
+		//ImGui::Begin("Hierarchy", &Hierarchy);
+		if (ImGui::CollapsingHeader("Scene"))
 		{
-			ImGui::Text("%s", AssimpManager::Meshes[i]->Name.c_str());
-		}
+			for (int i = 0; i < AssimpManager::Meshes.size(); i++)
+			{
+				if (ImGui::MenuItem(AssimpManager::Meshes[i]->Name.c_str(), 0, AssimpManager::Meshes[i]->isSelected))
+				{
+					for (int j = 0; j < AssimpManager::Meshes.size(); j++)
+					{
+						AssimpManager::Meshes[j]->isSelected = false;
+					}
 
-		if (ImGui::Button("Delete Last Object"))
-		{
-			AssimpManager::Clear_Mesh(AssimpManager::Meshes[AssimpManager::Meshes.size() - 1]);
+					AssimpManager::Meshes[i]->isSelected = true;
+					InfoGWindow = true;
+					actualMesh = AssimpManager::Meshes[i];
+				}
+			}
 		}
 
 		ImGui::End();
@@ -331,6 +340,11 @@ bool ModuleEditor::DrawEditor()
 		}
 
 		ImGui::End();
+	}
+
+	if(InfoGWindow)
+	{
+		InfoGameObjectWindow(actualMesh);
 	}
 
 	if (OpenAbout)
@@ -778,7 +792,6 @@ bool ModuleEditor::DrawEditor()
 					ImGui::TreePop();
 					ImGui::Separator();
 				}
-
 			}
 
 			//Default Config
@@ -816,8 +829,32 @@ bool ModuleEditor::DrawEditor()
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		return true;
+}
 
-	
+void ModuleEditor::InfoGameObjectWindow(Mesh* Mesh)
+{
+	ImVec2 size4 = { 350, 400 };
+	ImGui::SetNextWindowSize(size4);
+
+	ImGui::Begin("Inspector", &InfoGWindow);
+
+	if (Mesh != nullptr)
+	{
+		ImGui::Text(Mesh->Name.c_str());
+
+		ImGui::Text("Path: %s", Mesh->Path.c_str());
+		ImGui::Text("Texture path: %s", Mesh->PathTexture.c_str());
+		ImGui::Text("Texture ID: %d", Mesh->textureID);
+		ImGui::Text("Number of index: %d", Mesh->num_index);
+		ImGui::Text("Number of vertex: %d", Mesh->num_vertex);
+
+		if (ImGui::Button("Delete Object"))
+		{
+			AssimpManager::Clear_Mesh(Mesh);
+		}
+	}
+
+	ImGui::End();
 }
 
 void ModuleEditor::DefaultConfig()

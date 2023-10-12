@@ -29,7 +29,10 @@ struct Mesh
 	uint num_Tex = 0;
 	float* textures = nullptr;
 
+	string Path;
+	string PathTexture;
 	uint textureID;
+	bool isSelected;
 
 	uint VAO;
 	uint VBO;
