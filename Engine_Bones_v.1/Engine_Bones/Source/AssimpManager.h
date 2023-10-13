@@ -31,8 +31,6 @@ struct Mesh
 	math::float2* textures = nullptr;
 
 	string Path;
-	string PathTexture;
-	uint textureID;
 	bool isSelected;
 
 	uint VAO;

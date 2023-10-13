@@ -25,6 +25,8 @@ public:
 
 	void InfoGameObjectWindow(GameObjects* gameObject);
 
+	void ResetSelected();
+
 public:
 
 	struct l_Logs

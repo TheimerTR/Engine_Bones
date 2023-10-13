@@ -36,7 +36,7 @@ void FileSystem::ReadFyleType(const char* Path)
 			file = "Assets/Textures/" + file;
 			if (app->editor->actualMesh->Mesh->isSelected)
 			{
-				app->editor->actualMesh->Mesh->textureID = TexturesManager::TextureLoader(Path)->TextureID;
+				app->editor->actualMesh->Texture->TextureID = TexturesManager::TextureLoader(Path)->TextureID;
 			}
 			LOG(LogTypeCase::L_CASUAL, "Model Type: TEXTURE");
 			break;

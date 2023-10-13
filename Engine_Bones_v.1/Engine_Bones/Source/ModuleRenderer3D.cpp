@@ -150,6 +150,7 @@ bool ModuleRenderer3D::Init()
 	TexturesManager::SetCheckerTexture();
 
 	AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Lenna.dds");
+	GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);

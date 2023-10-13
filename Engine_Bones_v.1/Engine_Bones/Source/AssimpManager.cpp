@@ -47,7 +47,6 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 			Mesh* M_mesh = new Mesh();
 
 			M_mesh->Path = path;
-			M_mesh->PathTexture = path;
 
 			M_mesh->num_vertex = scene->mMeshes[i]->mNumVertices;
 			M_mesh->vertex = new float[M_mesh->num_vertex * 3];
@@ -214,7 +213,6 @@ void  AssimpManager::Clear_Mesh(Mesh* mesh)
 
 	mesh->Name.clear();
 	mesh->Path.clear();
-	mesh->PathTexture.clear();
 
 	mesh->num_index = 0;
 	mesh->index = nullptr;
@@ -225,7 +223,6 @@ void  AssimpManager::Clear_Mesh(Mesh* mesh)
 	mesh->normals = nullptr;
 
 	mesh->num_Tex = 0;
-	mesh->textureID = 0;
 	mesh->textures = nullptr;
 
 	for (auto it = AllMeshes.begin(); it != AllMeshes.end();) {

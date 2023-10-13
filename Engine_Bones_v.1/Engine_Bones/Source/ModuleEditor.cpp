@@ -150,6 +150,8 @@ bool ModuleEditor::DrawEditor()
 				if (ImGui::MenuItem("Cube"))
 				{
 					AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx", "Assets/Textures/Grass.dds");
+					ResetSelected();
+					GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
 				}
 				/*if (ImGui::MenuItem("Cylinder"))
 				{
@@ -158,6 +160,8 @@ bool ModuleEditor::DrawEditor()
 				if (ImGui::MenuItem("Pyramid"))
 				{
 					AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
+					ResetSelected();
+					GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
 				}	
 
 				ImGui::EndMenu();
@@ -168,14 +172,20 @@ bool ModuleEditor::DrawEditor()
 				if (ImGui::MenuItem("House"))
 				{
 					AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
+					ResetSelected();
+					GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
 				}
 				if (ImGui::MenuItem("Warrior"))
 				{
 					AssimpManager::AssimpLoader("Assets/Obj/warrior.fbx");
+					ResetSelected();
+					GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
 				}
 				if (ImGui::MenuItem("Walk"))
 				{
 					AssimpManager::AssimpLoader("Assets/Obj/walk.fbx");
+					ResetSelected();
+					GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
 				}
 
 				ImGui::EndMenu();
@@ -239,10 +249,7 @@ bool ModuleEditor::DrawEditor()
 			{
 				if (ImGui::MenuItem(GameObjectManager::AllGameObjects[i]->Mesh->Name.c_str(), 0, AssimpManager::AllMeshes[i]->isSelected))
 				{
-					for (int j = 0; j < GameObjectManager::AllGameObjects.size(); j++)
-					{
-						GameObjectManager::AllGameObjects[j]->Mesh->isSelected = false;
-					}
+					ResetSelected();
 
 					GameObjectManager::AllGameObjects[i]->Mesh->isSelected = true;
 					InfoGWindow = true;
@@ -842,8 +849,8 @@ void ModuleEditor::InfoGameObjectWindow(GameObjects* gameObject)
 		ImGui::Text(gameObject->Mesh->Name.c_str());
 
 		ImGui::Text("Path: %s", gameObject->Mesh->Path.c_str());
-		ImGui::Text("Texture path: %s", gameObject->Mesh->PathTexture.c_str());
-		ImGui::Text("Texture ID: %d", gameObject->Mesh->textureID);
+		ImGui::Text("Texture path: %s", gameObject->Texture->path);
+		ImGui::Text("Texture ID: %d", gameObject->Texture->TextureID);
 		ImGui::Text("Number of index: %d", gameObject->Mesh->num_index);
 		ImGui::Text("Number of vertex: %d", gameObject->Mesh->num_vertex);
 		ImGui::Text("Texture Data: %c", gameObject->Texture->Text_Data);
@@ -975,5 +982,13 @@ void ModuleEditor::ThemeUpdate()
 		break;
 	default:
 		break;
+	}
+}
+
+void ModuleEditor::ResetSelected()
+{
+	for (int j = 0; j < GameObjectManager::AllGameObjects.size(); j++)
+	{
+		GameObjectManager::AllGameObjects[j]->Mesh->isSelected = false;
 	}
 }
