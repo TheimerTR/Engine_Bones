@@ -147,7 +147,7 @@ bool ModuleRenderer3D::Init()
 
 	AssimpManager::SetCheckerTexture();
 
-	AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx", "Assets/Textures/Lenna.dds");
+	AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Lenna.dds");
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);

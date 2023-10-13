@@ -8,6 +8,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "AssimpManager.h"
+#include "ModuleEditor.h"
 
 void FileSystem::ReadFyleType(const char* Path)
 {
@@ -32,6 +33,10 @@ void FileSystem::ReadFyleType(const char* Path)
 			break;
 		case FileType::TEXTURE:
 			file = "Assets/Textures/" + file;
+			if (app->editor->actualMesh->isSelected)
+			{
+				app->editor->actualMesh->textureID = AssimpManager::TextureLoader(Path);
+			}
 			LOG(LogTypeCase::L_CASUAL, "Model Type: TEXTURE");
 			break;
 		case FileType::DEFAULT:

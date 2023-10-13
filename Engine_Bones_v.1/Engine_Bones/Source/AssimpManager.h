@@ -2,6 +2,7 @@
 #define ASSMIPMANAGER_H_
 
 #include "Globals.h"
+#include "External/MathGeoLib/include/MathGeoLib.h"
 #include<vector>
 
 #include "External/Assimp/include/mesh.h"
@@ -27,7 +28,7 @@ struct Mesh
 	float* normals = nullptr;
 
 	uint num_Tex = 0;
-	float* textures = nullptr;
+	math::float2* textures = nullptr;
 
 	string Path;
 	string PathTexture;

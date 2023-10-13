@@ -83,15 +83,16 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 
 			M_mesh->textureID = TextureLoader(pathTexture);
 
-			if (scene->mMeshes[i]->HasTextureCoords(0))
+			uint UV_Index = 0;
+			if (scene->mMeshes[i]->HasTextureCoords(UV_Index))
 			{
 				M_mesh->num_Tex = scene->mMeshes[i]->mNumVertices;
-				M_mesh->textures = new float[scene->mMeshes[i]->mNumVertices * 2];
+				M_mesh->textures = new math::float2[scene->mMeshes[i]->mNumVertices];
 
 				for (int j = 0; j < M_mesh->num_Tex; j++)
 				{
-					M_mesh->textures[j * 2] = scene->mMeshes[i]->mTextureCoords[0][j].x;
-					M_mesh->textures[j * 2 + 1] = scene->mMeshes[i]->mTextureCoords[0][j].y;
+					M_mesh->textures[j].x = scene->mMeshes[i]->mTextureCoords[UV_Index][j].x;
+					M_mesh->textures[j].y = scene->mMeshes[i]->mTextureCoords[UV_Index][j].y;
 				}
 			}
 
@@ -169,6 +170,10 @@ uint AssimpManager::TextureLoader(const char* path)
 	//ilLoadL(IL_TYPE_UNKNOWN, path, _id);
 	success = ilLoadImage(path);
 	_id = ilutGLBindTexImage();
+
+	uint Text_size = ilSaveL(IL_DDS, NULL, 0);
+	char* Text_data = new char[Text_size];
+
 	ilDeleteImages(1, &Devil_Texure);
 
 	if (success)
