@@ -80,7 +80,7 @@ update_status ModuleCamera3D::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
 	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) LookAt(Reference); 
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) Focus(); 
 
 	if (App->input->GetMouseZ() != 0) {
 
@@ -190,6 +190,13 @@ update_status ModuleCamera3D::Update(float dt)
 	CalculateViewMatrix();
 
 	return UPDATE_CONTINUE;
+}
+
+void ModuleCamera3D::Focus(){
+
+	Position = Reference + (Position - Reference).Normalized() * 10 ; 
+	LookAt(Reference); 
+
 }
 
 // -----------------------------------------------------------------

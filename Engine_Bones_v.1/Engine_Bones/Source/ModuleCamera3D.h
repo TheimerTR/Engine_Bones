@@ -25,6 +25,8 @@ public:
 	void Move(const float3&Movement);
 	float* GetViewMatrix();
 
+	void Focus(); 
+
 	float4x4 ModuleCamera3D::ViewMatrixOpenGL();
 
 private:
