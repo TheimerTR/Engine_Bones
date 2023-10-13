@@ -55,37 +55,9 @@ namespace AssimpManager
 
 	void Clear_Mesh(Mesh* mesh);
 
-	uint TextureLoader(const char* path);
-
-	
-	void SetCheckerTexture();
-
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
 
-	vector<Mesh*> Meshes;
-
-	uint CheckerTextureID;
-
-	byte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+	vector<Mesh*> AllMeshes;
 };
-
-class C_Mesh
-{
-private:
-	Mesh* mesh;
-	string path;
-
-public:
-
-	C_Mesh();
-
-	Mesh* GetMesh() const { return mesh; };
-	std::string  GetPath() const { return path; };
-
-	void SetMesh(Mesh* mesh);
-	void SetPath(string path);
-};
-
-extern C_Mesh* CM;
 
 #endif // ASSMIPMANAGER_H_

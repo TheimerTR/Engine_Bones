@@ -8,6 +8,7 @@
 #include "Primitive.h"
 
 #include "AssimpManager.h"
+#include "GameObjectManager.h"
 
 #include <vector>
 #include <stdio.h>
@@ -37,7 +38,7 @@ public:
 
 	void OnResize(int width, int height);
 
-	void RenderDraw(Mesh* Meshes);
+	void RenderDraw(GameObjects* gameObject);
 
 public:
 

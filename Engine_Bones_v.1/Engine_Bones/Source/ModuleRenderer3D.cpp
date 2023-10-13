@@ -10,6 +10,8 @@
 
 #include "ModuleEditor.h"
 #include "AssimpManager.h"
+#include "GameObjectManager.h"
+#include "TextureManager.h"
 
 #include "External/ImGui/imgui.h"
 #include "External/ImGui/backends/imgui_impl_sdl2.h"
@@ -145,7 +147,7 @@ bool ModuleRenderer3D::Init()
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
 
-	AssimpManager::SetCheckerTexture();
+	TexturesManager::SetCheckerTexture();
 
 	AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Lenna.dds");
 
@@ -183,9 +185,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	for (int i = 0; i < AssimpManager::Meshes.size(); i++)
+	for (int i = 0; i < GameObjectManager::AllGameObjects.size(); i++)
 	{
-		RenderDraw(AssimpManager::Meshes.at(i));
+		RenderDraw(GameObjectManager::AllGameObjects.at(i));
 	}
 	
 	if (App->editor->Gl_Grid)
@@ -231,19 +233,19 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
+void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 {
-	if (!AssimpManager::Meshes.empty())
+	if (!GameObjectManager::AllGameObjects.empty())
 	{
 		if (App->editor->DR_Normals)
 		{
 			glBegin(GL_LINES);
 			glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 
-			for (uint i = 0; i < Meshes->num_normals * 3; i += 3)
+			for (uint i = 0; i < gameObject->Mesh->num_normals * 3; i += 3)
 			{
-				glVertex3f(Meshes->vertex[i], Meshes->vertex[i + 1], Meshes->vertex[i + 2]);
-				glVertex3f(Meshes->vertex[i] + Meshes->normals[i], Meshes->vertex[i + 1] + Meshes->normals[i + 1], Meshes->vertex[i + 2] + Meshes->normals[i + 2]);
+				glVertex3f(gameObject->Mesh->vertex[i], gameObject->Mesh->vertex[i + 1], gameObject->Mesh->vertex[i + 2]);
+				glVertex3f(gameObject->Mesh->vertex[i] + gameObject->Mesh->normals[i], gameObject->Mesh->vertex[i + 1] + gameObject->Mesh->normals[i + 1], gameObject->Mesh->vertex[i + 2] + gameObject->Mesh->normals[i + 2]);
 			}
 
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -260,23 +262,23 @@ void ModuleRenderer3D::RenderDraw(Mesh* Meshes)
 
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		glBindTexture(GL_TEXTURE_2D, Meshes->textureID);
+		glBindTexture(GL_TEXTURE_2D, gameObject->Texture->TextureID);
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 
-		glBindVertexArray(Meshes->VAO);
+		glBindVertexArray(gameObject->Mesh->VAO);
 
-		glBindBuffer(GL_ARRAY_BUFFER, Meshes->VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, gameObject->Mesh->VBO);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ARRAY_BUFFER, Meshes->VN);
+		glBindBuffer(GL_ARRAY_BUFFER, gameObject->Mesh->VN);
 		glNormalPointer(GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ARRAY_BUFFER, Meshes->VT);
+		glBindBuffer(GL_ARRAY_BUFFER, gameObject->Mesh->VT);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Meshes->EBO);
-		glDrawElements(GL_TRIANGLES, Meshes->num_index, GL_UNSIGNED_INT, NULL);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gameObject->Mesh->EBO);
+		glDrawElements(GL_TRIANGLES, gameObject->Mesh->num_index, GL_UNSIGNED_INT, NULL);
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);

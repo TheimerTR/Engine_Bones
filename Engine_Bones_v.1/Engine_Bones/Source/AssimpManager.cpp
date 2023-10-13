@@ -14,6 +14,8 @@
 #include "ModuleRenderer3D.h"
 #include "FileSystemManager.h"
 #include "Globals.h"
+#include "GameObjectManager.h"
+#include "TextureManager.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -29,11 +31,9 @@
 #pragma comment (lib, "External/Devil/libx86/ILU.lib")
 #pragma comment (lib, "External/Devil/libx86/ILUT.lib")
 
+#pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "External/Glew/libx86/glew32.lib")
-#pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
-
-extern C_Mesh* CM = nullptr;
 
 void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 {
@@ -81,8 +81,6 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 				memcpy(M_mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * M_mesh->num_normals * 3);
 			}
 
-			M_mesh->textureID = TextureLoader(pathTexture);
-
 			uint UV_Index = 0;
 			if (scene->mMeshes[i]->HasTextureCoords(UV_Index))
 			{
@@ -97,10 +95,6 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 			}
 
 			FileSystem::StringDivide(path, &M_mesh->Name, nullptr);
-
-			CM = new C_Mesh();
-			CM->SetMesh(M_mesh);
-			CM->SetPath(path);
 
 			M_mesh->VAO = 0;
 			M_mesh->VBO = 0;
@@ -128,69 +122,15 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 			glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex * 2, M_mesh->textures, GL_STATIC_DRAW);
 
-			Meshes.push_back(M_mesh);
+			AllMeshes.push_back(M_mesh);
+
+			GameObjectManager::CreateGameObject(M_mesh, TexturesManager::TextureLoader(pathTexture));
 		}
 
 		aiReleaseImport(scene);
 	}
 	else
 		LOG(LogTypeCase::L_ERROR, "Error loading scene % s", path);
-}
-
-void AssimpManager::SetCheckerTexture()
-{
-	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
-		for (int j = 0; j < CHECKERS_WIDTH; j++) {
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkerImage[i][j][0] = (GLubyte)c;
-			checkerImage[i][j][1] = (GLubyte)c;
-			checkerImage[i][j][2] = (GLubyte)c;
-			checkerImage[i][j][3] = (GLubyte)255;
-		}
-	}
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &CheckerTextureID);
-	glBindTexture(GL_TEXTURE_2D, CheckerTextureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
-}
-
-uint AssimpManager::TextureLoader(const char* path)
-{
-	ILboolean success;
-	ILuint Devil_Texure;
-	uint _id;
-
-	ilGenImages(1, &Devil_Texure);
-	ilBindImage(Devil_Texure);
-	//ilLoadL(IL_TYPE_UNKNOWN, path, _id);
-	success = ilLoadImage(path);
-	_id = ilutGLBindTexImage();
-
-	uint Text_size = ilSaveL(IL_DDS, NULL, 0);
-	char* Text_data = new char[Text_size];
-
-	ilDeleteImages(1, &Devil_Texure);
-
-	if (success)
-	{
-		//success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-
-		if (!success || _id == NULL)
-		{
-			LOG(LogTypeCase::L_ERROR, "DEVIL can't load Image");
-		}
-		else 
-		{
-			LOG(LogTypeCase::L_CASUAL, "DEVIL load Image!");
-		}
-	}
-
-	return _id;
 }
 
 void AssimpManager::ChangeDebugMode(bool type)
@@ -210,27 +150,27 @@ void AssimpManager::ChangeDebugMode(bool type)
 
 void AssimpManager::CleanUp()
 {
-	for (int i = 0; i < Meshes.size(); i++)
+	for (int i = 0; i < AllMeshes.size(); i++)
 	{
-		if (Meshes[i]->VBO != 0)
+		if (AllMeshes[i]->VBO != 0)
 		{
-			glDeleteBuffers(1, &Meshes[i]->VBO);
+			glDeleteBuffers(1, &AllMeshes[i]->VBO);
 		}
-		if (Meshes[i]->VAO != 0)
+		if (AllMeshes[i]->VAO != 0)
 		{
-			glDeleteBuffers(1, &Meshes[i]->VAO);
+			glDeleteBuffers(1, &AllMeshes[i]->VAO);
 		}
-		if (Meshes[i]->EBO != 0)
+		if (AllMeshes[i]->EBO != 0)
 		{
-			glDeleteBuffers(1, &Meshes[i]->EBO);
+			glDeleteBuffers(1, &AllMeshes[i]->EBO);
 		}
-		if (Meshes[i]->VN != 0)
+		if (AllMeshes[i]->VN != 0)
 		{
-			glDeleteBuffers(1, &Meshes[i]->VN);
+			glDeleteBuffers(1, &AllMeshes[i]->VN);
 		}
-		if (Meshes[i]->VT != 0)
+		if (AllMeshes[i]->VT != 0)
 		{
-			glDeleteBuffers(1, &Meshes[i]->VT);
+			glDeleteBuffers(1, &AllMeshes[i]->VT);
 		}
 	}
 }
@@ -288,32 +228,15 @@ void  AssimpManager::Clear_Mesh(Mesh* mesh)
 	mesh->textureID = 0;
 	mesh->textures = nullptr;
 
-	for (auto it = Meshes.begin(); it != Meshes.end();) {
+	for (auto it = AllMeshes.begin(); it != AllMeshes.end();) {
 		if (*it == mesh) 
 		{
-			it = Meshes.erase(it);
+			it = AllMeshes.erase(it);
 		}
 		else {
 			++it;
 		}
 	}
-}
-
-C_Mesh::C_Mesh()
-{
-	mesh = nullptr;
-	path = "NULL";
-	CM = this;
-};
-
-void C_Mesh::SetMesh(Mesh* mesh)
-{
-	this->mesh = mesh;
-}
-
-void C_Mesh::SetPath(std::string path)
-{
-	this->path = path;
 }
 
 //Mesh* AssimpManager::LoadMesh(aiMesh* MeshToLoad)

@@ -9,6 +9,7 @@
 #include "Application.h"
 #include "AssimpManager.h"
 #include "ModuleEditor.h"
+#include "TextureManager.h"
 
 void FileSystem::ReadFyleType(const char* Path)
 {
@@ -33,9 +34,9 @@ void FileSystem::ReadFyleType(const char* Path)
 			break;
 		case FileType::TEXTURE:
 			file = "Assets/Textures/" + file;
-			if (app->editor->actualMesh->isSelected)
+			if (app->editor->actualMesh->Mesh->isSelected)
 			{
-				app->editor->actualMesh->textureID = AssimpManager::TextureLoader(Path);
+				app->editor->actualMesh->Mesh->textureID = TexturesManager::TextureLoader(Path)->TextureID;
 			}
 			LOG(LogTypeCase::L_CASUAL, "Model Type: TEXTURE");
 			break;

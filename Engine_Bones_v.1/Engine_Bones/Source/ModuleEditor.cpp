@@ -235,18 +235,18 @@ bool ModuleEditor::DrawEditor()
 		
 		if (ImGui::CollapsingHeader("Scene"))
 		{
-			for (int i = 0; i < AssimpManager::Meshes.size(); i++)
+			for (int i = 0; i < GameObjectManager::AllGameObjects.size(); i++)
 			{
-				if (ImGui::MenuItem(AssimpManager::Meshes[i]->Name.c_str(), 0, AssimpManager::Meshes[i]->isSelected))
+				if (ImGui::MenuItem(GameObjectManager::AllGameObjects[i]->Mesh->Name.c_str(), 0, AssimpManager::AllMeshes[i]->isSelected))
 				{
-					for (int j = 0; j < AssimpManager::Meshes.size(); j++)
+					for (int j = 0; j < GameObjectManager::AllGameObjects.size(); j++)
 					{
-						AssimpManager::Meshes[j]->isSelected = false;
+						GameObjectManager::AllGameObjects[j]->Mesh->isSelected = false;
 					}
 
-					AssimpManager::Meshes[i]->isSelected = true;
+					GameObjectManager::AllGameObjects[i]->Mesh->isSelected = true;
 					InfoGWindow = true;
-					actualMesh = AssimpManager::Meshes[i];
+					actualMesh = GameObjectManager::AllGameObjects[i];
 				}
 			}
 		}
@@ -830,31 +830,33 @@ bool ModuleEditor::DrawEditor()
 		return true;
 }
 
-void ModuleEditor::InfoGameObjectWindow(Mesh* Mesh)
+void ModuleEditor::InfoGameObjectWindow(GameObjects* gameObject)
 {
 	ImVec2 size4 = { 350, 400 };
 	ImGui::SetNextWindowSize(size4);
 
 	ImGui::Begin("Inspector", &InfoGWindow);
 
-	if (Mesh != nullptr)
+	if (gameObject->Mesh != nullptr)
 	{
-		ImGui::Text(Mesh->Name.c_str());
+		ImGui::Text(gameObject->Mesh->Name.c_str());
 
-		ImGui::Text("Path: %s", Mesh->Path.c_str());
-		ImGui::Text("Texture path: %s", Mesh->PathTexture.c_str());
-		ImGui::Text("Texture ID: %d", Mesh->textureID);
-		ImGui::Text("Number of index: %d", Mesh->num_index);
-		ImGui::Text("Number of vertex: %d", Mesh->num_vertex);
+		ImGui::Text("Path: %s", gameObject->Mesh->Path.c_str());
+		ImGui::Text("Texture path: %s", gameObject->Mesh->PathTexture.c_str());
+		ImGui::Text("Texture ID: %d", gameObject->Mesh->textureID);
+		ImGui::Text("Number of index: %d", gameObject->Mesh->num_index);
+		ImGui::Text("Number of vertex: %d", gameObject->Mesh->num_vertex);
+		ImGui::Text("Texture Data: %c", gameObject->Texture->Text_Data);
+		ImGui::Text("Texture Size: %d", gameObject->Texture->Text_Size);
 
 		if(app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
 		{
-			AssimpManager::Clear_Mesh(Mesh);
+			GameObjectManager::Clear_GameObject(gameObject); //Clean all the GameObject
 		}
 
 		if (ImGui::Button("Delete Object"))
 		{
-			AssimpManager::Clear_Mesh(Mesh);
+			GameObjectManager::Clear_GameObject(gameObject);
 		}
 	}
 

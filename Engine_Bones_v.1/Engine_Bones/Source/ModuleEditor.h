@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Application.h"
 #include "AssimpManager.h"
+#include "GameObjectManager.h"
 
 #include <vector>
 #include <stdio.h>
@@ -22,7 +23,7 @@ public:
 	void DefaultConfig();
 	void ThemeUpdate();
 
-	void InfoGameObjectWindow(Mesh* mesh);
+	void InfoGameObjectWindow(GameObjects* gameObject);
 
 public:
 
@@ -43,7 +44,7 @@ public:
 	int Log_current_idx;
 	int SelectPrimitive;
 
-	Mesh* actualMesh;
+	GameObjects* actualMesh;
 
 	float Volume;
 	float WinBright;
