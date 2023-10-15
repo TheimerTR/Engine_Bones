@@ -237,6 +237,9 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 {
+	//this moves all the objects 0,0,0 from all next obj forwards
+	glTranslatef(0.0f, 0.0f, 0.0f);
+
 	if (gameObject->Mesh->isSelected)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_RIGHT))
@@ -264,10 +267,11 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 			gameObject->Transform->SumPosition({ 0.0f, -0.1f, 0.0f });
 		}
 
+		//this moves all the objects 0,0,0 from all next obj forwards
+		glTranslatef(gameObject->Transform->GetPosition().x, gameObject->Transform->GetPosition().y, gameObject->Transform->GetPosition().z);
+
 		//LOG(LogTypeCase::L_CASUAL, "TRANSFORM X: %d", gameObject->Transform->GetPosition().x);
 	}
-
-	glTranslatef(gameObject->Transform->GetPosition().x, gameObject->Transform->GetPosition().y, gameObject->Transform->GetPosition().z);
 
 	if (!GameObjectManager::AllGameObjects.empty())
 	{
