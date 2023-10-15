@@ -178,6 +178,7 @@
     <ClInclude Include="Source\Primitive.h" />
     <ClInclude Include="Source\TextureManager.h" />
     <ClInclude Include="Source\Timer.h" />
+    <ClInclude Include="Source\TransformManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />

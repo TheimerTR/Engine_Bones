@@ -194,8 +194,31 @@ update_status ModuleCamera3D::Update(float dt)
 
 void ModuleCamera3D::Focus(){
 
-	Position = Reference + (Position - Reference).Normalized() * 10 ; 
-	LookAt(Reference); 
+	Transform* selected;
+
+	for (int i = 0; i < GameObjectManager::AllGameObjects.size(); i++)
+	{
+		if (GameObjectManager::AllGameObjects[i]->Mesh->isSelected == true) {
+
+			selected = (Transform*)GameObjectManager::AllGameObjects[i];
+
+		}
+	}
+
+	float3 selectedPos;
+
+	selectedPos.x = selected->GetPosition().x;
+	selectedPos.y = selected->GetPosition().y;
+	selectedPos.z = selected->GetPosition().z;
+
+	float3 selectedScale;
+
+	selectedScale.x = selected->GetScale().x;
+	selectedScale.y = selected->GetScale().y;
+	selectedScale.z = selected->GetScale().z;
+
+	Position = selectedPos + (Position - selectedPos).Normalized() * 10;
+	LookAt(selectedPos);
 
 }
 

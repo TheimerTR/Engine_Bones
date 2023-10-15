@@ -7,13 +7,16 @@
 
 #include "AssimpManager.h"
 #include "TextureManager.h"
+#include "TransformManager.h"
 
 using namespace std;
 
 struct GameObjects
 {
-	math::float3 Transform;
-	math::float3 Rotation;
+	//math::float3 Transform;
+	//math::float3 Rotation;
+
+	Transform* Transform; 
 
 	Mesh* Mesh;
 
@@ -24,12 +27,13 @@ namespace GameObjectManager
 {
 	vector<GameObjects*> AllGameObjects;
 
-	void CreateGameObject(Mesh* Mesh, Texture* Texture)
+	void CreateGameObject(Mesh* Mesh, Texture* Texture, Transform* Transform)
 	{
 		GameObjects* G_GameObject = new GameObjects();
 
 		G_GameObject->Mesh = Mesh;
 		G_GameObject->Texture = Texture;
+		G_GameObject->Transform = Transform; 
 
 		AllGameObjects.push_back(G_GameObject);
 	}
