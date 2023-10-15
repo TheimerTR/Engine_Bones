@@ -237,6 +237,38 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 {
+	if (gameObject->Mesh->isSelected)
+	{
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT))
+		{
+			gameObject->Transform->SumPosition({ 0.1f, 0.0f, 0.0f });
+		}
+		if (App->input->GetKey(SDL_SCANCODE_LEFT))
+		{
+			gameObject->Transform->SumPosition({ -0.1f, 0.0f, 0.0f });
+		}
+		if (App->input->GetKey(SDL_SCANCODE_UP))
+		{
+			gameObject->Transform->SumPosition({ 0.0f, 0.0f, -0.1f });
+		}
+		if (App->input->GetKey(SDL_SCANCODE_DOWN))
+		{
+			gameObject->Transform->SumPosition({ 0.0f, 0.0f, 0.1f });
+		}
+		if (App->input->GetKey(SDL_SCANCODE_X))
+		{
+			gameObject->Transform->SumPosition({ 0.0f, 0.1f, 0.0f });
+		}
+		if (App->input->GetKey(SDL_SCANCODE_Z))
+		{
+			gameObject->Transform->SumPosition({ 0.0f, -0.1f, 0.0f });
+		}
+
+		//LOG(LogTypeCase::L_CASUAL, "TRANSFORM X: %d", gameObject->Transform->GetPosition().x);
+	}
+
+	glTranslatef(gameObject->Transform->GetPosition().x, gameObject->Transform->GetPosition().y, gameObject->Transform->GetPosition().z);
+
 	if (!GameObjectManager::AllGameObjects.empty())
 	{
 		if (gameObject->Mesh->ShowNormals)

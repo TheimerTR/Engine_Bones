@@ -126,13 +126,7 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 			TexturesManager* texturesManager = new TexturesManager();
 			Transform* transform = new Transform(); 
 
-			float3 pos = { 0,0,0 }; 
-			transform->SetPosition(pos); 
-
-			float3 scale = { 1,1,1 }; 
-			transform->SetScale(scale); 
-
-			GameObjectManager::CreateGameObject(M_mesh, texturesManager->TexLoader(pathTexture), transform); ;
+			GameObjectManager::CreateGameObject(M_mesh, texturesManager->TexLoader(pathTexture), transform);
 		}
 
 		aiReleaseImport(scene);

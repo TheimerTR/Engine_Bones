@@ -13,10 +13,7 @@ using namespace std;
 
 struct GameObjects
 {
-	//math::float3 Transform;
-	//math::float3 Rotation;
-
-	Transform* Transform; 
+	Transform* Transform;
 
 	Mesh* Mesh;
 
