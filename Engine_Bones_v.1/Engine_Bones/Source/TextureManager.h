@@ -35,8 +35,18 @@ struct Texture
 	char* Text_Data;
 };
 
-namespace TexturesManager
+class TexturesManager
 {
+public:
+	TexturesManager()
+	{
+		CheckerTextureID = 0;
+	}
+
+	~TexturesManager()
+	{
+	}
+
 	vector<Texture*> AllTextures;
 
 	uint CheckerTextureID;
@@ -65,7 +75,7 @@ namespace TexturesManager
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
 	}
 
-	Texture* TextureLoader(const char* path)
+	Texture* TexLoader(const char* path)
 	{
 		Texture* T_Texture = new Texture();
 

@@ -123,7 +123,9 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 
 			AllMeshes.push_back(M_mesh);
 
-			GameObjectManager::CreateGameObject(M_mesh, TexturesManager::TextureLoader(pathTexture));
+			TexturesManager* texturesManager = new TexturesManager();
+
+			GameObjectManager::CreateGameObject(M_mesh, texturesManager->TexLoader(pathTexture));
 		}
 
 		aiReleaseImport(scene);

@@ -147,7 +147,8 @@ bool ModuleRenderer3D::Init()
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
 
-	TexturesManager::SetCheckerTexture();
+	TexturesManager* texturesManager = new TexturesManager();
+	texturesManager->SetCheckerTexture();
 
 	AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Lenna.dds");
 	GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
