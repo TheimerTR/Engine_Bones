@@ -32,6 +32,8 @@ struct Mesh
 
 	string Path;
 	bool isSelected;
+	bool ShowNormals = false;
+	bool ShowTextures = true;
 
 	uint VAO;
 	uint VBO;

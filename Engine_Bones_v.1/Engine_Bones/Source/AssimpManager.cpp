@@ -211,8 +211,8 @@ void  AssimpManager::Clear_Mesh(Mesh* mesh)
 		glDeleteBuffers(1, &mesh->VT);
 	}
 
-	mesh->Name.clear();
-	mesh->Path.clear();
+	//mesh->Name.clear();
+	//mesh->Path.clear();
 
 	mesh->num_index = 0;
 	mesh->index = nullptr;
@@ -225,7 +225,8 @@ void  AssimpManager::Clear_Mesh(Mesh* mesh)
 	mesh->num_Tex = 0;
 	mesh->textures = nullptr;
 
-	for (auto it = AllMeshes.begin(); it != AllMeshes.end();) {
+	for (auto it = AllMeshes.begin(); it != AllMeshes.end();) 
+	{
 		if (*it == mesh) 
 		{
 			it = AllMeshes.erase(it);

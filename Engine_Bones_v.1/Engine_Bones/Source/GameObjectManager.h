@@ -38,6 +38,17 @@ namespace GameObjectManager
 	{
 		AssimpManager::Clear_Mesh(Obj->Mesh);
 		//Needs clear Texture
+
+		for (auto it = AllGameObjects.begin(); it != AllGameObjects.end();) 
+		{
+			if (*it == Obj)
+			{
+				it = AllGameObjects.erase(it);
+			}
+			else {
+				++it;
+			}
+		}
 	}
 };
 

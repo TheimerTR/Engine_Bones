@@ -151,6 +151,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx", "Assets/Textures/Grass.dds");
 					ResetSelected();
+					actualMesh = GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1);
 					GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
 				}
 				/*if (ImGui::MenuItem("Cylinder"))
@@ -161,6 +162,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
 					ResetSelected();
+					actualMesh = GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1);
 					GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
 				}	
 
@@ -173,18 +175,21 @@ bool ModuleEditor::DrawEditor()
 				{
 					AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
 					ResetSelected();
+					actualMesh = GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1);
 					GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
 				}
 				if (ImGui::MenuItem("Warrior"))
 				{
 					AssimpManager::AssimpLoader("Assets/Obj/warrior.fbx");
 					ResetSelected();
+					actualMesh = GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1);
 					GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
 				}
 				if (ImGui::MenuItem("Walk"))
 				{
 					AssimpManager::AssimpLoader("Assets/Obj/walk.fbx");
 					ResetSelected();
+					actualMesh = GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1);
 					GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
 				}
 
@@ -855,6 +860,9 @@ void ModuleEditor::InfoGameObjectWindow(GameObjects* gameObject)
 		ImGui::Text("Number of vertex: %d", gameObject->Mesh->num_vertex);
 		ImGui::Text("Texture Data: %c", gameObject->Texture->Text_Data);
 		ImGui::Text("Texture Size: %d", gameObject->Texture->Text_Size);
+
+		ImGui::Checkbox("Show Normals", &gameObject->Mesh->ShowNormals);
+		ImGui::Checkbox("Show Textures", &gameObject->Mesh->ShowTextures);
 
 		if(app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
 		{

@@ -238,19 +238,24 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 {
 	if (!GameObjectManager::AllGameObjects.empty())
 	{
-		if (App->editor->DR_Normals)
+		if (gameObject->Mesh->ShowNormals)
 		{
-			glBegin(GL_LINES);
-			glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+			/*if (App->editor->DR_Normals)
+			{*/
+				glBegin(GL_LINES);
+				glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 
-			for (uint i = 0; i < gameObject->Mesh->num_normals * 3; i += 3)
-			{
-				glVertex3f(gameObject->Mesh->vertex[i], gameObject->Mesh->vertex[i + 1], gameObject->Mesh->vertex[i + 2]);
-				glVertex3f(gameObject->Mesh->vertex[i] + gameObject->Mesh->normals[i], gameObject->Mesh->vertex[i + 1] + gameObject->Mesh->normals[i + 1], gameObject->Mesh->vertex[i + 2] + gameObject->Mesh->normals[i + 2]);
-			}
+				for (uint i = 0; i < gameObject->Mesh->num_normals * 3; i += 3)
+				{
+					//Dont render vertex normals
 
-			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-			glEnd();
+					glVertex3f(gameObject->Mesh->vertex[i], gameObject->Mesh->vertex[i + 1], gameObject->Mesh->vertex[i + 2]);
+					glVertex3f(gameObject->Mesh->vertex[i] + gameObject->Mesh->normals[i], gameObject->Mesh->vertex[i + 1] + gameObject->Mesh->normals[i + 1], gameObject->Mesh->vertex[i + 2] + gameObject->Mesh->normals[i + 2]);
+				}
+
+				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				glEnd();
+			//}
 		}
 
 		/*glEnable(GL_TEXTURE_2D);
@@ -261,9 +266,12 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);*/
 
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glBindTexture(GL_TEXTURE_2D, gameObject->Texture->TextureID);
+		if (gameObject->Mesh->ShowTextures)
+		{
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, 0);
+			glBindTexture(GL_TEXTURE_2D, gameObject->Texture->TextureID);
+		}
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -287,7 +295,11 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 		glEnableVertexAttribArray(0);
 
 		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisable(GL_TEXTURE_2D);
+
+		if (gameObject->Mesh->ShowTextures)
+		{
+			glDisable(GL_TEXTURE_2D);
+		}
 	}
 	else
 	{
