@@ -58,6 +58,9 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 				M_mesh->num_index = scene->mMeshes[i]->mNumFaces * 3;
 				M_mesh->index = new uint[M_mesh->num_index]; // assume each face is a triangle
 
+				M_mesh->num_normals_Faces = scene->mMeshes[i]->mNumFaces * 3;
+				M_mesh->normals_Faces = new uint[M_mesh->num_normals_Faces];
+
 				for (uint d = 0; d < scene->mMeshes[i]->mNumFaces; ++d)
 				{
 					if (scene->mMeshes[i]->mFaces[d].mNumIndices != 3)
@@ -67,6 +70,7 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 					else
 					{
 						memcpy(&M_mesh->index[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
+						memcpy(&M_mesh->normals_Faces[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
 					}
 				}
 
@@ -75,7 +79,7 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 
 			if (scene->mMeshes[i]->HasNormals())
 			{
-				M_mesh->num_normals = scene->mMeshes[i]->mNumVertices;
+				M_mesh->num_normals = scene->mMeshes[i]->mNumVertices * 3;
 				M_mesh->normals = new float[M_mesh->num_normals * 3];
 				memcpy(M_mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * M_mesh->num_normals * 3);
 			}
@@ -99,6 +103,7 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 			M_mesh->VBO = 0;
 			M_mesh->EBO = 0;
 			M_mesh->VN = 0;
+			M_mesh->VNF = 0;
 			M_mesh->VT = 0;
 
 			glGenVertexArrays(1, &M_mesh->VAO);
@@ -116,6 +121,10 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 			glGenBuffers(1, (GLuint*)&(M_mesh->VN));
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals, M_mesh->normals, GL_STATIC_DRAW);
+			
+			glGenBuffers(1, (GLuint*)&(M_mesh->VNF));
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VNF);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals_Faces, M_mesh->normals_Faces, GL_STATIC_DRAW);
 
 			glGenBuffers(1, (GLuint*)&(M_mesh->VT));
 			glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);

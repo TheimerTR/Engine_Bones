@@ -26,6 +26,9 @@ struct Mesh
 
 	uint num_normals = 0;
 	float* normals = nullptr;
+	
+	uint num_normals_Faces = 0;
+	uint* normals_Faces = nullptr;
 
 	uint num_Tex = 0;
 	math::float2* textures = nullptr;
@@ -39,6 +42,7 @@ struct Mesh
 	uint VBO;
 	uint EBO;
 	uint VN;
+	uint VNF;
 	uint VT;
 };
 

@@ -151,7 +151,8 @@ bool ModuleRenderer3D::Init()
 	texturesManager->SetCheckerTexture();
 
 	AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
-	GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
+	App->editor->actualMesh = GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1);
+	App->editor->actualMesh->Mesh->isSelected = true;
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -288,6 +289,25 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 
 					glVertex3f(gameObject->Mesh->vertex[i], gameObject->Mesh->vertex[i + 1], gameObject->Mesh->vertex[i + 2]);
 					glVertex3f(gameObject->Mesh->vertex[i] + gameObject->Mesh->normals[i], gameObject->Mesh->vertex[i + 1] + gameObject->Mesh->normals[i + 1], gameObject->Mesh->vertex[i + 2] + gameObject->Mesh->normals[i + 2]);
+				}
+
+				for (uint i = 0; i < gameObject->Mesh->num_normals_Faces; i += 9)
+				{
+					//Dont render vertex normals
+					float3 Vec1 = { (float)gameObject->Mesh->index[i], (float)gameObject->Mesh->index[i + 1], (float)gameObject->Mesh->index[i + 2] };
+					float3 Vec2 = { (float)gameObject->Mesh->index[i + 3], (float)gameObject->Mesh->index[i + 4], (float)gameObject->Mesh->index[i + 5] };
+					float3 Vec3 = { (float)gameObject->Mesh->index[i + 6], (float)gameObject->Mesh->index[i + 7], (float)gameObject->Mesh->index[i + 8] };
+
+					float3 vec1_2 = Vec2 - Vec1;
+					float3 vec2_3 = Vec3 - Vec2;
+
+					float3 NormalVecFace;
+
+					NormalVecFace.x = (vec1_2.y * vec2_3.z) - (vec1_2.z - vec2_3.y);
+					NormalVecFace.y = (vec1_2.z * vec2_3.x) - (vec1_2.x - vec2_3.z);
+					NormalVecFace.z = (vec1_2.x * vec2_3.y) - (vec1_2.y - vec2_3.x);
+
+					glVertex3f(NormalVecFace.x, NormalVecFace.y, NormalVecFace.z);
 				}
 
 				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
