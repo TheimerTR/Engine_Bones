@@ -239,40 +239,40 @@ void ModuleRenderer3D::OnResize(int width, int height)
 void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 {
 	//this moves all the objects 0,0,0 from all next obj forwards
-	glTranslatef(0.0f, 0.0f, 0.0f);
+	//glTranslatef(0.0f, 0.0f, 0.0f);
 
-	if (gameObject->Mesh->isSelected)
-	{
-		if (App->input->GetKey(SDL_SCANCODE_RIGHT))
-		{
-			gameObject->Transform->SumPosition({ 0.1f, 0.0f, 0.0f });
-		}
-		if (App->input->GetKey(SDL_SCANCODE_LEFT))
-		{
-			gameObject->Transform->SumPosition({ -0.1f, 0.0f, 0.0f });
-		}
-		if (App->input->GetKey(SDL_SCANCODE_UP))
-		{
-			gameObject->Transform->SumPosition({ 0.0f, 0.0f, -0.1f });
-		}
-		if (App->input->GetKey(SDL_SCANCODE_DOWN))
-		{
-			gameObject->Transform->SumPosition({ 0.0f, 0.0f, 0.1f });
-		}
-		if (App->input->GetKey(SDL_SCANCODE_X))
-		{
-			gameObject->Transform->SumPosition({ 0.0f, 0.1f, 0.0f });
-		}
-		if (App->input->GetKey(SDL_SCANCODE_Z))
-		{
-			gameObject->Transform->SumPosition({ 0.0f, -0.1f, 0.0f });
-		}
+	//if (gameObject->Mesh->isSelected)
+	//{
+	//	if (App->input->GetKey(SDL_SCANCODE_RIGHT))
+	//	{
+	//		gameObject->Transform->SumPosition({ 0.1f, 0.0f, 0.0f });
+	//	}
+	//	if (App->input->GetKey(SDL_SCANCODE_LEFT))
+	//	{
+	//		gameObject->Transform->SumPosition({ -0.1f, 0.0f, 0.0f });
+	//	}
+	//	if (App->input->GetKey(SDL_SCANCODE_UP))
+	//	{
+	//		gameObject->Transform->SumPosition({ 0.0f, 0.0f, -0.1f });
+	//	}
+	//	if (App->input->GetKey(SDL_SCANCODE_DOWN))
+	//	{
+	//		gameObject->Transform->SumPosition({ 0.0f, 0.0f, 0.1f });
+	//	}
+	//	if (App->input->GetKey(SDL_SCANCODE_X))
+	//	{
+	//		gameObject->Transform->SumPosition({ 0.0f, 0.1f, 0.0f });
+	//	}
+	//	if (App->input->GetKey(SDL_SCANCODE_Z))
+	//	{
+	//		gameObject->Transform->SumPosition({ 0.0f, -0.1f, 0.0f });
+	//	}
 
-		//this moves all the objects 0,0,0 from all next obj forwards
-		glTranslatef(gameObject->Transform->GetPosition().x, gameObject->Transform->GetPosition().y, gameObject->Transform->GetPosition().z);
+	//	//this moves all the objects 0,0,0 from all next obj forwards
+	//	glTranslatef(gameObject->Transform->GetPosition().x, gameObject->Transform->GetPosition().y, gameObject->Transform->GetPosition().z);
 
-		//LOG(LogTypeCase::L_CASUAL, "TRANSFORM X: %d", gameObject->Transform->GetPosition().x);
-	}
+	//	//LOG(LogTypeCase::L_CASUAL, "TRANSFORM X: %d", gameObject->Transform->GetPosition().x);
+	//}
 
 	if (!GameObjectManager::AllGameObjects.empty())
 	{
@@ -327,9 +327,17 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 
 		if (gameObject->Mesh->ShowTextures)
 		{
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, 0);
-			glBindTexture(GL_TEXTURE_2D, gameObject->Texture->TextureID);
+			if (gameObject->Texture->path != nullptr)
+			{
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, 0);
+				glBindTexture(GL_TEXTURE_2D, gameObject->Texture->TextureID);
+			}
+			else
+			{
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, 1);
+			}
 		}
 
 		glEnableClientState(GL_VERTEX_ARRAY);
