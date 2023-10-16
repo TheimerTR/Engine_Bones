@@ -150,7 +150,7 @@ bool ModuleRenderer3D::Init()
 	TexturesManager* texturesManager = new TexturesManager();
 	texturesManager->SetCheckerTexture();
 
-	AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Lenna.dds");
+	AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
 	GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1)->Mesh->isSelected = true;
 
 	// Projection matrix for
@@ -311,6 +311,8 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 		}
 
 		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		glBindVertexArray(gameObject->Mesh->VAO);
 
@@ -332,6 +334,8 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 		glEnableVertexAttribArray(0);
 
 		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		if (gameObject->Mesh->ShowTextures)
 		{
