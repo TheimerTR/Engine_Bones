@@ -307,6 +307,8 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 					NormalVecFace.y = (vec1_2.z * vec2_3.x) - (vec1_2.x - vec2_3.z);
 					NormalVecFace.z = (vec1_2.x * vec2_3.y) - (vec1_2.y - vec2_3.x);
 
+					NormalVecFace = NormalVecFace / NormalVecFace.Normalize();
+
 					glVertex3f(NormalVecFace.x, NormalVecFace.y, NormalVecFace.z);
 				}
 
