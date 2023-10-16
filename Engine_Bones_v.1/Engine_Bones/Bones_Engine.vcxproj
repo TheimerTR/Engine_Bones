@@ -89,6 +89,7 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\AssimpManager.h" />
     <ClInclude Include="Source\Color.h" />
+    <ClInclude Include="Source\ComponentManager.h" />
     <ClInclude Include="Source\C_Math.h" />
     <ClInclude Include="Source\External\ImGuiCandy\candy.h" />
     <ClInclude Include="Source\External\ImGuiCandy\gradient.h" />

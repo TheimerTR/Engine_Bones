@@ -1,12 +1,15 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
+#include "GameObjectManager.h"
 #include "External/MathGeoLib/include/Math/Quat.h"
 #include "ModuleInput.h"
 #include "External/Glew/include/glew.h" // extension lib
 #include "External\SDL\include\SDL_opengl.h"
 #include "External/ImGui/backends/imgui_impl_opengl3.h"
 #include <gl/GL.h>
+
+GameObjectManager* G_Manager = new GameObjectManager();
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -196,11 +199,11 @@ void ModuleCamera3D::Focus(){
 
 	Transform* selected;
 
-	for (int i = 0; i < GameObjectManager::AllGameObjects.size(); i++)
+	for (int i = 0; i < G_Manager->AllGameObjects.size(); i++)
 	{
-		if (GameObjectManager::AllGameObjects[i]->Mesh->isSelected == true) {
+		if (G_Manager->AllGameObjects[i]->Mesh->isSelected == true) {
 
-			selected = (Transform*)GameObjectManager::AllGameObjects[i];
+			selected = (Transform*)G_Manager->AllGameObjects[i];
 
 		}
 	}

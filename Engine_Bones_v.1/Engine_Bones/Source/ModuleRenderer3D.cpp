@@ -41,6 +41,8 @@
 #pragma comment (lib, "External/MathGeoLib/libx86/LibRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
 
+GameObjectManager* G_Manager = new GameObjectManager();
+
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled), context(), Wireframe(false)
 {
 }
@@ -151,7 +153,7 @@ bool ModuleRenderer3D::Init()
 	texturesManager->SetCheckerTexture();
 
 	AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
-	App->editor->actualMesh = GameObjectManager::AllGameObjects.at(GameObjectManager::AllGameObjects.size() - 1);
+	App->editor->actualMesh = G_Manager->AllGameObjects.at(G_Manager->AllGameObjects.size() - 1);
 	App->editor->actualMesh->Mesh->isSelected = true;
 
 	// Projection matrix for
@@ -188,9 +190,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	for (int i = 0; i < GameObjectManager::AllGameObjects.size(); i++)
+	for (int i = 0; i < G_Manager->AllGameObjects.size(); i++)
 	{
-		RenderDraw(GameObjectManager::AllGameObjects.at(i));
+		RenderDraw(G_Manager->AllGameObjects.at(i));
 	}
 	
 	if (App->editor->Gl_Grid)
@@ -274,7 +276,7 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 	//	//LOG(LogTypeCase::L_CASUAL, "TRANSFORM X: %d", gameObject->Transform->GetPosition().x);
 	//}
 
-	if (!GameObjectManager::AllGameObjects.empty())
+	if (!G_Manager->AllGameObjects.empty())
 	{
 		if (gameObject->Mesh->ShowNormals)
 		{

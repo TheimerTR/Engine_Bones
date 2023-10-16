@@ -8,6 +8,7 @@
 #include "AssimpManager.h"
 #include "TextureManager.h"
 #include "TransformManager.h"
+#include "ComponentManager.h"
 
 using namespace std;
 
@@ -20,9 +21,37 @@ struct GameObjects
 	Texture* Texture;
 };
 
-namespace GameObjectManager
+class GameObjectManager
 {
+public:
+	GameObjectManager() {};
+	~GameObjectManager() {};
+
 	vector<GameObjects*> AllGameObjects;
+
+	GameObjectManager* mParent;
+	C_Transform* mTransform;
+	vector<ComponentManager*> mComponents;
+
+	void AddComponent(ComponentType type)
+	{
+		//If existe
+		switch (type)
+		{
+		case ComponentType::TRANSFORM:
+			C_Transform* Temp = new C_Transform();
+			mTransform = Temp;
+			mComponents.push_back(mTransform);
+			
+			break;
+		case ComponentType::MESH:
+			break;
+		case ComponentType::MATERIAL:
+			break;
+		default:
+			break;
+		}
+	}
 
 	void CreateGameObject(Mesh* Mesh, Texture* Texture, Transform* Transform)
 	{

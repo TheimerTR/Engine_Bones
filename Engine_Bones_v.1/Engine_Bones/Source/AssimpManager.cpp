@@ -35,6 +35,8 @@
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "External/Glew/libx86/glew32.lib")
 
+GameObjectManager* G_Manager = new GameObjectManager();
+
 void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 {
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -135,7 +137,7 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 			TexturesManager* texturesManager = new TexturesManager();
 			Transform* transform = new Transform(); 
 
-			GameObjectManager::CreateGameObject(M_mesh, texturesManager->TexLoader(pathTexture), transform);
+			G_Manager->CreateGameObject(M_mesh, texturesManager->TexLoader(pathTexture), transform);
 		}
 
 		aiReleaseImport(scene);
