@@ -16,6 +16,8 @@
 #include "Globals.h"
 #include "GameObjectManager.h"
 #include "TextureManager.h"
+#include "ComponentTransform.h"
+#include "ComponentManager.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -135,7 +137,7 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 			AllMeshes.push_back(M_mesh);
 
 			TexturesManager* texturesManager = new TexturesManager();
-			Transform* transform = new Transform(); 
+			ComponentTransform* transform = new ComponentTransform(); 
 
 			G_Manager->CreateGameObject(M_mesh, texturesManager->TexLoader(pathTexture), transform);
 		}

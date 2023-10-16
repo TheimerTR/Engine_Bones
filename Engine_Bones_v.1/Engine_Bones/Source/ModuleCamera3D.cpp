@@ -9,7 +9,7 @@
 #include "External/ImGui/backends/imgui_impl_opengl3.h"
 #include <gl/GL.h>
 
-GameObjectManager* G_Manager = new GameObjectManager();
+//GameObjectManager* G_Manager = new GameObjectManager();
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -197,31 +197,31 @@ update_status ModuleCamera3D::Update(float dt)
 
 void ModuleCamera3D::Focus(){
 
-	Transform* selected;
+	//Transform* selected;
 
-	for (int i = 0; i < G_Manager->AllGameObjects.size(); i++)
-	{
-		if (G_Manager->AllGameObjects[i]->Mesh->isSelected == true) {
+	//for (int i = 0; i < G_Manager->AllGameObjects.size(); i++)
+	//{
+	//	if (G_Manager->AllGameObjects[i]->Mesh->isSelected == true) {
 
-			selected = (Transform*)G_Manager->AllGameObjects[i];
+	//		selected = (Transform*)G_Manager->AllGameObjects[i];
 
-		}
-	}
+	//	}
+	//}
 
-	float3 selectedPos;
+	//float3 selectedPos;
 
-	selectedPos.x = selected->GetPosition().x;
-	selectedPos.y = selected->GetPosition().y;
-	selectedPos.z = selected->GetPosition().z;
+	//selectedPos.x = selected->GetPosition().x;
+	//selectedPos.y = selected->GetPosition().y;
+	//selectedPos.z = selected->GetPosition().z;
 
-	float3 selectedScale;
+	//float3 selectedScale;
 
-	selectedScale.x = selected->GetScale().x;
-	selectedScale.y = selected->GetScale().y;
-	selectedScale.z = selected->GetScale().z;
+	//selectedScale.x = selected->GetScale().x;
+	//selectedScale.y = selected->GetScale().y;
+	//selectedScale.z = selected->GetScale().z;
 
-	Position = selectedPos + (Position - selectedPos).Normalized() * 10;
-	LookAt(selectedPos);
+	//Position = selectedPos + (Position - selectedPos).Normalized() * 10;
+	//LookAt(selectedPos);
 
 }
 

@@ -179,12 +179,14 @@
     <ClInclude Include="Source\Primitive.h" />
     <ClInclude Include="Source\TextureManager.h" />
     <ClInclude Include="Source\Timer.h" />
-    <ClInclude Include="Source\TransformManager.h" />
+    <ClInclude Include="Source\ComponentTransform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\AssimpManager.cpp" />
     <ClCompile Include="Source\Color.cpp" />
+    <ClCompile Include="Source\ComponentManager.cpp" />
+    <ClCompile Include="Source\ComponentTransform.cpp" />
     <ClCompile Include="Source\External\ImGui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Source\External\ImGui\backends\imgui_impl_sdl.cpp" />
     <ClCompile Include="Source\External\ImGui\imgui.cpp" />
@@ -227,6 +229,7 @@
     <ClCompile Include="Source\External\mmgr\mmgr.cpp" />
     <ClCompile Include="Source\External\Parson\parson.c" />
     <ClCompile Include="Source\FileSystemManager.cpp" />
+    <ClCompile Include="Source\GameObjectManager.cpp" />
     <ClCompile Include="Source\glmath.cpp" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\log.cpp" />

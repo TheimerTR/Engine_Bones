@@ -327,7 +327,7 @@
     <ClInclude Include="Source\TextureManager.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Source\TransformManager.h">
+    <ClInclude Include="Source\ComponentTransform.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Source\ComponentManager.h">
@@ -501,6 +501,15 @@
       <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Source\Timer.cpp">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ComponentManager.cpp">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ComponentTransform.cpp">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameObjectManager.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>

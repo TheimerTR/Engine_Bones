@@ -7,13 +7,12 @@
 
 #include "AssimpManager.h"
 #include "TextureManager.h"
-#include "TransformManager.h"
 
 class GameObjectManager;
 
 using namespace std;
 
-enum class ComponentType 
+enum  ComponentType 
 {
 	TRANSFORM,
 	MESH,
@@ -25,7 +24,7 @@ class ComponentManager
 {
 public:
 
-	virtual void RenderInspector() {};
+	/*virtual void RenderInspector() {};*/
 
 	virtual void Enable() {};
 	virtual void Update() {};
@@ -34,46 +33,38 @@ public:
 public:
 	bool active;
 	ComponentType Type;
-	GameObjectManager* Parent;
+	GameObjectManager* Owner;
 
 public:
 
-	ComponentManager(GameObjectManager* parent)
-	{
-		active = true; 
-		Parent = parent;
-		Type = ComponentType::NONE;
-	};
+	ComponentManager();
+	~ComponentManager();
 
-	~ComponentManager()
-	{
-
-	}
 
 };
 
-class C_Transform : public ComponentManager
-{
-public:
-	C_Transform() 
-	{
-		mPosition = float3::zero;
-		mScale = float3::zero;
-		mrotation = Quat::identity;
+//class C_Transform : public ComponentManager
+//{
+//public:
+//	C_Transform() 
+//	{
+//		mPosition = float3::zero;
+//		mScale = float3::zero;
+//		mrotation = Quat::identity;
+//
+//		mGlobalMatrix = float4x4::identity;
+//		mLocalMatrix = float4x4::identity;
+//	};
+//	~C_Transform();
+//
+//	void RenderInspector() override;
+//
+//	float3 mPosition;
+//	float3 mScale;
+//	Quat mrotation;
+//
+//	float4x4 mGlobalMatrix;
+//	float4x4 mLocalMatrix;
 
-		mGlobalMatrix = float4x4::identity;
-		mLocalMatrix = float4x4::identity;
-	};
-	~C_Transform();
-
-	void RenderInspector() override;
-
-	float3 mPosition;
-	float3 mScale;
-	Quat mrotation;
-
-	float4x4 mGlobalMatrix;
-	float4x4 mLocalMatrix;
-};
 
 #endif // COMPONENTMANAGER_H_
