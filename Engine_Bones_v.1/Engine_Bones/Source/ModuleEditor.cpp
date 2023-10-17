@@ -23,7 +23,7 @@
 
 static ImGuiComboFlags flags;
 
-GameObjectManager* G_Manager = new GameObjectManager();
+GameObjectManager* G_Manager = new GameObjectManager("G_Manager", nullptr);
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {

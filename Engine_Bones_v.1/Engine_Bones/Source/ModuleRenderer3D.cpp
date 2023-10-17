@@ -41,7 +41,7 @@
 #pragma comment (lib, "External/MathGeoLib/libx86/LibRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
 
-GameObjectManager* G_Manager = new GameObjectManager();
+GameObjectManager* G_Manager = new GameObjectManager("G_Manager", nullptr);
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled), context(), Wireframe(false)
 {

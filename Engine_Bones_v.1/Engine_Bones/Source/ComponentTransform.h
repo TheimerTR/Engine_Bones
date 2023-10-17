@@ -3,6 +3,8 @@
 
 #include "ComponentManager.h"
 
+class GameObjectManager;
+
 class ComponentTransform : public ComponentManager
 {
 
@@ -17,7 +19,7 @@ private:
 
 public: 
 
-	ComponentTransform(); 
+	ComponentTransform(GameObjectManager* gameObject);
 	~ComponentTransform();
 
 	/*void RenderInspector() override;*/

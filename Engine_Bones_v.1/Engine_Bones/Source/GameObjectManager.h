@@ -27,7 +27,7 @@ class GameObjectManager
 {
 public:
 
-	GameObjectManager();
+	GameObjectManager(const char* name, GameObjectManager* parent, int id = 0);
 	~GameObjectManager();
 
 	vector<GameObjects*> AllGameObjects;
@@ -35,9 +35,25 @@ public:
 	GameObjectManager* mParent;
 	ComponentTransform* mTransform;
 	vector<ComponentManager*> mComponents;
+	const char* mName;
+	bool isActive;
 
-	void AddComponent(ComponentType type); 
+	vector<GameObjectManager*> childrens;
 
+	ComponentManager* AddComponent(ComponentType type);
+
+	void ActivateGameObject();
+
+	void Enable();
+	void Update();
+	void Disable();
+
+	void Destroy();
+
+	void DeleteComponent(ComponentManager* ptr);
+	void DeleteChild(GameObjectManager* gameObject);
+
+	void ChangeParent(GameObjectManager* gameObject);
 
 	void CreateGameObject(Mesh* Mesh, Texture* Texture, ComponentTransform* Transform)
 	{

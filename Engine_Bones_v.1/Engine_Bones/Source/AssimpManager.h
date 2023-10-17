@@ -11,6 +11,9 @@
 #include "External/Assimp/include/postprocess.h"
 #pragma comment (lib, "External/Assimp/libx86/assimp.lib")
 
+class GameObjectManager;
+class TextureManager;
+
 using namespace std;
 
 struct Mesh
@@ -56,6 +59,8 @@ namespace AssimpManager
 
 	template <class T>
 	void ClearAssimpVec(vector<T>& vector);
+
+	void GameObjectNodeTree(const aiScene* scene, int numMeshes /*aiMesh** M_Array*/, aiNode* actualObj, GameObjectManager* _Parent, const char* Name, const char* Path, const char* texturePath);
 
 	void Clear_Mesh(Mesh* mesh);
 

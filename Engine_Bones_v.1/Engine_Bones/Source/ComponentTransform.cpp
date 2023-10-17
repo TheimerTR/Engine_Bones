@@ -1,7 +1,7 @@
 #include "ComponentTransform.h"
 #include "GameObjectManager.h"
 
-ComponentTransform::ComponentTransform() : ComponentManager()
+ComponentTransform::ComponentTransform(GameObjectManager* gameObject) : ComponentManager(gameObject)
 {
 	mPosition = float3::zero;
 	mScale = float3::zero;

@@ -3,9 +3,14 @@
 #include "ComponentManager.h"
 #include "ComponentTransform.h"
 
-GameObjectManager::GameObjectManager()
+GameObjectManager::GameObjectManager(const char* name, GameObjectManager* parent, int id) : mParent(parent), mName(name), mTransform(nullptr), isActive(true)
 {
+	if(parent != nullptr)
+	{
+		parent->childrens.push_back(this);
+	}
 
+	mTransform = dynamic_cast<ComponentTransform*>(AddComponent(ComponentType::TRANSFORM));
 };
 
 GameObjectManager::~GameObjectManager() 
@@ -13,24 +18,27 @@ GameObjectManager::~GameObjectManager()
 
 };
 
-void GameObjectManager :: AddComponent(ComponentType type)
+ComponentManager* GameObjectManager::AddComponent(ComponentType type)
 {
+	ComponentManager* Comp = nullptr;
 
-	ComponentTransform* Temp = new ComponentTransform();
 	//If existe
 	switch (type)
 	{
 	case ComponentType::TRANSFORM:
-
-		mTransform = Temp;
 		mComponents.push_back(mTransform);
-
+		Comp = new ComponentTransform(this);
 		break;
 	case ComponentType::MESH:
 		break;
 	case ComponentType::MATERIAL:
 		break;
+	case ComponentType::NONE:
+		LOG(LogTypeCase::L_ERROR, "The Component Type was nullptr")
+		break;
 	default:
 		break;
 	}
+
+	return Comp;
 }

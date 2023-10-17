@@ -1,10 +1,8 @@
 #include "ComponentManager.h"
 #include "GameObjectManager.h"
 
-ComponentManager::ComponentManager()
+ComponentManager::ComponentManager(GameObjectManager* gameObject) : active(true), Owner(gameObject), Type(ComponentType::NONE)
 {
-	active = true;
-	Type = ComponentType::NONE;
 };
 
 ComponentManager::~ComponentManager() 
