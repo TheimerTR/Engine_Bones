@@ -9,6 +9,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
+#include "ModuleScene.h"
 
 #include<vector>
 
@@ -20,6 +21,7 @@ public:
 	class ModuleRenderer3D* renderer3D;
 	class ModuleCamera3D* camera;
 	class ModuleEditor* editor;
+	class ModuleScene* scene;
 
 private:
 

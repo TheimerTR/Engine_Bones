@@ -23,7 +23,7 @@ public:
 	void DefaultConfig();
 	void ThemeUpdate();
 
-	void InfoGameObjectWindow(GameObjects* gameObject);
+	void InfoGameObjectWindow(GameObjectManager* gameObject);
 
 	void ResetSelected();
 
@@ -46,7 +46,7 @@ public:
 	int Log_current_idx;
 	int SelectPrimitive;
 
-	GameObjects* actualMesh;
+	GameObjectManager* actualMesh;
 
 	float Volume;
 	float WinBright;

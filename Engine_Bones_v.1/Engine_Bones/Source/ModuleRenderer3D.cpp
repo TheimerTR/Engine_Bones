@@ -12,6 +12,10 @@
 #include "AssimpManager.h"
 #include "GameObjectManager.h"
 #include "TextureManager.h"
+#include "ModuleScene.h"
+#include "ComponentManager.h"
+#include "ComponentMesh.h"
+#include "ComponentMaterial.h"
 
 #include "External/ImGui/imgui.h"
 #include "External/ImGui/backends/imgui_impl_sdl2.h"
@@ -40,8 +44,6 @@
 #else
 #pragma comment (lib, "External/MathGeoLib/libx86/LibRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
-
-GameObjectManager* G_Manager = new GameObjectManager("G_Manager", nullptr);
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled), context(), Wireframe(false)
 {
@@ -153,8 +155,9 @@ bool ModuleRenderer3D::Init()
 	texturesManager->SetCheckerTexture();
 
 	AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
-	App->editor->actualMesh = G_Manager->AllGameObjects.at(G_Manager->AllGameObjects.size() - 1);
-	App->editor->actualMesh->Mesh->isSelected = true;
+	App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+	App->editor->actualMesh = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+	App->editor->actualMesh->isSelected = true;
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -190,9 +193,21 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	for (int i = 0; i < G_Manager->AllGameObjects.size(); i++)
+	/*for (int i = 0; i < G_Manager->AllGameObjects.size(); i++)
 	{
 		RenderDraw(G_Manager->AllGameObjects.at(i));
+	}*/
+	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
+	{
+		std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
+		
+		for (int i = 0; i < objectMeshes.size(); i++)
+		{
+			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
+			ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(i));
+
+			RenderDraw(objectMesh->GetMesh(), objectTexture->GetTexture());
+		}
 	}
 	
 	if (App->editor->Gl_Grid)
@@ -238,7 +253,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
+void ModuleRenderer3D::RenderDraw(Mesh* mesh, Texture* texture)
 {
 	//this moves all the objects 0,0,0 from all next obj forwards
 	//glTranslatef(0.0f, 0.0f, 0.0f);
@@ -276,29 +291,29 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 	//	//LOG(LogTypeCase::L_CASUAL, "TRANSFORM X: %d", gameObject->Transform->GetPosition().x);
 	//}
 
-	if (!G_Manager->AllGameObjects.empty())
+	if (mesh != nullptr)
 	{
-		if (gameObject->Mesh->ShowNormals)
+		if (mesh->ShowNormals)
 		{
 			/*if (App->editor->DR_Normals)
 			{*/
 				glBegin(GL_LINES);
 				glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 
-				for (uint i = 0; i < gameObject->Mesh->num_normals * 3; i += 3)
+				for (uint i = 0; i < mesh->num_normals * 3; i += 3)
 				{
 					//Dont render vertex normals
 
-					glVertex3f(gameObject->Mesh->vertex[i], gameObject->Mesh->vertex[i + 1], gameObject->Mesh->vertex[i + 2]);
-					glVertex3f(gameObject->Mesh->vertex[i] + gameObject->Mesh->normals[i], gameObject->Mesh->vertex[i + 1] + gameObject->Mesh->normals[i + 1], gameObject->Mesh->vertex[i + 2] + gameObject->Mesh->normals[i + 2]);
+					glVertex3f(mesh->vertex[i], mesh->vertex[i + 1], mesh->vertex[i + 2]);
+					glVertex3f(mesh->vertex[i] + mesh->normals[i], mesh->vertex[i + 1] + mesh->normals[i + 1], mesh->vertex[i + 2] + mesh->normals[i + 2]);
 				}
 
-				for (uint i = 0; i < gameObject->Mesh->num_normals_Faces; i += 9)
+				for (uint i = 0; i < mesh->num_normals_Faces; i += 9)
 				{
 					//Dont render vertex normals
-					float3 Vec1 = { (float)gameObject->Mesh->index[i], (float)gameObject->Mesh->index[i + 1], (float)gameObject->Mesh->index[i + 2] };
-					float3 Vec2 = { (float)gameObject->Mesh->index[i + 3], (float)gameObject->Mesh->index[i + 4], (float)gameObject->Mesh->index[i + 5] };
-					float3 Vec3 = { (float)gameObject->Mesh->index[i + 6], (float)gameObject->Mesh->index[i + 7], (float)gameObject->Mesh->index[i + 8] };
+					float3 Vec1 = { (float)mesh->index[i], (float)mesh->index[i + 1], (float)mesh->index[i + 2] };
+					float3 Vec2 = { (float)mesh->index[i + 3], (float)mesh->index[i + 4], (float)mesh->index[i + 5] };
+					float3 Vec3 = { (float)mesh->index[i + 6], (float)mesh->index[i + 7], (float)mesh->index[i + 8] };
 
 					float3 vec1_2 = Vec2 - Vec1;
 					float3 vec2_3 = Vec3 - Vec2;
@@ -327,13 +342,13 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);*/
 
-		if (gameObject->Mesh->ShowTextures)
+		if (mesh->ShowTextures)
 		{
-			if (gameObject->Texture->path != nullptr)
+			if (texture->path != nullptr)
 			{
 				glEnable(GL_TEXTURE_2D);
 				glBindTexture(GL_TEXTURE_2D, 0);
-				glBindTexture(GL_TEXTURE_2D, gameObject->Texture->TextureID);
+				glBindTexture(GL_TEXTURE_2D, texture->TextureID);
 			}
 			else
 			{
@@ -346,19 +361,19 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		glBindVertexArray(gameObject->Mesh->VAO);
+		glBindVertexArray(mesh->VAO);
 
-		glBindBuffer(GL_ARRAY_BUFFER, gameObject->Mesh->VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ARRAY_BUFFER, gameObject->Mesh->VN);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->VN);
 		glNormalPointer(GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ARRAY_BUFFER, gameObject->Mesh->VT);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->VT);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gameObject->Mesh->EBO);
-		glDrawElements(GL_TRIANGLES, gameObject->Mesh->num_index, GL_UNSIGNED_INT, NULL);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
+		glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -369,7 +384,7 @@ void ModuleRenderer3D::RenderDraw(GameObjects* gameObject)
 		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		if (gameObject->Mesh->ShowTextures)
+		if (mesh->ShowTextures)
 		{
 			glDisable(GL_TEXTURE_2D);
 		}

@@ -9,6 +9,7 @@
 
 #include "AssimpManager.h"
 #include "GameObjectManager.h"
+#include "TextureManager.h"
 
 #include <vector>
 #include <stdio.h>
@@ -38,7 +39,7 @@ public:
 
 	void OnResize(int width, int height);
 
-	void RenderDraw(GameObjects* gameObject);
+	void RenderDraw(Mesh* mesh, Texture* texture);
 
 public:
 

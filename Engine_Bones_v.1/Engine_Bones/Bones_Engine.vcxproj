@@ -90,6 +90,8 @@
     <ClInclude Include="Source\AssimpManager.h" />
     <ClInclude Include="Source\Color.h" />
     <ClInclude Include="Source\ComponentManager.h" />
+    <ClInclude Include="Source\ComponentMaterial.h" />
+    <ClInclude Include="Source\ComponentMesh.h" />
     <ClInclude Include="Source\C_Math.h" />
     <ClInclude Include="Source\External\ImGuiCandy\candy.h" />
     <ClInclude Include="Source\External\ImGuiCandy\gradient.h" />
@@ -175,6 +177,7 @@
     <ClInclude Include="Source\ModuleEditor.h" />
     <ClInclude Include="Source\ModuleInput.h" />
     <ClInclude Include="Source\ModuleRenderer3D.h" />
+    <ClInclude Include="Source\ModuleScene.h" />
     <ClInclude Include="Source\ModuleWindow.h" />
     <ClInclude Include="Source\Primitive.h" />
     <ClInclude Include="Source\TextureManager.h" />
@@ -186,6 +189,8 @@
     <ClCompile Include="Source\AssimpManager.cpp" />
     <ClCompile Include="Source\Color.cpp" />
     <ClCompile Include="Source\ComponentManager.cpp" />
+    <ClCompile Include="Source\ComponentMaterial.cpp" />
+    <ClCompile Include="Source\ComponentMesh.cpp" />
     <ClCompile Include="Source\ComponentTransform.cpp" />
     <ClCompile Include="Source\External\ImGui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Source\External\ImGui\backends\imgui_impl_sdl.cpp" />
@@ -238,6 +243,7 @@
     <ClCompile Include="Source\ModuleEditor.cpp" />
     <ClCompile Include="Source\ModuleInput.cpp" />
     <ClCompile Include="Source\ModuleRenderer3D.cpp" />
+    <ClCompile Include="Source\ModuleScene.cpp" />
     <ClCompile Include="Source\ModuleWindow.cpp" />
     <ClCompile Include="Source\Primitive.cpp" />
     <ClCompile Include="Source\Timer.cpp" />

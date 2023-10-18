@@ -17,7 +17,10 @@
 #include "GameObjectManager.h"
 #include "TextureManager.h"
 #include "ComponentTransform.h"
+#include "ComponentMesh.h"
+#include "ComponentMaterial.h"
 #include "ComponentManager.h"
+#include "ModuleScene.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -37,28 +40,24 @@
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "External/Glew/libx86/glew32.lib")
 
-GameObjectManager* G_Manager = new GameObjectManager("Descartar", nullptr);
-
 void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 {
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		GameObjectManager* OG_Parent = new GameObjectManager("ROOT NODE", nullptr);
-
 		string FileName = "";
 
 		FileSystem::StringDivide(path, &FileName, nullptr);
 
-		GameObjectNodeTree(scene, scene->mNumMeshes, scene->mRootNode, OG_Parent, FileName.c_str(), path, pathTexture );
+		GameObjectNodeTree(scene, scene->mNumMeshes, scene->mRootNode, app->scene->Root, FileName.c_str(), path, pathTexture );
 
 		aiReleaseImport(scene);
 	}
 	else
 		LOG(LogTypeCase::L_ERROR, "Error loading scene % s", path);
 }
-//aiMesh -> aiScene better?
+
 void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes /*aiMesh** M_Array*/, aiNode* actualObj, GameObjectManager* _Parent, const char* Name, const char* Path, const char* texturePath)
 {
 	int i = 0;
@@ -75,8 +74,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes /*aiM
 			GameObjectNodeTree(scene, actualObj->mChildren[i]->mNumChildren, actualObj->mChildren[i], _ParentObj, FileName, Path, texturePath);
 		}
 	}
-
-	//Components here
 
 	/*ResourceMesh R_Mesh = dynamic_cast<ComponentTransform*>(_ParentObj->AddComponent(ComponentType::TRANSFORM));
 	_ParentObj->mComponents.push_back(R_Mesh);*/
@@ -172,7 +169,14 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes /*aiM
 	TexturesManager* texturesManager = new TexturesManager();
 	ComponentTransform* transform = new ComponentTransform(nullptr);
 
-	G_Manager->CreateGameObject(M_mesh, texturesManager->TexLoader(texturePath), transform);
+	//Components here
+	ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
+	C_Mesh->SetMesh(M_mesh);
+
+	ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
+	C_Texture->SetTexture(texturesManager->TexLoader(texturePath));
+
+	//G_Manager->CreateGameObject(M_mesh, texturesManager->TexLoader(texturePath), transform);
 
 }
 

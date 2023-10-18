@@ -37,7 +37,7 @@ struct Mesh
 	math::float2* textures = nullptr;
 
 	string Path;
-	bool isSelected;
+	//bool isSelected;
 	bool ShowNormals = false;
 	bool ShowTextures = true;
 

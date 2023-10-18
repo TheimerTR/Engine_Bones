@@ -10,6 +10,8 @@
 #include "AssimpManager.h"
 #include "ModuleEditor.h"
 #include "TextureManager.h"
+#include "ComponentManager.h"
+#include "ComponentMaterial.h"
 
 void FileSystem::ReadFyleType(const char* Path)
 {
@@ -34,10 +36,11 @@ void FileSystem::ReadFyleType(const char* Path)
 			break;
 		case FileType::TEXTURE:
 			file = "Assets/Textures/" + file;
-			if (app->editor->actualMesh->Mesh->isSelected)
+			if (app->editor->actualMesh->isSelected)
 			{
 				TexturesManager* texturesManager = new TexturesManager();
-				app->editor->actualMesh->Texture->TextureID = texturesManager->TexLoader(Path)->TextureID;
+				ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::MATERIAL));
+				objectTexture->GetTexture()->TextureID = texturesManager->TexLoader(Path)->TextureID;
 			}
 			LOG(LogTypeCase::L_CASUAL, "Model Type: TEXTURE");
 			break;
