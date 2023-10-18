@@ -11,6 +11,7 @@ GameObjectManager::GameObjectManager(const char* name, GameObjectManager* parent
 	}
 
 	mTransform = dynamic_cast<ComponentTransform*>(AddComponent(ComponentType::TRANSFORM));
+	mComponents.push_back(mTransform);
 };
 
 GameObjectManager::~GameObjectManager() 
@@ -26,8 +27,10 @@ ComponentManager* GameObjectManager::AddComponent(ComponentType type)
 	switch (type)
 	{
 	case ComponentType::TRANSFORM:
-		mComponents.push_back(mTransform);
-		Comp = new ComponentTransform(this);
+		if (mTransform == nullptr)
+		{
+			Comp = new ComponentTransform(this);
+		}
 		break;
 	case ComponentType::MESH:
 		break;

@@ -78,7 +78,8 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes /*aiM
 
 	//Components here
 
-	_Parent->childrens.push_back(_ParentObj);
+	/*ResourceMesh R_Mesh = dynamic_cast<ComponentTransform*>(_ParentObj->AddComponent(ComponentType::TRANSFORM));
+	_ParentObj->mComponents.push_back(R_Mesh);*/
 
 	Mesh* M_mesh = new Mesh();
 
