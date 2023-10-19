@@ -40,7 +40,7 @@ public:
 	//vector<GameObjects*> AllGameObjects;
 
 	GameObjectManager* mParent;
-	ComponentTransform* mTransform;
+	ComponentTransform* mTransform = nullptr;
 	vector<ComponentManager*> mComponents;
 	const char* mName;
 	bool isActive;

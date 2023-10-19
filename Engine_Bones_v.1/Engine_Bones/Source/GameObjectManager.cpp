@@ -15,7 +15,6 @@ GameObjectManager::GameObjectManager(const char* name, GameObjectManager* parent
 	}
 
 	mTransform = dynamic_cast<ComponentTransform*>(AddComponent(ComponentType::TRANSFORM));
-	mComponents.push_back(mTransform);
 
 	if (app != nullptr)
 	{
@@ -40,19 +39,28 @@ ComponentManager* GameObjectManager::AddComponent(ComponentType type)
 		if (mTransform == nullptr)
 		{
 			Comp = new ComponentTransform(this);
+			Comp->Type = ComponentType::TRANSFORM;
 		}
 		break;
 	case ComponentType::MESH:
 		Comp = new ComponentMesh(this);
+		Comp->Type = ComponentType::MESH;
 		break;
 	case ComponentType::MATERIAL:
 		Comp = new ComponentMaterial(this);
+		Comp->Type = ComponentType::MATERIAL;
 		break;
 	case ComponentType::NONE:
-		LOG(LogTypeCase::L_ERROR, "The Component Type was nullptr")
+		LOG(LogTypeCase::L_ERROR, "The Component Type was nullptr");
+		Comp->Type = ComponentType::NONE;
 		break;
 	default:
 		break;
+	}
+
+	if (Comp != nullptr)
+	{
+		mComponents.push_back(Comp);
 	}
 
 	return Comp;

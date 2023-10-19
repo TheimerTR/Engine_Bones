@@ -201,12 +201,20 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	{
 		std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
 		
-		for (int i = 0; i < objectMeshes.size(); i++)
+		for (int j = 0; j < objectMeshes.size(); j++)
 		{
+			//Mira si puedes acceder a su componente texutra antes
 			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
-			ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(i));
+			ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
 
-			RenderDraw(objectMesh->GetMesh(), objectTexture->GetTexture());
+			if (objectTexture != nullptr)
+			{
+				RenderDraw(objectMesh->GetMesh(), objectTexture->CM_TextureID);
+			}
+			else
+			{
+				RenderDraw(objectMesh->GetMesh());
+			}
 		}
 	}
 	
@@ -253,7 +261,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::RenderDraw(Mesh* mesh, Texture* texture)
+void ModuleRenderer3D::RenderDraw(Mesh* mesh, uint textureID)
 {
 	//this moves all the objects 0,0,0 from all next obj forwards
 	//glTranslatef(0.0f, 0.0f, 0.0f);
@@ -344,17 +352,8 @@ void ModuleRenderer3D::RenderDraw(Mesh* mesh, Texture* texture)
 
 		if (mesh->ShowTextures)
 		{
-			if (texture->path != nullptr)
-			{
-				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, 0);
-				glBindTexture(GL_TEXTURE_2D, texture->TextureID);
-			}
-			else
-			{
-				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, 1);
-			}
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, textureID);
 		}
 
 		glEnableClientState(GL_VERTEX_ARRAY);

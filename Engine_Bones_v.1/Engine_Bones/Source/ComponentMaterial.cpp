@@ -21,6 +21,7 @@ ComponentMaterial::~ComponentMaterial()
 void ComponentMaterial::SetTexture(Texture* T_Texture)
 {
 	texture = T_Texture;
+	CM_TextureID = T_Texture->TextureID;
 }
 
 Texture* ComponentMaterial::GetTexture()
