@@ -350,10 +350,17 @@ void ModuleRenderer3D::RenderDraw(Mesh* mesh, uint textureID)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);*/
 
-		if (mesh->ShowTextures)
+		if (textureID != 0)
 		{
 			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, 0);
 			glBindTexture(GL_TEXTURE_2D, textureID);
+		}
+		else
+		{
+			//CheckerImageDefault
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 
 		glEnableClientState(GL_VERTEX_ARRAY);
