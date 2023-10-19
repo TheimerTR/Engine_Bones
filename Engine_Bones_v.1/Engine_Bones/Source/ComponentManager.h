@@ -27,7 +27,7 @@ public:
 	/*virtual void RenderInspector() {};*/
 
 	virtual void Enable() {};
-	virtual void Update() {};
+	virtual bool Update();
 	virtual void Disable() {};
 
 public:

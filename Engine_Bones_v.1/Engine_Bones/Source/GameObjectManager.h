@@ -58,7 +58,7 @@ public:
 	void Update();
 	void Disable();
 
-	void Destroy();
+	/*void Destroy();*/
 
 	void DeleteComponent(ComponentManager* ptr);
 	void DeleteChild(GameObjectManager* gameObject);
