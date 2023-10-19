@@ -26,7 +26,19 @@ GameObjectManager::GameObjectManager(const char* name, GameObjectManager* parent
 
 GameObjectManager::~GameObjectManager() 
 {
+	for(uint i = 0; i < mComponents.size(); i++)
+	{
+		RELEASE(mComponents[i]); 
+	}
 
+	mComponents.clear(); 
+
+	for (uint i = 0; i < childrens.size(); i++)
+	{
+		RELEASE(childrens[i]);
+	}
+
+	childrens.clear(); 
 };
 
 ComponentManager* GameObjectManager::AddComponent(ComponentType type)
@@ -93,4 +105,66 @@ ComponentManager* GameObjectManager::GetComponentGameObject(ComponentType type)
 	}
 
 	return nullptr;
+}
+
+bool GameObjectManager::isActiveGameObject()
+{
+	return isActive; 
+}
+
+void GameObjectManager::Enable()
+{
+	isActive = true; 
+
+	if(mParent != nullptr)
+	{
+		mParent->Enable(); 
+	}
+}
+
+void GameObjectManager::Disable()
+{
+	isActive = false;
+}
+
+void GameObjectManager::Update() 
+{
+	GameObjectManager* gameObjects = nullptr; 
+
+	for (uint i = 0; i < app->scene->AllGameObjectManagers.size(); i++)
+	{
+		gameObjects = app->scene->AllGameObjectManagers[i]; 
+
+		if (gameObjects->isActiveGameObject()) {
+
+			for (uint i = 0; i < gameObjects->mComponents.size(); i++)
+			{
+				gameObjects->mComponents[i]->Update(); 
+			}
+		}
+	}
+}
+
+void GameObjectManager::DeleteComponent(ComponentManager* ptr)
+{
+	if (ptr != nullptr)
+	{
+		mComponents.erase(find(mComponents.begin(), mComponents.end(), ptr)); 
+		RELEASE(ptr); 
+	}
+}
+
+void GameObjectManager::DeleteChild(GameObjectManager* gameObject)
+{
+	childrens.erase(find(childrens.begin(), childrens.end(), gameObject));
+}
+
+void GameObjectManager::ChangeParent(GameObjectManager* gameObject)
+{
+	if (this->mParent != gameObject)
+	{
+		mParent->DeleteChild(this);
+		mParent = gameObject;
+		mParent->childrens.push_back(this);
+	}
 }

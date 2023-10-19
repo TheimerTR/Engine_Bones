@@ -11,3 +11,8 @@ ComponentManager::~ComponentManager()
 
 }
 
+bool ComponentManager::Update()
+{
+	return true; 
+}
+

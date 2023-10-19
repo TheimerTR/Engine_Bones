@@ -114,6 +114,8 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes /*aiM
 				M_mesh->num_normals = scene->mMeshes[i]->mNumVertices * 3;
 				M_mesh->normals = new float[M_mesh->num_normals * 3];
 				memcpy(M_mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * M_mesh->num_normals * 3);
+				//memcpy(&M_mesh->index[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
+				/*memcpy(&M_mesh->normals_Faces[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));*/
 			}
 
 			uint UV_Index = 0;

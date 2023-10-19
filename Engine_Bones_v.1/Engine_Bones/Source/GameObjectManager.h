@@ -52,13 +52,13 @@ public:
 	vector<ComponentManager*> GetComponentsGameObject(ComponentType type);
 	ComponentManager* GetComponentGameObject(ComponentType type);
 
-	void ActivateGameObject();
+	bool isActiveGameObject();
 
 	void Enable();
 	void Update();
 	void Disable();
 
-	void Destroy();
+	/*void Destroy();*/
 
 	void DeleteComponent(ComponentManager* ptr);
 	void DeleteChild(GameObjectManager* gameObject);
