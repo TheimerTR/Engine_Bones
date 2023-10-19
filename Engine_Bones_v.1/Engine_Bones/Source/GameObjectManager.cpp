@@ -20,6 +20,7 @@ GameObjectManager::GameObjectManager(const char* name, GameObjectManager* parent
 	{
 		app->scene->AllGameObjectManagers.push_back(this);
 		app->scene->Selected_GameObject = this;
+		app->editor->actualMesh = this;
 	}
 };
 

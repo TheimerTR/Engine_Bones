@@ -252,21 +252,75 @@ bool ModuleEditor::DrawEditor()
 		ImGui::SetNextWindowSize(size3);
 
 		ImGui::Begin("Hierarchy", &Hierarchy);
-		
-		if (ImGui::CollapsingHeader("Scene"))
-		{
-			for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
-			{
-				if (ImGui::MenuItem(App->scene->AllGameObjectManagers[i]->mName, 0, App->scene->AllGameObjectManagers[i]->isSelected))
-				{
-					ResetSelected();
 
-					App->scene->AllGameObjectManagers[i]->isSelected = true;
-					InfoGWindow = true;
-					actualMesh = App->scene->AllGameObjectManagers[i];
-				}
-			}
-		}
+		HierarchyWindowDisplay(app->scene->Root);
+
+
+		//int nodeFlag = ImGuiTreeNodeFlags_Selected | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+
+		//for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
+		//{
+		//	/*if (App->scene->AllGameObjectManagers[i]->isSelected)
+		//	{
+		//		nodeFlag = ImGuiTreeNodeFlags_Selected | ImGuiTreeNodeFlags_OpenOnArrow;
+		//	}
+		//	else
+		//	{
+		//		nodeFlag = ImGuiTreeNodeFlags_None;
+		//	}*/
+
+		//	const bool nodeOpen = ImGui::TreeNodeEx(App->scene->AllGameObjectManagers[i]->mName, nodeFlag);
+
+		//	if (ImGui::IsItemClicked())
+		//	{
+		//		ResetSelected();
+
+		//		actualMesh = App->scene->AllGameObjectManagers[i];
+		//		App->scene->AllGameObjectManagers[i]->isSelected = true;
+		//	}
+
+		//	ImGui::TreePop();
+
+		//	for(int j = 0; j < App->scene->AllGameObjectManagers[i]->childrens.size(); j++)
+		//	{
+		//		/*if (App->scene->AllGameObjectManagers[i]->childrens[j]->isSelected)
+		//		{
+		//			nodeFlag = ImGuiTreeNodeFlags_Selected;
+		//		}
+		//		else
+		//		{
+		//			nodeFlag = ImGuiTreeNodeFlags_None;
+		//		}*/
+
+		//		if(ImGui::TreeNodeEx(App->scene->AllGameObjectManagers[i]->childrens[j]->mName, nodeFlag))
+		//		{
+		//			if(ImGui::IsItemClicked())
+		//			{
+		//				ResetSelected();
+
+		//				App->scene->AllGameObjectManagers[i]->childrens[j]->isSelected = true;
+		//				actualMesh = App->scene->AllGameObjectManagers[i]->childrens[j];
+		//			}
+		//		}
+
+		//		ImGui::TreePop();
+		//	}
+		//}
+
+		///*if (ImGui::CollapsingHeader("Scene"))
+		//{
+		//	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
+		//	{
+		//		if (ImGui::MenuItem(App->scene->AllGameObjectManagers[i]->mName, 0, App->scene->AllGameObjectManagers[i]->isSelected))
+		//		{
+		//			ResetSelected();
+
+		//			App->scene->AllGameObjectManagers[i]->isSelected = true;
+		//			InfoGWindow = true;
+		//			actualMesh = App->scene->AllGameObjectManagers[i];
+		//		}
+		//	}
+		//}*/
 
 		ImGui::End();
 	}
@@ -845,6 +899,41 @@ bool ModuleEditor::DrawEditor()
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		return true;
+}
+
+void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
+{
+	GameObjectManager* gm = nullptr;
+	treeFlags = ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_Selected;
+
+	for (int i = 0; i < gameObject->childrens.size(); i++)
+	{
+		gm = gameObject->childrens[i];
+
+		if (gm->childrens.size() > 0)
+		{
+			if (ImGui::TreeNodeEx((void*)(intptr_t)i, treeFlags, gm->mName))
+			{
+				HierarchyWindowDisplay(gm);
+				ImGui::TreePop();
+			}
+
+			if(ImGui::IsItemClicked())
+			{
+				actualMesh = gm;
+			}
+		}
+		else
+		{
+			int gmFlags = ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_Selected | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+			ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, gm->mName);
+
+			if (ImGui::IsItemClicked())
+			{
+				actualMesh = gm;
+			}
+		}
+	}
 }
 
 void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)

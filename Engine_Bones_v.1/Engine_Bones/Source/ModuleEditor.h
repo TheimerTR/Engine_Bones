@@ -23,6 +23,7 @@ public:
 	void DefaultConfig();
 	void ThemeUpdate();
 
+	void HierarchyWindowDisplay(GameObjectManager* gameObject);
 	void InfoGameObjectWindow(GameObjectManager* gameObject);
 
 	void ResetSelected();
@@ -50,6 +51,7 @@ public:
 
 	float Volume;
 	float WinBright;
+	int treeFlags;
 };
 
 #endif
