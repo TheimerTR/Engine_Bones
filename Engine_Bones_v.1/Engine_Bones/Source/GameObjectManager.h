@@ -52,7 +52,7 @@ public:
 	vector<ComponentManager*> GetComponentsGameObject(ComponentType type);
 	ComponentManager* GetComponentGameObject(ComponentType type);
 
-	void ActivateGameObject();
+	bool isActiveGameObject();
 
 	void Enable();
 	void Update();

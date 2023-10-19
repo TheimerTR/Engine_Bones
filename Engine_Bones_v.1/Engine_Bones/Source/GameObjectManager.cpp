@@ -93,3 +93,23 @@ ComponentManager* GameObjectManager::GetComponentGameObject(ComponentType type)
 
 	return nullptr;
 }
+
+bool GameObjectManager::isActiveGameObject()
+{
+	return isActive; 
+}
+
+void GameObjectManager::Enable()
+{
+	isActive = true; 
+
+	if(mParent != nullptr)
+	{
+		mParent->Enable(); 
+	}
+}
+
+void GameObjectManager::Disable()
+{
+	isActive = false;
+}
