@@ -968,43 +968,54 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 	ImGui::Begin("Inspector", &InfoGWindow);
 
 	std::vector<ComponentManager*> objectMeshes = gameObject->GetComponentsGameObject(ComponentType::MESH);
+	std::vector<ComponentManager*> objectMaterials = gameObject->GetComponentsGameObject(ComponentType::MATERIAL);
 
-	ComponentMesh* objectMesh = (ComponentMesh*)gameObject->GetComponentGameObject(ComponentType::MESH);
-	ComponentMaterial* objectTexture = (ComponentMaterial*)gameObject->GetComponentGameObject(ComponentType::MATERIAL);
+	//ComponentMesh* objectMesh = (ComponentMesh*)gameObject->GetComponentGameObject(ComponentType::MESH);
+	//ComponentMaterial* objectTexture = (ComponentMaterial*)gameObject->GetComponentGameObject(ComponentType::MATERIAL);
 
 	//ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(i));
 	//ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
 	
-	if (objectMesh != NULL)
+	for (int i = 0; i < objectMeshes.size(); i++)
 	{
-		if (objectMesh->C_Mesh != nullptr)
+		ComponentMesh* objectMesh = (ComponentMesh*)objectMeshes.at(i);
+
+		if (objectMesh != NULL)
 		{
-			if (ImGui::TreeNode("Mesh##1"))
+			if (objectMesh->C_Mesh != nullptr)
 			{
-				Mesh* mesh = objectMesh->C_Mesh;
-				ImGui::Text("%s", gameObject->mName.c_str());
-				ImGui::Text("Path: %s", mesh->Path.c_str());
-				ImGui::Text("Number of index: %d", mesh->num_index);
-				ImGui::Text("Number of vertex: %d", mesh->num_vertex);
-				ImGui::Checkbox("Show Normals", &mesh->ShowNormals);
-				ImGui::Checkbox("Show Textures", &mesh->ShowTextures);
-				ImGui::TreePop();
-				ImGui::Separator();
+				if (ImGui::TreeNode("Mesh##1"))
+				{
+					Mesh* mesh = objectMesh->C_Mesh;
+					ImGui::Text("%s", gameObject->mName.c_str());
+					ImGui::Text("Path: %s", mesh->Path.c_str());
+					ImGui::Text("Number of index: %d", mesh->num_index);
+					ImGui::Text("Number of vertex: %d", mesh->num_vertex);
+					ImGui::Checkbox("Show Normals", &mesh->ShowNormals);
+					ImGui::Checkbox("Show Textures", &mesh->ShowTextures);
+					ImGui::TreePop();
+					ImGui::Separator();
+				}
 			}
 		}
 	}
 
-	if (objectTexture != NULL)
+	for (int i = 0; i < objectMaterials.size(); i++)
 	{
-		if (ImGui::TreeNode("Texture##1"))
+		ComponentMaterial* objectTexture = (ComponentMaterial*)objectMaterials.at(i);
+
+		if (objectTexture != NULL)
 		{
-			Texture* texture = objectTexture->GetTexture();
-			ImGui::Text("Texture path: %s", texture->path);
-			ImGui::Text("Texture ID: %d", texture->TextureID);
-			ImGui::Text("Texture Data: %c", texture->Text_Data);
-			ImGui::Text("Texture Size: %d", texture->Text_Size);
-			ImGui::TreePop();
-			ImGui::Separator();
+			if (ImGui::TreeNode("Texture##1"))
+			{
+				Texture* texture = objectTexture->GetTexture();
+				ImGui::Text("Texture path: %s", texture->path);
+				ImGui::Text("Texture ID: %d", texture->TextureID);
+				ImGui::Text("Texture Data: %c", texture->Text_Data);
+				ImGui::Text("Texture Size: %d", texture->Text_Size);
+				ImGui::TreePop();
+				ImGui::Separator();
+			}
 		}
 	}
 
