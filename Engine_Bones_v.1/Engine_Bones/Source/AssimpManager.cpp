@@ -64,12 +64,11 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 	GameObjectManager* _ParentObj = new GameObjectManager(Name, _Parent);
 
-	for(i; i < numMeshes; i++)
+	if (actualObj->mNumChildren > 0 && numMeshes > 1)
 	{
-		//const char* FileName = scene->mMeshes[i]->mName.C_Str();
-
-		if(actualObj->mNumChildren > 0 && numMeshes > 1)
+		for (i; i < numMeshes; i++)
 		{
+			//const char* FileName = scene->mMeshes[i]->mName.C_Str();
 			GameObjectNodeTree(scene, actualObj->mChildren[i]->mNumChildren + i, i, actualObj->mChildren[i], _ParentObj, actualObj->mChildren[i]->mName.C_Str(), Path, texturePath);
 		}
 	}
@@ -176,8 +175,11 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 		ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
 		C_Mesh->SetMesh(M_mesh);
 
-		ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
-		C_Texture->SetTexture(texturesManager->TexLoader(texturePath));
+		if (texturePath != NULL)
+		{
+			ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
+			C_Texture->SetTexture(texturesManager->TexLoader(texturePath));
+		}
 	}
 			//G_Manager->CreateGameObject(M_mesh, texturesManager->TexLoader(texturePath), transform);
 		

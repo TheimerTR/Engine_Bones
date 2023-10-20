@@ -912,9 +912,17 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 
 		if (gm->childrens.size() > 0)
 		{
-			bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, treeFlags, gm->mName.c_str());
 
-			treeFlags |= ImGuiTreeNodeFlags_None;
+			if (gm == actualMesh)
+			{
+				treeFlags |= ImGuiTreeNodeFlags_Selected;
+			}
+			else
+			{
+				treeFlags |= ImGuiTreeNodeFlags_None;
+			}
+
+			bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, treeFlags, gm->mName.c_str());
 
 			if (ImGui::IsItemClicked())
 			{
@@ -924,7 +932,6 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 
 			if (isOpen)
 			{
-				treeFlags |= ImGuiTreeNodeFlags_Selected;
 				HierarchyWindowDisplay(gm);
 				ImGui::TreePop();
 			}
@@ -932,6 +939,16 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 		else
 		{
 			int gmFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+			if (gm == actualMesh)
+			{
+				gmFlags |= ImGuiTreeNodeFlags_Selected;
+			}
+			else
+			{
+				gmFlags |= ImGuiTreeNodeFlags_None;
+			}
+
 			ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, gm->mName.c_str());
 
 			if (ImGui::IsItemClicked())
