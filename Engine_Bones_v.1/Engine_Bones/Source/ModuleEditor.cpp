@@ -1027,9 +1027,15 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 		}
 	}
 
+	ComponentTransform* transform; 
+	transform = gameObject->mTransform; 
+
+	transform->ShowInfo(); 
+
+
 	if ((app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN) || ImGui::Button("Delete Object"))
 	{
-		delete gameObject;
+		gameObject->mParent->DeleteChild(gameObject);
 		//gameObject->Clear_GameObject(gameObject); //Clean all the GameObject
 	}
 

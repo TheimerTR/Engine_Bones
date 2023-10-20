@@ -22,7 +22,7 @@ public:
 	ComponentTransform(GameObjectManager* gameObject);
 	~ComponentTransform();
 
-	/*void RenderInspector() override;*/
+	void ShowInfo(); 
 
 
 private: 

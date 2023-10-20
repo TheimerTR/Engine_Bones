@@ -194,7 +194,11 @@ void GameObjectManager::DeleteComponent(ComponentManager* ptr)
 
 void GameObjectManager::DeleteChild(GameObjectManager* gameObject)
 {
-	childrens.erase(find(childrens.begin(), childrens.end(), gameObject));
+	if (gameObject != nullptr)
+	{
+		childrens.erase(find(childrens.begin(), childrens.end(), gameObject));
+		RELEASE(gameObject);
+	}  
 }
 
 void GameObjectManager::ChangeParent(GameObjectManager* gameObject)
