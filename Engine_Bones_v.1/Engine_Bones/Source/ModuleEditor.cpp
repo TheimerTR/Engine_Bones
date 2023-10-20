@@ -914,6 +914,8 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 		{
 			bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, treeFlags, gm->mName.c_str());
 
+			treeFlags |= ImGuiTreeNodeFlags_None;
+
 			if (ImGui::IsItemClicked())
 			{
 				actualMesh = gm;
@@ -922,6 +924,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 
 			if (isOpen)
 			{
+				treeFlags |= ImGuiTreeNodeFlags_Selected;
 				HierarchyWindowDisplay(gm);
 				ImGui::TreePop();
 			}
