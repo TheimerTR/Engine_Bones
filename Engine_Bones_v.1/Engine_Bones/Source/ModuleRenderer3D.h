@@ -39,7 +39,7 @@ public:
 
 	void OnResize(int width, int height);
 
-	void RenderDraw(Mesh* mesh, uint textureID = 1);
+	void RenderDraw(Mesh* mesh, Texture* texture = nullptr);
 
 public:
 

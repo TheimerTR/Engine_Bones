@@ -23,6 +23,7 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "TextureManager.h"
+#include "FileSystemManager.h"
 
 #include"External/Assimp/include/version.h"
 
@@ -992,30 +993,37 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 					ImGui::Text("Number of index: %d", mesh->num_index);
 					ImGui::Text("Number of vertex: %d", mesh->num_vertex);
 					ImGui::Checkbox("Show Normals", &mesh->ShowNormals);
-					ImGui::Checkbox("Show Textures", &mesh->ShowTextures);
 					ImGui::TreePop();
-					ImGui::Separator();
 				}
 			}
 		}
 	}
 
-	for (int i = 0; i < objectMaterials.size(); i++)
+	if (objectMaterials.size() > 0)
 	{
-		ComponentMaterial* objectTexture = (ComponentMaterial*)objectMaterials.at(i);
-
-		if (objectTexture != NULL)
+		if (ImGui::TreeNode("Textures##1"))
 		{
-			if (ImGui::TreeNode("Texture##1"))
+			for (int i = 0; i < objectMaterials.size(); i++)
 			{
-				Texture* texture = objectTexture->GetTexture();
-				ImGui::Text("Texture path: %s", texture->path);
-				ImGui::Text("Texture ID: %d", texture->TextureID);
-				ImGui::Text("Texture Data: %c", texture->Text_Data);
-				ImGui::Text("Texture Size: %d", texture->Text_Size);
-				ImGui::TreePop();
-				ImGui::Separator();
+				ComponentMaterial* objectTexture = (ComponentMaterial*)objectMaterials.at(i);
+
+				if (objectTexture != NULL)
+				{
+					Texture* texture = objectTexture->GetTexture();
+					FileSystem::StringDivide(texture->path, &texture->Name, nullptr);
+
+					if (ImGui::TreeNode("%s##2", texture->Name.c_str()))
+					{
+						ImGui::Text("Texture path: %s", texture->path);
+						ImGui::Text("Texture ID: %d", texture->TextureID);
+						ImGui::Text("Texture Data: %c", texture->Text_Data);
+						ImGui::Text("Texture Size: %d", texture->Text_Size);
+						ImGui::Checkbox("Show Texture", &texture->ShowTextures);
+						ImGui::TreePop();
+					}
+				}
 			}
+			ImGui::TreePop();
 		}
 	}
 

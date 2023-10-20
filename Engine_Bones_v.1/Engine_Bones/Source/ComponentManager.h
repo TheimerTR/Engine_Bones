@@ -17,6 +17,7 @@ enum ComponentType
 	TRANSFORM,
 	MESH,
 	MATERIAL,
+	SHOWNMATERIAL,
 	NONE,
 };
 

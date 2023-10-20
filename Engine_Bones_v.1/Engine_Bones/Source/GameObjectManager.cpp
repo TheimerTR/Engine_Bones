@@ -96,11 +96,49 @@ vector<ComponentManager*> GameObjectManager::GetComponentsGameObject(ComponentTy
 
 ComponentManager* GameObjectManager::GetComponentGameObject(ComponentType type)
 {
-	for (auto it = mComponents.begin(); it != mComponents.end(); ++it)
+	std::vector<ComponentManager*> objectMaterials;
+
+	if (type != ComponentType::SHOWNMATERIAL)
 	{
-		if ((*it)->Type == type)
+		objectMaterials = this->GetComponentsGameObject(type);
+	}
+	else
+	{
+		objectMaterials = this->GetComponentsGameObject(ComponentType::MATERIAL);
+	}
+
+	for (int i = 0; i < objectMaterials.size(); i++)
+	{
+		ComponentMaterial* object = (ComponentMaterial*)objectMaterials.at(i);
+		
+		switch (type)
 		{
-			return (*it);
+		case ComponentType::MESH:
+			if (object->Type == type)
+			{
+				return (object);
+			}
+			break;
+		case ComponentType::MATERIAL:
+			if (object->Type)
+			{
+				return (object);
+			}
+			break;
+		case ComponentType::SHOWNMATERIAL:
+			if (object->Type == ComponentType::MATERIAL && object->texture->ShowTextures)
+			{
+				return (object);
+			}
+			break;
+		case ComponentType::TRANSFORM:
+			if (object->Type == type)
+			{
+				return (object);
+			}
+			break;
+		default:
+			break;
 		}
 	}
 

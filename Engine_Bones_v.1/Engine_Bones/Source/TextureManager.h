@@ -33,6 +33,9 @@ struct Texture
 
 	const char* path;
 	char* Text_Data;
+	bool ShowTextures = true;
+
+	string Name = "";
 };
 
 class TexturesManager

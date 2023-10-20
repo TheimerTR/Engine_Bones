@@ -30,7 +30,6 @@ void FileSystem::ReadFyleType(const char* Path)
 		{
 		case FileType::MODEL_3D:
 			file = "Assets/Obj/" + file;
-			//AssimpManager::AssimpLoader(file.data());
 			AssimpManager::AssimpLoader(Path);
 			LOG(LogTypeCase::L_CASUAL, "Model Type: MODEL 3D");
 			break;
@@ -39,8 +38,21 @@ void FileSystem::ReadFyleType(const char* Path)
 			if (app->editor->actualMesh->isSelected)
 			{
 				TexturesManager* texturesManager = new TexturesManager();
-				ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::MATERIAL));
-				objectTexture->GetTexture()->TextureID = texturesManager->TexLoader(Path)->TextureID;
+				std::vector<ComponentManager*> objectMaterials = (app->editor->actualMesh->GetComponentsGameObject(ComponentType::MATERIAL));
+				
+				if (objectMaterials.size() != 0)
+				{
+					ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
+					objectTexture->SetTexture(texturesManager->TexLoader(Path));
+				}
+				else
+				{
+					ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
+					objectTexture->SetTexture(texturesManager->TexLoader(Path));
+				}
+
+				//ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::MATERIAL));
+				//objectTexture->GetTexture()->TextureID = texturesManager->TexLoader(Path)->TextureID;
 			}
 			LOG(LogTypeCase::L_CASUAL, "Model Type: TEXTURE");
 			break;

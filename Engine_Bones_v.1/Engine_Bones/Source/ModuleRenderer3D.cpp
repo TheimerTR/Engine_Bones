@@ -204,12 +204,12 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		for (int j = 0; j < objectMeshes.size(); j++)
 		{
 			//Mira si puedes acceder a su componente texutra antes
-			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
+			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
 			ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
 
 			if (objectTexture != nullptr)
 			{
-				RenderDraw(objectMesh->GetMesh(), objectTexture->CM_TextureID);
+				RenderDraw(objectMesh->GetMesh(), objectTexture->GetTexture());
 			}
 			else
 			{
@@ -261,7 +261,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::RenderDraw(Mesh* mesh, uint textureID)
+void ModuleRenderer3D::RenderDraw(Mesh* mesh, Texture* texture)
 {
 	//this moves all the objects 0,0,0 from all next obj forwards
 	//glTranslatef(0.0f, 0.0f, 0.0f);
@@ -350,20 +350,24 @@ void ModuleRenderer3D::RenderDraw(Mesh* mesh, uint textureID)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);*/
 
-		if (mesh->ShowTextures)
+		if (texture != nullptr)
 		{
-			if (textureID != 0)
+			if (texture->ShowTextures)
 			{
-				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, 0);
-				glBindTexture(GL_TEXTURE_2D, textureID);
+				if (texture->TextureID != 0)
+				{
+					glEnable(GL_TEXTURE_2D);
+					glBindTexture(GL_TEXTURE_2D, 0);
+					glBindTexture(GL_TEXTURE_2D, texture->TextureID);
+				}
+				
 			}
-			else
-			{
-				//CheckerImageDefault
-				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, 0);
-			}
+		}
+		else
+		{
+			//CheckerImageDefault
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -393,7 +397,7 @@ void ModuleRenderer3D::RenderDraw(Mesh* mesh, uint textureID)
 		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		if (mesh->ShowTextures)
+		if (texture != nullptr)
 		{
 			glDisable(GL_TEXTURE_2D);
 		}
