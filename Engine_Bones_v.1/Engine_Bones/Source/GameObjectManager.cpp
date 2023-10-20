@@ -7,7 +7,7 @@
 #include "ComponentMaterial.h"
 #include "ModuleScene.h"
 
-GameObjectManager::GameObjectManager(const char* name, GameObjectManager* parent, int id) : mParent(parent), mName(name), mTransform(nullptr), isActive(true)
+GameObjectManager::GameObjectManager(string name, GameObjectManager* parent, int id) : mParent(parent), mName(name), mTransform(nullptr), isActive(true)
 {
 	if(parent != nullptr)
 	{

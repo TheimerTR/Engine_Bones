@@ -904,7 +904,7 @@ bool ModuleEditor::DrawEditor()
 void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 {
 	GameObjectManager* gm = nullptr;
-	treeFlags = ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_Selected;
+	treeFlags = ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_OpenOnArrow;
 
 	for (int i = 0; i < gameObject->childrens.size(); i++)
 	{
@@ -912,25 +912,29 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 
 		if (gm->childrens.size() > 0)
 		{
-			if (ImGui::TreeNodeEx((void*)(intptr_t)i, treeFlags, gm->mName))
-			{
-				HierarchyWindowDisplay(gm);
-				ImGui::TreePop();
-			}
-
-			if(ImGui::IsItemClicked())
-			{
-				actualMesh = gm;
-			}
-		}
-		else
-		{
-			int gmFlags = ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_Selected | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-			ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, gm->mName);
+			bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, treeFlags, gm->mName.c_str());
 
 			if (ImGui::IsItemClicked())
 			{
 				actualMesh = gm;
+				InfoGWindow = true;
+			}
+
+			if (isOpen)
+			{
+				HierarchyWindowDisplay(gm);
+				ImGui::TreePop();
+			}
+		}
+		else
+		{
+			int gmFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+			ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, gm->mName.c_str());
+
+			if (ImGui::IsItemClicked())
+			{
+				actualMesh = gm;
+				InfoGWindow = true;
 			}
 		}
 	}
@@ -944,40 +948,40 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 	ImGui::Begin("Inspector", &InfoGWindow);
 
 	std::vector<ComponentManager*> objectMeshes = gameObject->GetComponentsGameObject(ComponentType::MESH);
+
+	ComponentMesh* objectMesh = (ComponentMesh*)gameObject->GetComponentGameObject(ComponentType::MESH);
+	ComponentMaterial* objectTexture = (ComponentMaterial*)gameObject->GetComponentGameObject(ComponentType::MATERIAL);
+
+	//ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(i));
+	//ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
 	
-	for (int i = 0; i < objectMeshes.size(); i++)
+	if (objectMesh != NULL)
 	{
-		ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(i));
-		ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
-
-		Texture* texture = objectTexture->GetTexture();
-		Mesh* mesh = objectMesh->C_Mesh;
-
 		if (objectMesh->C_Mesh != nullptr)
 		{
-			ImGui::Text(mesh->Name.c_str());
-
+			Mesh* mesh = objectMesh->C_Mesh;
+			ImGui::Text("%s", gameObject->mName.c_str());
 			ImGui::Text("Path: %s", mesh->Path.c_str());
-			ImGui::Text("Texture path: %s", texture->path);
-			ImGui::Text("Texture ID: %d", texture->TextureID);
 			ImGui::Text("Number of index: %d", mesh->num_index);
 			ImGui::Text("Number of vertex: %d", mesh->num_vertex);
-			ImGui::Text("Texture Data: %c", texture->Text_Data);
-			ImGui::Text("Texture Size: %d", texture->Text_Size);
-
 			ImGui::Checkbox("Show Normals", &mesh->ShowNormals);
 			ImGui::Checkbox("Show Textures", &mesh->ShowTextures);
-
-			if (app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
-			{
-				gameObject->Clear_GameObject(gameObject); //Clean all the GameObject
-			}
-
-			if (ImGui::Button("Delete Object"))
-			{
-				gameObject->Clear_GameObject(gameObject);
-			}
 		}
+	}
+
+	if (objectTexture != NULL)
+	{
+		Texture* texture = objectTexture->GetTexture();
+		ImGui::Text("Texture path: %s", texture->path);
+		ImGui::Text("Texture ID: %d", texture->TextureID);
+		ImGui::Text("Texture Data: %c", texture->Text_Data);
+		ImGui::Text("Texture Size: %d", texture->Text_Size);
+	}
+
+	if ((app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN) || ImGui::Button("Delete Object"))
+	{
+		delete gameObject;
+		//gameObject->Clear_GameObject(gameObject); //Clean all the GameObject
 	}
 
 	ImGui::End();

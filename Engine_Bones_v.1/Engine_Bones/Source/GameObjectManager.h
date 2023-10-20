@@ -34,7 +34,7 @@ class GameObjectManager
 {
 public:
 
-	GameObjectManager(const char* name, GameObjectManager* parent, int id = 0);
+	GameObjectManager(string name, GameObjectManager* parent, int id = 0);
 	~GameObjectManager();
 
 	//vector<GameObjects*> AllGameObjects;
@@ -42,7 +42,7 @@ public:
 	GameObjectManager* mParent;
 	ComponentTransform* mTransform = nullptr;
 	vector<ComponentManager*> mComponents;
-	const char* mName;
+	string mName;
 	bool isActive;
 	bool isSelected;
 

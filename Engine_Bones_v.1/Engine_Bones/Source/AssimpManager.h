@@ -60,7 +60,7 @@ namespace AssimpManager
 	template <class T>
 	void ClearAssimpVec(vector<T>& vector);
 
-	void GameObjectNodeTree(const aiScene* scene, int numMeshes /*aiMesh** M_Array*/, aiNode* actualObj, GameObjectManager* _Parent, const char* Name, const char* Path, const char* texturePath);
+	void GameObjectNodeTree(const aiScene* scene, int numMeshes, int pointer, /*aiMesh** M_Array*/ aiNode* actualObj, GameObjectManager* _Parent, string Name, const char* Path, const char* texturePath);
 
 	void Clear_Mesh(Mesh* mesh);
 
