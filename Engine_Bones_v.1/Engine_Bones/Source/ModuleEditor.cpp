@@ -979,23 +979,33 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 	{
 		if (objectMesh->C_Mesh != nullptr)
 		{
-			Mesh* mesh = objectMesh->C_Mesh;
-			ImGui::Text("%s", gameObject->mName.c_str());
-			ImGui::Text("Path: %s", mesh->Path.c_str());
-			ImGui::Text("Number of index: %d", mesh->num_index);
-			ImGui::Text("Number of vertex: %d", mesh->num_vertex);
-			ImGui::Checkbox("Show Normals", &mesh->ShowNormals);
-			ImGui::Checkbox("Show Textures", &mesh->ShowTextures);
+			if (ImGui::TreeNode("Mesh##1"))
+			{
+				Mesh* mesh = objectMesh->C_Mesh;
+				ImGui::Text("%s", gameObject->mName.c_str());
+				ImGui::Text("Path: %s", mesh->Path.c_str());
+				ImGui::Text("Number of index: %d", mesh->num_index);
+				ImGui::Text("Number of vertex: %d", mesh->num_vertex);
+				ImGui::Checkbox("Show Normals", &mesh->ShowNormals);
+				ImGui::Checkbox("Show Textures", &mesh->ShowTextures);
+				ImGui::TreePop();
+				ImGui::Separator();
+			}
 		}
 	}
 
 	if (objectTexture != NULL)
 	{
-		Texture* texture = objectTexture->GetTexture();
-		ImGui::Text("Texture path: %s", texture->path);
-		ImGui::Text("Texture ID: %d", texture->TextureID);
-		ImGui::Text("Texture Data: %c", texture->Text_Data);
-		ImGui::Text("Texture Size: %d", texture->Text_Size);
+		if (ImGui::TreeNode("Texture##1"))
+		{
+			Texture* texture = objectTexture->GetTexture();
+			ImGui::Text("Texture path: %s", texture->path);
+			ImGui::Text("Texture ID: %d", texture->TextureID);
+			ImGui::Text("Texture Data: %c", texture->Text_Data);
+			ImGui::Text("Texture Size: %d", texture->Text_Size);
+			ImGui::TreePop();
+			ImGui::Separator();
+		}
 	}
 
 	if ((app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN) || ImGui::Button("Delete Object"))
