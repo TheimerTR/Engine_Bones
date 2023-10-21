@@ -8,11 +8,11 @@ class GameObjectManager;
 class ComponentTransform : public ComponentManager
 {
 
-private:
+public:
 
 	float3 mPosition;
 	float3 mScale;
-	Quat mrotation;
+	Quat mRotation;
 
 	float4x4 mGlobalMatrix;
 	float4x4 mLocalMatrix;

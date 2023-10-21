@@ -7,7 +7,7 @@ ComponentTransform::ComponentTransform(GameObjectManager* gameObject) : Componen
 {
 	mPosition = float3::zero;
 	mScale = float3::zero;
-	mrotation = Quat::identity;
+	mRotation = Quat::identity;
 
 	mGlobalMatrix = float4x4::identity;
 	mLocalMatrix = float4x4::identity;
@@ -25,7 +25,7 @@ void ComponentTransform::ShowInfo()
 	{
 		ImGui::InputFloat3("Position",(float*)&mPosition );
 		ImGui::InputFloat3("Scale",(float*)&mScale);
-		ImGui::InputFloat3("Rotation",(float*)&mrotation);
+		ImGui::InputFloat3("Rotation",(float*)&mRotation);
 
 		ImGui::TreePop(); 
 	}

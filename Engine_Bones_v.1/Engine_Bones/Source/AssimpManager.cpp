@@ -62,6 +62,14 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 {
 	int i = pointer;
 
+	aiVector3D translation, scaling;
+	aiQuaternion rotation;
+
+	actualObj->mTransformation.Decompose(scaling, rotation, translation);
+	float3 pos(translation.x, translation.y, translation.z);
+	float3 scale(scaling.x, scaling.y, scaling.z);
+	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+
 	GameObjectManager* _ParentObj = new GameObjectManager(Name, _Parent);
 
 	if (actualObj->mNumChildren > 0 && numMeshes > 1)
@@ -170,6 +178,10 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 		//Components here
 		ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
 		C_Mesh->SetMesh(M_mesh);
+
+		_ParentObj->mTransform->mPosition = pos;
+		_ParentObj->mTransform->mScale = scale;
+		_ParentObj->mTransform->mRotation = rot;
 
 		if (texturePath != NULL)
 		{
