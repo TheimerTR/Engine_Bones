@@ -7,8 +7,12 @@ ComponentManager::ComponentManager(GameObjectManager* gameObject) : active(true)
 
 ComponentManager::~ComponentManager() 
 {
-
-
+	//switch(this->Type)
+	//{
+	//case ComponentType::MESH:
+	//	delete ComponentMesh(this);
+	//	break;
+	//}
 }
 
 bool ComponentManager::Update()

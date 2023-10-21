@@ -36,7 +36,7 @@ update_status ModuleScene::Update(float dt)
 		}
 	}
 
-	if(AllGameObjectManagers.size() <= 0)
+	if(AllGameObjectManagers.size() <= 1)
 	{
 		App->editor->actualMesh = nullptr;
 	}
