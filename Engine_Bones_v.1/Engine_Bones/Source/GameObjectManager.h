@@ -37,8 +37,6 @@ public:
 	GameObjectManager(string name, GameObjectManager* parent, int id = 0);
 	~GameObjectManager();
 
-	//vector<GameObjects*> AllGameObjects;
-
 	GameObjectManager* mParent;
 	ComponentTransform* mTransform = nullptr;
 	vector<ComponentManager*> mComponents;
@@ -64,49 +62,6 @@ public:
 	void DeleteChild(GameObjectManager* gameObject);
 
 	void ChangeParent(GameObjectManager* gameObject);
-
-	/*void CreateGameObject(Mesh* Mesh, Texture* Texture, ComponentTransform* Transform)
-	{
-		GameObjects* G_GameObject = new GameObjects();
-
-		G_GameObject->Mesh = Mesh;
-		G_GameObject->Texture = Texture;
-		G_GameObject->Transform = Transform; 
-
-		AllGameObjects.push_back(G_GameObject);
-	}*/
-
-	void Clear_GameObject(GameObjectManager* Obj)
-	{
-		//std::vector<ComponentManager*> objectMeshes = GetComponentsGameObject(ComponentType::MESH);
-
-		//for (int i = 0; i < objectMeshes.size(); i++)
-		//{
-		//	ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(i));
-		//	ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
-
-		//	Texture* texture = objectTexture->GetTexture();
-		//	Mesh* mesh = objectMesh->C_Mesh;
-
-		//	AssimpManager::Clear_Mesh(mesh);
-		//	//Needs clear Texture
-
-		//	for (auto it = app->scene->AllGameObjectManagers.begin(); it != app->scene->AllGameObjectManagers.end();)
-		//	{
-		//		if (*it == Obj)
-		//		{
-		//			it = app->scene->AllGameObjectManagers.erase(it);
-		//		}
-		//		else {
-		//			++it;
-		//		}
-		//	}
-		//	
-		//	Obj->mParent = nullptr;
-		//	Obj->mTransform = nullptr;
-		//	C_Math::ClearVec(Obj->mComponents);
-		//}
-	}
 };
 
 #endif // GAMEOBJECTMANAGER_H_

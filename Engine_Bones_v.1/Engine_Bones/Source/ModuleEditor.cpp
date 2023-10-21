@@ -156,7 +156,6 @@ bool ModuleEditor::DrawEditor()
 				if (ImGui::MenuItem("Cube"))
 				{
 					AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx", "Assets/Textures/Grass.dds");
-					ResetSelected();
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
@@ -167,7 +166,6 @@ bool ModuleEditor::DrawEditor()
 				if (ImGui::MenuItem("Pyramid"))
 				{
 					AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
-					ResetSelected();
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}	
@@ -180,21 +178,18 @@ bool ModuleEditor::DrawEditor()
 				if (ImGui::MenuItem("House"))
 				{
 					AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
-					ResetSelected();
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
 				if (ImGui::MenuItem("Warrior"))
 				{
 					AssimpManager::AssimpLoader("Assets/Obj/warrior.fbx");
-					ResetSelected();
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
 				if (ImGui::MenuItem("Walk"))
 				{
 					AssimpManager::AssimpLoader("Assets/Obj/walk.fbx");
-					ResetSelected();
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
@@ -255,73 +250,6 @@ bool ModuleEditor::DrawEditor()
 		ImGui::Begin("Hierarchy", &Hierarchy);
 
 		HierarchyWindowDisplay(app->scene->Root);
-
-
-		//int nodeFlag = ImGuiTreeNodeFlags_Selected | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-
-		//for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
-		//{
-		//	/*if (App->scene->AllGameObjectManagers[i]->isSelected)
-		//	{
-		//		nodeFlag = ImGuiTreeNodeFlags_Selected | ImGuiTreeNodeFlags_OpenOnArrow;
-		//	}
-		//	else
-		//	{
-		//		nodeFlag = ImGuiTreeNodeFlags_None;
-		//	}*/
-
-		//	const bool nodeOpen = ImGui::TreeNodeEx(App->scene->AllGameObjectManagers[i]->mName, nodeFlag);
-
-		//	if (ImGui::IsItemClicked())
-		//	{
-		//		ResetSelected();
-
-		//		actualMesh = App->scene->AllGameObjectManagers[i];
-		//		App->scene->AllGameObjectManagers[i]->isSelected = true;
-		//	}
-
-		//	ImGui::TreePop();
-
-		//	for(int j = 0; j < App->scene->AllGameObjectManagers[i]->childrens.size(); j++)
-		//	{
-		//		/*if (App->scene->AllGameObjectManagers[i]->childrens[j]->isSelected)
-		//		{
-		//			nodeFlag = ImGuiTreeNodeFlags_Selected;
-		//		}
-		//		else
-		//		{
-		//			nodeFlag = ImGuiTreeNodeFlags_None;
-		//		}*/
-
-		//		if(ImGui::TreeNodeEx(App->scene->AllGameObjectManagers[i]->childrens[j]->mName, nodeFlag))
-		//		{
-		//			if(ImGui::IsItemClicked())
-		//			{
-		//				ResetSelected();
-
-		//				App->scene->AllGameObjectManagers[i]->childrens[j]->isSelected = true;
-		//				actualMesh = App->scene->AllGameObjectManagers[i]->childrens[j];
-		//			}
-		//		}
-
-		//		ImGui::TreePop();
-		//	}
-		//}
-
-		///*if (ImGui::CollapsingHeader("Scene"))
-		//{
-		//	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
-		//	{
-		//		if (ImGui::MenuItem(App->scene->AllGameObjectManagers[i]->mName, 0, App->scene->AllGameObjectManagers[i]->isSelected))
-		//		{
-		//			ResetSelected();
-
-		//			App->scene->AllGameObjectManagers[i]->isSelected = true;
-		//			InfoGWindow = true;
-		//			actualMesh = App->scene->AllGameObjectManagers[i];
-		//		}
-		//	}
-		//}*/
 
 		ImGui::End();
 	}
@@ -968,75 +896,77 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 
 	ImGui::Begin("Inspector", &InfoGWindow);
 
-	std::vector<ComponentManager*> objectMeshes = gameObject->GetComponentsGameObject(ComponentType::MESH);
-	std::vector<ComponentManager*> objectMaterials = gameObject->GetComponentsGameObject(ComponentType::MATERIAL);
-
-	//ComponentMesh* objectMesh = (ComponentMesh*)gameObject->GetComponentGameObject(ComponentType::MESH);
-	//ComponentMaterial* objectTexture = (ComponentMaterial*)gameObject->GetComponentGameObject(ComponentType::MATERIAL);
-
-	//ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(i));
-	//ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
-	
-	for (int i = 0; i < objectMeshes.size(); i++)
+	if (gameObject != nullptr)
 	{
-		ComponentMesh* objectMesh = (ComponentMesh*)objectMeshes.at(i);
+		std::vector<ComponentManager*> objectMeshes = gameObject->GetComponentsGameObject(ComponentType::MESH);
+		std::vector<ComponentManager*> objectMaterials = gameObject->GetComponentsGameObject(ComponentType::MATERIAL);
 
-		if (objectMesh != NULL)
+		//ComponentMesh* objectMesh = (ComponentMesh*)gameObject->GetComponentGameObject(ComponentType::MESH);
+		//ComponentMaterial* objectTexture = (ComponentMaterial*)gameObject->GetComponentGameObject(ComponentType::MATERIAL);
+
+		//ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(i));
+		//ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
+
+		for (int i = 0; i < objectMeshes.size(); i++)
 		{
-			if (objectMesh->C_Mesh != nullptr)
+			ComponentMesh* objectMesh = (ComponentMesh*)objectMeshes.at(i);
+
+			if (objectMesh != NULL)
 			{
-				if (ImGui::TreeNode("Mesh##1"))
+				if (objectMesh->C_Mesh != nullptr)
 				{
-					Mesh* mesh = objectMesh->C_Mesh;
-					ImGui::Text("%s", gameObject->mName.c_str());
-					ImGui::Text("Path: %s", mesh->Path.c_str());
-					ImGui::Text("Number of index: %d", mesh->num_index);
-					ImGui::Text("Number of vertex: %d", mesh->num_vertex);
-					ImGui::Checkbox("Show Normals", &mesh->ShowNormals);
-					ImGui::TreePop();
-				}
-			}
-		}
-	}
-
-	if (objectMaterials.size() > 0)
-	{
-		if (ImGui::TreeNode("Textures##1"))
-		{
-			for (int i = 0; i < objectMaterials.size(); i++)
-			{
-				ComponentMaterial* objectTexture = (ComponentMaterial*)objectMaterials.at(i);
-
-				if (objectTexture != NULL)
-				{
-					Texture* texture = objectTexture->GetTexture();
-					FileSystem::StringDivide(texture->path, &texture->Name, nullptr);
-
-					if (ImGui::TreeNode("%s##2", texture->Name.c_str()))
+					if (ImGui::TreeNode("Mesh##1"))
 					{
-						ImGui::Text("Texture path: %s", texture->path);
-						ImGui::Text("Texture ID: %d", texture->TextureID);
-						ImGui::Text("Texture Data: %c", texture->Text_Data);
-						ImGui::Text("Texture Size: %d", texture->Text_Size);
-						ImGui::Checkbox("Show Texture", &texture->ShowTextures);
+						Mesh* mesh = objectMesh->C_Mesh;
+						ImGui::Text("%s", gameObject->mName.c_str());
+						ImGui::Text("Path: %s", mesh->Path.c_str());
+						ImGui::Text("Number of index: %d", mesh->num_index);
+						ImGui::Text("Number of vertex: %d", mesh->num_vertex);
+						ImGui::Checkbox("Show Normals", &mesh->ShowNormals);
 						ImGui::TreePop();
 					}
 				}
 			}
-			ImGui::TreePop();
 		}
-	}
 
-	ComponentTransform* transform; 
-	transform = gameObject->mTransform; 
+		if (objectMaterials.size() > 0)
+		{
+			if (ImGui::TreeNode("Textures##1"))
+			{
+				for (int i = 0; i < objectMaterials.size(); i++)
+				{
+					ComponentMaterial* objectTexture = (ComponentMaterial*)objectMaterials.at(i);
 
-	transform->ShowInfo(); 
+					if (objectTexture != NULL)
+					{
+						Texture* texture = objectTexture->GetTexture();
+						FileSystem::StringDivide(texture->path, &texture->Name, nullptr);
+
+						if (ImGui::TreeNode("%s##2", texture->Name.c_str()))
+						{
+							ImGui::Text("Texture path: %s", texture->path);
+							ImGui::Text("Texture ID: %d", texture->TextureID);
+							ImGui::Text("Texture Data: %c", texture->Text_Data);
+							ImGui::Text("Texture Size: %d", texture->Text_Size);
+							ImGui::Checkbox("Show Texture", &texture->ShowTextures);
+							ImGui::TreePop();
+						}
+					}
+				}
+				ImGui::TreePop();
+			}
+		}
+
+		ComponentTransform* transform;
+		transform = gameObject->mTransform;
+
+		transform->ShowInfo();
 
 
-	if ((app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN) || ImGui::Button("Delete Object"))
-	{
-		gameObject->mParent->DeleteChild(gameObject);
-		//gameObject->Clear_GameObject(gameObject); //Clean all the GameObject
+		if (ImGui::Button("Delete Object"))
+		{
+			gameObject->mParent->DeleteChild(gameObject);
+		}
 	}
 
 	ImGui::End();
@@ -1154,13 +1084,5 @@ void ModuleEditor::ThemeUpdate()
 		break;
 	default:
 		break;
-	}
-}
-
-void ModuleEditor::ResetSelected()
-{
-	for (int j = 0; j < App->scene->AllGameObjectManagers.size(); j++)
-	{
-		App->scene->AllGameObjectManagers[j]->isSelected = false;
 	}
 }

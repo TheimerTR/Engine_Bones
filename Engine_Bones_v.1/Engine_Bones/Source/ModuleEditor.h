@@ -26,8 +26,6 @@ public:
 	void HierarchyWindowDisplay(GameObjectManager* gameObject);
 	void InfoGameObjectWindow(GameObjectManager* gameObject);
 
-	void ResetSelected();
-
 public:
 
 	struct l_Logs

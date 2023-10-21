@@ -193,10 +193,12 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	/*for (int i = 0; i < G_Manager->AllGameObjects.size(); i++)
+	if ((app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN))
 	{
-		RenderDraw(G_Manager->AllGameObjects.at(i));
-	}*/
+		App->editor->actualMesh->mParent->DeleteChild(App->editor->actualMesh);
+		//gameObject->Clear_GameObject(gameObject); //Clean all the GameObject
+	}
+
 	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 	{
 		std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
@@ -357,17 +359,15 @@ void ModuleRenderer3D::RenderDraw(Mesh* mesh, Texture* texture)
 				if (texture->TextureID != 0)
 				{
 					glEnable(GL_TEXTURE_2D);
-					glBindTexture(GL_TEXTURE_2D, 0);
 					glBindTexture(GL_TEXTURE_2D, texture->TextureID);
 				}
-				
 			}
 		}
 		else
 		{
 			//CheckerImageDefault
 			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, 0);
+			glBindTexture(GL_TEXTURE_2D, 1);
 		}
 
 		glEnableClientState(GL_VERTEX_ARRAY);

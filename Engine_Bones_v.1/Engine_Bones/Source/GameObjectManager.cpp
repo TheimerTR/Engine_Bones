@@ -26,6 +26,8 @@ GameObjectManager::GameObjectManager(string name, GameObjectManager* parent, int
 
 GameObjectManager::~GameObjectManager() 
 {
+	app->scene->AllGameObjectManagers.erase(find(app->scene->AllGameObjectManagers.begin(), app->scene->AllGameObjectManagers.end(), this));
+
 	for(uint i = 0; i < mComponents.size(); i++)
 	{
 		RELEASE(mComponents[i]); 
@@ -38,7 +40,21 @@ GameObjectManager::~GameObjectManager()
 		RELEASE(childrens[i]);
 	}
 
-	childrens.clear(); 
+	childrens.clear();
+
+	if(mParent != nullptr)
+	{
+		mParent = nullptr;
+	}
+
+	if(mTransform != nullptr)
+	{
+		mTransform = nullptr;
+	}
+
+	mName = "";
+	isActive = false;
+	isSelected = false;
 };
 
 ComponentManager* GameObjectManager::AddComponent(ComponentType type)
@@ -194,10 +210,16 @@ void GameObjectManager::DeleteComponent(ComponentManager* ptr)
 
 void GameObjectManager::DeleteChild(GameObjectManager* gameObject)
 {
+	if(gameObject == app->editor->actualMesh)
+	{
+		app->editor->actualMesh = nullptr;
+	}
+
 	if (gameObject != nullptr)
 	{
-		childrens.erase(find(childrens.begin(), childrens.end(), gameObject));
-		RELEASE(gameObject);
+		gameObject->mParent->childrens.erase(find(childrens.begin(), childrens.end(), gameObject));
+		delete gameObject;
+		gameObject = nullptr;
 	}  
 }
 
