@@ -285,6 +285,21 @@ bool ModuleEditor::DrawEditor()
 		ImGui::End();
 	}
 
+	if (isMovingParent)
+	{
+		ImGuiWindowFlags window_flags = 0;
+		window_flags |= ImGuiWindowFlags_NoBackground;
+		window_flags |= ImGuiWindowFlags_NoTitleBar;
+		window_flags |= ImGuiWindowFlags_NoMouseInputs;
+
+		ImVec2 size5 = ImGui::GetMousePos();
+		ImGui::SetNextWindowPos(size5);
+
+		ImGui::Begin("Moving", 0, window_flags);
+		ImGui::Text("New Parent %s", hoveredItem->mName.c_str());
+		ImGui::End();
+	}
+
 	//Output Window
 	if (LogOutput)
 	{
@@ -1101,21 +1116,6 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 				ImGui::EndPopup();
 			}
 		}
-	}
-
-	if (isMovingParent)
-	{
-		ImGuiWindowFlags window_flags = 0;
-		window_flags |= ImGuiWindowFlags_NoBackground;
-		window_flags |= ImGuiWindowFlags_NoTitleBar;
-		window_flags |= ImGuiWindowFlags_NoMouseInputs;
-
-		ImVec2 size5 = ImGui::GetMousePos();
-		ImGui::SetNextWindowPos(size5);
-
-		ImGui::Begin("Moving", 0, window_flags);
-		ImGui::Text("New Parent %s", hoveredItem->mName.c_str());
-		ImGui::End();
 	}
 }
 
