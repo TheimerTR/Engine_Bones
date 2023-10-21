@@ -10,6 +10,7 @@ ComponentMesh::ComponentMesh(GameObjectManager* gameObject) : ComponentManager(g
 ComponentMesh::~ComponentMesh()
 {
 	AssimpManager::Clear_Mesh(C_Mesh);
+	Name = "";
 }
 
 void ComponentMesh::SetMesh(Mesh* T_Mesh)

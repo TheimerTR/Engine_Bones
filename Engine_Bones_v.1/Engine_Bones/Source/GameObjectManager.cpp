@@ -210,9 +210,23 @@ void GameObjectManager::DeleteComponent(ComponentManager* ptr)
 
 void GameObjectManager::DeleteChild(GameObjectManager* gameObject)
 {
-	if(gameObject == app->editor->actualMesh)
+	if (gameObject == app->editor->actualMesh)
 	{
-		app->editor->actualMesh = nullptr;
+		if (app->scene->AllGameObjectManagers.size() > 0)
+		{
+			if(gameObject == app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1))
+			{
+				app->editor->actualMesh = app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 2);
+			}
+			else
+			{
+				app->editor->actualMesh = app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1);
+			}
+		}
+		else
+		{
+			app->editor->actualMesh = app->scene->AllGameObjectManagers.at(0);
+		}
 	}
 
 	if (gameObject != nullptr)

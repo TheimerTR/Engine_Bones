@@ -945,9 +945,10 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 						if (ImGui::TreeNode("%s##2", texture->Name.c_str()))
 						{
 							ImGui::Text("Texture path: %s", texture->path);
+							//ImGui::Text("Texture Format: %d", texture->imageFormat);
+							//ImGui::Text("Texture Type: %d", texture->imageType);
 							ImGui::Text("Texture ID: %d", texture->TextureID);
-							ImGui::Text("Texture Data: %c", texture->Text_Data);
-							ImGui::Text("Texture Size: %d", texture->Text_Size);
+							ImGui::Text("Texture Size: Width:%d x Height:%d", texture->imageWidth, texture->imageHeight);
 							ImGui::Checkbox("Show Texture", &texture->ShowTextures);
 							ImGui::TreePop();
 						}

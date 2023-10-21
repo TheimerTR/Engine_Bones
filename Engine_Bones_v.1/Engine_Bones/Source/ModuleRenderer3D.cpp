@@ -195,8 +195,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	if ((app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN))
 	{
-		App->editor->actualMesh->mParent->DeleteChild(App->editor->actualMesh);
-		//gameObject->Clear_GameObject(gameObject); //Clean all the GameObject
+		if ((App->editor->actualMesh != nullptr) && (App->scene->AllGameObjectManagers.size() > 0))
+		{
+			App->editor->actualMesh->mParent->DeleteChild(App->editor->actualMesh);
+		}
 	}
 
 	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)

@@ -12,8 +12,14 @@ ComponentMaterial::~ComponentMaterial()
 	if (texture->TextureID != 0)
 		glDeleteTextures(1, &texture->TextureID);
 
+	texture->imageFormat = 0;
+	texture->imageHeight = 0;
+	texture->imageType = 0;
+	texture->imageWidth = 0;
+	texture->Name = "";
+	texture->path = "";
+	texture->ShowTextures = false;
 	texture->TextureID = 0;
-	texture->Text_Size = 0;
 
 	texture = nullptr;
 }

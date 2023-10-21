@@ -28,11 +28,14 @@ using namespace std;
 
 struct Texture
 {
+	int imageWidth;
+	int imageHeight;
+	int imageType;
+	int imageFormat;
+
 	uint TextureID;
-	uint Text_Size;
 
 	const char* path;
-	char* Text_Data;
 	bool ShowTextures = true;
 
 	string Name = "";
@@ -113,8 +116,10 @@ public:
 
 		T_Texture->path = path;
 		T_Texture->TextureID = TextID;
-		T_Texture->Text_Size = Text_Size;
-		T_Texture->Text_Data = Text_Data;
+		T_Texture->imageWidth = ilGetInteger(IL_IMAGE_WIDTH);
+		T_Texture->imageHeight = ilGetInteger(IL_IMAGE_HEIGHT);
+		T_Texture->imageType = ilGetInteger(IL_IMAGE_TYPE);
+		T_Texture->imageFormat = ilGetInteger(IL_IMAGE_FORMAT);
 
 		AllTextures.push_back(T_Texture);
 

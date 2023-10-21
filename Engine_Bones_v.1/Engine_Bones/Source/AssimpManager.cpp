@@ -68,13 +68,9 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	{
 		for (i; i < numMeshes; i++)
 		{
-			//const char* FileName = scene->mMeshes[i]->mName.C_Str();
 			GameObjectNodeTree(scene, actualObj->mChildren[i]->mNumChildren + i, i, actualObj->mChildren[i], _ParentObj, actualObj->mChildren[i]->mName.C_Str(), Path, texturePath);
 		}
 	}
-
-	/*ResourceMesh R_Mesh = dynamic_cast<ComponentTransform*>(_ParentObj->AddComponent(ComponentType::TRANSFORM));
-	_ParentObj->mComponents.push_back(R_Mesh);*/
 
 	Mesh* M_mesh = new Mesh();
 
@@ -181,8 +177,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			C_Texture->SetTexture(texturesManager->TexLoader(texturePath));
 		}
 	}
-			//G_Manager->CreateGameObject(M_mesh, texturesManager->TexLoader(texturePath), transform);
-		
 }
 
 void AssimpManager::ChangeDebugMode(bool type)
@@ -264,8 +258,8 @@ void  AssimpManager::Clear_Mesh(Mesh* mesh)
 		glDeleteBuffers(1, &mesh->VT);
 	}
 
-	//mesh->Name.clear();
-	//mesh->Path.clear();
+	mesh->Name = "";
+	mesh->Path = "";
 
 	mesh->num_index = 0;
 	mesh->index = nullptr;
@@ -289,47 +283,3 @@ void  AssimpManager::Clear_Mesh(Mesh* mesh)
 		}
 	}
 }
-
-//Mesh* AssimpManager::LoadMesh(aiMesh* MeshToLoad)
-//{
-//	LOG(LogTypeCase::L_CASUAL, "%s", MeshToLoad->mName.C_Str());
-//
-//	Mesh* M_mesh = new Mesh();
-//
-//	M_mesh->num_vertex = MeshToLoad->mNumVertices;
-//	M_mesh->vertex = new float[M_mesh->num_vertex * 3];
-//	memcpy(M_mesh->vertex, MeshToLoad->mVertices, sizeof(float) * M_mesh->num_vertex * 3);
-//	LOG(LogTypeCase::L_CASUAL, "New mesh with %d vertices: ", M_mesh->num_vertex);
-//
-//	if (MeshToLoad->HasFaces())
-//	{
-//		M_mesh->num_index = MeshToLoad->mNumVertices * 3;
-//		M_mesh->index = new uint[M_mesh->num_index]; // assume each face is a triangle
-//		for (uint i = 0; i < MeshToLoad->mNumFaces; ++i)
-//		{
-//			if (MeshToLoad->mFaces[i].mNumIndices != 3)
-//			{
-//				LOG(LogTypeCase::L_WARNING, "WARNING, geometry face with != 3 indices!");
-//			}
-//			else
-//			{
-//				memcpy(&M_mesh->index[i * 3], MeshToLoad->mFaces[i].mIndices, 3 * sizeof(uint));
-//			}
-//		}
-//
-//		LOG(LogTypeCase::L_CASUAL, "With %d indices: ", M_mesh->index);
-//	}
-//
-//	app->renderer3D->VBO = (uint)&M_mesh->vertex;
-//	app->renderer3D->EBO = (uint)&M_mesh->index;
-//
-//	glGenBuffers(1, &app->renderer3D->VBO);
-//	glBindBuffer(GL_ARRAY_BUFFER, app->renderer3D->VBO);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(M_mesh->vertex), M_mesh->vertex, GL_STATIC_DRAW);
-//
-//	glGenBuffers(1, &app->renderer3D->EBO);
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, app->renderer3D->EBO);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(M_mesh->index), M_mesh->index, GL_STATIC_DRAW);
-//
-//	return M_mesh;
-//}
