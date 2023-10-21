@@ -18,6 +18,11 @@ bool ModuleScene::Init()
 
 update_status ModuleScene::Update(float dt)
 {
+	if(AllGameObjectManagers.size() <= 0)
+	{
+		App->editor->actualMesh = nullptr;
+	}
+
 	return UPDATE_CONTINUE;
 }
 

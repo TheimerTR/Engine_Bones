@@ -151,6 +151,13 @@ bool ModuleEditor::DrawEditor()
 		
 		if (ImGui::BeginMenu("Assets"))
 		{
+			if (ImGui::MenuItem("Create Empty"))
+			{
+				GameObjectManager* gameObject = new GameObjectManager("Empty_Object", app->scene->Root);
+				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+			}
+
 			if (ImGui::BeginMenu("Render Primitive"))
 			{
 				if (ImGui::MenuItem("Cube"))
@@ -159,10 +166,10 @@ bool ModuleEditor::DrawEditor()
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
-				/*if (ImGui::MenuItem("Cylinder"))
+				if (ImGui::MenuItem("Cylinder"))
 				{
 					AssimpManager::AssimpLoader("Assets/Primitives/Cylinder.fbx");
-				}*/
+				}
 				if (ImGui::MenuItem("Pyramid"))
 				{
 					AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
@@ -187,15 +194,34 @@ bool ModuleEditor::DrawEditor()
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
-				if (ImGui::MenuItem("Walk"))
-				{
-					AssimpManager::AssimpLoader("Assets/Obj/walk.fbx");
-					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
-				}
+				//if (ImGui::MenuItem("Walk"))
+				//{
+				//	AssimpManager::AssimpLoader("Assets/Obj/walk.fbx");
+				//	App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+				//	App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+				//}
 
 				ImGui::EndMenu();
 			}
+
+			/*if (ImGui::BeginMenu("Add Component"))
+			{
+				GameObjectManager* gameObject = app->editor->actualMesh;
+
+				if (ImGui::MenuItem("Mesh Component"))
+				{
+					gameObject->AddComponent(ComponentType::MESH);
+				}
+				
+				if (ImGui::MenuItem("Material Component"))
+				{
+					gameObject->AddComponent(ComponentType::MATERIAL);
+				}
+
+				gameObject = nullptr;
+
+				ImGui::EndMenu();
+			}*/
 
 			ImGui::EndMenu();
 		}
@@ -343,7 +369,10 @@ bool ModuleEditor::DrawEditor()
 
 	if(InfoGWindow)
 	{
-		InfoGameObjectWindow(actualMesh);
+		if (actualMesh != nullptr)
+		{
+			InfoGameObjectWindow(actualMesh);
+		}
 	}
 
 	if (OpenAbout)
@@ -859,6 +888,85 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 				InfoGWindow = true;
 			}
 
+			if(ImGui::BeginPopupContextItem())
+			{
+				if(ImGui::BeginMenu("Add Entity")) 
+				{
+					if (ImGui::MenuItem("Create Empty"))
+					{
+						GameObjectManager* _gameObject = new GameObjectManager("Empty_Object", gm);
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+
+					if (ImGui::BeginMenu("Render Primitive"))
+					{
+						if (ImGui::MenuItem("Cube"))
+						{
+							AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx", "Assets/Textures/Grass.dds");
+							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
+							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+						}
+						if (ImGui::MenuItem("Cylinder"))
+						{
+							AssimpManager::AssimpLoader("Assets/Primitives/Cylinder.fbx");
+							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
+							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+						}
+						if (ImGui::MenuItem("Pyramid"))
+						{
+							AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
+							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
+							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+						}
+
+						ImGui::EndMenu();
+					}
+
+					if (ImGui::BeginMenu("Render Obj"))
+					{
+						if (ImGui::MenuItem("House"))
+						{
+							AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
+							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent));
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent->mParent = gm;
+							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent);
+						}
+						if (ImGui::MenuItem("Warrior"))
+						{
+							AssimpManager::AssimpLoader("Assets/Obj/warrior.fbx");
+							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
+							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+						}
+
+						ImGui::EndMenu();
+					}
+
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::MenuItem("Delete Entity"))
+				{
+					gm->mParent->DeleteChild(gm);
+				}
+
+				ImGui::EndPopup();
+			}
+
 			if (isOpen)
 			{
 				HierarchyWindowDisplay(gm);
@@ -884,6 +992,85 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 			{
 				actualMesh = gm;
 				InfoGWindow = true;
+			}
+
+			if (ImGui::BeginPopupContextItem())
+			{
+				if (ImGui::BeginMenu("Add Entity"))
+				{
+					if (ImGui::MenuItem("Create Empty"))
+					{
+						GameObjectManager* _gameObject = new GameObjectManager("Empty_Object", gm);
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+
+					if (ImGui::BeginMenu("Render Primitive"))
+					{
+						if (ImGui::MenuItem("Cube"))
+						{
+							AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx", "Assets/Textures/Grass.dds");
+							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
+							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+						}
+						if (ImGui::MenuItem("Cylinder"))
+						{
+							AssimpManager::AssimpLoader("Assets/Primitives/Cylinder.fbx");
+							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
+							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+						}
+						if (ImGui::MenuItem("Pyramid"))
+						{
+							AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
+							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
+							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+						}
+
+						ImGui::EndMenu();
+					}
+
+					if (ImGui::BeginMenu("Render Obj"))
+					{
+						if (ImGui::MenuItem("House"))
+						{
+							AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
+							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent));
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent->mParent = gm;
+							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent);
+						}
+						if (ImGui::MenuItem("Warrior"))
+						{
+							AssimpManager::AssimpLoader("Assets/Obj/warrior.fbx");
+							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
+							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
+							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+						}
+
+						ImGui::EndMenu();
+					}
+
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::MenuItem("Delete Entity"))
+				{
+					gm->mParent->DeleteChild(gm);
+				}
+
+				ImGui::EndPopup();
 			}
 		}
 	}
