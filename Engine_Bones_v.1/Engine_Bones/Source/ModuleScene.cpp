@@ -25,12 +25,13 @@ update_status ModuleScene::Update(float dt)
 			App->editor->actualMesh->mParent->DeleteChild(App->editor->actualMesh);
 		}
 	}
-
+	
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
 		if (App->editor->isMovingParent)
 		{
 			App->editor->moveEntityTo = nullptr;
+			App->editor->hoveredItem = nullptr;
 			App->editor->isMovingParent = false;
 		}
 	}

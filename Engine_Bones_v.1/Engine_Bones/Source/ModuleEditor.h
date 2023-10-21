@@ -49,6 +49,7 @@ public:
 
 	GameObjectManager* actualMesh;
 	GameObjectManager* moveEntityTo;
+	GameObjectManager* hoveredItem;
 
 	float Volume;
 	float WinBright;

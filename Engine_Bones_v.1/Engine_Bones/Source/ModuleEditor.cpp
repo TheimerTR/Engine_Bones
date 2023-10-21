@@ -52,11 +52,14 @@ bool ModuleEditor::Init()
 	DemoWindow = false;
 	OpenAbout = false;
 	InfoGWindow = false;
+	isMovingParent = false;
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 	Log_current_idx = 3;
 
 	moveEntityTo = nullptr;
+	hoveredItem = new GameObjectManager("", nullptr);
+
 
 	// Cheking Version of ImGuI and Init the Context
 	IMGUI_CHECKVERSION();
@@ -872,7 +875,6 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 
 		if (gm->childrens.size() > 0)
 		{
-
 			if (gm == actualMesh)
 			{
 				treeFlags |= ImGuiTreeNodeFlags_Selected;
@@ -883,6 +885,11 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 			}
 
 			bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, treeFlags, gm->mName.c_str());
+
+			if(ImGui::IsItemHovered())
+			{
+				hoveredItem = gm;
+			}
 
 			if (ImGui::IsItemClicked())
 			{
@@ -1002,6 +1009,11 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 
 			ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, gm->mName.c_str());
 
+			if (ImGui::IsItemHovered())
+			{
+				hoveredItem = gm;
+			}
+
 			if (ImGui::IsItemClicked())
 			{
 				actualMesh = gm;
@@ -1089,6 +1101,21 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 				ImGui::EndPopup();
 			}
 		}
+	}
+
+	if (isMovingParent)
+	{
+		ImGuiWindowFlags window_flags = 0;
+		window_flags |= ImGuiWindowFlags_NoBackground;
+		window_flags |= ImGuiWindowFlags_NoTitleBar;
+		window_flags |= ImGuiWindowFlags_NoMouseInputs;
+
+		ImVec2 size5 = ImGui::GetMousePos();
+		ImGui::SetNextWindowPos(size5);
+
+		ImGui::Begin("Moving", 0, window_flags);
+		ImGui::Text("New Parent %s", hoveredItem->mName.c_str());
+		ImGui::End();
 	}
 }
 
