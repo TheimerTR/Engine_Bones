@@ -193,14 +193,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	if ((app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN))
-	{
-		if ((App->editor->actualMesh != nullptr) && (App->scene->AllGameObjectManagers.size() > 0))
-		{
-			App->editor->actualMesh->mParent->DeleteChild(App->editor->actualMesh);
-		}
-	}
-
 	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 	{
 		std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);

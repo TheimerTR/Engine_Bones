@@ -231,7 +231,8 @@ void GameObjectManager::ChangeParent(GameObjectManager* gameObject)
 {
 	if (this->mParent != gameObject)
 	{
-		mParent->DeleteChild(this);
+		mParent->childrens.erase(find(mParent->childrens.begin(), mParent->childrens.end(), this));
+		this->mParent = nullptr;
 		mParent = gameObject;
 		mParent->childrens.push_back(this);
 	}

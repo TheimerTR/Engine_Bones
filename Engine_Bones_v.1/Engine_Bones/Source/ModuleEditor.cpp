@@ -56,6 +56,8 @@ bool ModuleEditor::Init()
 	SelectPrimitive = 0;
 	Log_current_idx = 3;
 
+	moveEntityTo = nullptr;
+
 	// Cheking Version of ImGuI and Init the Context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -886,6 +888,12 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 			{
 				actualMesh = gm;
 				InfoGWindow = true;
+
+				if(moveEntityTo != nullptr && isMovingParent)
+				{
+					moveEntityTo->ChangeParent(gm);
+					isMovingParent = false;
+				}
 			}
 
 			if(ImGui::BeginPopupContextItem())
@@ -959,6 +967,12 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					ImGui::EndMenu();
 				}
 
+				if (ImGui::MenuItem("Change Parent To:"))
+				{
+					moveEntityTo = gm;
+					isMovingParent = true;
+				}
+
 				if (ImGui::MenuItem("Delete Entity"))
 				{
 					gm->mParent->DeleteChild(gm);
@@ -992,6 +1006,12 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 			{
 				actualMesh = gm;
 				InfoGWindow = true;
+
+				if (moveEntityTo != nullptr && isMovingParent)
+				{
+					moveEntityTo->ChangeParent(gm);
+					isMovingParent = false;
+				}
 			}
 
 			if (ImGui::BeginPopupContextItem())
@@ -1053,6 +1073,12 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					}
 
 					ImGui::EndMenu();
+				}
+
+				if (ImGui::MenuItem("Change Parent To:"))
+				{
+					moveEntityTo = gm; 
+					isMovingParent = true;
 				}
 
 				if (ImGui::MenuItem("Delete Entity"))

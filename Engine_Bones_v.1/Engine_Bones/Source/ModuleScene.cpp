@@ -18,6 +18,23 @@ bool ModuleScene::Init()
 
 update_status ModuleScene::Update(float dt)
 {
+	if (app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
+	{
+		if ((App->editor->actualMesh != nullptr) && (App->scene->AllGameObjectManagers.size() > 0))
+		{
+			App->editor->actualMesh->mParent->DeleteChild(App->editor->actualMesh);
+		}
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	{
+		if (App->editor->isMovingParent)
+		{
+			App->editor->moveEntityTo = nullptr;
+			App->editor->isMovingParent = false;
+		}
+	}
+
 	if(AllGameObjectManagers.size() <= 0)
 	{
 		App->editor->actualMesh = nullptr;
