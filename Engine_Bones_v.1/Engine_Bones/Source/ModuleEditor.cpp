@@ -1012,27 +1012,21 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 							AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx", "Assets/Textures/Grass.dds");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
-							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
-							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
-							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+							AddChildren(gm);
 						}
 						if (ImGui::MenuItem("Cylinder"))
 						{
 							AssimpManager::AssimpLoader("Assets/Primitives/Cylinder.fbx");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
-							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
-							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+							AddChildren(gm);
 						}
 						if (ImGui::MenuItem("Pyramid"))
 						{
 							AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
-							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
-							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
-							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+							AddChildren(gm);
 						}
 
 						ImGui::EndMenu();
@@ -1045,18 +1039,14 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 							AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
-							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent));
-							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent->mParent = gm;
-							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent);
+							AddChildrenWithChildrens(gm);
 						}
 						if (ImGui::MenuItem("Warrior"))
 						{
 							AssimpManager::AssimpLoader("Assets/Obj/warrior.fbx");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
-							App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
-							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
-							gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+							AddChildren(gm);
 						}
 
 						ImGui::EndMenu();
@@ -1074,6 +1064,20 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 			}
 		}
 	}
+}
+
+void ModuleEditor::AddChildren(GameObjectManager* gm)
+{
+	App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
+	App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
+	gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+}
+
+void ModuleEditor::AddChildrenWithChildrens(GameObjectManager* gm)
+{
+	App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent));
+	App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent->mParent = gm;
+	gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent);
 }
 
 void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)

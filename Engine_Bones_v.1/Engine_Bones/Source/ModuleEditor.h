@@ -22,6 +22,8 @@ public:
 
 	void DefaultConfig();
 	void ThemeUpdate();
+	void AddChildren(GameObjectManager* gm);
+	void AddChildrenWithChildrens(GameObjectManager* gm);
 
 	void HierarchyWindowDisplay(GameObjectManager* gameObject);
 	void InfoGameObjectWindow(GameObjectManager* gameObject);
