@@ -1161,6 +1161,14 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					isMovingParent = true;
 				}
 
+				if (gm->mParent != App->scene->AllGameObjectManagers.at(0))
+				{
+					if (ImGui::MenuItem("Quit Parent"))
+					{
+						gm->ChangeParent(App->scene->Root);
+					}
+				}
+
 				if (ImGui::MenuItem("Delete Entity"))
 				{
 					gm->mParent->DeleteChild(gm);
