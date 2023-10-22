@@ -64,7 +64,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 	aiVector3D translation, scaling;
 	aiQuaternion rotation;
-
+	
 	actualObj->mTransformation.Decompose(scaling, rotation, translation);
 	float3 pos(translation.x, translation.y, translation.z);
 	float3 scale(scaling.x, scaling.y, scaling.z);

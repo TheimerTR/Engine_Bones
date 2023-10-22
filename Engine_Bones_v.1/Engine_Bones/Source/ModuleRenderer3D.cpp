@@ -199,7 +199,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		
 		for (int j = 0; j < objectMeshes.size(); j++)
 		{
-			//Mira si puedes acceder a su componente texutra antes
 			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
 			ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
 
@@ -259,42 +258,6 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::RenderDraw(Mesh* mesh, Texture* texture)
 {
-	//this moves all the objects 0,0,0 from all next obj forwards
-	//glTranslatef(0.0f, 0.0f, 0.0f);
-
-	//if (gameObject->Mesh->isSelected)
-	//{
-	//	if (App->input->GetKey(SDL_SCANCODE_RIGHT))
-	//	{
-	//		gameObject->Transform->SumPosition({ 0.1f, 0.0f, 0.0f });
-	//	}
-	//	if (App->input->GetKey(SDL_SCANCODE_LEFT))
-	//	{
-	//		gameObject->Transform->SumPosition({ -0.1f, 0.0f, 0.0f });
-	//	}
-	//	if (App->input->GetKey(SDL_SCANCODE_UP))
-	//	{
-	//		gameObject->Transform->SumPosition({ 0.0f, 0.0f, -0.1f });
-	//	}
-	//	if (App->input->GetKey(SDL_SCANCODE_DOWN))
-	//	{
-	//		gameObject->Transform->SumPosition({ 0.0f, 0.0f, 0.1f });
-	//	}
-	//	if (App->input->GetKey(SDL_SCANCODE_X))
-	//	{
-	//		gameObject->Transform->SumPosition({ 0.0f, 0.1f, 0.0f });
-	//	}
-	//	if (App->input->GetKey(SDL_SCANCODE_Z))
-	//	{
-	//		gameObject->Transform->SumPosition({ 0.0f, -0.1f, 0.0f });
-	//	}
-
-	//	//this moves all the objects 0,0,0 from all next obj forwards
-	//	glTranslatef(gameObject->Transform->GetPosition().x, gameObject->Transform->GetPosition().y, gameObject->Transform->GetPosition().z);
-
-	//	//LOG(LogTypeCase::L_CASUAL, "TRANSFORM X: %d", gameObject->Transform->GetPosition().x);
-	//}
-
 	if (mesh != nullptr)
 	{
 		if (mesh->ShowNormals)
@@ -337,14 +300,6 @@ void ModuleRenderer3D::RenderDraw(Mesh* mesh, Texture* texture)
 				glEnd();
 			//}
 		}
-
-		/*glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, Meshes->textureID);
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);*/
 
 		if (texture != nullptr)
 		{
