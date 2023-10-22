@@ -28,11 +28,32 @@ update_status ModuleScene::Update(float dt)
 	
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
-		if (App->editor->isMovingParent)
+		if (App->editor->isMovingParent && !app->editor->isMovingChild)
 		{
 			App->editor->moveEntityTo = nullptr;
 			App->editor->hoveredItem = nullptr;
 			App->editor->isMovingParent = false;
+		}
+
+		if (app->editor->isMovingChild && !App->editor->isMovingParent)
+		{
+			App->editor->actualMesh->mParent->childrens = App->editor->OG_ChildList;
+
+			/*GameObjectManager* tempGameObject = nullptr;
+
+			tempGameObject = App->editor->actualMesh->mParent->childrens.at(App->editor->OG_ChildListPos);
+			App->editor->actualMesh->mParent->childrens.at(App->editor->OG_ChildListPos) = App->editor->actualMesh->mParent->childrens.at(App->editor->Actual_ChildPos);
+			App->editor->actualMesh->mParent->childrens.at(App->editor->Actual_ChildPos) = tempGameObject;*/
+
+			App->editor->isMovingChild = false;
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	{
+		if (app->editor->isMovingChild && !App->editor->isMovingParent)
+		{
+			app->editor->isMovingChild = false;
 		}
 	}
 

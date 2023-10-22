@@ -250,6 +250,48 @@ void GameObjectManager::DeleteChild(GameObjectManager* gameObject)
 	}
 }
 
+void GameObjectManager::MoveChildIntoParent(int Key)
+{
+	int posInVector = 0;
+	posInVector = this->SearchChildPosInVector();
+	GameObjectManager* Temp_gameObject = nullptr;
+
+	if(Key == SDL_SCANCODE_UP)
+	{
+		if(posInVector > 0)
+		{
+			Temp_gameObject = this->mParent->childrens.at((posInVector - 1));
+			this->mParent->childrens.at((posInVector - 1)) = this->mParent->childrens.at(posInVector);
+			this->mParent->childrens.at(posInVector) = Temp_gameObject;
+		}
+	}
+
+	if(Key == SDL_SCANCODE_DOWN)
+	{
+		if (posInVector < this->mParent->childrens.size() - 1)
+		{
+			Temp_gameObject = this->mParent->childrens.at((posInVector + 1));
+			this->mParent->childrens.at((posInVector + 1)) = this->mParent->childrens.at(posInVector);
+			this->mParent->childrens.at(posInVector) = Temp_gameObject;
+		}
+	}
+}
+
+int GameObjectManager::SearchChildPosInVector()
+{
+	int i = 0;
+
+	for (int i = 0; i < this->mParent->childrens.size(); i++)
+	{
+		if (this == this->mParent->childrens.at(i))
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 void GameObjectManager::ChangeParent(GameObjectManager* gameObject)
 {
 	if (this->mParent != gameObject)

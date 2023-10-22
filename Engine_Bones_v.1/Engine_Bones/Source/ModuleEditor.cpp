@@ -53,9 +53,12 @@ bool ModuleEditor::Init()
 	OpenAbout = false;
 	InfoGWindow = false;
 	isMovingParent = false;
+	isMovingChild = false;
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 	Log_current_idx = 3;
+	OG_ChildListPos = 0;
+	Actual_ChildPos = 0;
 
 	moveEntityTo = nullptr;
 	hoveredItem = nullptr;
@@ -275,8 +278,8 @@ bool ModuleEditor::DrawEditor()
 
 	if(Hierarchy)
 	{
-		ImVec2 size3 = { 200, 500 };
-		ImGui::SetNextWindowSize(size3);
+		ImVec2 pos = { 200, 500 };
+		ImGui::SetNextWindowSize(pos);
 
 		ImGui::Begin("Hierarchy", &Hierarchy);
 
@@ -287,17 +290,58 @@ bool ModuleEditor::DrawEditor()
 
 	if (isMovingParent)
 	{
+		isMovingChild = false;
+
 		ImGuiWindowFlags window_flags = 0;
 		window_flags |= ImGuiWindowFlags_NoBackground;
 		window_flags |= ImGuiWindowFlags_NoTitleBar;
 		window_flags |= ImGuiWindowFlags_NoMouseInputs;
 
-		ImVec2 size5 = ImGui::GetMousePos();
-		ImGui::SetNextWindowPos(size5);
+		ImVec2 pos = ImGui::GetMousePos();
+		ImVec2 size = { 3000, 20 };
+		ImGui::SetNextWindowPos(pos);
+		ImGui::SetNextWindowSize(size);
 
 		ImGui::Begin("Moving", 0, window_flags);
-		ImGui::Text("New Parent %s", hoveredItem->mName.c_str());
+		ImGui::Text(" New Parent %s, click to confirm, escape to cancel", hoveredItem->mName.c_str());
 		ImGui::End();
+	}
+
+	if(isMovingChild)
+	{
+		isMovingParent = false;
+
+		ImGuiWindowFlags window_flags = 0;
+		window_flags |= ImGuiWindowFlags_NoBackground;
+		window_flags |= ImGuiWindowFlags_NoTitleBar;
+		window_flags |= ImGuiWindowFlags_NoMouseInputs;
+
+		ImVec2 pos = ImGui::GetMousePos();
+		ImVec2 size = { 3000, 20 };
+		ImGui::SetNextWindowPos(pos);
+		ImGui::SetNextWindowSize(size);
+
+		ImGui::Begin("Moving", 0, window_flags);
+		ImGui::Text(" Press arrow Up and Down to move, enter to confirm, escape to cancel");
+		ImGui::End();
+
+		int Key = 0;
+
+		Actual_ChildPos = actualMesh->SearchChildPosInVector();
+
+		if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN)
+		{
+			Key = SDL_SCANCODE_UP;
+
+			actualMesh->MoveChildIntoParent(Key);
+		}
+		
+		if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
+		{
+			Key = SDL_SCANCODE_DOWN;
+
+			actualMesh->MoveChildIntoParent(Key);
+		}
 	}
 
 	//Output Window
@@ -1057,6 +1101,21 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 				{
 					moveEntityTo = gm; 
 					isMovingParent = true;
+				}
+
+				if(ImGui::MenuItem("Move Into Child List:"))
+				{
+					OG_ChildListPos = gm->SearchChildPosInVector();
+					OG_ChildList = gm->mParent->childrens;
+
+					if (OG_ChildListPos != -1)
+					{
+						isMovingChild = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_ERROR, "Child Was not found in Parent list");
+					}
 				}
 
 				if (gm->mParent != App->scene->AllGameObjectManagers.at(0))

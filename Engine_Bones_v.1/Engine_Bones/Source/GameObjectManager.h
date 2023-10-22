@@ -23,15 +23,6 @@ class ComponentTransform;
 class ComponentMaterial;
 class ComponentMesh;
 
-struct GameObjects
-{
-	ComponentTransform* Transform;
-
-	Mesh* Mesh;
-
-	Texture* Texture;
-};
-
 class GameObjectManager
 {
 public:
@@ -62,6 +53,8 @@ public:
 
 	void DeleteComponent(ComponentManager* ptr);
 	void DeleteChild(GameObjectManager* gameObject);
+	void MoveChildIntoParent(int Key);
+	int SearchChildPosInVector();
 
 	void ChangeParent(GameObjectManager* gameObject);
 };
