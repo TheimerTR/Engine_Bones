@@ -72,6 +72,8 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 	GameObjectManager* _ParentObj = new GameObjectManager(Name, _Parent);
 
+	/*AplicateTransform(_ParentObj, pos, scale, rot);*/
+
 	if (actualObj->mNumChildren > 0 && numMeshes > 1)
 	{
 		for (i; i < numMeshes; i++)
@@ -179,9 +181,11 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 		ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
 		C_Mesh->SetMesh(M_mesh);
 
-		_ParentObj->mTransform->mPosition = pos;
-		_ParentObj->mTransform->mScale = scale;
-		_ParentObj->mTransform->mRotation = rot;
+		//_ParentObj->mTransform->mPosition = pos;
+		//_ParentObj->mTransform->mScale = scale;
+		//_ParentObj->mTransform->mRotation = rot; 
+
+		AplicateTransform(_ParentObj, pos, scale, rot);
 
 		if (texturePath != NULL)
 		{
@@ -294,4 +298,9 @@ void  AssimpManager::Clear_Mesh(Mesh* mesh)
 			++it;
 		}
 	}
+}
+
+void AssimpManager::AplicateTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation) 
+{
+	gameObject->mTransform->SetTransform(gameObject, position, scale, rotation); 
 }
