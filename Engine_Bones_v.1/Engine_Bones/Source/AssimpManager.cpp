@@ -98,8 +98,8 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			M_mesh->num_index = scene->mMeshes[i]->mNumFaces * 3;
 			M_mesh->index = new uint[M_mesh->num_index]; // assume each face is a triangle
 
-			M_mesh->num_normals_Faces = scene->mMeshes[i]->mNumFaces * 3;
-			M_mesh->normals_Faces = new uint[M_mesh->num_normals_Faces];
+			/*M_mesh->num_normals_Faces = scene->mMeshes[i]->mNumFaces * 3;
+			M_mesh->normals_Faces = new uint[M_mesh->num_normals_Faces];*/
 
 			for (uint d = 0; d < scene->mMeshes[i]->mNumFaces; ++d)
 			{
@@ -141,16 +141,16 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 		FileSystem::StringDivide(Path, &M_mesh->Name, nullptr);
 
-		M_mesh->VAO = 0;
+		//M_mesh->VAO = 0;
 		M_mesh->VBO = 0;
 		M_mesh->EBO = 0;
 		M_mesh->VN = 0;
-		M_mesh->VNF = 0;
+		//M_mesh->VNF = 0;
 		M_mesh->VT = 0;
 
-		glGenVertexArrays(1, &M_mesh->VAO);
+		/*glGenVertexArrays(1, &M_mesh->VAO);
 		glBindVertexArray(M_mesh->VAO);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);*/
 
 		glGenBuffers(1, (GLuint*)&(M_mesh->VBO));
 		glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VBO);
@@ -164,9 +164,9 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals, M_mesh->normals, GL_STATIC_DRAW);
 
-		glGenBuffers(1, (GLuint*)&(M_mesh->VNF));
+		/*glGenBuffers(1, (GLuint*)&(M_mesh->VNF));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VNF);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals_Faces, M_mesh->normals_Faces, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals_Faces, M_mesh->normals_Faces, GL_STATIC_DRAW);*/
 
 		glGenBuffers(1, (GLuint*)&(M_mesh->VT));
 		glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);
@@ -218,10 +218,10 @@ void AssimpManager::CleanUp()
 		{
 			glDeleteBuffers(1, &AllMeshes[i]->VBO);
 		}
-		if (AllMeshes[i]->VAO != 0)
+		/*if (AllMeshes[i]->VAO != 0)
 		{
 			glDeleteBuffers(1, &AllMeshes[i]->VAO);
-		}
+		}*/
 		if (AllMeshes[i]->EBO != 0)
 		{
 			glDeleteBuffers(1, &AllMeshes[i]->EBO);
@@ -257,10 +257,10 @@ void  AssimpManager::Clear_Mesh(Mesh* mesh)
 	{
 		glDeleteBuffers(1, &mesh->VBO);
 	}
-	if (mesh->VAO != 0)
+	/*if (mesh->VAO != 0)
 	{
 		glDeleteBuffers(1, &mesh->VAO);
-	}
+	}*/
 	if (mesh->EBO != 0)
 	{
 		glDeleteBuffers(1, &mesh->EBO);

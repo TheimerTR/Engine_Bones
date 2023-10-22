@@ -323,7 +323,7 @@ void ModuleRenderer3D::RenderDraw(Mesh* mesh, Texture* texture)
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		glBindVertexArray(mesh->VAO);
+		//glBindVertexArray(mesh->VAO);
 
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -340,7 +340,7 @@ void ModuleRenderer3D::RenderDraw(Mesh* mesh, Texture* texture)
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glEnableVertexAttribArray(0);
+		//glEnableVertexAttribArray(0);
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);

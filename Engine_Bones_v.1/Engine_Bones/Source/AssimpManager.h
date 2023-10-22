@@ -40,11 +40,11 @@ struct Mesh
 	//bool isSelected;
 	bool ShowNormals = false;
 
-	uint VAO;
+	//uint VAO;
 	uint VBO;
 	uint EBO;
 	uint VN;
-	uint VNF;
+	//uint VNF;
 	uint VT;
 };
 
