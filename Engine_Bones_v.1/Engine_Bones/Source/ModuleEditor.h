@@ -22,6 +22,7 @@ public:
 
 	void DefaultConfig();
 	void ThemeUpdate();
+	void AddEntity(GameObjectManager* gm);
 	void AddChildren(GameObjectManager* gm);
 	void AddChildrenWithChildrens(GameObjectManager* gm);
 
