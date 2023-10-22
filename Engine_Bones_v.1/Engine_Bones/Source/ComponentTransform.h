@@ -24,8 +24,14 @@ public:
 
 	void ShowInfo(); 
 
+	void SetTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation); 
 
+	void UpdateTransformation(); 
+
+	
 private: 
+
+	GameObjectManager* gameObject; 
 
 	//void UpdateMatrix(Transforms* trans) 
 	//{

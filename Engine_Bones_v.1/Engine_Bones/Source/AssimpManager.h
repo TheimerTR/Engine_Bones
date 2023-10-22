@@ -63,6 +63,8 @@ namespace AssimpManager
 
 	void Clear_Mesh(Mesh* mesh);
 
+	void AplicateTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation); 
+
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
 
 	vector<Mesh*> AllMeshes;
