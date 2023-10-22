@@ -28,19 +28,42 @@ GameObjectManager::~GameObjectManager()
 {
 	app->scene->AllGameObjectManagers.erase(find(app->scene->AllGameObjectManagers.begin(), app->scene->AllGameObjectManagers.end(), this));
 
-	for(uint i = 0; i < mComponents.size(); i++)
-	{
-		RELEASE(mComponents[i]); 
-	}
-
-	mComponents.clear(); 
-
 	for (uint i = 0; i < childrens.size(); i++)
 	{
 		RELEASE(childrens[i]);
+		childrens[i] = nullptr;
 	}
 
 	childrens.clear();
+
+	for(uint i = 0; i < mComponents.size(); i++)
+	{
+		ComponentManager* Comp = nullptr;
+		Comp = mComponents.at(i);
+
+		if (Comp->Type == ComponentType::MATERIAL)
+		{
+			ComponentMaterial* Mat = dynamic_cast<ComponentMaterial*>(Comp);
+			RELEASE(Mat);
+		}
+		if (Comp->Type == ComponentType::MESH)
+		{
+			ComponentMesh* Mes = dynamic_cast<ComponentMesh*>(Comp);
+			RELEASE(Mes);
+		}
+		if (Comp->Type == ComponentType::TRANSFORM)
+		{
+			ComponentTransform* Tra = dynamic_cast<ComponentTransform*>(Comp);
+			RELEASE(Tra);
+		}
+
+		Comp = nullptr;
+
+		//RELEASE(Comp);
+		//RELEASE(mComponents[i]); 
+	}
+
+	mComponents.clear(); 
 
 	if(mParent != nullptr)
 	{

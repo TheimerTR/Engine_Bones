@@ -20,6 +20,8 @@ using namespace std;
 enum ComponentType; 
 class ComponentManager; 
 class ComponentTransform; 
+class ComponentMaterial;
+class ComponentMesh;
 
 struct GameObjects
 {

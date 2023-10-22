@@ -58,7 +58,7 @@ bool ModuleEditor::Init()
 	Log_current_idx = 3;
 
 	moveEntityTo = nullptr;
-	hoveredItem = new GameObjectManager("", nullptr);
+	hoveredItem = nullptr;
 
 
 	// Cheking Version of ImGuI and Init the Context
