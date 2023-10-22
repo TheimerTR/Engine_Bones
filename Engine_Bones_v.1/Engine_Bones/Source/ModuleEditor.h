@@ -22,6 +22,7 @@ public:
 
 	void DefaultConfig();
 	void ThemeUpdate();
+	void AddEntity(GameObjectManager* gm);
 	void AddChildren(GameObjectManager* gm);
 	void AddChildrenWithChildrens(GameObjectManager* gm);
 
@@ -40,7 +41,8 @@ public:
 	std::vector<float> mFPSLOG;
 
 	bool copy, AboutWindow, OpenPreferences, LogOutput, Vsync, Gl_Grid, Gl_DepthTest, Gl_CullFace, Gl_Ligthing, Gl_ColorMaterial, Gl_Texture2D,
-		Gl_LineSmooth, Gl_PolygonSmooth, Gl_AlphaTest, DemoWindow, OpenAbout, DR_Normals, changeDebug, Hierarchy, InfoGWindow, isMovingParent;
+		Gl_LineSmooth, Gl_PolygonSmooth, Gl_AlphaTest, DemoWindow, OpenAbout, DR_Normals, changeDebug, Hierarchy, InfoGWindow, isMovingParent,
+		isMovingChild;
 
 	int ThemeSelector;
 	int item_current_idx;
@@ -50,6 +52,9 @@ public:
 	GameObjectManager* actualMesh;
 	GameObjectManager* moveEntityTo;
 	GameObjectManager* hoveredItem;
+	vector<GameObjectManager*> OG_ChildList;
+
+	int OG_ChildListPos, Actual_ChildPos;
 
 	float Volume;
 	float WinBright;

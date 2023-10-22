@@ -15,7 +15,12 @@ ComponentTransform::ComponentTransform(GameObjectManager* gameObject) : Componen
 
 ComponentTransform::~ComponentTransform()
 {
+	mPosition = float3::zero;
+	mScale = float3::zero;
+	mRotation = Quat::identity;
 
+	mGlobalMatrix = float4x4::identity;
+	mLocalMatrix = float4x4::identity;
 };
 
 void ComponentTransform::ShowInfo() 

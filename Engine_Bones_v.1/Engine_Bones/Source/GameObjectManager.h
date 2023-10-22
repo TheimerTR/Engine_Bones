@@ -20,15 +20,8 @@ using namespace std;
 enum ComponentType; 
 class ComponentManager; 
 class ComponentTransform; 
-
-struct GameObjects
-{
-	ComponentTransform* Transform;
-
-	Mesh* Mesh;
-
-	Texture* Texture;
-};
+class ComponentMaterial;
+class ComponentMesh;
 
 class GameObjectManager
 {
@@ -60,6 +53,8 @@ public:
 
 	void DeleteComponent(ComponentManager* ptr);
 	void DeleteChild(GameObjectManager* gameObject);
+	void MoveChildIntoParent(int Key);
+	int SearchChildPosInVector();
 
 	void ChangeParent(GameObjectManager* gameObject);
 };
