@@ -292,6 +292,39 @@ int GameObjectManager::SearchChildPosInVector()
 	return -1;
 }
 
+void GameObjectManager::CreateEmptyObject()
+{
+	GameObjectManager* _gameObject = new GameObjectManager("Empty_Object", app->scene->Root);
+	app->scene->Selected_GameObject = app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1);
+	app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+
+	int C = 0;
+	for (int m = 0; m < app->scene->AllGameObjectManagers.size(); m++)
+	{
+		if (C > 0)
+		{
+			std::string s = std::to_string(C);
+			_gameObject->mName = "Empty_Object" + s;
+			int compare = strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _gameObject->mName.c_str());
+
+			if (compare == 0)
+			{
+				std::string stri = std::to_string(C++);
+				_gameObject->mName = "Empty_Object" + s;
+			}
+		}
+
+		if (strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _gameObject->mName.c_str()) == 0)
+		{
+			if (C == 0)
+			{
+				_gameObject->mName = "Empty_Object";
+				C++;
+			}
+		}
+	}
+}
+
 void GameObjectManager::ChangeParent(GameObjectManager* gameObject)
 {
 	if (this->mParent != gameObject)
