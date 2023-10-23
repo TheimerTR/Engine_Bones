@@ -937,6 +937,36 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					GameObjectManager* _gameObject = new GameObjectManager("Empty_Object", App->scene->Root);
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+
+					int Counter = -1;
+					std::string TempString = "";
+					for (int m = 0; m < app->scene->AllGameObjectManagers.size(); m++)
+					{
+						std::string TempName = "";
+
+						if(Counter > 0)
+						{
+							std::string str = std::to_string(Counter);
+							TempName = _gameObject->mName + str;
+						}
+						else
+						{
+							TempName = _gameObject->mName;
+						}
+
+						int compare = strcmp(App->scene->AllGameObjectManagers.at(m)->mName.c_str(), TempName.c_str());
+
+						if (compare == 0)
+						{
+							Counter++;
+						}
+					}
+
+					if (Counter > 0)
+					{
+						std::string str = std::to_string(Counter);
+						_gameObject->mName = _gameObject->mName + str;
+					}
 				}
 
 				if (ImGui::BeginMenu("Render Primitive"))

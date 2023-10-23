@@ -139,7 +139,9 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			}
 		}
 
-		FileSystem::StringDivide(Path, &M_mesh->Name, nullptr);
+		M_mesh->Name = _ParentObj->mName;
+
+		/*FileSystem::StringDivide(Path, &M_mesh->Name, nullptr);*/
 
 		//M_mesh->VAO = 0;
 		M_mesh->VBO = 0;
@@ -181,9 +183,28 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 		ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
 		C_Mesh->SetMesh(M_mesh);
 
-		//_ParentObj->mTransform->mPosition = pos;
-		//_ParentObj->mTransform->mScale = scale;
-		//_ParentObj->mTransform->mRotation = rot; 
+		int Counter = -1;
+		std::string TempString = "";
+		for (int m = 0; m < app->scene->AllGameObjectManagers.size(); m++)
+		{
+			ComponentMesh* T_Mesh = (ComponentMesh*)app->scene->AllGameObjectManagers.at(m)->GetComponentGameObject(ComponentType::MESH);
+
+			if (T_Mesh != nullptr)
+			{
+				int compare = strcmp(M_mesh->Name.c_str(), T_Mesh->C_Mesh->Name.c_str());
+
+				if (compare == 0)
+				{
+					Counter++;
+				}
+			}
+		}
+
+		if (Counter > 0)
+		{
+			std::string str = std::to_string(Counter);
+			_ParentObj->mName = _ParentObj->mName + str;
+		}
 
 		AplicateTransform(_ParentObj, pos, scale, rot);
 
