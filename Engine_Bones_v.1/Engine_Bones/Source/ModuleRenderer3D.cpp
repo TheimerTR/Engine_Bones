@@ -204,7 +204,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 			if (objectTexture != nullptr)
 			{
-				RenderDraw(objectMesh->GetMesh(), objectTexture->GetTexture());
+				RenderDraw(objectMesh->GetMesh(), objectTexture);
 			}
 			else
 			{
@@ -256,7 +256,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::RenderDraw(Mesh* mesh, Texture* texture)
+void ModuleRenderer3D::RenderDraw(Mesh* mesh, ComponentMaterial* texture)
 {
 	if (mesh != nullptr)
 	{
@@ -303,12 +303,12 @@ void ModuleRenderer3D::RenderDraw(Mesh* mesh, Texture* texture)
 
 		if (texture != nullptr)
 		{
-			if (texture->ShowTextures)
+			if (texture->GetTexture()->ShowTextures)
 			{
-				if (texture->TextureID != 0)
+				if (texture->CM_TextureID != 0)
 				{
 					glEnable(GL_TEXTURE_2D);
-					glBindTexture(GL_TEXTURE_2D, texture->TextureID);
+					glBindTexture(GL_TEXTURE_2D, texture->CM_TextureID);
 				}
 			}
 		}

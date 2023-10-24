@@ -54,6 +54,7 @@ bool ModuleEditor::Init()
 	InfoGWindow = false;
 	isMovingParent = false;
 	isMovingChild = false;
+	selectTexture = false;
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 	Log_current_idx = 3;
@@ -1034,6 +1035,13 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					ImGui::EndMenu();
 				}
 
+				if (ImGui::BeginMenu("Add Component"))
+				{
+					AddComponentInInspector(gm);
+
+					ImGui::EndMenu();
+				}
+
 				if (ImGui::MenuItem("Change Parent To:"))
 				{
 					moveEntityTo = gm;
@@ -1091,6 +1099,13 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 				if (ImGui::BeginMenu("Add Entity"))
 				{
 					AddEntity(gm);
+
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("Add Component"))
+				{
+					AddComponentInInspector(gm);
 
 					ImGui::EndMenu();
 				}
@@ -1204,6 +1219,36 @@ void ModuleEditor::AddChildrenWithChildrens(GameObjectManager* gm)
 	gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent);
 }
 
+void ModuleEditor::AddComponentInInspector(GameObjectManager* gm)
+{
+	if (ImGui::BeginMenu("Mesh"))
+	{
+		if (ImGui::MenuItem("Cube"))
+		{
+			AssimpManager::SimpleAssimpLoader("Assets/Primitives/Cube.fbx", gm, "Assets/Textures/Grass.dds");
+		}
+
+		if (ImGui::MenuItem("Cylinder"))
+		{
+			AssimpManager::SimpleAssimpLoader("Assets/Primitives/Cylinder.fbx", gm, "Assets/Textures/Grass.dds");
+		}
+
+		if (ImGui::MenuItem("Pyramid"))
+		{
+			AssimpManager::SimpleAssimpLoader("Assets/Primitives/Pyramid.fbx", gm, "Assets/Textures/Grass.dds");
+		}
+
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::MenuItem("Texture"))
+	{
+		TexturesManager* texturesManager = new TexturesManager();
+		ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(gm->AddComponent(ComponentType::MATERIAL));
+		C_Texture->SetTexture(nullptr);
+	}
+}
+
 void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 {
 	ImVec2 size4 = { 350, 400 };
@@ -1233,11 +1278,17 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 					if (ImGui::TreeNode("Mesh##1"))
 					{
 						Mesh* mesh = objectMesh->C_Mesh;
-						ImGui::Text("%s", gameObject->mName.c_str());
+						ImGui::Text("%s", mesh->Name.c_str());
 						ImGui::Text("Path: %s", mesh->Path.c_str());
 						ImGui::Text("Number of index: %d", mesh->num_index);
 						ImGui::Text("Number of vertex: %d", mesh->num_vertex);
 						ImGui::Checkbox("Show Normals", &mesh->ShowNormals);
+						
+						if (ImGui::Button("Delete Mesh"))
+						{
+							gameObject->mParent->DeleteComponent(objectMeshes.at(i));
+						}
+
 						ImGui::TreePop();
 					}
 				}
@@ -1255,20 +1306,76 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 					if (objectTexture != NULL)
 					{
 						Texture* texture = objectTexture->GetTexture();
-						FileSystem::StringDivide(texture->path, &texture->Name, nullptr);
-
-						if (ImGui::TreeNode("%s##2", texture->Name.c_str()))
+					
+						if (texture != nullptr)
 						{
-							ImGui::Text("Texture path: %s", texture->path);
-							//ImGui::Text("Texture Format: %d", texture->imageFormat);
-							//ImGui::Text("Texture Type: %d", texture->imageType);
-							ImGui::Text("Texture ID: %d", texture->TextureID);
-							ImGui::Text("Texture Size: Width:%d x Height:%d", texture->imageWidth, texture->imageHeight);
-							ImGui::Checkbox("Show Texture", &texture->ShowTextures);
-							ImGui::TreePop();
+							FileSystem::StringDivide(texture->path, &texture->Name, nullptr);
+
+							if (ImGui::TreeNode("%s##2", texture->Name.c_str()))
+							{
+								ImGui::Image((void*)texture->TextureID, ImVec2(texture->imageWidth, texture->imageHeight));
+								ImGui::Text("Texture path: %s", texture->path);
+								ImGui::Text("Texture ID: %d", texture->TextureID);
+								ImGui::Text("Texture Size: Width:%d x Height:%d", texture->imageWidth, texture->imageHeight);
+								ImGui::Checkbox("Show Texture", &texture->ShowTextures);
+
+								if (ImGui::Button("Select Texture"))
+								{
+									selectTexture = !selectTexture;
+								}
+
+								if (selectTexture)
+								{
+									TexturesManager* texturesManager = new TexturesManager();
+
+									if (ImGui::MenuItem("House Texture"))
+									{
+										objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Baker_house.dds"));
+										selectTexture = false;
+									}
+
+									if (ImGui::MenuItem("Grass Texture"))
+									{
+										objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Grass.dds"));
+										selectTexture = false;
+									}
+								}
+
+								ImGui::TreePop();
+							}
+						}
+						else
+						{
+							if (ImGui::TreeNode("Empty Texture##2"))
+							{
+								if (ImGui::Button("Select Texture"))
+								{
+									selectTexture = !selectTexture;
+								}
+
+								if (selectTexture)
+								{
+									TexturesManager* texturesManager = new TexturesManager();
+
+									if (ImGui::MenuItem("House Texture"))
+									{
+										objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Baker_house.dds"));
+										selectTexture = false;
+									}
+
+									if (ImGui::MenuItem("Grass Texture"))
+									{
+										objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Grass.dds"));
+										selectTexture = false;
+									}
+								}
+
+								ImGui::TreePop();
+							}
 						}
 					}
 				}
+
 				ImGui::TreePop();
 			}
 		}

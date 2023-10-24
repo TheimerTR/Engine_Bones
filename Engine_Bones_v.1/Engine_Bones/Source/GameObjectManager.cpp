@@ -84,7 +84,6 @@ ComponentManager* GameObjectManager::AddComponent(ComponentType type)
 {
 	ComponentManager* Comp = nullptr;
 
-	//If existe
 	switch (type)
 	{
 	case ComponentType::TRANSFORM:
@@ -165,9 +164,12 @@ ComponentManager* GameObjectManager::GetComponentGameObject(ComponentType type)
 			}
 			break;
 		case ComponentType::SHOWNMATERIAL:
-			if (object->Type == ComponentType::MATERIAL && object->texture->ShowTextures)
+			if (object->texture != nullptr)
 			{
-				return (object);
+				if (object->Type == ComponentType::MATERIAL && object->texture->ShowTextures)
+				{
+					return (object);
+				}
 			}
 			break;
 		case ComponentType::TRANSFORM:
@@ -226,8 +228,29 @@ void GameObjectManager::DeleteComponent(ComponentManager* ptr)
 {
 	if (ptr != nullptr)
 	{
-		mComponents.erase(find(mComponents.begin(), mComponents.end(), ptr)); 
-		RELEASE(ptr); 
+		ComponentManager* Comp = nullptr;
+		Comp = ptr;
+
+		if (Comp->Type == ComponentType::MATERIAL)
+		{
+			ComponentMaterial* Mat = dynamic_cast<ComponentMaterial*>(Comp);
+			RELEASE(Mat);
+		}
+		if (Comp->Type == ComponentType::MESH)
+		{
+			ComponentMesh* Mes = dynamic_cast<ComponentMesh*>(Comp);
+			RELEASE(Mes);
+		}
+		if (Comp->Type == ComponentType::TRANSFORM)
+		{
+			ComponentTransform* Tra = dynamic_cast<ComponentTransform*>(Comp);
+			RELEASE(Tra);
+		}
+
+		Comp = nullptr;
+
+		/*mComponents.erase(find(mComponents.begin(), mComponents.end(), ptr)); 
+		RELEASE(ptr); */
 	}
 }
 

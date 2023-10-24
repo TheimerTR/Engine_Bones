@@ -27,7 +27,14 @@ ComponentMaterial::~ComponentMaterial()
 void ComponentMaterial::SetTexture(Texture* T_Texture)
 {
 	texture = T_Texture;
-	CM_TextureID = T_Texture->TextureID;
+	if (texture != nullptr)
+	{
+		CM_TextureID = T_Texture->TextureID;
+	}
+	else
+	{
+		CM_TextureID = 0;
+	}
 }
 
 Texture* ComponentMaterial::GetTexture()

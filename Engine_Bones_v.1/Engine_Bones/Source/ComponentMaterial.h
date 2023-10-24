@@ -18,7 +18,7 @@ public:
 	ComponentMaterial(GameObjectManager* gameObject);
 	~ComponentMaterial();
 
-	void SetTexture(Texture* T_Texture);
+	void SetTexture(Texture* T_Texture = nullptr);
 	Texture* GetTexture();
 
 private:

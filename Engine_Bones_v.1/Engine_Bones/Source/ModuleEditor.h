@@ -25,6 +25,7 @@ public:
 	void AddEntity(GameObjectManager* gm);
 	void AddChildren(GameObjectManager* gm);
 	void AddChildrenWithChildrens(GameObjectManager* gm);
+	void AddComponentInInspector(GameObjectManager* gm);
 
 	void HierarchyWindowDisplay(GameObjectManager* gameObject);
 	void InfoGameObjectWindow(GameObjectManager* gameObject);
@@ -42,7 +43,7 @@ public:
 
 	bool copy, AboutWindow, OpenPreferences, LogOutput, Vsync, Gl_Grid, Gl_DepthTest, Gl_CullFace, Gl_Ligthing, Gl_ColorMaterial, Gl_Texture2D,
 		Gl_LineSmooth, Gl_PolygonSmooth, Gl_AlphaTest, DemoWindow, OpenAbout, DR_Normals, changeDebug, Hierarchy, InfoGWindow, isMovingParent,
-		isMovingChild;
+		isMovingChild, selectTexture;
 
 	int ThemeSelector;
 	int item_current_idx;

@@ -52,6 +52,8 @@ namespace AssimpManager
 {
 	void AssimpLoader(const char* path, const char* pathTexture = nullptr);
 
+	void SimpleAssimpLoader(const char* Path, GameObjectManager* gameObject, const char* texturePath = nullptr);
+
 	void ChangeDebugMode(bool type);
 
 	void CleanUp();

@@ -58,6 +58,110 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 		LOG(LogTypeCase::L_ERROR, "Error loading scene % s", path);
 }
 
+void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* gameObject, const char* texturePath)
+{
+	const aiScene* scene = aiImportFile(Path, aiProcessPreset_TargetRealtime_MaxQuality);
+
+	if (scene != nullptr && scene->HasMeshes())
+	{
+		string FileName = "";
+
+		FileSystem::StringDivide(Path, &FileName, nullptr);
+	
+		Mesh* M_mesh = new Mesh();
+
+		M_mesh->Path = Path;
+
+		M_mesh->Name = FileName;
+
+		for (int i = 0; i < scene->mNumMeshes; i++)
+		{
+			M_mesh->num_vertex = scene->mMeshes[i]->mNumVertices;
+			M_mesh->vertex = new float[M_mesh->num_vertex * 3];
+			memcpy(M_mesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * M_mesh->num_vertex * 3);
+			LOG(LogTypeCase::L_CASUAL, "New mesh with %d vertices", M_mesh->num_vertex);
+
+			if (scene->mMeshes[i]->HasFaces())
+			{
+				M_mesh->num_index = scene->mMeshes[i]->mNumFaces * 3;
+				M_mesh->index = new uint[M_mesh->num_index]; // assume each face is a triangle
+
+				/*M_mesh->num_normals_Faces = scene->mMeshes[i]->mNumFaces * 3;
+				M_mesh->normals_Faces = new uint[M_mesh->num_normals_Faces];*/
+
+				for (uint d = 0; d < scene->mMeshes[i]->mNumFaces; ++d)
+				{
+					if (scene->mMeshes[i]->mFaces[d].mNumIndices != 3)
+					{
+						LOG(LogTypeCase::L_WARNING, "WARNING, geometry face with != 3 indices!");
+					}
+					else
+					{
+						memcpy(&M_mesh->index[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
+						//memcpy(&M_mesh->normals_Faces[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
+					}
+				}
+
+				LOG(LogTypeCase::L_CASUAL, "With %d indices", M_mesh->num_index);
+			}
+
+			if (scene->mMeshes[i]->HasNormals())
+			{
+				M_mesh->num_normals = scene->mMeshes[i]->mNumVertices * 3;
+				M_mesh->normals = new float[M_mesh->num_normals * 3];
+				memcpy(M_mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * M_mesh->num_normals * 3);
+				//memcpy(&M_mesh->index[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
+				/*memcpy(&M_mesh->normals_Faces[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));*/
+			}
+
+			uint UV_Index = 0;
+			if (scene->mMeshes[i]->HasTextureCoords(UV_Index))
+			{
+				M_mesh->num_Tex = scene->mMeshes[i]->mNumVertices;
+				M_mesh->textures = new math::float2[scene->mMeshes[i]->mNumVertices];
+
+				for (int j = 0; j < M_mesh->num_Tex; j++)
+				{
+					M_mesh->textures[j].x = scene->mMeshes[i]->mTextureCoords[UV_Index][j].x;
+					M_mesh->textures[j].y = scene->mMeshes[i]->mTextureCoords[UV_Index][j].y;
+				}
+			}
+		}
+
+			M_mesh->VBO = 0;
+			M_mesh->EBO = 0;
+			M_mesh->VN = 0;
+			M_mesh->VT = 0;
+
+			glGenBuffers(1, (GLuint*)&(M_mesh->VBO));
+			glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->vertex, GL_STATIC_DRAW);
+
+			glGenBuffers(1, (GLuint*)&(M_mesh->EBO));
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->EBO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * M_mesh->num_index, M_mesh->index, GL_STATIC_DRAW);
+
+			glGenBuffers(1, (GLuint*)&(M_mesh->VN));
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals, M_mesh->normals, GL_STATIC_DRAW);
+
+			/*glGenBuffers(1, (GLuint*)&(M_mesh->VNF));
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VNF);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals_Faces, M_mesh->normals_Faces, GL_STATIC_DRAW);*/
+
+			glGenBuffers(1, (GLuint*)&(M_mesh->VT));
+			glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex * 2, M_mesh->textures, GL_STATIC_DRAW);
+
+			AllMeshes.push_back(M_mesh);
+
+			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gameObject->AddComponent(ComponentType::MESH));
+			C_Mesh->SetMesh(M_mesh);
+	}
+	else
+		LOG(LogTypeCase::L_ERROR, "Error loading scene % s", Path);
+}
+
 void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int pointer, /*aiMesh** M_Array*/ aiNode* actualObj, GameObjectManager* _Parent, string Name, const char* Path, const char* texturePath)
 {
 	int i = pointer;
@@ -176,10 +280,9 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 		AllMeshes.push_back(M_mesh);
 
-		TexturesManager* texturesManager = new TexturesManager();
+		//Components here
 		ComponentTransform* transform = new ComponentTransform(nullptr);
 
-		//Components here
 		ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
 		C_Mesh->SetMesh(M_mesh);
 
@@ -213,6 +316,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 		if (texturePath != NULL)
 		{
+			TexturesManager* texturesManager = new TexturesManager();
 			ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
 			C_Texture->SetTexture(texturesManager->TexLoader(texturePath));
 		}
