@@ -44,7 +44,7 @@ public:
 
 	bool copy, AboutWindow, OpenPreferences, LogOutput, Vsync, Gl_Grid, Gl_DepthTest, Gl_CullFace, Gl_Ligthing, Gl_ColorMaterial, Gl_Texture2D,
 		Gl_LineSmooth, Gl_PolygonSmooth, Gl_AlphaTest, DemoWindow, OpenAbout, DR_Normals, changeDebug, Hierarchy, InfoGWindow, isMovingParent,
-		isMovingChild;
+		isMovingChild, numcap;
 
 	int ThemeSelector;
 	int item_current_idx;

@@ -14,6 +14,7 @@
 
 #include "External/ImGuiCandy/candy.h"
 
+#include "External/mmgr/mmgr.h"
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
@@ -63,6 +64,7 @@ bool ModuleEditor::Init()
 	moveEntityTo = nullptr;
 	hoveredItem = nullptr;
 
+	numcap = true; 
 
 	// Cheking Version of ImGuI and Init the Context
 	IMGUI_CHECKVERSION();
@@ -96,7 +98,10 @@ bool ModuleEditor::DrawEditor()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			//ImGui::Text("Hello World!");
+			if (ImGui::MenuItem("QUIT"))
+			{
+				App->QuitApp();
+			}
 			ImGui::EndMenu();
 		}
 
@@ -147,11 +152,6 @@ bool ModuleEditor::DrawEditor()
 			{
 				ThemeUpdate();
 				OpenPreferences = !OpenPreferences;
-			}
-
-			if (ImGui::MenuItem("QUIT"))
-			{
-				App->QuitApp();
 			}
 
 			ImGui::EndMenu();
@@ -252,6 +252,12 @@ bool ModuleEditor::DrawEditor()
 			{
 				ThemeUpdate();
 				DemoWindow = !DemoWindow;
+			}
+
+			if (ImGui::MenuItem("Inspector"))
+			{
+				ThemeUpdate(); 
+				InfoGWindow = !InfoGWindow;
 			}
 
 			ImGui::EndMenu();
@@ -696,6 +702,36 @@ bool ModuleEditor::DrawEditor()
 
 			if (ImGui::CollapsingHeader("Render Options"))
 			{
+				string caps; 
+				if (numcap == true) {
+					caps += (SDL_HasRDTSC()) ? "RDTSC," : "";
+					caps += (SDL_HasMMX()) ? "MMX, " : "";
+					caps += (SDL_HasSSE()) ? "SSE, " : "";
+					caps += (SDL_HasSSE2()) ? "SSE2, " : "";
+					caps += (SDL_HasSSE3()) ? "SSE3, " : "";
+					caps += "\n";
+					caps += (SDL_HasSSE41()) ? "SSE41, " : "";
+					caps += (SDL_HasSSE42()) ? "SSE42, " : "";
+					caps += (SDL_HasAVX()) ? "AVX, " : "";
+					caps += (SDL_HasAltiVec()) ? "AltiVec, " : "";
+					caps += (SDL_Has3DNow()) ? "3DNow, " : "";
+					numcap = false;  
+				}
+
+				ImGui::Text("CPUs: %d (Cache: %dkb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
+				ImGui::Text("System RAM: %dGb", SDL_GetSystemRAM() / 1000);
+				ImGui::Text("Caps: %c", caps.c_str()); 
+				ImGui::Separator();
+
+				ImGui::Text("GPU: %s", glGetString(GL_VENDOR));
+				ImGui::Text("Brand: %s", glGetString(GL_RENDERER)); 
+
+				sMStats stats = m_getMemoryStatistics();
+				ImGui::Text("Total Reported Memory: %u bytes", stats.totalReportedMemory); 
+				ImGui::Text("Total Actual Memory: %u bytes", stats.totalActualMemory); 
+				ImGui::Text("Peak Reported Memory: %u bytes", stats.peakReportedMemory); 
+				ImGui::Text("Peak Actual Memory: %u bytes", stats.peakActualMemory); 
+				ImGui::Separator(); 
 
 				if (ImGui::TreeNode("FPS##2"))
 				{
@@ -1001,7 +1037,6 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 			if (ImGui::IsItemClicked())
 			{
 				actualMesh = gm;
-				InfoGWindow = true;
 
 				if(moveEntityTo != nullptr && isMovingParent)
 				{
@@ -1069,7 +1104,6 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 			if (ImGui::IsItemClicked())
 			{
 				actualMesh = gm;
-				InfoGWindow = true;
 
 				if (moveEntityTo != nullptr && isMovingParent)
 				{

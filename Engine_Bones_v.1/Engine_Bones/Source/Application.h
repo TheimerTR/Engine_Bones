@@ -41,7 +41,7 @@ public:
 	bool CleanUp();
 
 	float GetDeltaTime() const;
-	float GetFrameRate() const;
+	float GetFrameRate() const; 
 
 	void QuitApp();
 
