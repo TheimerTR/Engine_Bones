@@ -1390,6 +1390,10 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 
 		transform->ShowInfo();
 
+		if (ImGui::Button("Add Component"))
+		{
+
+		}
 
 		if (ImGui::Button("Delete Object"))
 		{
