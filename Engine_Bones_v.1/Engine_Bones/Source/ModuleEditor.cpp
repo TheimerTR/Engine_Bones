@@ -54,7 +54,6 @@ bool ModuleEditor::Init()
 	InfoGWindow = false;
 	isMovingParent = false;
 	isMovingChild = false;
-	selectTexture = false;
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 	Log_current_idx = 3;
@@ -1306,24 +1305,30 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 
 								if (ImGui::Button("Select Texture"))
 								{
-									selectTexture = !selectTexture;
+									ImGui::OpenPopup("SelectTexture");
 								}
 
-								if (selectTexture)
+								if (ImGui::BeginPopup("SelectTexture"))
 								{
 									TexturesManager* texturesManager = new TexturesManager();
 
 									if (ImGui::MenuItem("House Texture"))
 									{
-										objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Baker_house.dds"));
-										selectTexture = false;
+										if (texture->path != "Assets/Textures/Baker_house.dds")
+										{
+											objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Baker_house.dds"));
+										}
 									}
 
 									if (ImGui::MenuItem("Grass Texture"))
 									{
-										objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Grass.dds"));
-										selectTexture = false;
+										if (texture->path != "Assets/Textures/Grass.dds")
+										{
+											objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Grass.dds"));
+										}
 									}
+
+									ImGui::EndPopup();
 								}
 								
 								if (ImGui::Button("Delete Texture"))
@@ -1340,24 +1345,24 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 							{
 								if (ImGui::Button("Select Texture"))
 								{
-									selectTexture = !selectTexture;
+									ImGui::OpenPopup("SelectTexture2");
 								}
 
-								if (selectTexture)
+								if (ImGui::BeginPopup("SelectTexture2"))
 								{
 									TexturesManager* texturesManager = new TexturesManager();
 
 									if (ImGui::MenuItem("House Texture"))
 									{
 										objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Baker_house.dds"));
-										selectTexture = false;
 									}
 
 									if (ImGui::MenuItem("Grass Texture"))
 									{
 										objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Grass.dds"));
-										selectTexture = false;
 									}
+
+									ImGui::EndPopup();
 								}
 
 								ImGui::TreePop();
@@ -1377,7 +1382,15 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 
 		if (ImGui::Button("Add Component"))
 		{
+			ImGui::OpenPopup("AddComponent");
+		}
 
+		if (ImGui::BeginPopup("AddComponent"))
+		{
+
+			AddComponentInInspector(gameObject);
+
+			ImGui::EndPopup();
 		}
 
 		if (ImGui::Button("Delete Object"))
