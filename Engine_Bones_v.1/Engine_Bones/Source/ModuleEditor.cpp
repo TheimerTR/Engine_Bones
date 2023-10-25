@@ -455,11 +455,17 @@ bool ModuleEditor::DrawEditor()
 
 		ImGui::Text("Bones Engine\n");
 		ImGui::Text("An amazing 3D Engine for your amazing 3D games");
+		copy = ImGui::Button("View on GitHub");
+		if (copy) {
+
+			OsOpenInShell("https://github.com/TheimerTR/Engine_Bones");
+		}
 		ImGui::Separator();
 		ImGui::Text("Authors:\n");
 		ImGui::Text("Alberto Hidalgo Garcia\nSonia Cristina Ojeda Lanz");
-		ImGui::Text("\nThird Party Libraries used:");
 
+		ImGui::Text("\nThird Party Libraries used:");
+		
 		std::string strVer;
 		SDL_version version;
 		SDL_GetVersion(&version);
@@ -471,11 +477,8 @@ bool ModuleEditor::DrawEditor()
 
 		if (copy) {
 
-			ImGui::LogToClipboard();
-			ImGui::LogText("https://www.libsdl.org/");
-			ImGui::LogFinish();
+			OsOpenInShell("https://www.libsdl.org/"); 
 		}
-
 
 		std::string gui = (ImGui::GetVersion());
 		ImGui::Text("ImGui v %s", gui.c_str());
@@ -484,9 +487,7 @@ bool ModuleEditor::DrawEditor()
 
 		if (copy) {
 
-			ImGui::LogToClipboard();
-			ImGui::LogText("https://github.com/ocornut/imgui");
-			ImGui::LogFinish();
+			OsOpenInShell("https://github.com/ocornut/imgui"); 
 		}
 
 		std::string gl = (const char*)glGetString(GL_VERSION);
@@ -496,9 +497,7 @@ bool ModuleEditor::DrawEditor()
 
 		if (copy) {
 
-			ImGui::LogToClipboard();
-			ImGui::LogText("https://www.opengl.org/");
-			ImGui::LogFinish();
+			OsOpenInShell("https://www.opengl.org/"); 
 		}
 
 		std::string glew = (const char*)glewGetString(GLEW_VERSION);
@@ -508,9 +507,7 @@ bool ModuleEditor::DrawEditor()
 
 		if (copy) {
 
-			ImGui::LogToClipboard();
-			ImGui::LogText("https://glew.sourceforge.net/");
-			ImGui::LogFinish();
+			OsOpenInShell("https://glew.sourceforge.net/");
 		}
 
 		ImGui::Text("ImGuiCandy");
@@ -519,9 +516,7 @@ bool ModuleEditor::DrawEditor()
 
 		if (copy) {
 
-			ImGui::LogToClipboard();
-			ImGui::LogText("https://github.com/Raais/ImguiCandy");
-			ImGui::LogFinish();
+			OsOpenInShell("https://github.com/Raais/ImguiCandy"); 
 		}
 
 		ImGui::Text("MathGeoLib");
@@ -530,9 +525,7 @@ bool ModuleEditor::DrawEditor()
 
 		if (copy) {
 
-			ImGui::LogToClipboard();
-			ImGui::LogText("https://github.com/juj/MathGeoLib");
-			ImGui::LogFinish();
+			OsOpenInShell("https://github.com/juj/MathGeoLib"); 
 		}
 
 		ImGui::Text("Parson");
@@ -541,9 +534,7 @@ bool ModuleEditor::DrawEditor()
 
 		if (copy) {
 
-			ImGui::LogToClipboard();
-			ImGui::LogText("https://github.com/kgabis/parson");
-			ImGui::LogFinish();
+			OsOpenInShell("https://github.com/kgabis/parson"); 
 		}
 
 		ImGui::Text("Parson");
@@ -552,9 +543,7 @@ bool ModuleEditor::DrawEditor()
 
 		if (copy) {
 
-			ImGui::LogToClipboard();
-			ImGui::LogText("https://github.com/kgabis/parson");
-			ImGui::LogFinish();
+			OsOpenInShell("https://github.com/kgabis/parson"); 
 		}
 
 		ImGui::Text("Devil v1.8.0");
@@ -563,9 +552,7 @@ bool ModuleEditor::DrawEditor()
 
 		if (copy) {
 
-			ImGui::LogToClipboard();
-			ImGui::LogText("https://openil.sourceforge.net/");
-			ImGui::LogFinish();
+			OsOpenInShell("https://openil.sourceforge.net/"); 
 		}
 
 		std::string assimp = std::to_string(aiGetVersionMajor()) + '.' + std::to_string(aiGetVersionMinor()) + '.' + std::to_string(aiGetVersionRevision());
@@ -575,9 +562,7 @@ bool ModuleEditor::DrawEditor()
 
 		if (copy) {
 
-			ImGui::LogToClipboard();
-			ImGui::LogText("https://www.assimp.org/");
-			ImGui::LogFinish();
+			OsOpenInShell("https://www.assimp.org/");
 		}
 
 		ImGui::Text("\nLisence: MIT Lisence ");
@@ -1513,4 +1498,21 @@ void ModuleEditor::ThemeUpdate()
 	default:
 		break;
 	}
+}
+
+void ModuleEditor::OsOpenInShell(const char* path)
+{
+#ifdef _WIN32
+	// Note: executable path must use backslashes!
+	::ShellExecuteA(NULL, "open", path, NULL, NULL, SW_SHOWDEFAULT);
+#else
+#if __APPLE__
+	const char* open_executable = "open";
+#else
+	const char* open_executable = "xdg-open";
+#endif
+	char command[256];
+	snprintf(command, 256, "%s \"%s\"", open_executable, path);
+	system(command);
+#endif
 }

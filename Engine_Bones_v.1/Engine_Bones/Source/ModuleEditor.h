@@ -29,6 +29,7 @@ public:
 
 	void HierarchyWindowDisplay(GameObjectManager* gameObject);
 	void InfoGameObjectWindow(GameObjectManager* gameObject);
+	void OsOpenInShell(const char* path); 
 
 public:
 
