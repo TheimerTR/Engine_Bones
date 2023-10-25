@@ -1340,6 +1340,11 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 										selectTexture = false;
 									}
 								}
+								
+								if (ImGui::Button("Delete Texture"))
+								{
+									gameObject->DeleteComponent(objectTexture);
+								}
 
 								ImGui::TreePop();
 							}
