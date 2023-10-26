@@ -62,9 +62,24 @@ void ComponentTransform::SetTransform(GameObjectManager* gameObject, float3 posi
 	}
 }
 
-void ComponentTransform::UpdateTransformation() 
-{
-	mLocalMatrix = float4x4::FromTRS(mPosition, mRotation, mScale);
+float3 ComponentTransform::GetPosition() {
 
+	return mPosition; 
 }
+
+float3 ComponentTransform::GetScale() {
+
+	return mScale;
+}
+
+Quat ComponentTransform::GetRotation() {
+
+	return mRotation;
+}
+
+//void ComponentTransform::UpdateTransformation() 
+//{
+//	mLocalMatrix = float4x4::FromTRS(mPosition, mRotation, mScale);
+//
+//}
 

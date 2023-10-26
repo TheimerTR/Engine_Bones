@@ -77,7 +77,7 @@ update_status ModuleCamera3D::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) newPos.y += speed;
 	if(App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) newPos.y -= speed;
 	
-	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
+	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)  newPos += Z * speed;
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
 
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
@@ -197,31 +197,32 @@ update_status ModuleCamera3D::Update(float dt)
 
 void ModuleCamera3D::Focus(){
 
-	//Transform* selected;
+	ComponentTransform* selected;
+	GameObjectManager* gameObject; 
 
-	//for (int i = 0; i < G_Manager->AllGameObjects.size(); i++)
-	//{
-	//	if (G_Manager->AllGameObjects[i]->Mesh->isSelected == true) {
+	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
+	{
+		if (App->scene->AllGameObjectManagers[i]->isSelected == true) {
 
-	//		selected = (Transform*)G_Manager->AllGameObjects[i];
+			gameObject = App->scene->AllGameObjectManagers[i];
+		}
+		
+	}
 
-	//	}
-	//}
+	float3 selectedPos;
 
-	//float3 selectedPos;
+	selectedPos.x = gameObject->mTransform->GetPosition().x; 
+	selectedPos.y = gameObject->mTransform->GetPosition().y; 
+	selectedPos.z = gameObject->mTransform->GetPosition().z; 
 
-	//selectedPos.x = selected->GetPosition().x;
-	//selectedPos.y = selected->GetPosition().y;
-	//selectedPos.z = selected->GetPosition().z;
+	float3 selectedScale;
 
-	//float3 selectedScale;
+	selectedScale.x = gameObject->mTransform->GetScale().x;
+	selectedScale.y = gameObject->mTransform->GetScale().y;
+	selectedScale.z = gameObject->mTransform->GetScale().z;
 
-	//selectedScale.x = selected->GetScale().x;
-	//selectedScale.y = selected->GetScale().y;
-	//selectedScale.z = selected->GetScale().z;
-
-	//Position = selectedPos + (Position - selectedPos).Normalized() * 10;
-	//LookAt(selectedPos);
+	Position = selectedPos + (Position - selectedPos).Normalized() * 10;
+	LookAt(selectedPos);
 
 }
 

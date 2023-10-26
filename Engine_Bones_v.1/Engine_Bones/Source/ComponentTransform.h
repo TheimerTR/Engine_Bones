@@ -26,7 +26,11 @@ public:
 
 	void SetTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation); 
 
-	void UpdateTransformation(); 
+	//void UpdateTransformation(); 
+
+	float3 GetPosition(); 
+	float3 GetScale(); 
+	Quat GetRotation(); 
 
 	
 private: 
