@@ -1293,16 +1293,16 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 			{
 				if (objectMesh->C_Mesh != nullptr)
 				{
-					if (ImGui::TreeNode("Mesh##1"))
+					if (ImGui::TreeNode((std::string("Mesh##%s") + to_string(i).c_str()).c_str()))
 					{
 						Mesh* mesh = objectMesh->C_Mesh;
 						ImGui::Text("%s", mesh->Name.c_str());
 						ImGui::Text("Path: %s", mesh->Path.c_str());
 						ImGui::Text("Number of index: %d", mesh->num_index);
 						ImGui::Text("Number of vertex: %d", mesh->num_vertex);
-						ImGui::Checkbox("Show Normals", &mesh->ShowNormals);
+						ImGui::Checkbox((std::string("Show Normals##%s") + to_string(i).c_str()).c_str(), &mesh->ShowNormals);
 						
-						if (ImGui::Button("Delete Mesh"))
+						if (ImGui::Button((std::string("Delete Mesh##%s") + to_string(i).c_str()).c_str()))
 						{
 							gameObject->mParent->DeleteComponent(objectMeshes.at(i));
 						}
