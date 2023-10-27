@@ -21,6 +21,11 @@ public:
 	void SetTexture(Texture* T_Texture = nullptr);
 	Texture* GetTexture();
 
+	void Enable() override;
+	bool Update() override;
+	void Disable() override;
+	void ShowInfo(Texture* texture, int i);
+
 private:
 
 };
