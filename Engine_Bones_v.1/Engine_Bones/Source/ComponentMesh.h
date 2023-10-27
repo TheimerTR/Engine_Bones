@@ -20,6 +20,11 @@ public:
 	void SetMesh(Mesh* T_Mesh);
 	Mesh* GetMesh();
 
+	void Enable() override;
+	bool Update() override;
+	void Disable() override;
+	void ShowInfo(Mesh* mesh, int i);
+
 private:
 
 };

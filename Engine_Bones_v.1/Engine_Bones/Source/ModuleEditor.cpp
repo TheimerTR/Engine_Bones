@@ -1298,16 +1298,8 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 					if (ImGui::TreeNode((std::string("Mesh##%s") + to_string(i).c_str()).c_str()))
 					{
 						Mesh* mesh = objectMesh->C_Mesh;
-						ImGui::Text("%s", mesh->Name.c_str());
-						ImGui::Text("Path: %s", mesh->Path.c_str());
-						ImGui::Text("Number of index: %d", mesh->num_index);
-						ImGui::Text("Number of vertex: %d", mesh->num_vertex);
-						ImGui::Checkbox((std::string("Show Normals##%s") + to_string(i).c_str()).c_str(), &mesh->ShowNormals);
 						
-						if (ImGui::Button((std::string("Delete Mesh##%s") + to_string(i).c_str()).c_str()))
-						{
-							gameObject->mParent->DeleteComponent(objectMeshes.at(i));
-						}
+						objectMesh->ShowInfo(mesh, i);
 
 						ImGui::TreePop();
 					}
