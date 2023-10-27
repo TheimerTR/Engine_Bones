@@ -223,9 +223,8 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 		if (scene->mMeshes[i]->HasNormals())
 		{
-			M_mesh->num_normals = scene->mMeshes[i]->mNumVertices * 3;
-			M_mesh->normals = new float[M_mesh->num_normals * 3];
-			memcpy(M_mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * M_mesh->num_normals * 3);
+			M_mesh->normals = new float[scene->mMeshes[i]->mNumVertices * 3];
+			memcpy(M_mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * scene->mMeshes[i]->mNumVertices * 3);
 			//memcpy(&M_mesh->index[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
 			/*memcpy(&M_mesh->normals_Faces[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));*/
 		}
@@ -268,7 +267,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 		glGenBuffers(1, (GLuint*)&(M_mesh->VN));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals, M_mesh->normals, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->normals, GL_STATIC_DRAW);
 
 		/*glGenBuffers(1, (GLuint*)&(M_mesh->VNF));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VNF);
