@@ -128,35 +128,35 @@ void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* game
 			}
 		}
 
-			M_mesh->VBO = 0;
-			M_mesh->EBO = 0;
-			M_mesh->VN = 0;
-			M_mesh->VT = 0;
+		M_mesh->VBO = 0;
+		M_mesh->EBO = 0;
+		M_mesh->VN = 0;
+		M_mesh->VT = 0;
 
-			glGenBuffers(1, (GLuint*)&(M_mesh->VBO));
-			glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VBO);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->vertex, GL_STATIC_DRAW);
+		glGenBuffers(1, (GLuint*)&(M_mesh->VBO));
+		glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->vertex, GL_STATIC_DRAW);
 
-			glGenBuffers(1, (GLuint*)&(M_mesh->EBO));
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->EBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * M_mesh->num_index, M_mesh->index, GL_STATIC_DRAW);
+		glGenBuffers(1, (GLuint*)&(M_mesh->EBO));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * M_mesh->num_index, M_mesh->index, GL_STATIC_DRAW);
 
-			glGenBuffers(1, (GLuint*)&(M_mesh->VN));
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals, M_mesh->normals, GL_STATIC_DRAW);
+		glGenBuffers(1, (GLuint*)&(M_mesh->VN));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals, M_mesh->normals, GL_STATIC_DRAW);
 
-			/*glGenBuffers(1, (GLuint*)&(M_mesh->VNF));
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VNF);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals_Faces, M_mesh->normals_Faces, GL_STATIC_DRAW);*/
+		/*glGenBuffers(1, (GLuint*)&(M_mesh->VNF));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VNF);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals_Faces, M_mesh->normals_Faces, GL_STATIC_DRAW);*/
 
-			glGenBuffers(1, (GLuint*)&(M_mesh->VT));
-			glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex * 2, M_mesh->textures, GL_STATIC_DRAW);
+		glGenBuffers(1, (GLuint*)&(M_mesh->VT));
+		glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex * 2, M_mesh->textures, GL_STATIC_DRAW);
 
-			AllMeshes.push_back(M_mesh);
+		AllMeshes.push_back(M_mesh);
 
-			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gameObject->AddComponent(ComponentType::MESH));
-			C_Mesh->SetMesh(M_mesh);
+		ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gameObject->AddComponent(ComponentType::MESH));
+		C_Mesh->SetMesh(M_mesh);
 	}
 	else
 		LOG(LogTypeCase::L_ERROR, "Error loading scene % s", Path);

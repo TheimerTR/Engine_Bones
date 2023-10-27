@@ -1313,18 +1313,16 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 			}
 		}
 
-		if (objectMaterials.size() > 0)
+		for (int i = 0; i < objectMaterials.size(); i++)
 		{
-			if (ImGui::TreeNode("Textures##1"))
-			{
-				for (int i = 0; i < objectMaterials.size(); i++)
-				{
-					ComponentMaterial* objectTexture = (ComponentMaterial*)objectMaterials.at(i);
+			ComponentMaterial* objectMaterial = (ComponentMaterial*)objectMaterials.at(i);
 
-					if (objectTexture != NULL)
+			if (ImGui::TreeNode((std::string("Texture##%s") + to_string(i).c_str()).c_str()))
+			{
+					if (objectMaterial != NULL)
 					{
-						Texture* texture = objectTexture->GetTexture();
-					
+						Texture* texture = objectMaterial->GetTexture();
+
 						if (texture != nullptr)
 						{
 							FileSystem::StringDivide(texture->path, &texture->Name, nullptr);
@@ -1337,37 +1335,37 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 								ImGui::Text("Texture Size: Width:%d x Height:%d", texture->imageWidth, texture->imageHeight);
 								ImGui::Checkbox("Show Texture", &texture->ShowTextures);
 
-								if (ImGui::Button("Select Texture"))
+								if (ImGui::Button((std::string("Select Texture##%s") + to_string(i).c_str()).c_str()))
 								{
-									ImGui::OpenPopup("SelectTexture");
+									ImGui::OpenPopup((std::string("SelectTexture##%s") + to_string(i).c_str()).c_str());
 								}
 
-								if (ImGui::BeginPopup("SelectTexture"))
+								if (ImGui::BeginPopup((std::string("SelectTexture##%s") + to_string(i).c_str()).c_str()))
 								{
 									TexturesManager* texturesManager = new TexturesManager();
 
-									if (ImGui::MenuItem("House Texture"))
+									if (ImGui::MenuItem((std::string("House Texture##%s") + to_string(i).c_str()).c_str()))
 									{
 										if (texture->path != "Assets/Textures/Baker_house.dds")
 										{
-											objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Baker_house.dds"));
+											objectMaterial->SetTexture(texturesManager->TexLoader("Assets/Textures/Baker_house.dds"));
 										}
 									}
 
-									if (ImGui::MenuItem("Grass Texture"))
+									if (ImGui::MenuItem((std::string("Grass Texture##%s") + to_string(i).c_str()).c_str()))
 									{
 										if (texture->path != "Assets/Textures/Grass.dds")
 										{
-											objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Grass.dds"));
+											objectMaterial->SetTexture(texturesManager->TexLoader("Assets/Textures/Grass.dds"));
 										}
 									}
 
 									ImGui::EndPopup();
 								}
-								
-								if (ImGui::Button("Delete Texture"))
+
+								if (ImGui::Button((std::string("Delete Texture##%s") + to_string(i).c_str()).c_str()))
 								{
-									gameObject->DeleteComponent(objectTexture);
+									gameObject->DeleteComponent(objectMaterial);
 								}
 
 								ImGui::TreePop();
@@ -1375,25 +1373,25 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 						}
 						else
 						{
-							if (ImGui::TreeNode("Empty Texture##2"))
+							if (ImGui::TreeNode((std::string("Empty Texture##%s") + to_string(i).c_str()).c_str()))
 							{
-								if (ImGui::Button("Select Texture"))
+								if (ImGui::Button((std::string("Select Texture##%s") + to_string(i).c_str()).c_str()))
 								{
-									ImGui::OpenPopup("SelectTexture2");
+									ImGui::OpenPopup((std::string("SelectTexture2##%s") + to_string(i).c_str()).c_str());
 								}
 
-								if (ImGui::BeginPopup("SelectTexture2"))
+								if (ImGui::BeginPopup((std::string("SelectTexture2##%s") + to_string(i).c_str()).c_str()))
 								{
 									TexturesManager* texturesManager = new TexturesManager();
 
-									if (ImGui::MenuItem("House Texture"))
+									if (ImGui::MenuItem((std::string("House Texture##%s") + to_string(i).c_str()).c_str()))
 									{
-										objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Baker_house.dds"));
+										objectMaterial->SetTexture(texturesManager->TexLoader("Assets/Textures/Baker_house.dds"));
 									}
 
-									if (ImGui::MenuItem("Grass Texture"))
+									if (ImGui::MenuItem((std::string("Grass Texture##%s") + to_string(i).c_str()).c_str()))
 									{
-										objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/Grass.dds"));
+										objectMaterial->SetTexture(texturesManager->TexLoader("Assets/Textures/Grass.dds"));
 									}
 
 									ImGui::EndPopup();
@@ -1402,8 +1400,8 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 								ImGui::TreePop();
 							}
 						}
+
 					}
-				}
 
 				ImGui::TreePop();
 			}
