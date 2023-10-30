@@ -702,25 +702,44 @@ bool ModuleEditor::DrawEditor()
 
 			if (ImGui::CollapsingHeader("Render Options"))
 			{
-				string caps; 
 				if (numcap == true) {
-					caps += (SDL_HasRDTSC()) ? "RDTSC," : "";
-					caps += (SDL_HasMMX()) ? "MMX, " : "";
-					caps += (SDL_HasSSE()) ? "SSE, " : "";
-					caps += (SDL_HasSSE2()) ? "SSE2, " : "";
-					caps += (SDL_HasSSE3()) ? "SSE3, " : "";
-					caps += "\n";
-					caps += (SDL_HasSSE41()) ? "SSE41, " : "";
-					caps += (SDL_HasSSE42()) ? "SSE42, " : "";
-					caps += (SDL_HasAVX()) ? "AVX, " : "";
-					caps += (SDL_HasAltiVec()) ? "AltiVec, " : "";
-					caps += (SDL_Has3DNow()) ? "3DNow, " : "";
+					if (SDL_HasRDTSC() == true) {
+						caps += "RDTSC,"; 
+					}
+					if (SDL_HasMMX() == true) {
+						caps += "MMX,";
+					}
+					if (SDL_HasSSE() == true) {
+						caps += "SSE,";
+					}
+					if (SDL_HasSSE2() == true) {
+						caps += "SSE2,";
+					}
+					if (SDL_HasSSE3() == true) {
+						caps += "SSE3,";
+					}
+					if (SDL_HasSSE41() == true) {
+						caps += "SSE41,";
+					}
+					if (SDL_HasSSE42() == true) {
+						caps += "SSE42,";
+					}
+					if (SDL_HasAVX() == true) {
+						caps += "AVX,";
+					}
+					if (SDL_HasAltiVec() == true) {
+						caps += "AltiVec,";
+					}
+					if (SDL_Has3DNow() == true) {
+						caps += "3DNow,";
+					}
+
 					numcap = false;  
 				}
 
 				ImGui::Text("CPUs: %d (Cache: %dkb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
 				ImGui::Text("System RAM: %dGb", SDL_GetSystemRAM() / 1000);
-				ImGui::Text("Caps: %c", caps.c_str()); 
+				ImGui::Text("Caps: %s", caps.c_str()); 
 				ImGui::Separator();
 
 				ImGui::Text("GPU: %s", glGetString(GL_VENDOR));
