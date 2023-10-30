@@ -330,10 +330,9 @@ void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentMaterial* textur
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
 
-		if (texture != nullptr)
-		{
-			glDisable(GL_TEXTURE_2D);
-		}
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 	else
 	{
