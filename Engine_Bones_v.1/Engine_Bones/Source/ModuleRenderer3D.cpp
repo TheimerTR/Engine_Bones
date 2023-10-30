@@ -204,11 +204,11 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 			if (objectTexture != nullptr)
 			{
-				RenderDraw(objectMesh->GetMesh(), objectTexture);
+				RenderDraw(objectMesh, objectTexture);
 			}
 			else
 			{
-				RenderDraw(objectMesh->GetMesh());
+				RenderDraw(objectMesh);
 			}
 		}
 	}
@@ -256,31 +256,30 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::RenderDraw(Mesh* mesh, ComponentMaterial* texture)
+void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentMaterial* texture)
 {
 	if (mesh != nullptr)
 	{
-		if (mesh->ShowNormals)
+		if (mesh->GetMesh()->ShowNormals)
 		{
 				glBegin(GL_LINES);
 				glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 
-				for (uint i = 0; i < mesh->num_vertex * 3; i += 3)
+				for (uint i = 0; i < mesh->GetMesh()->num_vertex * 3; i += 3)
 				{
-					glVertex3f(mesh->vertex[i], mesh->vertex[i + 1], mesh->vertex[i + 2]);
-					glVertex3f(mesh->vertex[i] + mesh->normals[i], mesh->vertex[i + 1] + mesh->normals[i + 1], mesh->vertex[i + 2] + mesh->normals[i + 2]);
+					glVertex3f(mesh->GetMesh()->vertex[i], mesh->GetMesh()->vertex[i + 1], mesh->GetMesh()->vertex[i + 2]);
+					glVertex3f(mesh->GetMesh()->vertex[i] + mesh->GetMesh()->normals[i], mesh->GetMesh()->vertex[i + 1] + mesh->GetMesh()->normals[i + 1], mesh->GetMesh()->vertex[i + 2] + mesh->GetMesh()->normals[i + 2]);
 				}
 
-				for (uint i = 0; i < mesh->num_index; i += 3)
+				for (uint i = 0; i < mesh->GetMesh()->num_index; i += 3)
 				{
-					glVertex3f(mesh->center[i], mesh->center[i + 1], mesh->center[i + 2]);
-					glVertex3f(mesh->center[i] + mesh->center_normal[i] * 2, mesh->center[i + 1] + mesh->center_normal[i + 1] * 2, mesh->center[i + 2] + mesh->center_normal[i + 2] * 2);
+					glVertex3f(mesh->GetMesh()->center[i], mesh->GetMesh()->center[i + 1], mesh->GetMesh()->center[i + 2]);
+					glVertex3f(mesh->GetMesh()->center[i] + mesh->GetMesh()->center_normal[i] * 2, mesh->GetMesh()->center[i + 1] + mesh->GetMesh()->center_normal[i + 1] * 2, mesh->GetMesh()->center[i + 2] + mesh->GetMesh()->center_normal[i + 2] * 2);
 				}
 
 				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				glEnd();
 				glLineWidth(1);
-
 		}
 
 		if (texture != nullptr)
@@ -301,32 +300,35 @@ void ModuleRenderer3D::RenderDraw(Mesh* mesh, ComponentMaterial* texture)
 			glBindTexture(GL_TEXTURE_2D, 1);
 		}
 
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		if (mesh->isActive)
+		{
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		//glBindVertexArray(mesh->VAO);
+			//glBindVertexArray(mesh->VAO);
 
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->GetMesh()->VBO);
+			glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->VN);
-		glNormalPointer(GL_FLOAT, 0, NULL);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->GetMesh()->VN);
+			glNormalPointer(GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->VT);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->GetMesh()->VT);
+			glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
-		glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->GetMesh()->EBO);
+			glDrawElements(GL_TRIANGLES, mesh->GetMesh()->num_index, GL_UNSIGNED_INT, NULL);
 
-		glBindVertexArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		//glEnableVertexAttribArray(0);
+			glBindVertexArray(0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			//glEnableVertexAttribArray(0);
 
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_NORMAL_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableClientState(GL_NORMAL_ARRAY);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		}
 
 		if (texture != nullptr)
 		{

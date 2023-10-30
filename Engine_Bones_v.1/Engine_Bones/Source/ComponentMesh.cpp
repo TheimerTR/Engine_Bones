@@ -38,7 +38,7 @@ Mesh* ComponentMesh::GetMesh()
 
 void ComponentMesh::Enable()
 {
-	active = true;
+	this->isActive = true;
 }
 
 bool ComponentMesh::Update()
@@ -48,14 +48,16 @@ bool ComponentMesh::Update()
 
 void ComponentMesh::Disable()
 {
-	active = false;
+	this->isActive = false;
 }
 
 void ComponentMesh::ShowInfo(Mesh* mesh, int i)
 {
-	if (active)
-	{
-		ImGui::Text("%s", mesh->Name.c_str());
+	ImGui::Checkbox((std::string("Active##%s") + to_string(i).c_str()).c_str(), &this->isActive);
+	ImGui::Text("%s", mesh->Name.c_str());
+
+	if (this->isActive)
+	{	
 		ImGui::Text("Path: %s", mesh->Path.c_str());
 		ImGui::Text("Number of index: %d", mesh->num_index);
 		ImGui::Text("Number of vertex: %d", mesh->num_vertex);

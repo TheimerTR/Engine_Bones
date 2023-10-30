@@ -11,6 +11,7 @@ class ComponentMesh : public ComponentManager
 public:
 	Mesh* C_Mesh;
 	const char* Name;
+	bool isActive;
 
 public:
 
