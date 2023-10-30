@@ -79,11 +79,15 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-	if (editor->Vsync)
+	if(!editor->Vsync)
 	{
 		Uint32 last_frame_ms = ms_timer.Read();
 		float wait_time = (1000.f / (float)max_FPS) - (float)last_frame_ms;
-		SDL_Delay(static_cast<Uint32>(fabs(wait_time)));
+
+		if((1000.f / (float)max_FPS) > last_frame_ms)
+		{
+			SDL_Delay(static_cast<Uint32>(fabs(wait_time)));
+		}
 	}
 }
 

@@ -766,7 +766,7 @@ bool ModuleEditor::DrawEditor()
 						}
 						else
 						{
-							SDL_GL_SetSwapInterval(0);
+							SDL_GL_SetSwapInterval(1);
 						}
 					}
 
@@ -777,7 +777,7 @@ bool ModuleEditor::DrawEditor()
 
 					ImGui::PlotHistogram("FPS", &mFPSLOG[0], mFPSLOG.size(), 0, NULL, 0.0f, 100.0f, ImVec2(300, 100));
 
-					if (Vsync)
+					if (!Vsync)
 					{
 						if (ImGui::SliderInt("Select the MaxFPS", &App->max_FPS, -1, 200, NULL))
 						{
