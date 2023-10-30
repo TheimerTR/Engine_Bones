@@ -61,6 +61,8 @@ public:
 	float Volume;
 	float WinBright;
 	int treeFlags;
+
+	string caps = "caps: ";
 };
 
 #endif
