@@ -262,43 +262,25 @@ void ModuleRenderer3D::RenderDraw(Mesh* mesh, ComponentMaterial* texture)
 	{
 		if (mesh->ShowNormals)
 		{
-			/*if (App->editor->DR_Normals)
-			{*/
 				glBegin(GL_LINES);
 				glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 
-				for (uint i = 0; i < mesh->num_normals * 3; i += 3)
+				for (uint i = 0; i < mesh->num_vertex * 3; i += 3)
 				{
-					//Dont render vertex normals
-
 					glVertex3f(mesh->vertex[i], mesh->vertex[i + 1], mesh->vertex[i + 2]);
 					glVertex3f(mesh->vertex[i] + mesh->normals[i], mesh->vertex[i + 1] + mesh->normals[i + 1], mesh->vertex[i + 2] + mesh->normals[i + 2]);
 				}
 
-				for (uint i = 0; i < mesh->num_normals_Faces; i += 9)
+				for (uint i = 0; i < mesh->num_index; i += 3)
 				{
-					//Dont render vertex normals
-					float3 Vec1 = { (float)mesh->index[i], (float)mesh->index[i + 1], (float)mesh->index[i + 2] };
-					float3 Vec2 = { (float)mesh->index[i + 3], (float)mesh->index[i + 4], (float)mesh->index[i + 5] };
-					float3 Vec3 = { (float)mesh->index[i + 6], (float)mesh->index[i + 7], (float)mesh->index[i + 8] };
-
-					float3 vec1_2 = Vec2 - Vec1;
-					float3 vec2_3 = Vec3 - Vec2;
-
-					float3 NormalVecFace;
-
-					NormalVecFace.x = (vec1_2.y * vec2_3.z) - (vec1_2.z - vec2_3.y);
-					NormalVecFace.y = (vec1_2.z * vec2_3.x) - (vec1_2.x - vec2_3.z);
-					NormalVecFace.z = (vec1_2.x * vec2_3.y) - (vec1_2.y - vec2_3.x);
-
-					NormalVecFace = NormalVecFace / NormalVecFace.Normalize();
-
-					glVertex3f(NormalVecFace.x, NormalVecFace.y, NormalVecFace.z);
+					glVertex3f(mesh->center[i], mesh->center[i + 1], mesh->center[i + 2]);
+					glVertex3f(mesh->center[i] + mesh->center_normal[i] * 2, mesh->center[i + 1] + mesh->center_normal[i + 1] * 2, mesh->center[i + 2] + mesh->center_normal[i + 2] * 2);
 				}
 
 				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				glEnd();
-			//}
+				glLineWidth(1);
+
 		}
 
 		if (texture != nullptr)

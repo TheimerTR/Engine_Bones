@@ -40,6 +40,10 @@ struct Mesh
 	//bool isSelected;
 	bool ShowNormals = false;
 
+	float* center_normal = nullptr;
+	float* center = nullptr;
+	int faces = 0;
+
 	//uint VAO;
 	uint VBO;
 	uint EBO;
