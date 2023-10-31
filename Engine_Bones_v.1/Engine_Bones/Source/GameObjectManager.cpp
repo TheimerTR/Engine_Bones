@@ -351,11 +351,14 @@ void GameObjectManager::CreateEmptyObject(GameObjectManager* gameObject)
 
 void GameObjectManager::ChangeParent(GameObjectManager* gameObject)
 {
-	if (this->mParent != gameObject)
+	if (this != gameObject)
 	{
-		mParent->childrens.erase(find(mParent->childrens.begin(), mParent->childrens.end(), this));
-		this->mParent = nullptr;
-		mParent = gameObject;
-		mParent->childrens.push_back(this);
+		if(gameObject->mParent != this)
+		{
+			mParent->childrens.erase(find(mParent->childrens.begin(), mParent->childrens.end(), this));
+			this->mParent = nullptr;
+			mParent = gameObject;
+			mParent->childrens.push_back(this);
+		}
 	}
 }

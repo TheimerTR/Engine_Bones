@@ -22,4 +22,7 @@ Engine Bones is an amazing 3D Engine for your amazing 3D games :D
 
 * Left click over element to open Game Object menu
 * Left click over Hierarchy window to add Game Object 
+* P to enter in InsertParent mode.
+* C to enter in MoveIntoChildList mode.
+* LShift+P to quit a child from a parent.
 
