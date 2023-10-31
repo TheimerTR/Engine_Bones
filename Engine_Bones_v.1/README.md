@@ -1,13 +1,27 @@
-# Engine_Bones
+# Engine Bones
 
-## Controles
+Engine Bones is an amazing 3D Engine for your amazing 3D games :D
 
-- First Person Camera
+### Authors
 
-  - Left Mouse Button + Drag -> Move Camera View.
-  - W -> Move Camera Forward.
-  - S -> Move Camera Backward.
-  - A -> Move Camera Left.
-  - D -> Move Camera Right.
-  - R or Space -> Move Camera Up.
-  - F or LCTRL -> Move Camera Down.
+* [Alberto Hidalgo García](https://github.com/TheimerTR)
+* [Sonia Cristina Ojeda Lanz](https://github.com/SoniaOL)
+
+## Controls 
+
+### Camera
+
+* Moving -> WASD keys
+* Looking around -> Right click
+* Mouse wheel -> zoom in and out
+* Orbit object -> Alt+Lefk click
+* Focus selected object -> F 
+* Duplicate movement -> Shift
+
+### Hierarchy
+
+* Left click over element to open Game Object menu
+* Left click over Hierarchy window to add Game Object 
+* P to enter in InsertParent mode.
+* C to enter in MoveIntoChildList mode.
+* LShift+P to quit a child from a parent.
