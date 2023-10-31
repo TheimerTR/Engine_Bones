@@ -56,7 +56,7 @@ public:
 	void MoveChildIntoParent(int Key);
 	int SearchChildPosInVector();
 
-	void CreateEmptyObject();
+	void CreateEmptyObject(GameObjectManager* gameObject);
 
 	void ChangeParent(GameObjectManager* gameObject);
 };

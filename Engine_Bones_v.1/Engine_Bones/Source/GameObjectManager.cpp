@@ -315,9 +315,10 @@ int GameObjectManager::SearchChildPosInVector()
 	return -1;
 }
 
-void GameObjectManager::CreateEmptyObject()
+void GameObjectManager::CreateEmptyObject(GameObjectManager* gameObject)
 {
-	GameObjectManager* _gameObject = new GameObjectManager("Empty_Object", app->scene->Root);
+	GameObjectManager* _gameObject = new GameObjectManager("Empty_Object", gameObject);
+	
 	app->scene->Selected_GameObject = app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1);
 	app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 

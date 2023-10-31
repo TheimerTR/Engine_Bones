@@ -974,7 +974,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 			{
 				if (ImGui::MenuItem("Create Empty"))
 				{
-					actualMesh->CreateEmptyObject();
+					actualMesh->CreateEmptyObject(App->scene->Root);
 				}
 
 				if (ImGui::BeginMenu("Render Primitive"))
@@ -1193,7 +1193,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 {
 	if (ImGui::MenuItem("Create Empty"))
 	{
-		actualMesh->CreateEmptyObject();
+		actualMesh->CreateEmptyObject(gm);
 	}
 
 	if (ImGui::BeginMenu("Render Primitive"))

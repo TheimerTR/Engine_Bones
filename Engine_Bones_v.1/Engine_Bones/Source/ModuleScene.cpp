@@ -57,6 +57,43 @@ update_status ModuleScene::Update(float dt)
 		}
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	{
+		if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		{
+			if (App->editor->actualMesh->mParent != App->scene->AllGameObjectManagers.at(0))
+			{
+				App->editor->actualMesh->ChangeParent(App->scene->Root);
+			}
+		}
+		else
+		{
+			if (App->editor->actualMesh != nullptr)
+			{
+				App->editor->moveEntityTo = App->editor->actualMesh;
+				App->editor->isMovingParent = true;
+			}
+		}
+	}
+	
+	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+	{
+		if(App->editor->actualMesh != nullptr)
+		{
+			App->editor->OG_ChildListPos = App->editor->actualMesh->SearchChildPosInVector();
+			App->editor->OG_ChildList = App->editor->actualMesh->mParent->childrens;
+
+			if (App->editor->OG_ChildListPos != -1)
+			{
+				App->editor->isMovingChild = true;
+			}
+			else
+			{
+				LOG(LogTypeCase::L_ERROR, "Child Was not found in Parent list");
+			}
+		}
+	}
+
 	if(AllGameObjectManagers.size() <= 1)
 	{
 		App->editor->actualMesh = nullptr;
