@@ -31,7 +31,7 @@ void ComponentTransform::ShowInfo()
 		ImGui::Text("Local Position"); 
 		ImGui::InputFloat3("Position",(float*)&mPosition);
 		ImGui::InputFloat3("Scale",(float*)&mScale);
-		ImGui::InputFloat3("Rotation",(float*)&mRotation);
+		ImGui::InputFloat3("Rotation",(float*)&mRotation.ToEulerXYZ());
 
 		float3 gPosition, gScale; 
 		Quat gRotation; 
@@ -41,7 +41,7 @@ void ComponentTransform::ShowInfo()
 		ImGui::Text("Global Position"); 
 		ImGui::InputFloat3("Position",(float*)&gPosition); 
 		ImGui::InputFloat3("Scale",(float*)&gScale); 
-		ImGui::InputFloat3("Rotation",(float*)&gRotation); 
+		ImGui::InputFloat3("Rotation",(float*)&gRotation.ToEulerXYZ()); 
 
 		ImGui::TreePop(); 
 	}
