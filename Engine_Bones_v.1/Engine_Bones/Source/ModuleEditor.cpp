@@ -219,6 +219,13 @@ bool ModuleEditor::DrawEditor()
 					objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunManEye_BaseColor.dds"));
 				}
 
+				if (ImGui::MenuItem("Cat"))
+				{
+					AssimpManager::AssimpLoader("Assets/Obj/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
+					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+				}
+
 				ImGui::EndMenu();
 			}
 
@@ -1023,6 +1030,13 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 						objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunManEye_BaseColor.dds"));
 					}
 
+					if (ImGui::MenuItem("Cat"))
+					{
+						AssimpManager::AssimpLoader("Assets/Obj/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+
 					ImGui::EndMenu();
 				}
 
@@ -1261,6 +1275,14 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 
 			objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->AddComponent(ComponentType::MATERIAL));
 			objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunManEye_BaseColor.dds"));
+			AddChildren(gm);
+		}
+
+		if (ImGui::MenuItem("Cat"))
+		{
+			AssimpManager::AssimpLoader("Assets/Obj/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
+			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 			AddChildren(gm);
 		}
 
