@@ -20,6 +20,8 @@ Engine Bones is an amazing 3D Engine for your amazing 3D games :D
 * Orbit object -> Alt+Lefk click
 * Focus selected object -> F 
 * Duplicate movement -> Shift
+* Moving Down -> LCtrl
+* Moving Up -> Space bar
 
 ### Hierarchy
 
