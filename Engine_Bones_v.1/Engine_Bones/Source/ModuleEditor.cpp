@@ -232,8 +232,14 @@ bool ModuleEditor::DrawEditor()
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
+				if (ImGui::MenuItem("Clean Bot"))
+				{
+					AssimpManager::AssimpLoader("Assets/Obj/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
+					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+				}
 
-				if (ImGui::MenuItem("Sunrise"))
+				/*if (ImGui::MenuItem("Sunrise"))
 				{
 					ComponentMaterial* objectTexture = nullptr; 
 					TexturesManager* texturesManager = new TexturesManager();
@@ -247,7 +253,7 @@ bool ModuleEditor::DrawEditor()
 
 					objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->AddComponent(ComponentType::MATERIAL));
 					objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunManEye_BaseColor.dds"));
-				}
+				}*/
 
 				if (ImGui::MenuItem("Cat"))
 				{
@@ -1073,23 +1079,12 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
-
-					if (ImGui::MenuItem("Sunrise"))
+					if (ImGui::MenuItem("Clean Bot"))
 					{
-						ComponentMaterial* objectTexture = nullptr;
-						TexturesManager* texturesManager = new TexturesManager();
-
-						AssimpManager::AssimpLoader("Assets/Obj/SunAnimation.fbx");
+						AssimpManager::AssimpLoader("Assets/Obj/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
-
-						objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 2)->AddComponent(ComponentType::MATERIAL));
-						objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunMan_BaseColor.dds"));
-
-						objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->AddComponent(ComponentType::MATERIAL));
-						objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunManEye_BaseColor.dds"));
 					}
-
 					if (ImGui::MenuItem("Cat"))
 					{
 						AssimpManager::AssimpLoader("Assets/Obj/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
@@ -1350,24 +1345,13 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 			AddChildren(gm);
 		}
-
-		if (ImGui::MenuItem("Sunrise"))
+		if (ImGui::MenuItem("Clean Bot"))
 		{
-			ComponentMaterial* objectTexture = nullptr;
-			TexturesManager* texturesManager = new TexturesManager();
-
-			AssimpManager::AssimpLoader("Assets/Obj/SunAnimation.fbx");
+			AssimpManager::AssimpLoader("Assets/Obj/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
 			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
-
-			objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 2)->AddComponent(ComponentType::MATERIAL));
-			objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunMan_BaseColor.dds"));
-
-			objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->AddComponent(ComponentType::MATERIAL));
-			objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunManEye_BaseColor.dds"));
 			AddChildren(gm);
 		}
-
 		if (ImGui::MenuItem("Cat"))
 		{
 			AssimpManager::AssimpLoader("Assets/Obj/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
