@@ -118,7 +118,7 @@ void FileSystem::CompatibleString(string& ConvertPath)
 	}
 }
 
-FileType& FileSystem::ExtensionType(string Extension)
+FileType FileSystem::ExtensionType(string Extension)
 {
 	FileType _type = FileType::DEFAULT;
 

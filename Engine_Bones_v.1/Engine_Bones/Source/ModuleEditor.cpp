@@ -170,7 +170,7 @@ bool ModuleEditor::DrawEditor()
 			{
 				if (ImGui::MenuItem("Cube"))
 				{
-					AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx", "Assets/Textures/Grass.dds");
+					AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx");
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
@@ -183,7 +183,37 @@ bool ModuleEditor::DrawEditor()
 					AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
-				}	
+				}
+				if (ImGui::MenuItem("Torus"))
+				{
+					AssimpManager::AssimpLoader("Assets/Primitives/Torus.fbx");
+					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+				}
+				if (ImGui::MenuItem("Sphere"))
+				{
+					AssimpManager::AssimpLoader("Assets/Primitives/Sphere.fbx");
+					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+				}
+				if (ImGui::MenuItem("Plane"))
+				{
+					AssimpManager::AssimpLoader("Assets/Primitives/Plane.fbx");
+					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+				}
+				if (ImGui::MenuItem("Icosphere"))
+				{
+					AssimpManager::AssimpLoader("Assets/Primitives/Icosphere.fbx");
+					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+				}
+				if (ImGui::MenuItem("Monkey"))
+				{
+					AssimpManager::AssimpLoader("Assets/Primitives/Monkey.fbx");
+					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+				}
 
 				ImGui::EndMenu();
 			}
@@ -979,7 +1009,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 				{
 					if (ImGui::MenuItem("Cube"))
 					{
-						AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx", "Assets/Textures/Grass.dds");
+						AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -992,6 +1022,36 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					if (ImGui::MenuItem("Pyramid"))
 					{
 						AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					if (ImGui::MenuItem("Torus"))
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Torus.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					if (ImGui::MenuItem("Sphere"))
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Sphere.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					if (ImGui::MenuItem("Plane"))
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Plane.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					if (ImGui::MenuItem("Icosphere"))
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Icosphere.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					if (ImGui::MenuItem("Monkey"))
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Monkey.fbx");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -1221,7 +1281,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 	{
 		if (ImGui::MenuItem("Cube"))
 		{
-			AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx", "Assets/Textures/Grass.dds");
+			AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx");
 			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 			AddChildren(gm);
@@ -1239,6 +1299,36 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 			AddChildren(gm);
+		}
+		if (ImGui::MenuItem("Torus"))
+		{
+			AssimpManager::AssimpLoader("Assets/Primitives/Torus.fbx");
+			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+		}
+		if (ImGui::MenuItem("Sphere"))
+		{
+			AssimpManager::AssimpLoader("Assets/Primitives/Sphere.fbx");
+			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+		}
+		if (ImGui::MenuItem("Plane"))
+		{
+			AssimpManager::AssimpLoader("Assets/Primitives/Plane.fbx");
+			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+		}
+		if (ImGui::MenuItem("Icosphere"))
+		{
+			AssimpManager::AssimpLoader("Assets/Primitives/Icosphere.fbx");
+			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+		}
+		if (ImGui::MenuItem("Monkey"))
+		{
+			AssimpManager::AssimpLoader("Assets/Primitives/Monkey.fbx");
+			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 		}
 
 		ImGui::EndMenu();

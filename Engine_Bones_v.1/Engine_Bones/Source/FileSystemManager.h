@@ -23,7 +23,7 @@ namespace FileSystem
 
 	void CompatibleString(string& ConvertPath);
 
-	FileType& ExtensionType(string ConvertPath);
+	FileType ExtensionType(string ConvertPath);
 };
 
 #endif // FILESYSTEMMANAGER_H_
