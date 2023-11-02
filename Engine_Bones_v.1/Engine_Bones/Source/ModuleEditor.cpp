@@ -211,12 +211,12 @@ bool ModuleEditor::DrawEditor()
 					AssimpManager::AssimpLoader("Assets/Obj/SunAnimation.fbx");
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 2)->AddComponent(ComponentType::MATERIAL);
-					objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 2)->GetComponentGameObject(ComponentType::MATERIAL));
-					objectTexture->SetTexture(texturesManager->TexLoader("Assets/Obj/TEX_SunMan_BaseColor.dds"));
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->AddComponent(ComponentType::MATERIAL);
-				    objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->Selected_GameObject->GetComponentGameObject(ComponentType::MATERIAL));
-					objectTexture->SetTexture(texturesManager->TexLoader("Assets/Obj/TEX_SunManEye_BaseColor.dds"));
+
+					objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 2)->AddComponent(ComponentType::MATERIAL));
+					objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunMan_BaseColor.dds"));
+
+					objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->AddComponent(ComponentType::MATERIAL));
+					objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunManEye_BaseColor.dds"));
 				}
 
 				ImGui::EndMenu();
@@ -1009,13 +1009,18 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 
 					if (ImGui::MenuItem("Sunrise"))
 					{
+						ComponentMaterial* objectTexture = nullptr;
 						TexturesManager* texturesManager = new TexturesManager();
 
-						AssimpManager::AssimpLoader("Assets/Obj/SunAnimation.fbx", "Assets/Obj/TEX_SunMan_BaseColor.dds");
-						ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(actualMesh->childrens.at(0)->GetComponentGameObject(ComponentType::MATERIAL));
-						objectTexture->SetTexture(texturesManager->TexLoader("Assets/Obj/TEX_SunManEye_BaseColor.dds"));
+						AssimpManager::AssimpLoader("Assets/Obj/SunAnimation.fbx");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+
+						objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 2)->AddComponent(ComponentType::MATERIAL));
+						objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunMan_BaseColor.dds"));
+
+						objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->AddComponent(ComponentType::MATERIAL));
+						objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunManEye_BaseColor.dds"));
 					}
 
 					ImGui::EndMenu();
@@ -1244,15 +1249,19 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 
 		if (ImGui::MenuItem("Sunrise"))
 		{
+			ComponentMaterial* objectTexture = nullptr;
 			TexturesManager* texturesManager = new TexturesManager();
 
-			AssimpManager::AssimpLoader("Assets/Obj/SunAnimation.fbx", "Assets/Obj/TEX_SunMan_BaseColor.dds");
-			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(actualMesh->childrens.at(0)->GetComponentGameObject(ComponentType::MATERIAL));
-			objectTexture->SetTexture(texturesManager->TexLoader("Assets/Obj/TEX_SunManEye_BaseColor.dds"));
+			AssimpManager::AssimpLoader("Assets/Obj/SunAnimation.fbx");
 			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
-			AddChildren(gm);
 
+			objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 2)->AddComponent(ComponentType::MATERIAL));
+			objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunMan_BaseColor.dds"));
+
+			objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->AddComponent(ComponentType::MATERIAL));
+			objectTexture->SetTexture(texturesManager->TexLoader("Assets/Textures/TEX_SunManEye_BaseColor.dds"));
+			AddChildren(gm);
 		}
 
 		ImGui::EndMenu();
