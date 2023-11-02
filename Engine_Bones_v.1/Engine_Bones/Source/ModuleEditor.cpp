@@ -202,34 +202,25 @@ bool ModuleEditor::DrawEditor()
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
-				//if (ImGui::MenuItem("Walk"))
-				//{
-				//	AssimpManager::AssimpLoader("Assets/Obj/walk.fbx");
-				//	App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-				//	App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
-				//}
+
+				if (ImGui::MenuItem("Sunrise"))
+				{
+					ComponentMaterial* objectTexture = nullptr; 
+					TexturesManager* texturesManager = new TexturesManager();
+
+					AssimpManager::AssimpLoader("Assets/Obj/SunAnimation.fbx");
+					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 2)->AddComponent(ComponentType::MATERIAL);
+					objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 2)->GetComponentGameObject(ComponentType::MATERIAL));
+					objectTexture->SetTexture(texturesManager->TexLoader("Assets/Obj/TEX_SunMan_BaseColor.dds"));
+					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->AddComponent(ComponentType::MATERIAL);
+				    objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->Selected_GameObject->GetComponentGameObject(ComponentType::MATERIAL));
+					objectTexture->SetTexture(texturesManager->TexLoader("Assets/Obj/TEX_SunManEye_BaseColor.dds"));
+				}
 
 				ImGui::EndMenu();
 			}
-
-			/*if (ImGui::BeginMenu("Add Component"))
-			{
-				GameObjectManager* gameObject = app->editor->actualMesh;
-
-				if (ImGui::MenuItem("Mesh Component"))
-				{
-					gameObject->AddComponent(ComponentType::MESH);
-				}
-				
-				if (ImGui::MenuItem("Material Component"))
-				{
-					gameObject->AddComponent(ComponentType::MATERIAL);
-				}
-
-				gameObject = nullptr;
-
-				ImGui::EndMenu();
-			}*/
 
 			ImGui::EndMenu();
 		}
@@ -1016,6 +1007,17 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
 
+					if (ImGui::MenuItem("Sunrise"))
+					{
+						TexturesManager* texturesManager = new TexturesManager();
+
+						AssimpManager::AssimpLoader("Assets/Obj/SunAnimation.fbx", "Assets/Obj/TEX_SunMan_BaseColor.dds");
+						ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(actualMesh->childrens.at(0)->GetComponentGameObject(ComponentType::MATERIAL));
+						objectTexture->SetTexture(texturesManager->TexLoader("Assets/Obj/TEX_SunManEye_BaseColor.dds"));
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+
 					ImGui::EndMenu();
 				}
 
@@ -1240,6 +1242,19 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 			AddChildren(gm);
 		}
 
+		if (ImGui::MenuItem("Sunrise"))
+		{
+			TexturesManager* texturesManager = new TexturesManager();
+
+			AssimpManager::AssimpLoader("Assets/Obj/SunAnimation.fbx", "Assets/Obj/TEX_SunMan_BaseColor.dds");
+			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(actualMesh->childrens.at(0)->GetComponentGameObject(ComponentType::MATERIAL));
+			objectTexture->SetTexture(texturesManager->TexLoader("Assets/Obj/TEX_SunManEye_BaseColor.dds"));
+			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+			AddChildren(gm);
+
+		}
+
 		ImGui::EndMenu();
 	}
 }
@@ -1392,7 +1407,7 @@ void ModuleEditor::DefaultConfig()
 	App->max_FPS = 60;
 
 	//Quit Vsync
-	Vsync = true;
+	Vsync = false;
 	SDL_GL_SetSwapInterval(0);
 
 	//General Volume
