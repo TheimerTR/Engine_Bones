@@ -29,7 +29,7 @@ void FileSystem::ReadFyleType(const char* Path)
 		switch (Type)
 		{
 		case FileType::MODEL_3D:
-			file = "Assets/Obj/" + file;
+			file = "Assets/ModelsFbx/" + file;
 			AssimpManager::AssimpLoader(Path);
 			LOG(LogTypeCase::L_CASUAL, "Model Type: MODEL 3D");
 			break;

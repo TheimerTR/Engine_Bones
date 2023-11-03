@@ -222,19 +222,19 @@ bool ModuleEditor::DrawEditor()
 			{
 				if (ImGui::MenuItem("House"))
 				{
-					AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
+					AssimpManager::AssimpLoader("Assets/ModelsFbx/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
 				if (ImGui::MenuItem("Warrior"))
 				{
-					AssimpManager::AssimpLoader("Assets/Obj/warrior.fbx");
+					AssimpManager::AssimpLoader("Assets/ModelsFbx/warrior.fbx");
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
 				if (ImGui::MenuItem("Clean Bot"))
 				{
-					AssimpManager::AssimpLoader("Assets/Obj/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
+					AssimpManager::AssimpLoader("Assets/ModelsFbx/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
@@ -244,7 +244,7 @@ bool ModuleEditor::DrawEditor()
 				//	ComponentMaterial* objectTexture = nullptr; 
 				//	TexturesManager* texturesManager = new TexturesManager();
 
-				//	AssimpManager::AssimpLoader("Assets/Obj/SunAnimation.fbx");
+				//	AssimpManager::AssimpLoader("Assets/ModelsFbx/SunAnimation.fbx");
 				//	App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				//	App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 
@@ -257,7 +257,7 @@ bool ModuleEditor::DrawEditor()
 
 				if (ImGui::MenuItem("Cat"))
 				{
-					AssimpManager::AssimpLoader("Assets/Obj/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
+					AssimpManager::AssimpLoader("Assets/ModelsFbx/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
 					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				}
@@ -1069,25 +1069,25 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 				{
 					if (ImGui::MenuItem("House"))
 					{
-						AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
+						AssimpManager::AssimpLoader("Assets/ModelsFbx/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
 					if (ImGui::MenuItem("Warrior"))
 					{
-						AssimpManager::AssimpLoader("Assets/Obj/warrior.fbx");
+						AssimpManager::AssimpLoader("Assets/ModelsFbx/warrior.fbx");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
 					if (ImGui::MenuItem("Clean Bot"))
 					{
-						AssimpManager::AssimpLoader("Assets/Obj/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
+						AssimpManager::AssimpLoader("Assets/ModelsFbx/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
 					if (ImGui::MenuItem("Cat"))
 					{
-						AssimpManager::AssimpLoader("Assets/Obj/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
+						AssimpManager::AssimpLoader("Assets/ModelsFbx/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -1338,28 +1338,28 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 	{
 		if (ImGui::MenuItem("House"))
 		{
-			AssimpManager::AssimpLoader("Assets/Obj/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
+			AssimpManager::AssimpLoader("Assets/ModelsFbx/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
 			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 			AddChildrenWithChildrens(gm);
 		}
 		if (ImGui::MenuItem("Warrior"))
 		{
-			AssimpManager::AssimpLoader("Assets/Obj/warrior.fbx");
+			AssimpManager::AssimpLoader("Assets/ModelsFbx/warrior.fbx");
 			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 			AddChildren(gm);
 		}
 		if (ImGui::MenuItem("Clean Bot"))
 		{
-			AssimpManager::AssimpLoader("Assets/Obj/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
+			AssimpManager::AssimpLoader("Assets/ModelsFbx/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
 			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 			AddChildren(gm);
 		}
 		if (ImGui::MenuItem("Cat"))
 		{
-			AssimpManager::AssimpLoader("Assets/Obj/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
+			AssimpManager::AssimpLoader("Assets/ModelsFbx/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
 			App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 			App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 			AddChildren(gm);
