@@ -9,7 +9,7 @@ Engine Bones is an amazing 3D Engine for your amazing 3D games :D
 
 ## Controls 
 
-###Scene
+### Scene
 * Supr -> To delete actual object selected
 
 ### Camera
