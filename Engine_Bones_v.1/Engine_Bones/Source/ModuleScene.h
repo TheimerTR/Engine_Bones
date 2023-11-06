@@ -29,7 +29,6 @@ public:
 	vector<GameObjectManager*> AllGameObjectManagers;
 	GameObjectManager* Root = nullptr;
 	GameObjectManager* Selected_GameObject = nullptr;
-	
 };
 
 #endif

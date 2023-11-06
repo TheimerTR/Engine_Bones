@@ -1420,6 +1420,9 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 
 	ImGui::Begin("Inspector", &InfoGWindow);
 
+	ImGui::Text("Name: %s", gameObject->mName.c_str());
+	ImGui::Text("UUID: %d", gameObject->UUID);
+
 	if (gameObject != nullptr)
 	{
 		std::vector<ComponentManager*> objectMeshes = gameObject->GetComponentsGameObject(ComponentType::MESH);

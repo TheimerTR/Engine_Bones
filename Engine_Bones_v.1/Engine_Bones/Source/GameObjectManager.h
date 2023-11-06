@@ -37,6 +37,8 @@ public:
 	bool isActive;
 	bool isSelected;
 
+	unsigned long UUID;
+
 	vector<GameObjectManager*> childrens;
 
 	ComponentManager* AddComponent(ComponentType type);

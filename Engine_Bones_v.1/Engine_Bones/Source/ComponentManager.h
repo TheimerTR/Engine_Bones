@@ -35,6 +35,7 @@ public:
 	bool active;
 	ComponentType Type;
 	GameObjectManager* Owner;
+	long unsigned int UUID;
 
 public:
 

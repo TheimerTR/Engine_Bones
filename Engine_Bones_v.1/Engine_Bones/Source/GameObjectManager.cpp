@@ -21,6 +21,16 @@ GameObjectManager::GameObjectManager(string name, GameObjectManager* parent, int
 		app->scene->AllGameObjectManagers.push_back(this);
 		app->scene->Selected_GameObject = this;
 		app->editor->actualMesh = this;
+
+		this->UUID = app->RandomIntGenerator();
+
+		for(int i = 0; i < app->scene->AllGameObjectManagers.size(); i++)
+		{
+			if((app->scene->AllGameObjectManagers.at(i)->UUID == this->UUID) && (this != app->scene->AllGameObjectManagers.at(i)))
+			{
+				this->UUID = app->RandomIntGenerator();
+			}
+		}
 	}
 };
 

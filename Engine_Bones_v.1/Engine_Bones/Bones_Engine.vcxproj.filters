@@ -49,6 +49,9 @@
     <Filter Include="Sources\ImGuiCandy">
       <UniqueIdentifier>{ac913b7c-269b-4c61-95b4-b5480e02225a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\PhysFS">
+      <UniqueIdentifier>{032ea26d-2142-4215-a5c5-cb9482b9e56c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Module.h">
@@ -341,6 +344,9 @@
     </ClInclude>
     <ClInclude Include="Source\ModuleScene.h">
       <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External\PhysFS\include\physfs.h">
+      <Filter>Sources\PhysFS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

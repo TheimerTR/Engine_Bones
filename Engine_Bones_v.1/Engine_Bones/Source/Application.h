@@ -10,6 +10,7 @@
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
 #include "ModuleScene.h"
+#include "External/MathGeoLib/include/Algorithm/Random/LCG.h"
 
 #include<vector>
 
@@ -41,13 +42,17 @@ public:
 	bool CleanUp();
 
 	float GetDeltaTime() const;
-	float GetFrameRate() const; 
+	float GetFrameRate() const;
+
+	int RandomIntGenerator();
 
 	void QuitApp();
 
 	int max_FPS = 60;
 
 	int volume_general = 50;
+
+	math::LCG RandomGenerator;
 
 private:
 

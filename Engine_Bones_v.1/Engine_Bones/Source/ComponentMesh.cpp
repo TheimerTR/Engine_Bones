@@ -18,6 +18,7 @@ ComponentMesh::ComponentMesh(GameObjectManager* gameObject) : ComponentManager(g
 {
 	C_Mesh = new Mesh();
 	Name = "";
+	this->UUID = app->RandomIntGenerator();
 }
 
 ComponentMesh::~ComponentMesh()
@@ -59,6 +60,7 @@ void ComponentMesh::ShowInfo(Mesh* mesh, int i)
 	if (this->isActive)
 	{	
 		ImGui::Text("Path: %s", mesh->Path.c_str());
+		ImGui::Text("Mesh UUID: %d", this->UUID);
 		ImGui::Text("Number of index: %d", mesh->num_index);
 		ImGui::Text("Number of vertex: %d", mesh->num_vertex);
 		ImGui::Checkbox((std::string("Show Normals##%s") + to_string(i).c_str()).c_str(), &mesh->ShowNormals);

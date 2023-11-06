@@ -167,6 +167,7 @@
     <ClInclude Include="Source\External\mmgr\mmgr.h" />
     <ClInclude Include="Source\External\mmgr\nommgr.h" />
     <ClInclude Include="Source\External\Parson\parson.h" />
+    <ClInclude Include="Source\External\PhysFS\include\physfs.h" />
     <ClInclude Include="Source\FileSystemManager.h" />
     <ClInclude Include="Source\GameObjectManager.h" />
     <ClInclude Include="Source\glmath.h" />

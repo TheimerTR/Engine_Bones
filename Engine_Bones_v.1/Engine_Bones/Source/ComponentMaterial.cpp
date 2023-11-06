@@ -18,6 +18,7 @@ ComponentMaterial::ComponentMaterial(GameObjectManager* gameObject) : ComponentM
 {
 	texture = new Texture();
 	CM_TextureID = NULL;
+	this->UUID = app->RandomIntGenerator();
 }
 
 ComponentMaterial::~ComponentMaterial()
