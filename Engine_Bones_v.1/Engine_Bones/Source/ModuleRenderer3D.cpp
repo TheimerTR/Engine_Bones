@@ -10,12 +10,15 @@
 
 #include "ModuleEditor.h"
 #include "AssimpManager.h"
-#include "GameObjectManager.h"
 #include "TextureManager.h"
 #include "ModuleScene.h"
+
+#include "GameObjectManager.h"
 #include "ComponentManager.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+
+#include "ImporterTexture.h"
 
 #include "External/ImGui/imgui.h"
 #include "External/ImGui/backends/imgui_impl_sdl2.h"
@@ -146,10 +149,7 @@ bool ModuleRenderer3D::Init()
 		//glEnable(GL_MULTISAMPLE);
 	}
 
-	ilInit();
-	iluInit();
-	ilutInit();
-	ilutRenderer(ILUT_OPENGL);
+	Importer::ImporterTexture::InitDevil();
 
 	TexturesManager* texturesManager = new TexturesManager();
 	texturesManager->SetCheckerTexture();

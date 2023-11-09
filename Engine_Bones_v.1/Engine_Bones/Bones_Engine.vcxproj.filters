@@ -52,6 +52,9 @@
     <Filter Include="Sources\PhysFS">
       <UniqueIdentifier>{032ea26d-2142-4215-a5c5-cb9482b9e56c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Importers">
+      <UniqueIdentifier>{55a5abaa-5137-4346-8232-5452c82c9961}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Module.h">
@@ -348,6 +351,12 @@
     <ClInclude Include="Source\External\PhysFS\include\physfs.h">
       <Filter>Sources\PhysFS</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ImporterMesh.h">
+      <Filter>Sources\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ImporterTexture.h">
+      <Filter>Sources\Importers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -536,6 +545,10 @@
     <ClCompile Include="Source\ModuleScene.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ImporterMesh.cpp">
+      <Filter>Sources\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ImporterTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External\MathGeoLib\include\Math\Matrix.inl">

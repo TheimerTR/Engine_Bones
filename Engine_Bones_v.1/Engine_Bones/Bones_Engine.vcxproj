@@ -172,10 +172,12 @@
     <ClInclude Include="Source\GameObjectManager.h" />
     <ClInclude Include="Source\glmath.h" />
     <ClInclude Include="Source\Globals.h" />
+    <ClInclude Include="Source\ImporterTexture.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\Module.h" />
     <ClInclude Include="Source\ModuleCamera3D.h" />
     <ClInclude Include="Source\ModuleEditor.h" />
+    <ClInclude Include="Source\ImporterMesh.h" />
     <ClInclude Include="Source\ModuleInput.h" />
     <ClInclude Include="Source\ModuleRenderer3D.h" />
     <ClInclude Include="Source\ModuleScene.h" />
@@ -237,6 +239,8 @@
     <ClCompile Include="Source\FileSystemManager.cpp" />
     <ClCompile Include="Source\GameObjectManager.cpp" />
     <ClCompile Include="Source\glmath.cpp" />
+    <ClCompile Include="Source\ImporterMesh.cpp" />
+    <ClCompile Include="Source\ImporterTexture.cpp" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\log.cpp" />
     <ClCompile Include="Source\Main.cpp" />

@@ -38,6 +38,7 @@ void VectorLogsPushBack(std::vector<T>& vector, int MaxValue, T& Log);
 
 
 typedef unsigned int uint;
+typedef unsigned __int64 uint64;
 
 enum update_status
 {
