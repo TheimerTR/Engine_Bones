@@ -21,6 +21,8 @@
 #include "ComponentMaterial.h"
 #include "ComponentManager.h"
 #include "ModuleScene.h"
+#include "ImporterMesh.h"
+#include "ImporterTexture.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -76,108 +78,15 @@ void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* game
 
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
-			M_mesh->num_vertex = scene->mMeshes[i]->mNumVertices;
-			M_mesh->vertex = new float[M_mesh->num_vertex * 3];
-			memcpy(M_mesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * M_mesh->num_vertex * 3);
-			LOG(LogTypeCase::L_CASUAL, "New mesh with %d vertices", M_mesh->num_vertex);
+			Mesh* M_mesh = new Mesh();
 
-			if (scene->mMeshes[i]->HasFaces())
-			{
-				M_mesh->num_index = scene->mMeshes[i]->mNumFaces * 3;
-				M_mesh->index = new uint[M_mesh->num_index]; // assume each face is a triangle
+			Importer::ImporterMesh::ImportMesh(M_mesh, scene->mMeshes[i]);
 
-				/*M_mesh->num_normals_Faces = scene->mMeshes[i]->mNumFaces * 3;
-				M_mesh->normals_Faces = new uint[M_mesh->num_normals_Faces];*/
+			AllMeshes.push_back(M_mesh);
 
-				for (uint d = 0; d < scene->mMeshes[i]->mNumFaces; ++d)
-				{
-					if (scene->mMeshes[i]->mFaces[d].mNumIndices != 3)
-					{
-						LOG(LogTypeCase::L_WARNING, "WARNING, geometry face with != 3 indices!");
-					}
-					else
-					{
-						memcpy(&M_mesh->index[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
-						//memcpy(&M_mesh->normals_Faces[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
-					}
-				}
-
-				LOG(LogTypeCase::L_CASUAL, "With %d indices", M_mesh->num_index);
-			}
-
-			if (scene->mMeshes[i]->HasNormals())
-			{
-				M_mesh->num_normals = scene->mMeshes[i]->mNumVertices;
-				M_mesh->normals = new float[M_mesh->num_normals * 3];
-				memcpy(M_mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * M_mesh->num_normals * 3);
-
-				M_mesh->center_normal = new float[scene->mMeshes[i]->mNumFaces * 3];
-				M_mesh->center = new float[scene->mMeshes[i]->mNumFaces * 3];
-				M_mesh->faces = scene->mMeshes[i]->mNumFaces;
-
-				for (uint i = 0; i < M_mesh->num_index; i += 3)
-				{
-					float3 x0(M_mesh->vertex[(M_mesh->index[i] * 3)], M_mesh->vertex[(M_mesh->index[i] * 3) + 1], M_mesh->vertex[(M_mesh->index[i] * 3) + 2]);
-					float3 x1(M_mesh->vertex[(M_mesh->index[i + 1] * 3)], M_mesh->vertex[(M_mesh->index[i + 1] * 3) + 1], M_mesh->vertex[(M_mesh->index[i + 1] * 3) + 2]);
-					float3 x2(M_mesh->vertex[(M_mesh->index[i + 2] * 3)], M_mesh->vertex[(M_mesh->index[i + 2] * 3) + 1], M_mesh->vertex[(M_mesh->index[i + 2] * 3) + 2]);
-
-					float3 v0 = x1 - x0;
-					float3 v1 = x2 - x1;
-					float3 normalized = v0.Cross(v1);
-
-					M_mesh->center[i] = (x0.x + x1.x + x2.x) / 3;
-					M_mesh->center[i + 1] = (x0.y + x1.y + x2.y) / 3;
-					M_mesh->center[i + 2] = (x0.z + x1.z + x2.z) / 3;
-
-					M_mesh->center_normal[i] = normalized.Normalized().x;
-					M_mesh->center_normal[i + 1] = normalized.Normalized().y;
-					M_mesh->center_normal[i + 2] = normalized.Normalized().z;
-				}
-			}
-
-			uint UV_Index = 0;
-			if (scene->mMeshes[i]->HasTextureCoords(UV_Index))
-			{
-				M_mesh->num_Tex = scene->mMeshes[i]->mNumVertices;
-				M_mesh->textures = new math::float2[scene->mMeshes[i]->mNumVertices];
-
-				for (int j = 0; j < M_mesh->num_Tex; j++)
-				{
-					M_mesh->textures[j].x = scene->mMeshes[i]->mTextureCoords[UV_Index][j].x;
-					M_mesh->textures[j].y = scene->mMeshes[i]->mTextureCoords[UV_Index][j].y;
-				}
-			}
+			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gameObject->AddComponent(ComponentType::MESH));
+			C_Mesh->SetMesh(M_mesh);
 		}
-
-		M_mesh->VBO = 0;
-		M_mesh->EBO = 0;
-		M_mesh->VN = 0;
-		M_mesh->VT = 0;
-
-		glGenBuffers(1, (GLuint*)&(M_mesh->VBO));
-		glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->vertex, GL_STATIC_DRAW);
-
-		glGenBuffers(1, (GLuint*)&(M_mesh->EBO));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * M_mesh->num_index, M_mesh->index, GL_STATIC_DRAW);
-
-		glGenBuffers(1, (GLuint*)&(M_mesh->VN));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals, M_mesh->normals, GL_STATIC_DRAW);
-
-		/*glGenBuffers(1, (GLuint*)&(M_mesh->VNF));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VNF);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals_Faces, M_mesh->normals_Faces, GL_STATIC_DRAW);*/
-
-		glGenBuffers(1, (GLuint*)&(M_mesh->VT));
-		glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex * 2, M_mesh->textures, GL_STATIC_DRAW);
-
-		AllMeshes.push_back(M_mesh);
-
-		ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gameObject->AddComponent(ComponentType::MESH));
-		C_Mesh->SetMesh(M_mesh);
 	}
 	else
 		LOG(LogTypeCase::L_ERROR, "Error loading scene % s", Path);
@@ -213,111 +122,9 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 	if (i < scene->mNumMeshes)
 	{
-		M_mesh->num_vertex = scene->mMeshes[i]->mNumVertices;
-		M_mesh->vertex = new float[M_mesh->num_vertex * 3];
-		memcpy(M_mesh->vertex, scene->mMeshes[i]->mVertices, sizeof(float) * M_mesh->num_vertex * 3);
-		LOG(LogTypeCase::L_CASUAL, "New mesh with %d vertices", M_mesh->num_vertex);
-
-		if (scene->mMeshes[i]->HasFaces())
-		{
-			M_mesh->num_index = scene->mMeshes[i]->mNumFaces * 3;
-			M_mesh->index = new uint[M_mesh->num_index]; // assume each face is a triangle
-
-			/*M_mesh->num_normals_Faces = scene->mMeshes[i]->mNumFaces * 3;
-			M_mesh->normals_Faces = new uint[M_mesh->num_normals_Faces];*/
-
-			for (uint d = 0; d < scene->mMeshes[i]->mNumFaces; ++d)
-			{
-				if (scene->mMeshes[i]->mFaces[d].mNumIndices != 3)
-				{
-					LOG(LogTypeCase::L_WARNING, "WARNING, geometry face with != 3 indices!");
-				}
-				else
-				{
-					memcpy(&M_mesh->index[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
-					//memcpy(&M_mesh->normals_Faces[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
-				}
-			}
-
-			LOG(LogTypeCase::L_CASUAL, "With %d indices", M_mesh->num_index);
-		}
-
-		if (scene->mMeshes[i]->HasNormals())
-		{
-			M_mesh->normals = new float[scene->mMeshes[i]->mNumVertices * 3];
-			memcpy(M_mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * scene->mMeshes[i]->mNumVertices * 3);
-
-			M_mesh->center_normal = new float[scene->mMeshes[i]->mNumFaces * 3];
-			M_mesh->center = new float[scene->mMeshes[i]->mNumFaces * 3];
-			M_mesh->faces = scene->mMeshes[i]->mNumFaces;
-
-			for (uint i = 0; i < M_mesh->num_index; i += 3)
-			{
-				float3 x0(M_mesh->vertex[(M_mesh->index[i] * 3)], M_mesh->vertex[(M_mesh->index[i] * 3) + 1], M_mesh->vertex[(M_mesh->index[i] * 3) + 2]);
-				float3 x1(M_mesh->vertex[(M_mesh->index[i + 1] * 3)], M_mesh->vertex[(M_mesh->index[i + 1] * 3) + 1], M_mesh->vertex[(M_mesh->index[i + 1] * 3) + 2]);
-				float3 x2(M_mesh->vertex[(M_mesh->index[i + 2] * 3)], M_mesh->vertex[(M_mesh->index[i + 2] * 3) + 1], M_mesh->vertex[(M_mesh->index[i + 2] * 3) + 2]);
-
-				float3 v0 = x1 - x0;
-				float3 v1 = x2 - x1;
-				float3 normalized = v0.Cross(v1);
-
-				M_mesh->center[i] = (x0.x + x1.x + x2.x) / 3;
-				M_mesh->center[i + 1] = (x0.y + x1.y + x2.y) / 3;
-				M_mesh->center[i + 2] = (x0.z + x1.z + x2.z) / 3;
-
-				M_mesh->center_normal[i] = normalized.Normalized().x;
-				M_mesh->center_normal[i + 1] = normalized.Normalized().y;
-				M_mesh->center_normal[i + 2] = normalized.Normalized().z;
-			}
-		}
-
-		uint UV_Index = 0;
-		if (scene->mMeshes[i]->HasTextureCoords(UV_Index))
-		{
-			M_mesh->num_Tex = scene->mMeshes[i]->mNumVertices;
-			M_mesh->textures = new math::float2[scene->mMeshes[i]->mNumVertices];
-
-			for (int j = 0; j < M_mesh->num_Tex; j++)
-			{
-				M_mesh->textures[j].x = scene->mMeshes[i]->mTextureCoords[UV_Index][j].x;
-				M_mesh->textures[j].y = scene->mMeshes[i]->mTextureCoords[UV_Index][j].y;
-			}
-		}
+		Importer::ImporterMesh::ImportMesh(M_mesh, scene->mMeshes[i]);
 
 		M_mesh->Name = _ParentObj->mName;
-
-		/*FileSystem::StringDivide(Path, &M_mesh->Name, nullptr);*/
-
-		//M_mesh->VAO = 0;
-		M_mesh->VBO = 0;
-		M_mesh->EBO = 0;
-		M_mesh->VN = 0;
-		//M_mesh->VNF = 0;
-		M_mesh->VT = 0;
-
-		/*glGenVertexArrays(1, &M_mesh->VAO);
-		glBindVertexArray(M_mesh->VAO);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);*/
-
-		glGenBuffers(1, (GLuint*)&(M_mesh->VBO));
-		glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->vertex, GL_STATIC_DRAW);
-
-		glGenBuffers(1, (GLuint*)&(M_mesh->EBO));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * M_mesh->num_index, M_mesh->index, GL_STATIC_DRAW);
-
-		glGenBuffers(1, (GLuint*)&(M_mesh->VN));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->normals, GL_STATIC_DRAW);
-
-		/*glGenBuffers(1, (GLuint*)&(M_mesh->VNF));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VNF);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals_Faces, M_mesh->normals_Faces, GL_STATIC_DRAW);*/
-
-		glGenBuffers(1, (GLuint*)&(M_mesh->VT));
-		glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex * 2, M_mesh->textures, GL_STATIC_DRAW);
 
 		AllMeshes.push_back(M_mesh);
 
@@ -357,9 +164,11 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 		if (texturePath != NULL)
 		{
+			Texture* texture = new Texture();
+			Importer::ImporterTexture::Load(texture, texturePath);
 			TexturesManager* texturesManager = new TexturesManager();
 			ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
-			C_Texture->SetTexture(texturesManager->TexLoader(texturePath));
+			C_Texture->SetTexture(texture);
 		}
 	}
 }
@@ -472,4 +281,28 @@ void  AssimpManager::Clear_Mesh(Mesh* mesh)
 void AssimpManager::AplicateTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation) 
 {
 	gameObject->mTransform->SetTransform(gameObject, position, scale, rotation); 
+}
+
+void AssimpManager::SetBuffers(Mesh* M_mesh)
+{
+	M_mesh->VBO = 0;
+	M_mesh->EBO = 0;
+	M_mesh->VN = 0;
+	M_mesh->VT = 0;
+
+	glGenBuffers(1, (GLuint*)&(M_mesh->VBO));
+	glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->vertex, GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*)&(M_mesh->EBO));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * M_mesh->num_index, M_mesh->index, GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*)&(M_mesh->VN));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->normals, GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*)&(M_mesh->VT));
+	glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex * 2, M_mesh->textures, GL_STATIC_DRAW);
 }

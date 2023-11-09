@@ -24,9 +24,8 @@ namespace Importer
 	namespace ImporterTexture
 	{
 		void InitDevil();
-		void ImportTexture(Texture* texture, const char* fileBuffer = nullptr, uint size = 0);
 		uint64 Save(const Texture* texture = nullptr, char** fileBuffer = nullptr);
-		void Load(Texture* texture = nullptr, const char* fileBuffer = nullptr, uint size = 0);
+		void Load(Texture* texture = nullptr, const char* fileBuffer = nullptr);
 	}
 };
 

@@ -8,14 +8,6 @@ void Importer::ImporterTexture::InitDevil()
     ilutRenderer(ILUT_OPENGL);
 }
 
-void Importer::ImporterTexture::ImportTexture(Texture* texture, const char* fileBuffer, uint size)
-{
-    if (ilLoadL(IL_TYPE_UNKNOWN, (const void*)fileBuffer, size))
-    {
-        texture->TextureID = ilutGLBindTexImage();
-    }
-}
-
 uint64 Importer::ImporterTexture::Save(const Texture* texture, char** fileBuffer)
 {
     ILuint size;
@@ -32,7 +24,7 @@ uint64 Importer::ImporterTexture::Save(const Texture* texture, char** fileBuffer
     return size;
 }
 
-void Importer::ImporterTexture::Load(Texture* texture, const char* fileBuffer, uint size)
+void Importer::ImporterTexture::Load(Texture* texture, const char* fileBuffer)
 {
 	ILboolean success;
 	ILuint Devil_Texure;
@@ -40,8 +32,8 @@ void Importer::ImporterTexture::Load(Texture* texture, const char* fileBuffer, u
 
 	ilGenImages(1, &Devil_Texure);
 	ilBindImage(Devil_Texure);
-
-	success = ilLoadL(IL_TYPE_UNKNOWN, (const void*)fileBuffer, size);
+	//ilLoadL(IL_TYPE_UNKNOWN, path, _id);
+	success = ilLoadImage(fileBuffer);
 	TextID = ilutGLBindTexImage();
 
 	uint Text_Size = ilSaveL(IL_DDS, NULL, 0);

@@ -13,6 +13,7 @@
 
 class GameObjectManager;
 class TextureManager;
+struct Texture;
 
 using namespace std;
 
@@ -70,6 +71,8 @@ namespace AssimpManager
 	void Clear_Mesh(Mesh* mesh);
 
 	void AplicateTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation); 
+
+	void SetBuffers(Mesh* M_mesh);
 
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
 
