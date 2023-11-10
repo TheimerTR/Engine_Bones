@@ -548,7 +548,9 @@
     <ClCompile Include="Source\ImporterMesh.cpp">
       <Filter>Sources\Importers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ImporterTexture.cpp" />
+    <ClCompile Include="Source\ImporterTexture.cpp">
+      <Filter>Sources\Importers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External\MathGeoLib\include\Math\Matrix.inl">
