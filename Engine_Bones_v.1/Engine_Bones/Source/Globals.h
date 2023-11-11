@@ -61,6 +61,21 @@ enum update_status
 #define CHECKERS_HEIGHT 64
 #define CHECKERS_WIDTH 64
 
+#define LIBRARY_PATH "Library/"
+#define MESHES_PATH "Library/Meshes/"
+#define TEXTURES_PATH "Library/Textures/"
+#define SCENES_PATH "Library/Scenes/"
+#define MODELS_PATH "Library/Models/"
+
+#define ASSETS_FOLDER "Assets/"
+#define MODELS_FOLDER "Assets/Models/"
+#define TEXTURES_FOLDER "Assets/Textures/"
+#define SCENES_FOLDER "Assets/Scenes/"
+
+#define MESH_EXTENSION ".mesh"
+#define SCENE_EXTENSION	".scene"
+#define TEXTURE_EXTENSION ".tex"
+
 // Deletes a buffer
 #define RELEASE( x )\
     {\
