@@ -357,6 +357,9 @@
     <ClInclude Include="Source\ImporterTexture.h">
       <Filter>Sources\Importers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\PhysFSManager.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -551,6 +554,7 @@
     <ClCompile Include="Source\ImporterTexture.cpp">
       <Filter>Sources\Importers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PhysFSManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External\MathGeoLib\include\Math\Matrix.inl">

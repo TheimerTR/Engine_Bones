@@ -10,6 +10,7 @@
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
 #include "ModuleScene.h"
+#include "PhysFSManager.h"
 #include "External/MathGeoLib/include/Algorithm/Random/LCG.h"
 
 #include<vector>
@@ -23,6 +24,7 @@ public:
 	class ModuleCamera3D* camera;
 	class ModuleEditor* editor;
 	class ModuleScene* scene;
+	class PhysFSManager* physFSManager;
 
 private:
 
