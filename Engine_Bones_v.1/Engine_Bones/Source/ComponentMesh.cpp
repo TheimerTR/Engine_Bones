@@ -30,6 +30,11 @@ ComponentMesh::~ComponentMesh()
 void ComponentMesh::SetMesh(Mesh* T_Mesh)
 {
 	C_Mesh = T_Mesh;
+
+	obb = C_Mesh->local_aabb;
+	
+	global_aabb.SetNegativeInfinity();
+	global_aabb.Enclose(obb); 
 }
 
 Mesh* ComponentMesh::GetMesh()
@@ -70,4 +75,9 @@ void ComponentMesh::ShowInfo(Mesh* mesh, int i)
 			Owner->mParent->DeleteComponent(this);
 		}
 	}
+}
+
+AABB ComponentMesh::GetAABB() {
+
+	return local_aabb; 
 }

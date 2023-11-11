@@ -201,14 +201,15 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		{
 			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
 			ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
+			ComponentTransform* objectTransform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
 
 			if (objectTexture != nullptr)
 			{
-				RenderDraw(objectMesh, objectTexture);
+				RenderDraw(objectMesh, objectTransform, objectTexture);
 			}
 			else
 			{
-				RenderDraw(objectMesh);
+				RenderDraw(objectMesh, objectTransform);
 			}
 		}
 	}
@@ -256,10 +257,16 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentMaterial* texture)
+void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* transform ,ComponentMaterial* texture)
 {
 	if (mesh != nullptr)
 	{
+		if (transform != nullptr)
+		{
+			glPushMatrix();
+			glMultMatrixf(transform->GetGlobalTransposed());
+		}
+
 		if (mesh->GetMesh()->ShowNormals)
 		{
 				glBegin(GL_LINES);
@@ -333,6 +340,10 @@ void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentMaterial* textur
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+		if (transform != nullptr) {
+			glPopMatrix(); 
+		}
 	}
 	else
 	{

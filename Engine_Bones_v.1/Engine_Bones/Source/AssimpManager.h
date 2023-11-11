@@ -51,6 +51,9 @@ struct Mesh
 	uint VN;
 	//uint VNF;
 	uint VT;
+
+	//
+	AABB local_aabb; 
 };
 
 namespace AssimpManager

@@ -3,6 +3,8 @@
 
 #include "ComponentManager.h"
 #include "AssimpManager.h"
+#include "External/MathGeoLib/include/Geometry/AABB.h"
+#include "External/MathGeoLib/include/Geometry/OBB.h"
 
 class GameObjectManager;
 
@@ -26,7 +28,16 @@ public:
 	void Disable() override;
 	void ShowInfo(Mesh* mesh, int i);
 
+	AABB GetAABB(); 
+
+	AABB local_aabb;
+	AABB global_aabb;
+	OBB  obb;
+
+
 private:
+
+
 
 };
 

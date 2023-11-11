@@ -17,6 +17,10 @@ public:
 	float4x4 mGlobalMatrix;
 	float4x4 mLocalMatrix;
 
+	float3 gPosition;
+	float3 gScale;
+	Quat gRotation;
+
 public: 
 
 	ComponentTransform(GameObjectManager* gameObject);
@@ -26,16 +30,18 @@ public:
 
 	void SetTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation); 
 
-	//void UpdateTransformation(); 
+	void UpdateTransformation(); 
 
 	float3 GetPosition(); 
 	float3 GetScale(); 
 	Quat GetRotation(); 
+	float4x4 GetGlobalMatrix(); 
+	const float* GetGlobalTransposed(); 
 
 	
 private: 
 
-	GameObjectManager* gameObject; 
+	//GameObjectManager* gameObject; 
 
 	//void UpdateMatrix(Transforms* trans) 
 	//{

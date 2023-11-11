@@ -1,6 +1,7 @@
 #include "ComponentTransform.h"
 #include "GameObjectManager.h"
 #include "External/ImGui/imgui.h"
+#include "Application.h"
 
 
 ComponentTransform::ComponentTransform(GameObjectManager* gameObject) : ComponentManager(gameObject)
@@ -9,8 +10,13 @@ ComponentTransform::ComponentTransform(GameObjectManager* gameObject) : Componen
 	mScale = float3::zero;
 	mRotation = Quat::identity;
 
+	gPosition = float3::zero; 
+	gScale = float3::zero; 
+	gRotation = Quat::identity; 
+
 	mGlobalMatrix = float4x4::identity;
 	mLocalMatrix = float4x4::identity;
+
 };
 
 ComponentTransform::~ComponentTransform()
@@ -18,6 +24,10 @@ ComponentTransform::~ComponentTransform()
 	mPosition = float3::zero;
 	mScale = float3::zero;
 	mRotation = Quat::identity;
+
+	gPosition = float3::zero;
+	gScale = float3::zero;
+	gRotation = Quat::identity;
 
 	mGlobalMatrix = float4x4::identity;
 	mLocalMatrix = float4x4::identity;
@@ -28,20 +38,35 @@ void ComponentTransform::ShowInfo()
 
 	if (ImGui::TreeNode("Transform##1"))
 	{
-		ImGui::Text("Local Position"); 
-		ImGui::InputFloat3("Position",(float*)&mPosition);
-		ImGui::InputFloat3("Scale",(float*)&mScale);
-		ImGui::InputFloat3("Rotation",(float*)&mRotation.ToEulerXYZ());
+		//ImGui::Text("Local Position"); 
+		//ImGui::InputFloat3("Position",(float*)&mPosition);
+		//ImGui::InputFloat3("Scale",(float*)&mScale);
+		//ImGui::InputFloat3("Rotation",(float*)&mRotation);
 
-		float3 gPosition, gScale; 
-		Quat gRotation; 
+	
 
-		mGlobalMatrix.Decompose(gPosition, gRotation, gScale);
+		if (ImGui::DragFloat3("Position", &mPosition[0], 0.1f))
+		{
+			UpdateTransformation();
+		}
+
+		if (ImGui::DragFloat3("Rotation", &mRotation.ToEulerXYZ()[0], 0.1f))
+		{
+			UpdateTransformation();
+		}
+
+		if (ImGui::DragFloat3("Scale", &mScale[0], 0.1f))
+		{
+			UpdateTransformation();
+		}
 
 		ImGui::Text("Global Position"); 
-		ImGui::InputFloat3("Position",(float*)&gPosition); 
-		ImGui::InputFloat3("Scale",(float*)&gScale); 
-		ImGui::InputFloat3("Rotation",(float*)&gRotation.ToEulerXYZ()); 
+
+		mGlobalMatrix.Decompose(gPosition, gRotation, gScale); 
+
+		ImGui::Text("Position %f, %f, %f", gPosition.x, gPosition.y, gPosition.z);
+		ImGui::Text("Rotation %f, %f, %f", gRotation.x, gRotation.y, gRotation.z);
+		ImGui::Text("Scale %f, %f, %f", gScale.x, gScale.y, gScale.z);
 
 		ImGui::TreePop(); 
 	}
@@ -77,9 +102,31 @@ Quat ComponentTransform::GetRotation() {
 	return mRotation;
 }
 
-//void ComponentTransform::UpdateTransformation() 
-//{
-//	mLocalMatrix = float4x4::FromTRS(mPosition, mRotation, mScale);
-//
-//}
+float4x4 ComponentTransform::GetGlobalMatrix() {
+	return mGlobalMatrix; 
+}
+
+const float* ComponentTransform::GetGlobalTransposed() 
+{
+	return mGlobalMatrix.Transposed().ptr(); 
+}
+
+void ComponentTransform::UpdateTransformation() 
+{
+	
+
+	mLocalMatrix = float4x4::FromTRS(mPosition, mRotation, mScale);
+
+	//mGlobalMatrix = float4x4::FromTRS(gPosition, gRotation, gScale);
+
+	for (int i = 1; i < app->scene->AllGameObjectManagers.size(); i++) {
+
+		ComponentTransform* objectsToTransform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
+
+		ComponentTransform* parent = objectsToTransform->Owner->mParent->mTransform; 
+
+		objectsToTransform->mGlobalMatrix = parent->mGlobalMatrix * objectsToTransform->mLocalMatrix; 
+	}
+	 
+}
 
