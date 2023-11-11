@@ -3,6 +3,7 @@
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	Root = new GameObjectManager("ROOT NODE", nullptr);
+	Root->UUID = 0;
 	AllGameObjectManagers.push_back(Root);
 	Selected_GameObject = Root;
 }

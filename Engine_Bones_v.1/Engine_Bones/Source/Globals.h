@@ -68,7 +68,7 @@ enum update_status
 #define MODELS_PATH "Library/Models/"
 
 #define ASSETS_FOLDER "Assets/"
-#define MODELS_FOLDER "Assets/Models/"
+#define MODELS_FOLDER "Assets/ModelsFbx/"
 #define TEXTURES_FOLDER "Assets/Textures/"
 #define SCENES_FOLDER "Assets/Scenes/"
 

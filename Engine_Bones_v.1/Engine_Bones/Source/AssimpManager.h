@@ -2,6 +2,7 @@
 #define ASSMIPMANAGER_H_
 
 #include "Globals.h"
+#include "JsonManager.h"
 #include "External/MathGeoLib/include/MathGeoLib.h"
 #include<vector>
 
@@ -13,6 +14,8 @@
 
 class GameObjectManager;
 class TextureManager;
+class JsonManager;
+class JSArray;
 struct Texture;
 
 using namespace std;
@@ -76,6 +79,8 @@ namespace AssimpManager
 	void AplicateTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation); 
 
 	void SetBuffers(Mesh* M_mesh);
+
+	void MetaFileCreator(GameObjectManager* gameObject);
 
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
 

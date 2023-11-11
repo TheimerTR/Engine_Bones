@@ -124,6 +124,10 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	{
 		Importer::ImporterMesh::ImportMesh(M_mesh, scene->mMeshes[i]);
 
+		char* buffer = nullptr;
+		uint size = 0;
+		size = Importer::ImporterMesh::Save(M_mesh, &buffer);
+
 		M_mesh->Name = _ParentObj->mName;
 
 		AllMeshes.push_back(M_mesh);
@@ -133,6 +137,16 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 		ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
 		C_Mesh->SetMesh(M_mesh);
+
+		string pathToMeta;
+		pathToMeta = MESHES_PATH;
+		pathToMeta.append(std::to_string(C_Mesh->UUID));
+		pathToMeta.append(".meta");
+
+		if (size > 0)
+		{
+			app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
+		}
 
 		int C = 0;
 		for (int m = 0; m < app->scene->AllGameObjectManagers.size(); m++)
@@ -166,10 +180,35 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 		{
 			Texture* texture = new Texture();
 			Importer::ImporterTexture::Load(texture, texturePath);
+
+			char* buffer = nullptr;
+			uint size = 0;
+
+			size = Importer::ImporterTexture::Save(texture, &buffer);
+
 			TexturesManager* texturesManager = new TexturesManager();
 			ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
 			C_Texture->SetTexture(texture);
+
+			string pathToMeta;
+			pathToMeta = TEXTURES_PATH;
+			pathToMeta.append(std::to_string(C_Texture->UUID));
+			pathToMeta.append(".meta");
+
+			if (size > 0)
+			{
+				app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
+			}
 		}
+	}
+
+	GameObjectManager* gameObject;
+	MetaFileCreator(_ParentObj);
+
+	for(int f = 0; f < _ParentObj->childrens.size(); f++)
+	{
+		gameObject = _ParentObj->childrens[f];
+		MetaFileCreator(gameObject);
 	}
 }
 
@@ -305,4 +344,55 @@ void AssimpManager::SetBuffers(Mesh* M_mesh)
 	glGenBuffers(1, (GLuint*)&(M_mesh->VT));
 	glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex * 2, M_mesh->textures, GL_STATIC_DRAW);
+}
+
+void AssimpManager::MetaFileCreator(GameObjectManager* gameObject)
+{
+	//string nameToMeta;
+	//string extensionToMeta;
+	string pathToAssetsMeta;
+	string pathToLibraryMeta;
+	JsonManager json;
+
+	char* buffer;
+	uint size;
+
+	pathToAssetsMeta = MODELS_FOLDER;
+	pathToAssetsMeta.append(gameObject->mName.c_str());
+	pathToAssetsMeta.append(".meta");
+	
+	pathToLibraryMeta = MODELS_PATH;
+	pathToLibraryMeta.append(gameObject->mName.c_str());
+	pathToLibraryMeta.append(".meta");
+
+	//app->physFSManager->SplitFilePath(MODELS_FOLDER, nullptr, &nameToMeta, &extensionToMeta);
+	//gameObject->mName = nameToMeta;
+
+	json.addString("Name", gameObject->mName.c_str());
+	json.addNumber("Parent", gameObject->mParent->UUID);
+	//json.addString("Extension", extensionToMeta.c_str());
+	json.addNumber("UID", gameObject->UUID);
+	json.addString("Library Path", MODELS_PATH);
+	json.addString("Type", "GameObject (Make ResourceManager)");
+
+	uint64 modDate = app->physFSManager->GetLastModTime(MODELS_FOLDER);
+	json.addNumber("Last modification date: ", modDate);
+
+	JSArray ComponentstoMeta = json.addArray("Components: ");
+	for(int i = 0; i < gameObject->mComponents.size(); i++)
+	{
+		JsonManager& jsNode = ComponentstoMeta.addNode();
+		jsNode.addNumber("Type", gameObject->mComponents[i]->Type);
+		jsNode.addNumber("UID", gameObject->mComponents[i]->UUID);
+		jsNode.addNumber("Parent", gameObject->mComponents[i]->Owner->UUID);
+		jsNode.addString("Library path", "Model file in library (Add with ResourceManager)");
+	}
+
+	size = json.toSerialize(&buffer);
+
+	if(size > 0)
+	{
+		app->physFSManager->Save(pathToAssetsMeta.c_str(), buffer, size);
+		app->physFSManager->Save(pathToLibraryMeta.c_str(), buffer, size);
+	}
 }
