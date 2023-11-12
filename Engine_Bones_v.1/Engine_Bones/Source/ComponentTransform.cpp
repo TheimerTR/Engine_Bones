@@ -10,9 +10,13 @@ ComponentTransform::ComponentTransform(GameObjectManager* gameObject) : Componen
 	mScale = float3::zero;
 	mRotation = Quat::identity;
 
+	mRotationEuler = mRotation.ToEulerXYZ(); 
+
 	gPosition = float3::zero; 
 	gScale = float3::zero; 
 	gRotation = Quat::identity; 
+
+	gRotationEuler = gRotation.ToEulerXYZ(); 
 
 	mGlobalMatrix = float4x4::identity;
 	mLocalMatrix = float4x4::identity;
@@ -50,7 +54,7 @@ void ComponentTransform::ShowInfo()
 			UpdateTransformation();
 		}
 
-		if (ImGui::DragFloat3("Rotation", &mRotation.ToEulerXYZ()[0], 0.1f))
+		if (ImGui::DragFloat3("Rotation", &mRotationEuler[0], 0.1f))
 		{
 			UpdateTransformation();
 		}
@@ -65,7 +69,7 @@ void ComponentTransform::ShowInfo()
 		mGlobalMatrix.Decompose(gPosition, gRotation, gScale); 
 
 		ImGui::Text("Position %f, %f, %f", gPosition.x, gPosition.y, gPosition.z);
-		ImGui::Text("Rotation %f, %f, %f", gRotation.x, gRotation.y, gRotation.z);
+		ImGui::Text("Rotation %f, %f, %f", gRotationEuler.x, gRotationEuler.y, gRotationEuler.z);
 		ImGui::Text("Scale %f, %f, %f", gScale.x, gScale.y, gScale.z);
 
 		ImGui::TreePop(); 
@@ -113,8 +117,8 @@ const float* ComponentTransform::GetGlobalTransposed()
 
 void ComponentTransform::UpdateTransformation() 
 {
+	mRotation = Quat::FromEulerXYZ(mRotationEuler.x * DEGTORAD, mRotationEuler.y * DEGTORAD, mRotationEuler.z * DEGTORAD); 
 	
-
 	mLocalMatrix = float4x4::FromTRS(mPosition, mRotation, mScale);
 
 	//mGlobalMatrix = float4x4::FromTRS(gPosition, gRotation, gScale);

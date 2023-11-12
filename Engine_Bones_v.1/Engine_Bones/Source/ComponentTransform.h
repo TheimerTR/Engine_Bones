@@ -21,6 +21,10 @@ public:
 	float3 gScale;
 	Quat gRotation;
 
+	float3 mRotationEuler; 
+
+	float3 gRotationEuler; 
+
 public: 
 
 	ComponentTransform(GameObjectManager* gameObject);
