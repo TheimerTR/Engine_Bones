@@ -120,95 +120,173 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 	M_mesh->Path = Path;
 
+	string ExistInMeta;
+	ExistInMeta = MODELS_FOLDER;
+	ExistInMeta.append(_ParentObj->mName);
+	ExistInMeta.append(".meta");
+
 	if (i < scene->mNumMeshes)
 	{
-		Importer::ImporterMesh::ImportMesh(M_mesh, scene->mMeshes[i]);
-
-		char* buffer = nullptr;
-		uint size = 0;
-		size = Importer::ImporterMesh::Save(M_mesh, &buffer);
-
-		M_mesh->Name = _ParentObj->mName;
-
-		AllMeshes.push_back(M_mesh);
-
-		//Components here
-		ComponentTransform* transform = new ComponentTransform(nullptr);
-
-		ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
-		C_Mesh->SetMesh(M_mesh);
-
-		string pathToMeta;
-		pathToMeta = MESHES_PATH;
-		pathToMeta.append(std::to_string(C_Mesh->UUID));
-		pathToMeta.append(".meta");
-
-		if (size > 0)
+		if(!app->physFSManager->Exists(ExistInMeta.c_str()))
 		{
-			app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
-		}
-
-		int C = 0;
-		for (int m = 0; m < app->scene->AllGameObjectManagers.size(); m++)
-		{
-			if (C > 0)
-			{
-				std::string s = std::to_string(C);
-				_ParentObj->mName = M_mesh->Name + s;
-				int compare = strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _ParentObj->mName.c_str());
-
-				if (compare == 0)
-				{
-					std::string stri = std::to_string(C++);
-					_ParentObj->mName = M_mesh->Name + s;
-				}
-			}
-
-			if (strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _ParentObj->mName.c_str()) == 0)
-			{
-				if (C == 0)
-				{
-					_ParentObj->mName = M_mesh->Name;
-					C++;
-				}
-			}
-		}
-
-		AplicateTransform(_ParentObj, pos, scale, rot);
-
-		if (texturePath != NULL)
-		{
-			Texture* texture = new Texture();
-			Importer::ImporterTexture::Load(texture, texturePath);
+			Importer::ImporterMesh::ImportMesh(M_mesh, scene->mMeshes[i]);
 
 			char* buffer = nullptr;
 			uint size = 0;
+			size = Importer::ImporterMesh::Save(M_mesh, &buffer);
 
-			size = Importer::ImporterTexture::Save(texture, &buffer);
+			M_mesh->Name = _ParentObj->mName;
 
-			TexturesManager* texturesManager = new TexturesManager();
-			ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
-			C_Texture->SetTexture(texture);
+			AllMeshes.push_back(M_mesh);
+
+			//Components here
+			ComponentTransform* transform = new ComponentTransform(nullptr);
+
+			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
+			C_Mesh->SetMesh(M_mesh);
 
 			string pathToMeta;
-			pathToMeta = TEXTURES_PATH;
-			pathToMeta.append(std::to_string(C_Texture->UUID));
+			pathToMeta = MESHES_PATH;
+			pathToMeta.append(std::to_string(C_Mesh->UUID));
 			pathToMeta.append(".meta");
 
 			if (size > 0)
 			{
 				app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
 			}
+			RELEASE_ARRAY(buffer);
+
+			int C = 0;
+			for (int m = 0; m < app->scene->AllGameObjectManagers.size(); m++)
+			{
+				if (C > 0)
+				{
+					std::string s = std::to_string(C);
+					_ParentObj->mName = M_mesh->Name + s;
+					int compare = strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _ParentObj->mName.c_str());
+
+					if (compare == 0)
+					{
+						std::string stri = std::to_string(C++);
+						_ParentObj->mName = M_mesh->Name + s;
+					}
+				}
+
+				if (strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _ParentObj->mName.c_str()) == 0)
+				{
+					if (C == 0)
+					{
+						_ParentObj->mName = M_mesh->Name;
+						C++;
+					}
+				}
+			}
+
+			AplicateTransform(_ParentObj, pos, scale, rot);
+
+			if (texturePath != NULL)
+			{
+				Texture* texture = new Texture();
+				Importer::ImporterTexture::Load(texture, texturePath);
+
+				char* buffer = nullptr;
+				uint size = 0;
+
+				size = Importer::ImporterTexture::Save(texture, &buffer);
+
+				TexturesManager* texturesManager = new TexturesManager();
+				ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
+				C_Texture->SetTexture(texture);
+
+				string pathToMeta;
+				pathToMeta = TEXTURES_PATH;
+				pathToMeta.append(std::to_string(C_Texture->UUID));
+				pathToMeta.append(".meta");
+
+				if (size > 0)
+				{
+					app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
+				}
+
+				RELEASE_ARRAY(buffer);
+			}
+		}
+		else
+		{
+			Importer::ImporterMesh::ImportMesh(M_mesh, scene->mMeshes[i]);
+
+			char* buffer = nullptr;
+
+			Importer::ImporterMesh::Save(M_mesh, &buffer);
+
+			M_mesh->Name = _ParentObj->mName;
+
+			AllMeshes.push_back(M_mesh);
+
+			//Components here
+			ComponentTransform* transform = new ComponentTransform(nullptr);
+
+			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
+			C_Mesh->SetMesh(M_mesh);
+
+			RELEASE_ARRAY(buffer);
+
+			int C = 0;
+			for (int m = 0; m < app->scene->AllGameObjectManagers.size(); m++)
+			{
+				if (C > 0)
+				{
+					std::string s = std::to_string(C);
+					_ParentObj->mName = M_mesh->Name + s;
+					int compare = strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _ParentObj->mName.c_str());
+
+					if (compare == 0)
+					{
+						std::string stri = std::to_string(C++);
+						_ParentObj->mName = M_mesh->Name + s;
+					}
+				}
+
+				if (strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _ParentObj->mName.c_str()) == 0)
+				{
+					if (C == 0)
+					{
+						_ParentObj->mName = M_mesh->Name;
+						C++;
+					}
+				}
+			}
+
+			AplicateTransform(_ParentObj, pos, scale, rot);
+
+			if (texturePath != NULL)
+			{
+				Texture* texture = new Texture();
+				Importer::ImporterTexture::Load(texture, texturePath);
+
+				char* buffer = nullptr;
+
+				Importer::ImporterTexture::Save(texture, &buffer);
+
+				TexturesManager* texturesManager = new TexturesManager();
+				ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
+				C_Texture->SetTexture(texture);
+
+				RELEASE_ARRAY(buffer);
+			}
 		}
 	}
 
-	GameObjectManager* gameObject;
-	MetaFileCreator(_ParentObj);
-
-	for(int f = 0; f < _ParentObj->childrens.size(); f++)
+	if (!app->physFSManager->Exists(ExistInMeta.c_str()))
 	{
-		gameObject = _ParentObj->childrens[f];
-		MetaFileCreator(gameObject);
+		GameObjectManager* gameObject;
+		MetaFileCreator(_ParentObj);
+
+		for (int f = 0; f < _ParentObj->childrens.size(); f++)
+		{
+			gameObject = _ParentObj->childrens[f];
+			MetaFileCreator(gameObject);
+		}
 	}
 }
 
