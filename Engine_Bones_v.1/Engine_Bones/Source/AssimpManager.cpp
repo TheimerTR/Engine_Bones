@@ -473,4 +473,6 @@ void AssimpManager::MetaFileCreator(GameObjectManager* gameObject)
 		app->physFSManager->Save(pathToAssetsMeta.c_str(), buffer, size);
 		app->physFSManager->Save(pathToLibraryMeta.c_str(), buffer, size);
 	}
+
+	RELEASE_ARRAY(buffer);
 }
