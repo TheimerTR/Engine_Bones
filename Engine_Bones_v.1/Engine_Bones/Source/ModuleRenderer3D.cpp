@@ -259,6 +259,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* transform ,ComponentMaterial* texture)
 {
+
 	if (mesh != nullptr)
 	{
 		if (transform != nullptr)
@@ -349,4 +350,43 @@ void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* trans
 	{
 		LOG(LogTypeCase::L_ERROR, "Unable to render meshes (No meshes loaded)");
 	}
+}
+
+void ModuleRenderer3D::DrawBox(float3* points, float3 color)
+{
+	glColor3fv(&color.x);
+	glLineWidth(2.f);
+	glBegin(GL_LINES);
+
+	//Draw plane
+	glVertex3fv(&points[0].x);
+	glVertex3fv(&points[2].x);
+	glVertex3fv(&points[2].x);
+	glVertex3fv(&points[6].x);
+	glVertex3fv(&points[6].x);
+	glVertex3fv(&points[4].x);
+	glVertex3fv(&points[4].x);
+	glVertex3fv(&points[0].x);
+
+	glVertex3fv(&points[0].x);
+	glVertex3fv(&points[1].x);
+	glVertex3fv(&points[1].x);
+	glVertex3fv(&points[3].x);
+	glVertex3fv(&points[3].x);
+	glVertex3fv(&points[2].x);
+	glVertex3fv(&points[4].x);
+	glVertex3fv(&points[5].x);
+
+	glVertex3fv(&points[6].x);
+	glVertex3fv(&points[7].x);
+	glVertex3fv(&points[5].x);
+	glVertex3fv(&points[7].x);
+	glVertex3fv(&points[3].x);
+	glVertex3fv(&points[7].x);
+	glVertex3fv(&points[1].x);
+	glVertex3fv(&points[5].x);
+
+	glEnd();
+	glLineWidth(1.f);
+	glColor3f(1.f, 1.f, 1.f);
 }

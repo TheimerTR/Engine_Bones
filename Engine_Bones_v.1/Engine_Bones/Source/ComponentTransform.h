@@ -36,6 +36,8 @@ public:
 
 	void UpdateTransformation(); 
 
+	void UpdateBox(); 
+
 	float3 GetPosition(); 
 	float3 GetScale(); 
 	Quat GetRotation(); 
