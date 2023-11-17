@@ -86,6 +86,7 @@ void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* game
 			Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
 
 			char* buffer = nullptr;
+			uint size = 0;
 
 			Importer::ImporterMesh::Save(R_Mesh, &buffer);
 
@@ -97,6 +98,17 @@ void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* game
 
 			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gameObject->AddComponent(ComponentType::MESH));
 			C_Mesh->SetMesh(M_mesh);
+
+			string pathToMeta;
+			pathToMeta = MESHES_PATH;
+			pathToMeta.append(std::to_string(C_Mesh->UUID));
+			pathToMeta.append(".mesh");
+
+			if (size > 0)
+			{
+				app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
+			}
+			RELEASE_ARRAY(buffer);
 		}
 	}
 	else
@@ -217,7 +229,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				string pathToMeta;
 				pathToMeta = TEXTURES_PATH;
 				pathToMeta.append(std::to_string(C_Texture->UUID));
-				pathToMeta.append(".meta");
+				pathToMeta.append(".texture");
 
 				if (size > 0)
 				{
