@@ -41,6 +41,8 @@ public:
 
 	void RenderDraw(ComponentMesh* mesh, ComponentTransform* transform, ComponentMaterial* texture = nullptr);
 
+	void DrawBox(float3* points, float3 color); 
+
 public:
 
 	Light lights[MAX_LIGHTS];
