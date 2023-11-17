@@ -7,6 +7,7 @@
 #include "AssimpManager.h"
 #include "GameObjectManager.h"
 #include "ComponentMesh.h"
+#include "ResourceMesh.h"
 
 #include <vector>
 #include <stdio.h>
@@ -22,9 +23,9 @@ namespace Importer
 {
 	namespace ImporterMesh
 	{
-		void ImportMesh(Mesh* M_mesh, const aiMesh* aiMesh);
-		uint64 Save(const Mesh* M_mesh, char** fileBuffer);
-		void Load(Mesh* M_mesh, const char* fileBuffer);
+		void ImportMesh(ResourceMesh* M_mesh, const aiMesh* aiMesh);
+		uint64 Save(const ResourceMesh* M_mesh, char** fileBuffer);
+		void Load(ResourceMesh* M_mesh, const char* fileBuffer);
 	}
 };
 

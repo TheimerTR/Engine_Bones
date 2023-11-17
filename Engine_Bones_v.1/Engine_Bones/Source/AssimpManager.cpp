@@ -1,4 +1,5 @@
 #include "AssimpManager.h"
+#include "ResourceMesh.h"
 
 #include<stdlib.h>
 #include<time.h>
@@ -23,6 +24,7 @@
 #include "ModuleScene.h"
 #include "ImporterMesh.h"
 #include "ImporterTexture.h"
+#include "ResourceManager.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -71,18 +73,27 @@ void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* game
 		FileSystem::StringDivide(Path, &FileName, nullptr);
 	
 		Mesh* M_mesh = new Mesh();
+		ResourceMesh* R_Mesh = new ResourceMesh();
 
 		M_mesh->Path = Path;
 
-		M_mesh->Name = FileName;
+		R_Mesh->name = FileName;
 
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
 			Mesh* M_mesh = new Mesh();
 
-			Importer::ImporterMesh::ImportMesh(M_mesh, scene->mMeshes[i]);
+			Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
 
+			char* buffer = nullptr;
+
+			Importer::ImporterMesh::Save(R_Mesh, &buffer);
+
+			M_mesh = R_Mesh->mesh;
+			M_mesh->Name = FileName;
 			AllMeshes.push_back(M_mesh);
+
+			app->scene->AllResources.push_back(R_Mesh);
 
 			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gameObject->AddComponent(ComponentType::MESH));
 			C_Mesh->SetMesh(M_mesh);
@@ -117,8 +128,9 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	}
 
 	Mesh* M_mesh = new Mesh();
+	ResourceMesh* R_Mesh = new ResourceMesh();
 
-	M_mesh->Path = Path;
+	R_Mesh->AssetsPath = Path;
 
 	string ExistInMeta;
 	ExistInMeta = MODELS_FOLDER;
@@ -129,15 +141,19 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	{
 		if(!app->physFSManager->Exists(ExistInMeta.c_str()))
 		{
-			Importer::ImporterMesh::ImportMesh(M_mesh, scene->mMeshes[i]);
+			Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
 
 			char* buffer = nullptr;
 			uint size = 0;
-			size = Importer::ImporterMesh::Save(M_mesh, &buffer);
+			size = Importer::ImporterMesh::Save(R_Mesh, &buffer);
 
+			R_Mesh->name = _ParentObj->mName;
+
+			M_mesh = R_Mesh->mesh;
 			M_mesh->Name = _ParentObj->mName;
-
 			AllMeshes.push_back(M_mesh);
+
+			app->scene->AllResources.push_back(R_Mesh);
 
 			//Components here
 			ComponentTransform* transform = new ComponentTransform(nullptr);
@@ -148,7 +164,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			string pathToMeta;
 			pathToMeta = MESHES_PATH;
 			pathToMeta.append(std::to_string(C_Mesh->UUID));
-			pathToMeta.append(".meta");
+			pathToMeta.append(".mesh");
 
 			if (size > 0)
 			{
@@ -213,15 +229,19 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 		}
 		else
 		{
-			Importer::ImporterMesh::ImportMesh(M_mesh, scene->mMeshes[i]);
+			Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
 
 			char* buffer = nullptr;
 
-			Importer::ImporterMesh::Save(M_mesh, &buffer);
+			Importer::ImporterMesh::Save(R_Mesh, &buffer);
 
+			R_Mesh->name = _ParentObj->mName;
+
+			M_mesh = R_Mesh->mesh;
 			M_mesh->Name = _ParentObj->mName;
-
 			AllMeshes.push_back(M_mesh);
+
+			app->scene->AllResources.push_back(R_Mesh);
 
 			//Components here
 			ComponentTransform* transform = new ComponentTransform(nullptr);

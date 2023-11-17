@@ -185,6 +185,8 @@
     <ClInclude Include="Source\ModuleWindow.h" />
     <ClInclude Include="Source\PhysFSManager.h" />
     <ClInclude Include="Source\Primitive.h" />
+    <ClInclude Include="Source\ResourceManager.h" />
+    <ClInclude Include="Source\ResourceMesh.h" />
     <ClInclude Include="Source\TextureManager.h" />
     <ClInclude Include="Source\Timer.h" />
     <ClInclude Include="Source\ComponentTransform.h" />
@@ -255,6 +257,8 @@
     <ClCompile Include="Source\ModuleWindow.cpp" />
     <ClCompile Include="Source\PhysFSManager.cpp" />
     <ClCompile Include="Source\Primitive.cpp" />
+    <ClCompile Include="Source\ResourceManager.cpp" />
+    <ClCompile Include="Source\ResourceMesh.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>

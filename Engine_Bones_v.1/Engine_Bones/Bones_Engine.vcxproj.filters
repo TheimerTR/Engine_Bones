@@ -55,6 +55,9 @@
     <Filter Include="Sources\Importers">
       <UniqueIdentifier>{55a5abaa-5137-4346-8232-5452c82c9961}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Resources">
+      <UniqueIdentifier>{7385dd2b-5dd0-4220-a870-4acb345bc1f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Module.h">
@@ -363,6 +366,12 @@
     <ClInclude Include="Source\JsonManager.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ResourceManager.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ResourceMesh.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -559,6 +568,12 @@
     </ClCompile>
     <ClCompile Include="Source\PhysFSManager.cpp" />
     <ClCompile Include="Source\JsonManager.cpp" />
+    <ClCompile Include="Source\ResourceManager.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ResourceMesh.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External\MathGeoLib\include\Math\Matrix.inl">

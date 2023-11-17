@@ -25,6 +25,8 @@ public:
 	string AssetsPath = "";
 	string LibraryPath = "";
 
+	ResourceManager* R_Manager;
+
 	ResourceTypes type = ResourceTypes::NONE;
 	uint32 UUID = 0;
 
