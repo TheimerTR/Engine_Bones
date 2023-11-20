@@ -11,6 +11,7 @@
 #include "ModuleWindow.h"
 #include "ModuleScene.h"
 #include "PhysFSManager.h"
+#include "ModuleResource.h"
 #include "External/MathGeoLib/include/Algorithm/Random/LCG.h"
 
 #include<vector>
@@ -25,6 +26,7 @@ public:
 	class ModuleEditor* editor;
 	class ModuleScene* scene;
 	class PhysFSManager* physFSManager;
+	class ModuleResource* resource;
 
 private:
 

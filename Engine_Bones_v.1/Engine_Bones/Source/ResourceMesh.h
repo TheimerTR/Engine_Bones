@@ -3,7 +3,7 @@
 
 #include "Application.h"
 #include "Globals.h"
-#include "ResourceManager.h"
+#include "Resource.h"
 #include "AssimpManager.h"
 
 using namespace std;

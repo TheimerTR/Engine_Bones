@@ -24,7 +24,7 @@
 #include "ModuleScene.h"
 #include "ImporterMesh.h"
 #include "ImporterTexture.h"
-#include "ResourceManager.h"
+#include "Resource.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -241,6 +241,38 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 		}
 		else
 		{
+			char* buffer = nullptr;
+			uint size = app->physFSManager->Load(ExistInMeta.c_str(), &buffer);
+			string path = MODELS_FOLDER + _ParentObj->mName;
+
+			if (size > 0)
+			{
+				JsonManager js(buffer);
+
+				map<uint32, ResourceManager*>::iterator iterator = app->resource->AllResources.find(js.getNumber("UID"));
+
+				if(iterator != app->resource->AllResources.end())
+				{
+					if(app->physFSManager->GetLastModTime(path.c_str()) != js.getNumber("Last_Modification_Date"))
+					{
+						//Volver a crear GameObject	
+					}
+				}
+				else
+				{
+					string name = js.getString("Name");
+					uint32 UUID = js.getNumber("UID");
+					int type = js.getNumber("Type");
+					ResourceManager* resource = new ResourceManager(name.c_str(), path.c_str(), (ResourceTypes)type, UUID);
+					if((ResourceTypes)type == ResourceTypes::MODEL)
+					{
+					
+					}
+
+					uint32 Paretn = js.getNumber("Parent");
+				}
+			}
+
 			Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
 
 			char* buffer = nullptr;
@@ -482,13 +514,24 @@ void AssimpManager::MetaFileCreator(GameObjectManager* gameObject)
 	json.addNumber("Parent", gameObject->mParent->UUID);
 	//json.addString("Extension", extensionToMeta.c_str());
 	json.addNumber("UID", gameObject->UUID);
-	json.addString("Library Path", MODELS_PATH);
-	json.addString("Type", "GameObject (Make ResourceManager)");
+	json.addString("Library_Path", MODELS_PATH);
+	json.addNumber("Type", 1);
 
 	uint64 modDate = app->physFSManager->GetLastModTime(MODELS_FOLDER);
-	json.addNumber("Last modification date: ", modDate);
+	json.addNumber("Last_Modification_Date", modDate);
 
-	JSArray ComponentstoMeta = json.addArray("Components: ");
+	JSArray ChildrenstoMeta = json.addArray("Meshes");
+	for (int i = 0; i < gameObject->childrens.size(); i++)
+	{
+		JsonManager& jsNode = ChildrenstoMeta.addNode();
+		string name_UUID = "Library/Meshes/";
+		string UUID = std::to_string(gameObject->childrens[i]->UUID);
+		name_UUID.append(UUID);
+		name_UUID.append(".mesh");
+		jsNode.addString("Path", name_UUID.c_str());
+	}
+
+	JSArray ComponentstoMeta = json.addArray("Components");
 	for(int i = 0; i < gameObject->mComponents.size(); i++)
 	{
 		JsonManager& jsNode = ComponentstoMeta.addNode();

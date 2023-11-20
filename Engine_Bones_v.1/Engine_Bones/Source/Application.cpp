@@ -18,6 +18,7 @@ Application::Application()
 	editor = new ModuleEditor(this);
 	scene = new ModuleScene(this);
 	physFSManager = new PhysFSManager(this);
+	resource = new ModuleResource(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -28,6 +29,7 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 	AddModule(physFSManager);
+	AddModule(resource);
 
 	// Renderer last!
 	AddModule(scene);

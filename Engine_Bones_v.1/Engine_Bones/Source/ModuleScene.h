@@ -5,7 +5,7 @@
 #include "Application.h"
 #include "AssimpManager.h"
 #include "GameObjectManager.h"
-#include "ResourceManager.h"
+#include "Resource.h"
 
 #include <vector>
 #include <stdio.h>

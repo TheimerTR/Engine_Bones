@@ -1,4 +1,4 @@
-#include "ResourceManager.h"
+#include "Resource.h"
 
 ResourceManager::ResourceManager()
 {
@@ -12,7 +12,7 @@ ResourceManager::ResourceManager(ResourceTypes Rtype) : type(Rtype)
 	R_Manager = this;
 }
 
-ResourceManager::ResourceManager(const char* Rname, uint Rcount, const char* Rassetspath, uint32 Ruuid, ResourceTypes Rtype) : name(Rname), resourceCounter(Rcount), AssetsPath(Rassetspath), UUID(Ruuid), type(Rtype)
+ResourceManager::ResourceManager(const char* Rname, const char* Rassetspath, uint32 Ruuid, ResourceTypes Rtype) : name(Rname), AssetsPath(Rassetspath), UUID(Ruuid), type(Rtype)
 {
 	this->UUID == 0 ? app->RandomGenerator.Int() : Ruuid;
 	R_Manager = this;

@@ -5,6 +5,7 @@
 #include "JsonManager.h"
 #include "External/MathGeoLib/include/MathGeoLib.h"
 #include<vector>
+#include<map>
 
 #include "External/Assimp/include/mesh.h"
 #include "External/Assimp/include/cimport.h"

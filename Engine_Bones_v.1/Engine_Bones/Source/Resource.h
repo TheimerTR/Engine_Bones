@@ -32,7 +32,7 @@ public:
 
 	ResourceManager();
 	ResourceManager(ResourceTypes Rtype);
-	ResourceManager(const char* Rname, uint Rcount, const char* Rassetspath, uint32 Ruuid, ResourceTypes Rtype);
+	ResourceManager(const char* Rname, const char* Rassetspath, ResourceTypes Rtype, uint32 Ruuid);
 
 	string getAssetsPath();
 	string getLibraryPath();
