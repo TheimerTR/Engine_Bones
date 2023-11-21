@@ -2,21 +2,22 @@
 
 Resource::Resource()
 {
-	this->UUID = app->RandomGenerator.Int();
-	R_Manager = this;
-}
+	UUID = app->RandomGenerator.Int();
+};
 
 Resource::Resource(ResourceTypes Rtype) : type(Rtype)
 {
-	this->UUID = app->RandomGenerator.Int();
-	R_Manager = this;
-}
+	UUID = app->RandomGenerator.Int();
+};
 
 Resource::Resource(const char* Rname, const char* Rassetspath, ResourceTypes Rtype, uint32 Ruuid) : name(Rname), AssetsPath(Rassetspath), UUID(Ruuid), type(Rtype)
 {
-	this->UUID == 0 ? app->RandomGenerator.Int() : Ruuid;
-	R_Manager = this;
-}
+	UUID = (Ruuid == 0) ? app->RandomGenerator.Int() : Ruuid;
+};
+
+Resource::~Resource()
+{
+};
 
 string Resource::getAssetsPath()
 {

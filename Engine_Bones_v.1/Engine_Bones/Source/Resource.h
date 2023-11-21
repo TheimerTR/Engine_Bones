@@ -20,22 +20,10 @@ enum class ResourceTypes
 class Resource
 {
 public:
-
 	Resource();
 	Resource(ResourceTypes Rtype);
 	Resource(const char* Rname, const char* Rassetspath, ResourceTypes Rtype, uint32 Ruuid);
-
-	string name;
-	uint resourceCounter = 0;
-	string AssetsPath = "";
-	string LibraryPath = "";
-
-	Resource* R_Manager;
-
-	ResourceTypes type = ResourceTypes::NONE;
-	uint32 UUID = 0;
-
-	vector<uint32> ComponentsOrChildrensInModel;
+	~Resource();
 
 	string getAssetsPath();
 	string getLibraryPath();
@@ -43,6 +31,17 @@ public:
 	uint32 getUUID();
 	ResourceTypes getType();
 	uint getResourceCounter();
+
+public:
+	string name = "";
+	uint resourceCounter = 0;
+	string AssetsPath = "";
+	string LibraryPath = "";
+
+	ResourceTypes type = ResourceTypes::NONE;
+	uint32 UUID = 0;
+
+	vector<uint32> ComponentsOrChildrensInModel;
 };
 
 #endif // RESOURCE_H_

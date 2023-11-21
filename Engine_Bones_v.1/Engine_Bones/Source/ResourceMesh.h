@@ -6,19 +6,16 @@
 #include "Resource.h"
 #include "AssimpManager.h"
 
-using namespace std;
-class Resource;
-
 class ResourceMesh : public Resource
 {
 public:
+	ResourceMesh();
+	ResourceMesh(const char* Rname, const char* Rassetspath, const char* Rlibrarypath, uint32 Ruuid);
+
 	Mesh* mesh;
 
 	uint UUID;
 	uint size;
-
-	ResourceMesh();
-	ResourceMesh(const char* Rname, const char* Rassetspath, const char* Rlibrarypath, uint32 Ruuid);
 };
 
 #endif // RESOURCEMESH_H_

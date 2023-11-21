@@ -1,6 +1,6 @@
 #include "ResourceMesh.h"
 
-ResourceMesh::ResourceMesh()
+ResourceMesh::ResourceMesh() : Resource()
 {
 	this->mesh = new Mesh;
 	this->UUID = app->RandomGenerator.Int();
