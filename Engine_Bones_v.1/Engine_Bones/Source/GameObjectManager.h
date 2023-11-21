@@ -22,6 +22,7 @@ class ComponentManager;
 class ComponentTransform; 
 class ComponentMaterial;
 class ComponentMesh;
+class ComponentCamera; 
 
 class GameObjectManager
 {
