@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 using namespace std;
-class ResourceManager;
+class Resource;
 
 class ModuleScene : public Module
 {
@@ -32,7 +32,7 @@ public:
 	GameObjectManager* Root = nullptr;
 	GameObjectManager* Selected_GameObject = nullptr;
 
-	vector<ResourceManager*> AllResources;
+	vector<Resource*> AllResources;
 };
 
 #endif

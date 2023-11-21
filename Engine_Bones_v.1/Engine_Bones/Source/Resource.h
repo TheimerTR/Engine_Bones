@@ -1,5 +1,5 @@
-#ifndef RESOURCEMANAGER_H_
-#define RESOURCEMANAGER_H_
+#ifndef RESOURCE_H_
+#define RESOURCE_H_
 
 #include "Application.h"
 #include "Globals.h"
@@ -17,22 +17,25 @@ enum class ResourceTypes
 	NONE
 };
 
-class ResourceManager
+class Resource
 {
 public:
+
+	Resource();
+	Resource(ResourceTypes Rtype);
+	Resource(const char* Rname, const char* Rassetspath, ResourceTypes Rtype, uint32 Ruuid);
+
 	string name;
 	uint resourceCounter = 0;
 	string AssetsPath = "";
 	string LibraryPath = "";
 
-	ResourceManager* R_Manager;
+	Resource* R_Manager;
 
 	ResourceTypes type = ResourceTypes::NONE;
 	uint32 UUID = 0;
 
-	ResourceManager();
-	ResourceManager(ResourceTypes Rtype);
-	ResourceManager(const char* Rname, const char* Rassetspath, ResourceTypes Rtype, uint32 Ruuid);
+	vector<uint32> ComponentsOrChildrensInModel;
 
 	string getAssetsPath();
 	string getLibraryPath();
@@ -42,4 +45,4 @@ public:
 	uint getResourceCounter();
 };
 
-#endif // RESOURCEMANAGER_H_
+#endif // RESOURCE_H_

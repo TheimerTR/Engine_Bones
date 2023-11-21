@@ -249,7 +249,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			{
 				JsonManager js(buffer);
 
-				map<uint32, ResourceManager*>::iterator iterator = app->resource->AllResources.find(js.getNumber("UID"));
+				map<uint32, Resource*>::iterator iterator = app->resource->AllResources.find(js.getNumber("UID"));
 
 				if(iterator != app->resource->AllResources.end())
 				{
@@ -263,19 +263,24 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 					string name = js.getString("Name");
 					uint32 UUID = js.getNumber("UID");
 					int type = js.getNumber("Type");
-					ResourceManager* resource = new ResourceManager(name.c_str(), path.c_str(), (ResourceTypes)type, UUID);
+					Resource* resource = new Resource(name.c_str(), path.c_str(), (ResourceTypes)type, UUID);
 					if((ResourceTypes)type == ResourceTypes::MODEL)
 					{
-					
-					}
+						uint32 Paretn = js.getNumber("Parent");
+						JSArray meshesArr = js.getArray("Meshes");
 
-					uint32 Paretn = js.getNumber("Parent");
+						for(int i = 0; i < meshesArr.GetSize(); i++)
+						{
+							JsonManager meshInModel = meshesArr.getNode(i);
+							resource->ComponentsOrChildrensInModel.push_back(meshInModel.getNumber("UID"));
+							string name = meshInModel.getString("Name");
+							uint32 UUID = meshInModel.getNumber("UID");
+						}
+					}
 				}
 			}
 
 			Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
-
-			char* buffer = nullptr;
 
 			Importer::ImporterMesh::Save(R_Mesh, &buffer);
 

@@ -1,44 +1,44 @@
 #include "Resource.h"
 
-ResourceManager::ResourceManager()
+Resource::Resource()
 {
 	this->UUID = app->RandomGenerator.Int();
 	R_Manager = this;
 }
 
-ResourceManager::ResourceManager(ResourceTypes Rtype) : type(Rtype)
+Resource::Resource(ResourceTypes Rtype) : type(Rtype)
 {
 	this->UUID = app->RandomGenerator.Int();
 	R_Manager = this;
 }
 
-ResourceManager::ResourceManager(const char* Rname, const char* Rassetspath, uint32 Ruuid, ResourceTypes Rtype) : name(Rname), AssetsPath(Rassetspath), UUID(Ruuid), type(Rtype)
+Resource::Resource(const char* Rname, const char* Rassetspath, ResourceTypes Rtype, uint32 Ruuid) : name(Rname), AssetsPath(Rassetspath), UUID(Ruuid), type(Rtype)
 {
 	this->UUID == 0 ? app->RandomGenerator.Int() : Ruuid;
 	R_Manager = this;
 }
 
-string ResourceManager::getAssetsPath()
+string Resource::getAssetsPath()
 {
 	return this->AssetsPath;
 }
 
-string ResourceManager::getLibraryPath()
+string Resource::getLibraryPath()
 {
 	return this->LibraryPath;
 }
 
-uint32 ResourceManager::getUUID()
+uint32 Resource::getUUID()
 {
 	return this->UUID;
 }
 
-ResourceTypes ResourceManager::getType()
+ResourceTypes Resource::getType()
 {
 	return this->type;
 }
 
-uint ResourceManager::getResourceCounter()
+uint Resource::getResourceCounter()
 {
 	return this->resourceCounter;
 }

@@ -7,8 +7,10 @@
 #include "AssimpManager.h"
 
 using namespace std;
+class Resource;
 
-class ResourceMesh : public ResourceManager {
+class ResourceMesh : public Resource
+{
 public:
 	Mesh* mesh;
 
