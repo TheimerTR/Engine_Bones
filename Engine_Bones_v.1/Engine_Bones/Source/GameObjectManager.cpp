@@ -5,6 +5,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentCamera.h"
 #include "ModuleScene.h"
 
 GameObjectManager::GameObjectManager(string name, GameObjectManager* parent, int id) : mParent(parent), mName(name), mTransform(nullptr), isActive(true)
@@ -67,6 +68,12 @@ GameObjectManager::~GameObjectManager()
 			RELEASE(Tra);
 		}
 
+		if (Comp->Type == ComponentType::CAMERA)
+		{
+			ComponentCamera* Cam = dynamic_cast<ComponentCamera*>(Comp);
+			RELEASE(Cam);
+		}
+
 		Comp = nullptr;
 
 		//RELEASE(Comp);
@@ -111,6 +118,10 @@ ComponentManager* GameObjectManager::AddComponent(ComponentType type)
 		Comp = new ComponentMaterial(this);
 		Comp->Type = ComponentType::MATERIAL;
 		break;
+	case ComponentType::CAMERA:
+		Comp = new ComponentCamera(this); 
+		Comp->Type = ComponentType::CAMERA; 
+		break; 
 	case ComponentType::NONE:
 		LOG(LogTypeCase::L_ERROR, "The Component Type was nullptr");
 		Comp->Type = ComponentType::NONE;

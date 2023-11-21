@@ -89,6 +89,7 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\AssimpManager.h" />
     <ClInclude Include="Source\Color.h" />
+    <ClInclude Include="Source\ComponentCamera.h" />
     <ClInclude Include="Source\ComponentManager.h" />
     <ClInclude Include="Source\ComponentMaterial.h" />
     <ClInclude Include="Source\ComponentMesh.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\AssimpManager.cpp" />
     <ClCompile Include="Source\Color.cpp" />
+    <ClCompile Include="Source\ComponentCamera.cpp" />
     <ClCompile Include="Source\ComponentManager.cpp" />
     <ClCompile Include="Source\ComponentMaterial.cpp" />
     <ClCompile Include="Source\ComponentMesh.cpp" />

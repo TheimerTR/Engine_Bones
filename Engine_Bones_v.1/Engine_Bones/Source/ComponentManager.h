@@ -18,6 +18,7 @@ enum ComponentType
 	MESH,
 	MATERIAL,
 	SHOWNMATERIAL,
+	CAMERA,
 	NONE,
 };
 
