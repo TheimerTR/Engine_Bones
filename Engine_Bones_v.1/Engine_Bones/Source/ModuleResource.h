@@ -13,8 +13,9 @@
 #include <map>
 
 using namespace std;
-class ResourceManager;
+class Resource;
 class ResourceMesh;
+enum class ResourceTypes;
 
 class ModuleResource : public Module
 {
@@ -26,13 +27,13 @@ public:
 	bool Init() override;
 	bool CleanUp() override;
 
-	ResourceManager* CreateResource(const char* name, ResourceTypes type, uint32 UUID, const char* assetsPath);
+	Resource* CreateResource(const char* name, ResourceTypes type, uint32 UUID, const char* assetsPath);
 
-	ResourceManager* LoadResource(uint32 UUID);
-	ResourceManager* GetResource(uint32 UUID);
+	Resource* LoadResource(uint32 UUID);
+	Resource* GetResource(uint32 UUID);
 
 public:
-	map<uint32, ResourceManager*> AllResources;
+	map<uint32, Resource*> AllResources;
 };
 
 #endif //MODULE_RESOURCE

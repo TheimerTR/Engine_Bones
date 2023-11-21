@@ -18,9 +18,9 @@ bool ModuleResource::CleanUp()
 	return true;
 }
 
-ResourceManager* ModuleResource::CreateResource(const char* name, ResourceTypes type, uint32 UUID, const char* assetsPath)
+Resource* ModuleResource::CreateResource(const char* name, ResourceTypes type, uint32 UUID, const char* assetsPath)
 {
-	ResourceManager* R_Temp = nullptr;
+	Resource* R_Temp = nullptr;
 
 	switch(type)
 	{
