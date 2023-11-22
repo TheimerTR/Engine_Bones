@@ -15,7 +15,7 @@
 using namespace std;
 class Resource;
 class ResourceMesh;
-enum class ResourceTypes;
+enum ResourceTypes;
 
 class ModuleResource : public Module
 {

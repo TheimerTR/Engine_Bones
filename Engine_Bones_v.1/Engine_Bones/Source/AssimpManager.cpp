@@ -44,6 +44,7 @@
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "External/Glew/libx86/glew32.lib")
 
+
 void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 {
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -264,7 +265,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 					uint32 UUID = js.getNumber("UID");
 					int type = js.getNumber("Type");
 					Resource* resource = new Resource(name.c_str(), path.c_str(), (ResourceTypes)type, UUID);
-					if((ResourceTypes)type == ResourceTypes::MODEL)
+					if((ResourceTypes)type == ResourceTypes::R_MODEL)
 					{
 						uint32 Paretn = js.getNumber("Parent");
 						JSArray meshesArr = js.getArray("Meshes");

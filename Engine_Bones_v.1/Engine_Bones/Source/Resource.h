@@ -3,18 +3,13 @@
 
 #include "Application.h"
 #include "Globals.h"
-#include "JsonManager.h"
-#include "AssimpManager.h"
 
-class JsonManager;
-using namespace std;
-
-enum class ResourceTypes
+enum ResourceTypes
 {
-	MESH,
-	MODEL,
-	MATERIAL,
-	NONE
+	R_MESH,
+	R_MODEL,
+	R_MATERIAL,
+	R_NONE
 };
 
 class Resource
@@ -25,23 +20,22 @@ public:
 	Resource(const char* Rname, const char* Rassetspath, ResourceTypes Rtype, uint32 Ruuid);
 	~Resource();
 
-	string getAssetsPath();
-	string getLibraryPath();
+	std::string name;
+	uint resourceCounter;
+	std::string AssetsPath;
+	std::string LibraryPath;
+
+	ResourceTypes type;
+	uint32 UUID;
+
+	std::vector<uint32> ComponentsOrChildrensInModel;
+
+	std::string getAssetsPath();
+	std::string getLibraryPath();
 
 	uint32 getUUID();
 	ResourceTypes getType();
 	uint getResourceCounter();
-
-public:
-	string name = "";
-	uint resourceCounter = 0;
-	string AssetsPath = "";
-	string LibraryPath = "";
-
-	ResourceTypes type = ResourceTypes::NONE;
-	uint32 UUID = 0;
-
-	vector<uint32> ComponentsOrChildrensInModel;
 };
 
 #endif // RESOURCE_H_

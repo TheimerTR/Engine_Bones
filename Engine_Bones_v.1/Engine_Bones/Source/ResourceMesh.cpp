@@ -7,7 +7,7 @@ ResourceMesh::ResourceMesh() : Resource()
 	size = 0;
 }
 
-ResourceMesh::ResourceMesh(const char* Rname, const char* Rassetspath, const char* Rlibrarypath, uint32 Ruuid) : Resource(ResourceTypes::MESH)
+ResourceMesh::ResourceMesh(const char* Rname, const char* Rassetspath, const char* Rlibrarypath, uint32 Ruuid) : Resource(ResourceTypes::R_MESH)
 {
 	this->name = name;
 	this->LibraryPath = LibraryPath;

@@ -24,14 +24,14 @@ Resource* ModuleResource::CreateResource(const char* name, ResourceTypes type, u
 
 	switch(type)
 	{
-	case ResourceTypes::MATERIAL:
+	case ResourceTypes::R_MATERIAL:
 			break;
-	case ResourceTypes::MESH:
+	case ResourceTypes::R_MESH:
 		R_Temp = new ResourceMesh(name, assetsPath, MESHES_PATH, UUID);
 		break;
-	case ResourceTypes::MODEL:
+	case ResourceTypes::R_MODEL:
 		break;
-	case ResourceTypes::NONE:
+	case ResourceTypes::R_NONE:
 		break;
 	}
 
