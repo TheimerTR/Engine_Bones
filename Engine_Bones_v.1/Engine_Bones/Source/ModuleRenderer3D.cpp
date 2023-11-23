@@ -202,7 +202,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
 			ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
 			ComponentTransform* objectTransform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
-
+			
 			if (objectTexture != nullptr)
 			{
 				RenderDraw(objectMesh, objectTransform, objectTexture);

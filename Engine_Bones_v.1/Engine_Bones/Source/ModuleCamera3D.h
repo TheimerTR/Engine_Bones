@@ -5,6 +5,7 @@
 #include "External/MathGeoLib/include/Math/float4x4.h"
 
 #include "External/MathGeoLib/include/Geometry/Frustum.h"
+//#include "ComponentCamera.h"
 
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
@@ -37,6 +38,8 @@ public:
 	
 	//You won't need this after using Frustum
 	float3 X, Y, Z, Position, Reference;
+	
+	//ComponentCamera camera; 
 
 private:
 

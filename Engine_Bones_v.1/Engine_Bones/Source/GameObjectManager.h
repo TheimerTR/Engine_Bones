@@ -11,6 +11,7 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentTransform.h"
+#include "ComponentCamera.h"
 #include "C_Math.h"
 #include "Application.h"
 #include "ModuleScene.h"
