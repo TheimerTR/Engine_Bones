@@ -199,6 +199,11 @@ ComponentManager* GameObjectManager::GetComponentGameObject(ComponentType type)
 				return (object);
 			}
 			break;
+		case ComponentType::CAMERA: 
+			if (object->Type == type)
+			{
+				return (object); 
+			}
 		default:
 			break;
 		}
@@ -267,6 +272,12 @@ void GameObjectManager::DeleteComponent(ComponentManager* ptr)
 			ComponentTransform* Tra = dynamic_cast<ComponentTransform*>(Comp);
 			RELEASE(Tra);
 		}
+		if (Comp->Type == ComponentType::CAMERA)
+		{
+			ComponentCamera* Cam = dynamic_cast<ComponentCamera*>(Cam);
+			RELEASE(Cam);
+		}
+
 
 		Comp = nullptr;
 

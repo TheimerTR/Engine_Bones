@@ -1427,6 +1427,7 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 	{
 		std::vector<ComponentManager*> objectMeshes = gameObject->GetComponentsGameObject(ComponentType::MESH);
 		std::vector<ComponentManager*> objectMaterials = gameObject->GetComponentsGameObject(ComponentType::MATERIAL);
+		std::vector<ComponentManager*> objectCameras = gameObject->GetComponentsGameObject(ComponentType::CAMERA);
 
 		//ComponentMesh* objectMesh = (ComponentMesh*)gameObject->GetComponentGameObject(ComponentType::MESH);
 		//ComponentMaterial* objectTexture = (ComponentMaterial*)gameObject->GetComponentGameObject(ComponentType::MATERIAL);
@@ -1472,7 +1473,7 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 		}
 
 		ComponentTransform* transform;
-		transform = gameObject->mTransform;
+		transform = gameObject->mTransform; 
 
 		transform->ShowInfo();
 
