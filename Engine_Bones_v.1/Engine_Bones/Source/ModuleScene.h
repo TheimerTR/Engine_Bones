@@ -5,13 +5,12 @@
 #include "Application.h"
 #include "AssimpManager.h"
 #include "GameObjectManager.h"
-#include "Resource.h"
+#include "ResourceElement.h"
 
 #include <vector>
 #include <stdio.h>
 
 using namespace std;
-class Resource;
 
 class ModuleScene : public Module
 {
@@ -32,7 +31,7 @@ public:
 	GameObjectManager* Root = nullptr;
 	GameObjectManager* Selected_GameObject = nullptr;
 
-	vector<Resource*> AllResources;
+	vector<ResourceElement*> AllResources;
 };
 
 #endif

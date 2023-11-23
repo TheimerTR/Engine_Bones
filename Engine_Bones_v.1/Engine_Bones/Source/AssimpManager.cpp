@@ -24,7 +24,7 @@
 #include "ModuleScene.h"
 #include "ImporterMesh.h"
 #include "ImporterTexture.h"
-#include "Resource.h"
+#include "ResourceElement.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -78,7 +78,7 @@ void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* game
 
 		M_mesh->Path = Path;
 
-		//R_Mesh->name = FileName;
+		R_Mesh->name = FileName;
 
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
@@ -95,7 +95,7 @@ void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* game
 			M_mesh->Name = FileName;
 			AllMeshes.push_back(M_mesh);
 
-			//app->scene->AllResources.push_back(R_Mesh);
+			app->scene->AllResources.push_back(R_Mesh);
 
 			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gameObject->AddComponent(ComponentType::MESH));
 			C_Mesh->SetMesh(M_mesh);
@@ -143,7 +143,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	Mesh* M_mesh = new Mesh();
 	ResourceMesh* R_Mesh = new ResourceMesh();
 
-	//R_Mesh->AssetsPath = Path;
+	R_Mesh->AssetsPath = Path;
 
 	string ExistInMeta;
 	ExistInMeta = MODELS_FOLDER;
@@ -160,13 +160,13 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			uint size = 0;
 			size = Importer::ImporterMesh::Save(R_Mesh, &buffer);
 
-			//R_Mesh->name = _ParentObj->mName;
+			R_Mesh->name = _ParentObj->mName;
 
 			M_mesh = R_Mesh->mesh;
 			M_mesh->Name = _ParentObj->mName;
 			AllMeshes.push_back(M_mesh);
 
-			//app->scene->AllResources.push_back(R_Mesh);
+			app->scene->AllResources.push_back(R_Mesh);
 
 			//Components here
 			ComponentTransform* transform = new ComponentTransform(nullptr);
@@ -250,9 +250,9 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			{
 				JsonManager js(buffer);
 
-				map<uint32, Resource*>::iterator iterator = app->resource->AllResources.find(js.getNumber("UID"));
+				map<uint32, ResourceElement*>::iterator iterator = app->resource->AllResourcesMap.find(js.getNumber("UID"));
 
-				if(iterator != app->resource->AllResources.end())
+				if(iterator != app->resource->AllResourcesMap.end())
 				{
 					if(app->physFSManager->GetLastModTime(path.c_str()) != js.getNumber("Last_Modification_Date"))
 					{
@@ -263,20 +263,33 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				{
 					string name = js.getString("Name");
 					uint32 UUID = js.getNumber("UID");
+					uint32 Parent = js.getNumber("Parent");
 					int type = js.getNumber("Type");
-					Resource* resource = new Resource(name.c_str(), path.c_str(), (ResourceTypes)type, UUID);
+
+					ResourceElement* resource = new ResourceElement(name.c_str(), path.c_str(), (ResourceTypes)type, UUID);
+					
 					if((ResourceTypes)type == ResourceTypes::R_MODEL)
 					{
-						uint32 Paretn = js.getNumber("Parent");
 						JSArray meshesArr = js.getArray("Meshes");
 
 						for(int i = 0; i < meshesArr.GetSize(); i++)
 						{
 							JsonManager meshInModel = meshesArr.getNode(i);
-							resource->ComponentsOrChildrensInModel.push_back(meshInModel.getNumber("UID"));
-							string name = meshInModel.getString("Name");
-							uint32 UUID = meshInModel.getNumber("UID");
+							resource->MeshesChildrensInModel.push_back(meshInModel.getString("Path"));
 						}
+
+						JSArray compArr = js.getArray("Components");
+
+						for (int i = 0; i < compArr.GetSize(); i++)
+						{
+							JsonManager compInModel = compArr.getNode(i);
+							resource->ComponentsInModel[compInModel.getNumber("UID")] = (ComponentType)compInModel.getNumber("Type");
+						}
+					}
+
+					for(int j = 0; j < resource->MeshesChildrensInModel.size(); j++)
+					{
+						app->resource->LoadResourceElement(resource->MeshesChildrensInModel[i].c_str());
 					}
 				}
 			}
@@ -285,13 +298,13 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 			Importer::ImporterMesh::Save(R_Mesh, &buffer);
 
-			//R_Mesh->name = _ParentObj->mName;
+			R_Mesh->name = _ParentObj->mName;
 
 			M_mesh = R_Mesh->mesh;
 			M_mesh->Name = _ParentObj->mName;
 			AllMeshes.push_back(M_mesh);
 
-			//app->scene->AllResources.push_back(R_Mesh);
+			app->scene->AllResources.push_back(R_Mesh);
 
 			//Components here
 			ComponentTransform* transform = new ComponentTransform(nullptr);

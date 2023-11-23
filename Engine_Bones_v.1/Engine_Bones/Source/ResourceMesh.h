@@ -1,13 +1,11 @@
 #ifndef RESOURCEMESH_H_
 #define RESOURCEMESH_H_
 
-#pragma once
 #include "AssimpManager.h"
-#include "Resource.h"
+#include "ResourceElement.h"
+#include "Application.h"
 
-class Resource;
-
-class ResourceMesh
+class ResourceMesh : public ResourceElement
 {
 public:
 	ResourceMesh();

@@ -3,19 +3,15 @@
 
 #include "Module.h"
 #include "Application.h"
-#include "Resource.h"
 #include "ResourceMesh.h"
 #include "GameObjectManager.h"
-#include "Resource.h"
+#include "ResourceElement.h"
 
 #include <vector>
 #include <stdio.h>
 #include <map>
 
 using namespace std;
-class Resource;
-class ResourceMesh;
-enum ResourceTypes;
 
 class ModuleResource : public Module
 {
@@ -27,13 +23,15 @@ public:
 	bool Init() override;
 	bool CleanUp() override;
 
-	Resource* CreateResource(const char* name, ResourceTypes type, uint32 UUID, const char* assetsPath);
+	ResourceElement* CreateResource(const char* name, ResourceTypes type, uint32 UUID, const char* assetsPath);
 
-	Resource* LoadResource(uint32 UUID);
-	Resource* GetResource(uint32 UUID);
+	ResourceElement* LoadResourceElement(const char* LibraryPath);
+
+	//ResourceElement* LoadResource(uint32 UUID);
+	//ResourceElement* GetResource(uint32 UUID);
 
 public:
-	map<uint32, Resource*> AllResources;
+	map<uint32, ResourceElement*> AllResourcesMap;
 };
 
 #endif //MODULE_RESOURCE
