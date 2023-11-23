@@ -28,9 +28,9 @@ public:
 	void Disable() override;
 	void ShowInfo(Mesh* mesh, int i);
 
-	AABB GetAABB(); 
+	//AABB GetAABB(); 
 
-	AABB local_aabb;
+	//AABB local_aabb;
 	AABB global_aabb;
 	OBB  obb;
 
