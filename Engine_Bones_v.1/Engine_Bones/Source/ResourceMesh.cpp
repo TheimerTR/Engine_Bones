@@ -1,17 +1,17 @@
 #include "ResourceMesh.h"
 
-ResourceMesh::ResourceMesh() : Resource()
+ResourceMesh::ResourceMesh()
 {
 	this->mesh = new Mesh;
 	this->UUID = app->RandomGenerator.Int();
 	size = 0;
 }
 
-ResourceMesh::ResourceMesh(const char* Rname, const char* Rassetspath, const char* Rlibrarypath, uint32 Ruuid) : Resource(ResourceTypes::R_MESH)
+ResourceMesh::ResourceMesh(const char* Rname, const char* Rassetspath, const char* Rlibrarypath, uint32 Ruuid) 
 {
-	this->name = name;
+	/*this->name = name;
 	this->LibraryPath = LibraryPath;
-	this->AssetsPath = AssetsPath;
+	this->AssetsPath = AssetsPath;*/
 
 	if(this->UUID != 0)
 	{

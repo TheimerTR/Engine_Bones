@@ -7,7 +7,7 @@
 
 class Resource;
 
-class ResourceMesh : public Resource
+class ResourceMesh
 {
 public:
 	ResourceMesh();

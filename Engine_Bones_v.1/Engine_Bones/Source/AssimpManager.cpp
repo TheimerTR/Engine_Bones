@@ -78,7 +78,7 @@ void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* game
 
 		M_mesh->Path = Path;
 
-		R_Mesh->name = FileName;
+		//R_Mesh->name = FileName;
 
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
@@ -95,7 +95,7 @@ void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* game
 			M_mesh->Name = FileName;
 			AllMeshes.push_back(M_mesh);
 
-			app->scene->AllResources.push_back(R_Mesh);
+			//app->scene->AllResources.push_back(R_Mesh);
 
 			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gameObject->AddComponent(ComponentType::MESH));
 			C_Mesh->SetMesh(M_mesh);
@@ -143,7 +143,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	Mesh* M_mesh = new Mesh();
 	ResourceMesh* R_Mesh = new ResourceMesh();
 
-	R_Mesh->AssetsPath = Path;
+	//R_Mesh->AssetsPath = Path;
 
 	string ExistInMeta;
 	ExistInMeta = MODELS_FOLDER;
@@ -160,13 +160,13 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			uint size = 0;
 			size = Importer::ImporterMesh::Save(R_Mesh, &buffer);
 
-			R_Mesh->name = _ParentObj->mName;
+			//R_Mesh->name = _ParentObj->mName;
 
 			M_mesh = R_Mesh->mesh;
 			M_mesh->Name = _ParentObj->mName;
 			AllMeshes.push_back(M_mesh);
 
-			app->scene->AllResources.push_back(R_Mesh);
+			//app->scene->AllResources.push_back(R_Mesh);
 
 			//Components here
 			ComponentTransform* transform = new ComponentTransform(nullptr);
@@ -285,13 +285,13 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 			Importer::ImporterMesh::Save(R_Mesh, &buffer);
 
-			R_Mesh->name = _ParentObj->mName;
+			//R_Mesh->name = _ParentObj->mName;
 
 			M_mesh = R_Mesh->mesh;
 			M_mesh->Name = _ParentObj->mName;
 			AllMeshes.push_back(M_mesh);
 
-			app->scene->AllResources.push_back(R_Mesh);
+			//app->scene->AllResources.push_back(R_Mesh);
 
 			//Components here
 			ComponentTransform* transform = new ComponentTransform(nullptr);

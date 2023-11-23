@@ -27,7 +27,7 @@ Resource* ModuleResource::CreateResource(const char* name, ResourceTypes type, u
 	case ResourceTypes::R_MATERIAL:
 			break;
 	case ResourceTypes::R_MESH:
-		R_Temp = new ResourceMesh(name, assetsPath, MESHES_PATH, UUID);
+		//R_Temp = new ResourceMesh(name, assetsPath, MESHES_PATH, UUID);
 		break;
 	case ResourceTypes::R_MODEL:
 		break;

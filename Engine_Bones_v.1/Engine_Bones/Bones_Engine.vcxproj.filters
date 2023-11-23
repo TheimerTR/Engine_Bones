@@ -366,17 +366,17 @@
     <ClInclude Include="Source\JsonManager.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Resource.h">
-      <Filter>Sources\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ResourceMesh.h">
-      <Filter>Sources\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ModuleResource.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Source\ComponentCamera.h">
       <Filter>Sources\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Resource.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ResourceMesh.h">
+      <Filter>Sources\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -574,17 +574,17 @@
     </ClCompile>
     <ClCompile Include="Source\PhysFSManager.cpp" />
     <ClCompile Include="Source\JsonManager.cpp" />
-    <ClCompile Include="Source\Resource.cpp">
-      <Filter>Sources\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ResourceMesh.cpp">
-      <Filter>Sources\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModuleResource.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="Source\ComponentCamera.cpp">
       <Filter>Sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Resource.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ResourceMesh.cpp">
+      <Filter>Sources\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
