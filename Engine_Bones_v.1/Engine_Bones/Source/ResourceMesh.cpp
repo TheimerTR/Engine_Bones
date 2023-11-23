@@ -9,6 +9,7 @@ ResourceMesh::ResourceMesh() : ResourceElement()
 
 ResourceMesh::ResourceMesh(const char* Rname, const char* Rassetspath, const char* Rlibrarypath, uint32 Ruuid) : ResourceElement(ResourceTypes::R_MESH)
 {
+	this->mesh = new Mesh;
 	this->name = name;
 	this->LibraryPath = LibraryPath;
 	this->AssetsPath = AssetsPath;

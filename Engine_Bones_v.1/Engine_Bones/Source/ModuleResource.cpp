@@ -1,6 +1,7 @@
 #include "ModuleResource.h"
 #include "ResourceElement.h"
 #include "FileSystemManager.h"
+#include "ImporterMesh.h"
 
 ModuleResource::ModuleResource(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -53,6 +54,15 @@ ResourceElement* ModuleResource::LoadResourceElement(const char* LibraryPath)
 	{
 		string extension = "";
 		FileSystem::StringDivide(LibraryPath, nullptr, &extension);
+
+		if (strcmp(extension.data(), "mesh") == 0)
+		{
+			ResourceMesh* R_Mesh = new ResourceMesh();
+			Importer::ImporterMesh::Load(R_Mesh, buffer);
+			LOG(LogTypeCase::L_CASUAL, "Resource extension .mesh");
+			temp_ResourceElement = R_Mesh;
+			temp_ResourceElement->type = ResourceTypes::R_MESH;
+		}
 	}
 	else
 	{
