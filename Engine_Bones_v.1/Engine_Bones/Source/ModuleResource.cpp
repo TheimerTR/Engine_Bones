@@ -70,5 +70,7 @@ ResourceElement* ModuleResource::LoadResourceElement(const char* LibraryPath)
 		return nullptr;
 	}
 
+	RELEASE_ARRAY(buffer);
+
 	return temp_ResourceElement;
 }

@@ -184,61 +184,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
 			}
 			RELEASE_ARRAY(buffer);
-
-			int C = 0;
-			for (int m = 0; m < app->scene->AllGameObjectManagers.size(); m++)
-			{
-				if (C > 0)
-				{
-					std::string s = std::to_string(C);
-					_ParentObj->mName = M_mesh->Name + s;
-					int compare = strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _ParentObj->mName.c_str());
-
-					if (compare == 0)
-					{
-						std::string stri = std::to_string(C++);
-						_ParentObj->mName = M_mesh->Name + s;
-					}
-				}
-
-				if (strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _ParentObj->mName.c_str()) == 0)
-				{
-					if (C == 0)
-					{
-						_ParentObj->mName = M_mesh->Name;
-						C++;
-					}
-				}
-			}
-
-			AplicateTransform(_ParentObj, pos, scale, rot);
-
-			if (texturePath != NULL)
-			{
-				Texture* texture = new Texture();
-				Importer::ImporterTexture::Load(texture, texturePath);
-
-				char* buffer = nullptr;
-				uint size = 0;
-
-				size = Importer::ImporterTexture::Save(texture, &buffer);
-
-				TexturesManager* texturesManager = new TexturesManager();
-				ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
-				C_Texture->SetTexture(texture);
-
-				string pathToMeta;
-				pathToMeta = TEXTURES_PATH;
-				pathToMeta.append(std::to_string(C_Texture->UUID));
-				pathToMeta.append(".texture");
-
-				if (size > 0)
-				{
-					app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
-				}
-
-				RELEASE_ARRAY(buffer);
-			}
 		}
 	}
 	else
@@ -301,9 +246,8 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 							Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[i]);
 
-							Importer::ImporterMesh::Save(R_MeshToComponent, &buffer);
-
 							R_MeshToComponent->name = _ParentObj->mName;
+							R_MeshToComponent->mesh->Name = R_MeshToComponent->name;
 
 							AllMeshes.push_back(R_MeshToComponent->mesh);
 
@@ -316,55 +260,29 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				}
 			}
 		}
+	}
 
-		//Components here
-		ComponentTransform* transform = new ComponentTransform(nullptr);
+	M_mesh->Name = _ParentObj->mName;
+
+	//Components here
+	ComponentTransform* transform = new ComponentTransform(nullptr);
+
+	AplicateTransform(_ParentObj, pos, scale, rot);
+
+	if (texturePath != NULL)
+	{
+		Texture* texture = new Texture();
+		Importer::ImporterTexture::Load(texture, texturePath);
+
+		char* buffer = nullptr;
+
+		Importer::ImporterTexture::Save(texture, &buffer);
+
+		TexturesManager* texturesManager = new TexturesManager();
+		ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
+		C_Texture->SetTexture(texture);
 
 		RELEASE_ARRAY(buffer);
-
-		int C = 0;
-		for (int m = 0; m < app->scene->AllGameObjectManagers.size(); m++)
-		{
-			if (C > 0)
-			{
-				std::string s = std::to_string(C);
-				_ParentObj->mName = M_mesh->Name + s;
-				int compare = strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _ParentObj->mName.c_str());
-
-				if (compare == 0)
-				{
-					std::string stri = std::to_string(C++);
-					_ParentObj->mName = M_mesh->Name + s;
-				}
-			}
-
-			if (strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _ParentObj->mName.c_str()) == 0)
-			{
-				if (C == 0)
-				{
-					_ParentObj->mName = M_mesh->Name;
-					C++;
-				}
-			}
-		}
-
-		AplicateTransform(_ParentObj, pos, scale, rot);
-
-		if (texturePath != NULL)
-		{
-			Texture* texture = new Texture();
-			Importer::ImporterTexture::Load(texture, texturePath);
-
-			char* buffer = nullptr;
-
-			Importer::ImporterTexture::Save(texture, &buffer);
-
-			TexturesManager* texturesManager = new TexturesManager();
-			ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
-			C_Texture->SetTexture(texture);
-
-			RELEASE_ARRAY(buffer);
-		}
 	}
 
 	if (!app->physFSManager->Exists(ExistInMeta.c_str()))
@@ -376,6 +294,32 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 		{
 			gameObject = _ParentObj->childrens[f];
 			MetaFileCreator(gameObject);
+		}
+	}
+
+	int C = 0;
+	for (int m = 0; m < app->scene->AllGameObjectManagers.size(); m++)
+	{
+		if (C > 0)
+		{
+			std::string s = std::to_string(C);
+			_ParentObj->mName = M_mesh->Name + s;
+			int compare = strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _ParentObj->mName.c_str());
+
+			if (compare == 0)
+			{
+				std::string stri = std::to_string(C++);
+				_ParentObj->mName = M_mesh->Name + s;
+			}
+		}
+
+		if (strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), _ParentObj->mName.c_str()) == 0)
+		{
+			if (C == 0)
+			{
+				_ParentObj->mName = M_mesh->Name;
+				C++;
+			}
 		}
 	}
 }
