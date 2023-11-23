@@ -42,7 +42,7 @@ public:
 	uint32 UUID;
 
 	vector<string> MeshesChildrensInModel;
-	map<uint32, ComponentType> ComponentsInModel;
+	vector<string> ComponentsInModel;
 
 public:
 	uint32 getUUID();
