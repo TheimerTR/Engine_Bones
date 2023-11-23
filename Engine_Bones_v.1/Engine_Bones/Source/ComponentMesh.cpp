@@ -87,7 +87,7 @@ void ComponentMesh::ShowInfo(Mesh* mesh, int i)
 	}
 }
 
-AABB ComponentMesh::GetAABB() {
-
-	return local_aabb; 
-}
+//AABB ComponentMesh::GetAABB() {
+//
+//	return local_aabb; 
+//}

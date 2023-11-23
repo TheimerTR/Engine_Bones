@@ -72,6 +72,9 @@ void Importer::ImporterMesh::ImportMesh(ResourceMesh* M_mesh, const aiMesh* aiMe
 		}
 	}
 
+	M_mesh->local_aabb.SetNegativeInfinity();
+	M_mesh->local_aabb.Enclose((float3*)M_mesh->mesh->vertex, M_mesh->mesh->num_vertex);
+
 	AssimpManager::SetBuffers(M_mesh->mesh);
 }
 
