@@ -55,6 +55,16 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 
 		FileSystem::StringDivide(path, &FileName, nullptr);
 
+		string dstFolder;
+		dstFolder = MODELS_FOLDER;
+
+		string newPath = "";
+
+		if (!app->physFSManager->Exists(path))
+		{
+			app->physFSManager->DuplicateFile(path, dstFolder.c_str(), newPath);
+		}
+
 		GameObjectNodeTree(scene, scene->mNumMeshes, 0, scene->mRootNode, app->scene->Root, FileName.c_str(), path, pathTexture );
 
 		aiReleaseImport(scene);
