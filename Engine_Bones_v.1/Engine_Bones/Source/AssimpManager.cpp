@@ -252,6 +252,8 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 					uint32 Parent = js.getNumber("Parent");
 					int type = js.getNumber("Type");
 
+					_ParentObj->UUID = UUID;
+
 					ResourceElement* resource = new ResourceElement(name.c_str(), path.c_str(), (ResourceTypes)type, UUID);
 
 					if ((ResourceTypes)type == ResourceTypes::R_MODEL)
