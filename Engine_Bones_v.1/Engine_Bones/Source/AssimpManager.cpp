@@ -55,6 +55,16 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 
 		FileSystem::StringDivide(path, &FileName, nullptr);
 
+		string dstFolder;
+		dstFolder = MODELS_FOLDER;
+
+		string newPath = "";
+
+		if (!app->physFSManager->Exists(path))
+		{
+			app->physFSManager->DuplicateFile(path, dstFolder.c_str(), newPath);
+		}
+
 		GameObjectNodeTree(scene, scene->mNumMeshes, 0, scene->mRootNode, app->scene->Root, FileName.c_str(), path, pathTexture );
 
 		aiReleaseImport(scene);
@@ -198,46 +208,17 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 			map<uint32, ResourceElement*>::iterator iterator = app->resource->AllResourcesMap.find(js.getNumber("UID"));
 
-			if(iterator != app->resource->AllResourcesMap.end())
+			ResourceElement* existResource = app->resource->AllResourcesMap[js.getNumber("UID")];
+
+			if(existResource != nullptr)
 			{
-				if(app->physFSManager->GetLastModTime(path.c_str()) != js.getNumber("Last_Modification_Date"))
-				{
-					//Volver a crear GameObject	
-				}
-			}
-			else
-			{
-				string name = js.getString("Name");
-				uint32 UUID = js.getNumber("UID");
-				uint32 Parent = js.getNumber("Parent");
-				int type = js.getNumber("Type");
+				existResource->resourceCounter += 1;
 
-				ResourceElement* resource = new ResourceElement(name.c_str(), path.c_str(), (ResourceTypes)type, UUID);
-				
-				if((ResourceTypes)type == ResourceTypes::R_MODEL)
-				{
-					JSArray meshesArr = js.getArray("Meshes");
-
-					for(int i = 0; i < meshesArr.GetSize(); i++)
-					{
-						JsonManager meshInModel = meshesArr.getNode(i);
-						resource->MeshesChildrensInModel.push_back(meshInModel.getString("Path"));
-					}
-
-					JSArray compArr = js.getArray("Components");
-
-					for (int i = 0; i < compArr.GetSize(); i++)
-					{
-						JsonManager compInModel = compArr.getNode(i);
-						resource->ComponentsInModel.push_back(compInModel.getString("Library_path"));
-					}
-				}
-
-				for(int j = 0; j < resource->ComponentsInModel.size(); j++)
+				for (int j = 0; j < existResource->ComponentsInModel.size(); j++)
 				{
 					ResourceElement* ResourceToGameobject = nullptr;
-					ResourceToGameobject = app->resource->LoadResourceElement(resource->ComponentsInModel[j].c_str());
-					
+					ResourceToGameobject = app->resource->LoadResourceElement(existResource->ComponentsInModel[j].c_str());
+
 					if (ResourceToGameobject != nullptr)
 					{
 						if (ResourceToGameobject->type == ResourceTypes::R_MESH)
@@ -258,6 +239,72 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 							C_Mesh->SetMesh(R_MeshToComponent->mesh);
 						}
 					}
+				}
+			}
+			else
+			{
+				if (iterator != app->resource->AllResourcesMap.end())
+				{
+					if (app->physFSManager->GetLastModTime(path.c_str()) != js.getNumber("Last_Modification_Date"))
+					{
+						//Volver a crear GameObject	
+					}
+				}
+				else
+				{
+					string name = js.getString("Name");
+					uint32 UUID = js.getNumber("UID");
+					uint32 Parent = js.getNumber("Parent");
+					int type = js.getNumber("Type");
+
+					ResourceElement* resource = new ResourceElement(name.c_str(), path.c_str(), (ResourceTypes)type, UUID);
+
+					if ((ResourceTypes)type == ResourceTypes::R_MODEL)
+					{
+						JSArray meshesArr = js.getArray("Meshes");
+
+						for (int i = 0; i < meshesArr.GetSize(); i++)
+						{
+							JsonManager meshInModel = meshesArr.getNode(i);
+							resource->MeshesChildrensInModel.push_back(meshInModel.getString("Path"));
+						}
+
+						JSArray compArr = js.getArray("Components");
+
+						for (int i = 0; i < compArr.GetSize(); i++)
+						{
+							JsonManager compInModel = compArr.getNode(i);
+							resource->ComponentsInModel.push_back(compInModel.getString("Library_path"));
+						}
+					}
+
+					for (int j = 0; j < resource->ComponentsInModel.size(); j++)
+					{
+						ResourceElement* ResourceToGameobject = nullptr;
+						ResourceToGameobject = app->resource->LoadResourceElement(resource->ComponentsInModel[j].c_str());
+
+						if (ResourceToGameobject != nullptr)
+						{
+							if (ResourceToGameobject->type == ResourceTypes::R_MESH)
+							{
+								ResourceMesh* R_MeshToComponent = (ResourceMesh*)ResourceToGameobject;
+
+								Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[i]);
+
+								R_MeshToComponent->name = _ParentObj->mName;
+								R_MeshToComponent->mesh->Name = R_MeshToComponent->name;
+
+								AllMeshes.push_back(R_MeshToComponent->mesh);
+
+								app->scene->AllResources.push_back(R_MeshToComponent);
+
+								ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
+								C_Mesh->SetMesh(R_MeshToComponent->mesh);
+							}
+						}
+					}
+
+					app->resource->AllResourcesMap[resource->getUUID()] = resource;
 				}
 			}
 		}
