@@ -158,6 +158,7 @@ bool ModuleRenderer3D::Init()
 	App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 	App->editor->actualMesh = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 	App->editor->actualMesh->isSelected = true;
+	App->editor->actualResource = App->scene->AllResources[0];
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);

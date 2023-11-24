@@ -208,16 +208,15 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 			map<uint32, ResourceElement*>::iterator iterator = app->resource->AllResourcesMap.find(js.getNumber("UID"));
 
-			ResourceElement* existResource = app->resource->AllResourcesMap[js.getNumber("UID")];
-
-			if(existResource != nullptr)
+			if(app->resource->AllResourcesMap[js.getNumber("UID")] != nullptr)
 			{
-				existResource->resourceCounter += 1;
+				_ParentObj->UUID = js.getNumber("UID");
+				app->resource->AllResourcesMap[js.getNumber("UID")]->resourceCounter += 1;
 
-				for (int j = 0; j < existResource->ComponentsInModel.size(); j++)
+				for (int j = 0; j < app->resource->AllResourcesMap[js.getNumber("UID")]->ComponentsInModel.size(); j++)
 				{
 					ResourceElement* ResourceToGameobject = nullptr;
-					ResourceToGameobject = app->resource->LoadResourceElement(existResource->ComponentsInModel[j].c_str());
+					ResourceToGameobject = app->resource->LoadResourceElement(app->resource->AllResourcesMap[js.getNumber("UID")]->ComponentsInModel[j].c_str());
 
 					if (ResourceToGameobject != nullptr)
 					{
@@ -229,10 +228,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 							R_MeshToComponent->name = _ParentObj->mName;
 							R_MeshToComponent->mesh->Name = R_MeshToComponent->name;
-
-							AllMeshes.push_back(R_MeshToComponent->mesh);
-
-							app->scene->AllResources.push_back(R_MeshToComponent);
 
 							ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
 							//R_MeshToComponent->mesh->local_aabb = R_MeshToComponent->local_aabb;

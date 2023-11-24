@@ -53,6 +53,7 @@ bool ModuleEditor::Init()
 	DemoWindow = false;
 	OpenAbout = false;
 	InfoGWindow = false;
+	ResourceWindow = false;
 	isMovingParent = false;
 	isMovingChild = false;
 	ThemeSelector = 2;
@@ -63,6 +64,7 @@ bool ModuleEditor::Init()
 
 	moveEntityTo = nullptr;
 	hoveredItem = nullptr;
+	hoveredResource = nullptr;
 
 	numcap = true; 
 
@@ -294,6 +296,12 @@ bool ModuleEditor::DrawEditor()
 				InfoGWindow = !InfoGWindow;
 			}
 
+			if (ImGui::MenuItem("Resources"))
+			{
+				ThemeUpdate();
+				ResourceWindow = !ResourceWindow;
+			}
+
 			ImGui::EndMenu();
 		}
 
@@ -324,6 +332,18 @@ bool ModuleEditor::DrawEditor()
 		ImGui::Begin("Hierarchy", &Hierarchy);
 
 		HierarchyWindowDisplay(app->scene->Root);
+
+		ImGui::End();
+	}
+	
+	if(ResourceWindow)
+	{
+		ImVec2 pos = { 200, 500 };
+		ImGui::SetNextWindowSize(pos);
+
+		ImGui::Begin("Resource Hierarchy", &ResourceWindow);
+
+		ResourceWindowDisplay();
 
 		ImGui::End();
 	}
@@ -476,6 +496,14 @@ bool ModuleEditor::DrawEditor()
 		if (actualMesh != nullptr)
 		{
 			InfoGameObjectWindow(actualMesh);
+		}
+	}
+	
+	if(ResourceWindow)
+	{
+		if (actualResource != nullptr)
+		{
+			ResourceAssetWindow(actualResource);
 		}
 	}
 
@@ -1265,6 +1293,42 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 	}
 }
 
+void ModuleEditor::ResourceWindowDisplay()
+{
+
+	map<uint32, ResourceElement*>::iterator iterator = app->resource->AllResourcesMap.begin();
+
+	int i = 0;
+
+	for (iterator; iterator != app->resource->AllResourcesMap.end(); iterator++)
+	{
+		int R_Flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+		if (iterator->second == actualResource)
+		{
+			R_Flags |= ImGuiTreeNodeFlags_Selected;
+		}
+		else
+		{
+			R_Flags |= ImGuiTreeNodeFlags_None;
+		}
+
+		bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, R_Flags, iterator->second->name.c_str());
+
+		if (ImGui::IsItemHovered())
+		{
+			hoveredResource = iterator->second;
+		}
+
+		if (ImGui::IsItemClicked())
+		{
+			actualResource = iterator->second;
+		}
+
+		i++;
+	}
+}
+
 void ModuleEditor::AddEntity(GameObjectManager* gm)
 {
 	if (ImGui::MenuItem("Create Empty"))
@@ -1495,6 +1559,22 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 			gameObject->mParent->DeleteChild(gameObject);
 		}
 	}
+
+	ImGui::End();
+}
+
+void ModuleEditor::ResourceAssetWindow(ResourceElement* actualResource)
+{
+	ImVec2 size4 = { 500, 200 };
+	ImGui::SetNextWindowSize(size4);
+
+	ImGui::Begin("Resources", &ResourceWindow);
+
+	ImGui::Text("Name: %s", actualResource->name.c_str());
+	ImGui::Text("Assets Path: %s", actualResource->AssetsPath.c_str());
+	ImGui::Text("Library Path: %s", actualResource->LibraryPath.c_str());
+	ImGui::Text("UUID: %d", actualResource->UUID);
+	ImGui::Text("In use: %d", actualResource->resourceCounter);
 
 	ImGui::End();
 }
