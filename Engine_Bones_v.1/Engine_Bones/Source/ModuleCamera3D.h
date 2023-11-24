@@ -5,7 +5,7 @@
 #include "External/MathGeoLib/include/Math/float4x4.h"
 
 #include "External/MathGeoLib/include/Geometry/Frustum.h"
-//#include "ComponentCamera.h"
+#include "ComponentCamera.h"
 
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
@@ -46,6 +46,8 @@ private:
 	mat4x4 ViewMatrix;
 
 	Frustum F_Camera;
+
+	ComponentCamera* camera; 
 
 	//Frustum mMainCamera; Some help here :)
 };

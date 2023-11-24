@@ -36,13 +36,6 @@ void ComponentMesh::SetMesh(Mesh* T_Mesh)
 	global_aabb.SetNegativeInfinity();
 	global_aabb.Enclose(obb); 
 
-	float3 points[8];
-	global_aabb.GetCornerPoints(points);
-	app->renderer3D->DrawBox(points, float3(0.2f, 1.f, 0.101f));
-
-	float3 points2[8];
-	obb.GetCornerPoints(points2);
-	app->renderer3D->DrawBox(points2, float3(0.0f, 152.f, 70.f));
 }
 
 Mesh* ComponentMesh::GetMesh()
@@ -57,7 +50,13 @@ void ComponentMesh::Enable()
 
 bool ComponentMesh::Update()
 {
+	float3 points[8];
+	global_aabb.GetCornerPoints(points);
+	app->renderer3D->DrawBox(points, float3(245.f, 16.f, 16.f));
 
+	float3 points2[8];
+	obb.GetCornerPoints(points2);
+	app->renderer3D->DrawBox(points2, float3(0.0f, 152.f, 70.f));
 
 	return true;
 }

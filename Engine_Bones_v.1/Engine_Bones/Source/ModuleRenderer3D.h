@@ -52,6 +52,8 @@ public:
 	bool OpenWindow; 
 	bool Wireframe;
 
+	ComponentCamera* cameraScene; 
+
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;
 };

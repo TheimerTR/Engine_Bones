@@ -23,6 +23,9 @@ using namespace std;
 
 struct Mesh
 {
+	Mesh() {
+		local_aabb.SetNegativeInfinity();
+	}
 	string Name = "";
 
 	//uint id_index = 0; // index in VRAM

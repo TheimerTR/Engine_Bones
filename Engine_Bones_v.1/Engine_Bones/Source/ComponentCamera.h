@@ -9,18 +9,17 @@ class GameObjectManager;
 
 class ComponentCamera : public ComponentManager
 {
-public:
-	
-	Frustum frustum;
 
 public:
 
 	ComponentCamera(GameObjectManager* gameObject);
 	~ComponentCamera();
 
+public:
+
+	Frustum frustum;
 
 private:
-
 
 
 };

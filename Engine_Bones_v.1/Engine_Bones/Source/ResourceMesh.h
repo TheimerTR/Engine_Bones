@@ -15,8 +15,6 @@ public:
 
 	uint UUID;
 	uint size;
-
-	AABB local_aabb; 
 };
 
 #endif // RESOURCEMESH_H_

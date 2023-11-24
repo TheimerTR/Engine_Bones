@@ -254,6 +254,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 							app->scene->AllResources.push_back(R_MeshToComponent);
 
 							ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
+							//R_MeshToComponent->mesh->local_aabb = R_MeshToComponent->local_aabb;
 							C_Mesh->SetMesh(R_MeshToComponent->mesh);
 						}
 					}
