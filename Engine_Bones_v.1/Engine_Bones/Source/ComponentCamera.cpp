@@ -24,3 +24,32 @@ ComponentCamera::~ComponentCamera() {
 
 }
 
+void ComponentCamera::LookAt(const float3& Spot) 
+{
+	frustum.front = (Spot - frustum.pos).Normalized();
+	float3 X = (float3(0.0f, 1.0f, 0.0f).Cross(frustum.front)).Normalized();
+	frustum.up = frustum.front.Cross(X);
+}
+
+void ComponentCamera::Draw()
+{
+
+}
+
+
+float* ComponentCamera::GetViewMatrix()
+{
+	math::float4x4 mat = frustum.ViewMatrix();
+	mat.Transposed();
+
+	return (float*)mat.v; 
+}
+
+float* ComponentCamera::GetProjectionMatrix()
+{
+	math::float4x4 mat = frustum.ProjectionMatrix();
+	mat.Transposed();
+
+	return (float*)mat.v;
+}
+

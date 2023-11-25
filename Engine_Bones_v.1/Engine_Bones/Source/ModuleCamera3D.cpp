@@ -33,7 +33,7 @@ bool ModuleCamera3D::Start()
 	LOG(LogTypeCase::L_CASUAL, "Setting up the camera");
 	bool ret = true;
 
-	camera = new ComponentCamera(nullptr); 
+	cameraEditor = new ComponentCamera(nullptr); 
 
 	LookAt(float3::zero);
 
@@ -252,11 +252,13 @@ void ModuleCamera3D::LookAt( const float3&Spot)
 {
 	//Reference = Spot;
 
-	Z = (camera->frustum.pos - Spot).Normalized();
-	X = (float3(0.0f, 1.0f, 0.0f).Cross(Z)).Normalized();
-	Y = Z.Cross(X);
+	//Z = (cameraEditor->frustum.pos - Spot).Normalized();
+	//X = (float3(0.0f, 1.0f, 0.0f).Cross(Z)).Normalized();
+	//Y = Z.Cross(X);
 
-	CalculateViewMatrix();
+	cameraEditor->LookAt(Spot); 
+
+	//CalculateViewMatrix();
 }
 
 

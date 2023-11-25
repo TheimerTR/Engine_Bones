@@ -47,7 +47,7 @@ private:
 
 	Frustum F_Camera;
 
-	ComponentCamera* camera; 
+	ComponentCamera* cameraEditor; 
 
 	//Frustum mMainCamera; Some help here :)
 };

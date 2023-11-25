@@ -15,6 +15,13 @@ public:
 	ComponentCamera(GameObjectManager* gameObject);
 	~ComponentCamera();
 
+	void LookAt(const float3& Spot); 
+	void Draw(); 
+	//float* GetViewMatrix();
+
+	float* GetViewMatrix();
+	float* GetProjectionMatrix(); 
+
 public:
 
 	Frustum frustum;
