@@ -43,6 +43,8 @@ public:
 
 	void DrawBox(float3* points, float3 color); 
 
+	void SetCameraEditor(ComponentCamera* camera); 
+
 public:
 
 	Light lights[MAX_LIGHTS];
@@ -52,7 +54,7 @@ public:
 	bool OpenWindow; 
 	bool Wireframe;
 
-	//ComponentCamera* cameraScene; 
+	ComponentCamera* ActiveCameraEditor; 
 	ComponentCamera* cameraGame; 
 
 	//You won't need this after using Frustum

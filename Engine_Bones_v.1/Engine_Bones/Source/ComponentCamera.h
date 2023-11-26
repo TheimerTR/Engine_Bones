@@ -19,6 +19,8 @@ public:
 	void Draw(); 
 	//float* GetViewMatrix();
 
+	void SetRatio(float ratio); 
+
 	float* GetViewMatrix();
 	float* GetProjectionMatrix(); 
 

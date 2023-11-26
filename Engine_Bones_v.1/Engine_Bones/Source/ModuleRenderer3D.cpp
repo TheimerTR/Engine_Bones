@@ -247,14 +247,19 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
+	//float ratio = (float)width / float(height); 
+	//ActiveCameraEditor->SetRatio(ratio); 
+
 	glViewport(0, 0, width, height);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	//todo: USE MATHGEOLIB here BEFORE 1st delivery! (TIP: Use MathGeoLib/Geometry/Frustum.h, view and projection matrices are managed internally.)
+	/*todo: USE MATHGEOLIB here BEFORE 1st delivery! (TIP: Use MathGeoLib/Geometry/Frustum.h, view and projection matrices are managed internally.)*/
 	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
 	glLoadMatrixf(ProjectionMatrix.M);
+
+	//glLoadMatrixf(ActiveCameraEditor->GetProjectionMatrix()); 
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -392,4 +397,9 @@ void ModuleRenderer3D::DrawBox(float3* points, float3 color)
 	glEnd();
 	glLineWidth(1.f);
 	glColor3f(1.f, 1.f, 1.f);
+}
+
+void ModuleRenderer3D::SetCameraEditor(ComponentCamera* camera)
+{
+	ActiveCameraEditor = camera;
 }
