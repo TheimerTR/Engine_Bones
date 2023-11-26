@@ -38,7 +38,7 @@ bool ModuleCamera3D::Start()
 
 	LookAt(float3::zero);
 
-	app->renderer3D->ActiveCameraEditor(cameraEditor); 
+	//App->renderer3D->SetCameraEditor(cameraEditor);
 
 	return ret;
 }

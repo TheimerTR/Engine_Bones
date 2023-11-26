@@ -38,6 +38,11 @@ void ComponentCamera::Draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void ComponentCamera::SetRatio(float ratio)
+{
+	frustum.verticalFov = 60.0f * DEGTORAD;
+	frustum.horizontalFov = ratio * atanf(tanf(frustum.verticalFov / 2.0f) * 1.3f);
+}
 
 float* ComponentCamera::GetViewMatrix()
 {
