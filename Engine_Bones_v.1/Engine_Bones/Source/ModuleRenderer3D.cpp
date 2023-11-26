@@ -253,8 +253,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 
 	//todo: USE MATHGEOLIB here BEFORE 1st delivery! (TIP: Use MathGeoLib/Geometry/Frustum.h, view and projection matrices are managed internally.)
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(ProjectionMatrix.M);
+	//ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+	//glLoadMatrixf(ProjectionMatrix.M);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

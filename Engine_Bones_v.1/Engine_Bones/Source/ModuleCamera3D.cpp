@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "GameObjectManager.h"
 #include "External/MathGeoLib/include/Math/Quat.h"
@@ -36,6 +37,8 @@ bool ModuleCamera3D::Start()
 	cameraEditor = new ComponentCamera(nullptr); 
 
 	LookAt(float3::zero);
+
+	app->renderer3D->ActiveCameraEditor(cameraEditor); 
 
 	return ret;
 }

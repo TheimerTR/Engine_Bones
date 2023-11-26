@@ -33,7 +33,9 @@ void ComponentCamera::LookAt(const float3& Spot)
 
 void ComponentCamera::Draw()
 {
-
+	Color c = { 0.0f, 0.0f, 0.0f, 1.0f };
+	glClearColor(c.r, c.g, c.b, c.a);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 
