@@ -8,6 +8,7 @@
 #include <map>
 
 using namespace std;
+class GameObjectManager;
 
 enum class ResourceTypes
 {
@@ -43,6 +44,7 @@ public:
 
 	vector<string> MeshesChildrensInModel;
 	vector<string> ComponentsInModel;
+	vector<GameObjectManager*> AssociatedGameObjects;
 
 public:
 	uint32 getUUID();

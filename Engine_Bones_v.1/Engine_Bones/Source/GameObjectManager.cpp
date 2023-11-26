@@ -39,6 +39,16 @@ GameObjectManager::~GameObjectManager()
 {
 	app->scene->AllGameObjectManagers.erase(find(app->scene->AllGameObjectManagers.begin(), app->scene->AllGameObjectManagers.end(), this));
 
+	map<uint32, ResourceElement*>::iterator iterator = app->resource->AllResourcesMap.begin();
+
+	for (iterator; iterator != app->resource->AllResourcesMap.end(); iterator++)
+	{
+		if (UUID == iterator->second->UUID)
+		{
+			iterator->second->resourceCounter -= 1;
+		}
+	}
+
 	for (uint i = 0; i < childrens.size(); i++)
 	{
 		RELEASE(childrens[i]);
@@ -260,29 +270,29 @@ void GameObjectManager::DeleteComponent(ComponentManager* ptr)
 		if (Comp->Type == ComponentType::MATERIAL)
 		{
 			ComponentMaterial* Mat = dynamic_cast<ComponentMaterial*>(Comp);
+			mComponents.erase(find(mComponents.begin(), mComponents.end(), Comp));
 			RELEASE(Mat);
 		}
 		if (Comp->Type == ComponentType::MESH)
 		{
 			ComponentMesh* Mes = dynamic_cast<ComponentMesh*>(Comp);
+			mComponents.erase(find(mComponents.begin(), mComponents.end(), Comp));
 			RELEASE(Mes);
 		}
 		if (Comp->Type == ComponentType::TRANSFORM)
 		{
 			ComponentTransform* Tra = dynamic_cast<ComponentTransform*>(Comp);
+			mComponents.erase(find(mComponents.begin(), mComponents.end(), Comp));
 			RELEASE(Tra);
 		}
 		if (Comp->Type == ComponentType::CAMERA)
 		{
-			ComponentCamera* Cam = dynamic_cast<ComponentCamera*>(Cam);
+			ComponentCamera* Cam = dynamic_cast<ComponentCamera*>(Comp);
+			mComponents.erase(find(mComponents.begin(), mComponents.end(), Comp));
 			RELEASE(Cam);
 		}
 
-
 		Comp = nullptr;
-
-		/*mComponents.erase(find(mComponents.begin(), mComponents.end(), ptr)); 
-		RELEASE(ptr); */
 	}
 }
 

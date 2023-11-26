@@ -255,6 +255,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 					_ParentObj->UUID = UUID;
 
 					ResourceElement* resource = new ResourceElement(name.c_str(), path.c_str(), (ResourceTypes)type, UUID);
+					resource->resourceCounter += 1;
 
 					if ((ResourceTypes)type == ResourceTypes::R_MODEL)
 					{
@@ -301,6 +302,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 						}
 					}
 
+					resource->AssociatedGameObjects.push_back(_ParentObj);
 					app->resource->AllResourcesMap[resource->getUUID()] = resource;
 				}
 			}
