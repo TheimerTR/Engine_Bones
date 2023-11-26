@@ -4,6 +4,8 @@
 #include "ComponentManager.h"
 #include "AssimpManager.h"
 
+#include "External/MathGeoLib/include/Geometry/Frustum.h"
+
 
 class GameObjectManager;
 
@@ -15,14 +17,19 @@ public:
 	ComponentCamera(GameObjectManager* gameObject);
 	~ComponentCamera();
 
+	bool Update(); 
+
 	void LookAt(const float3& Spot); 
 	void Draw(); 
+	void EndDraw(); 
 	//float* GetViewMatrix();
 
 	void SetRatio(float ratio); 
 
 	float* GetViewMatrix();
 	float* GetProjectionMatrix(); 
+
+	float3 GetPosition(); 
 
 public:
 

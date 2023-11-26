@@ -22,23 +22,36 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	Reference = float3(0.0f, 0.0f, 0.0f);
 	ViewMatrix = IdentityMatrix;
 
-	CalculateViewMatrix();
+	cameraEditor = new ComponentCamera(nullptr);
+
+	cameraEditor->frustum.farPlaneDistance = 5000; 
+	cameraEditor->frustum.pos = float3(8.0f, 3.0f, 8.0f); 
+
+	//CalculateViewMatrix();
 }
 
 ModuleCamera3D::~ModuleCamera3D()
 {}
 
 // -----------------------------------------------------------------
-bool ModuleCamera3D::Start()
+bool ModuleCamera3D::Init()
 {
 	LOG(LogTypeCase::L_CASUAL, "Setting up the camera");
 	bool ret = true;
 
-	cameraEditor = new ComponentCamera(nullptr); 
+
+	App->renderer3D->SetCameraEditor(cameraEditor);
 
 	LookAt(float3::zero);
 
-	//App->renderer3D->SetCameraEditor(cameraEditor);
+	return ret; 
+}
+
+bool ModuleCamera3D::Start()
+{
+
+	bool ret = true; 
+
 
 	return ret;
 }
@@ -53,12 +66,12 @@ bool ModuleCamera3D::CleanUp()
 
 update_status ModuleCamera3D::PreUpdate(float dt)
 {
-	Color c = {0.0f, 0.0f, 0.0f, 1.0f};
-	glClearColor(c.r, c.g, c.b, c.a);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf((GLfloat*)ViewMatrixOpenGL().v);
-
+//	Color c = {0.0f, 0.0f, 0.0f, 1.0f};
+//	glClearColor(c.r, c.g, c.b, c.a);
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//	glMatrixMode(GL_MODELVIEW);
+//	glLoadMatrixf((GLfloat*)ViewMatrixOpenGL().v);
+//
 	return UPDATE_CONTINUE;
 }
 
@@ -71,131 +84,131 @@ float4x4 ModuleCamera3D::ViewMatrixOpenGL()
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {
-	// Implement a debug camera with keys and mouse
-	// Now we can make this movememnt frame rate independant!
+	//// Implement a debug camera with keys and mouse
+	//// Now we can make this movememnt frame rate independant!
 
-	float3 newPos(0,0,0);
-	float speed = 3.0f * dt;
-	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-		speed = 8.0f * dt;
+	//float3 newPos(0,0,0);
+	//float speed = 3.0f * dt;
+	//if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+	//	speed = 8.0f * dt;
 
-	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) newPos.y += speed;
-	if(App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) newPos.y -= speed;
-	
-	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)  newPos += Z * speed;
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
+	//if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) newPos.y += speed;
+	//if(App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) newPos.y -= speed;
+	//
+	//if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)  newPos += Z * speed;
+	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
-	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
+	//if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
+	//if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) Focus(); 
+	//if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) Focus(); 
 
-	if (App->input->GetMouseZ() != 0) {
+	//if (App->input->GetMouseZ() != 0) {
 
-		if (App->input->GetMouseZ() > 0) {
-			newPos -= Z * speed * 4;
-		}
+	//	if (App->input->GetMouseZ() > 0) {
+	//		newPos -= Z * speed * 4;
+	//	}
 
-		else if (App->input->GetMouseZ() < 0) {
-			newPos += Z * speed * 4;
-		}
-	}
-	
+	//	else if (App->input->GetMouseZ() < 0) {
+	//		newPos += Z * speed * 4;
+	//	}
+	//}
+	//
 
-	Position += newPos;
-	//Reference += newPos;
+	//Position += newPos;
+	////Reference += newPos;
 
-	// Mouse motion ----------------
+	//// Mouse motion ----------------
 
-	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
-	{
-		int dx = -App->input->GetMouseXMotion();
-		int dy = -App->input->GetMouseYMotion();
+	//if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	//{
+	//	int dx = -App->input->GetMouseXMotion();
+	//	int dy = -App->input->GetMouseYMotion();
 
-		float Sensitivity = 0.35f * dt;
+	//	float Sensitivity = 0.35f * dt;
 
-		//Position -= Reference;
+	//	//Position -= Reference;
 
-		if(dx != 0)
-		{
-			float DeltaX = (float)dx * Sensitivity;
+	//	if(dx != 0)
+	//	{
+	//		float DeltaX = (float)dx * Sensitivity;
 
-			float3 rotationAxis(0.0f, 1.0f, 0.0f);
-			Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX);
+	//		float3 rotationAxis(0.0f, 1.0f, 0.0f);
+	//		Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX);
 
-			X = rotationQuat * X;
-			Y = rotationQuat * Y;
-			Z = rotationQuat * Z;
-		}
+	//		X = rotationQuat * X;
+	//		Y = rotationQuat * Y;
+	//		Z = rotationQuat * Z;
+	//	}
 
-		if(dy != 0)
-		{
-			float DeltaY = (float)dy * Sensitivity;
+	//	if(dy != 0)
+	//	{
+	//		float DeltaY = (float)dy * Sensitivity;
 
-			Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
+	//		Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
 
-			Y = rotationQuat * Y;
-			Z = rotationQuat * Z;
+	//		Y = rotationQuat * Y;
+	//		Z = rotationQuat * Z;
 
-			if(Y.y < 0.0f)
-			{
-				Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				Y = Z.Cross(X);
-			}
-		}
+	//		if(Y.y < 0.0f)
+	//		{
+	//			Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+	//			Y = Z.Cross(X);
+	//		}
+	//	}
 
-		//Reference = Z * Reference.Length();
-	}
+	//	//Reference = Z * Reference.Length();
+	//}
 
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
-	{
-		int dx = -App->input->GetMouseXMotion();
-		int dy = -App->input->GetMouseYMotion();
+	//if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	//{
+	//	int dx = -App->input->GetMouseXMotion();
+	//	int dy = -App->input->GetMouseYMotion();
 
-		float Sensitivity = 0.35f * dt;
+	//	float Sensitivity = 0.35f * dt;
 
-		Position -= Reference;
+	//	Position -= Reference;
 
-		if (dx != 0)
-		{
-			float DeltaX = (float)dx * Sensitivity;
+	//	if (dx != 0)
+	//	{
+	//		float DeltaX = (float)dx * Sensitivity;
 
-			float3 rotationAxis(0.0f, 1.0f, 0.0f);
-			Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX);
+	//		float3 rotationAxis(0.0f, 1.0f, 0.0f);
+	//		Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX);
 
-			X = rotationQuat * X;
-			Y = rotationQuat * Y;
-			Z = rotationQuat * Z;
-		}
+	//		X = rotationQuat * X;
+	//		Y = rotationQuat * Y;
+	//		Z = rotationQuat * Z;
+	//	}
 
-		if (dy != 0)
-		{
-			float DeltaY = (float)dy * Sensitivity;
+	//	if (dy != 0)
+	//	{
+	//		float DeltaY = (float)dy * Sensitivity;
 
-			Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
+	//		Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
 
-			Y = rotationQuat * Y;
-			Z = rotationQuat * Z;
+	//		Y = rotationQuat * Y;
+	//		Z = rotationQuat * Z;
 
-			if (Y.y < 0.0f)
-			{
-				Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				Y = Z.Cross(X);
-			}
-		}
+	//		if (Y.y < 0.0f)
+	//		{
+	//			Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+	//			Y = Z.Cross(X);
+	//		}
+	//	}
 
-		Position = Reference + Z * Length(Position);
-	}
-
-
-	//LookAt(Reference);
-
-	//Activar si selección de objeto, asignar Reference a centro de obj
-	//	LookAt(Reference);
+	//	Position = Reference + Z * Length(Position);
+	//}
 
 
-	// Recalculate matrix -------------
-	CalculateViewMatrix();
+	////LookAt(Reference);
+
+	////Activar si selección de objeto, asignar Reference a centro de obj
+	////	LookAt(Reference);
+
+
+	//// Recalculate matrix -------------
+	//CalculateViewMatrix();
 
 	return UPDATE_CONTINUE;
 }

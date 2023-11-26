@@ -24,6 +24,14 @@ ComponentCamera::~ComponentCamera() {
 
 }
 
+bool ComponentCamera::Update()
+{
+	float3 points[8];
+	frustum.GetCornerPoints(points);
+
+	return true; 
+}
+
 void ComponentCamera::LookAt(const float3& Spot) 
 {
 	frustum.front = (Spot - frustum.pos).Normalized();
@@ -33,9 +41,25 @@ void ComponentCamera::LookAt(const float3& Spot)
 
 void ComponentCamera::Draw()
 {
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(GetProjectionMatrix());
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(GetViewMatrix());
+
 	Color c = { 0.0f, 0.0f, 0.0f, 1.0f };
 	glClearColor(c.r, c.g, c.b, c.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void ComponentCamera::EndDraw()
+{
+	glDisable(GL_DEPTH_TEST);
 }
 
 void ComponentCamera::SetRatio(float ratio)
@@ -58,5 +82,10 @@ float* ComponentCamera::GetProjectionMatrix()
 	mat.Transposed();
 
 	return (float*)mat.v;
+}
+
+float3 ComponentCamera::GetPosition()
+{
+	return frustum.pos; 
 }
 

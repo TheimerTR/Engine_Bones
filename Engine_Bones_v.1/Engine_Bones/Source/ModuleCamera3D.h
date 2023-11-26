@@ -15,7 +15,7 @@ class ModuleCamera3D : public Module
 public:
 	ModuleCamera3D(Application* app, bool start_enabled = true);
 	~ModuleCamera3D();
-
+	bool Init();
 	bool Start();
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
