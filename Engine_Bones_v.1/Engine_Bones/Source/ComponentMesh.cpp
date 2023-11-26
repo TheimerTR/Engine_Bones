@@ -81,7 +81,7 @@ void ComponentMesh::ShowInfo(Mesh* mesh, int i)
 
 		if (ImGui::Button((std::string("Delete Mesh##%s") + to_string(i).c_str()).c_str()))
 		{
-			Owner->mParent->DeleteComponent(this);
+			Owner->DeleteComponent(this);
 		}
 	}
 }

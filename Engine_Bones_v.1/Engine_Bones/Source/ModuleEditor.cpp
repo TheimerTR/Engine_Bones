@@ -501,10 +501,7 @@ bool ModuleEditor::DrawEditor()
 	
 	if(ResourceWindow)
 	{
-		if (actualResource != nullptr)
-		{
-			ResourceAssetWindow(actualResource);
-		}
+		ResourceAssetWindow();
 	}
 
 	if (OpenAbout)
@@ -1137,157 +1134,169 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 
 	for (int i = 0; i < gameObject->childrens.size(); i++)
 	{
-		gm = gameObject->childrens[i];
-
-		if (gm->childrens.size() > 0)
+		if (gameObject != nullptr)
 		{
-			if (gm == actualMesh)
+			if (gameObject->childrens[i] != nullptr)
 			{
-				treeFlags |= ImGuiTreeNodeFlags_Selected;
-			}
-			else
-			{
-				treeFlags |= ImGuiTreeNodeFlags_None;
-			}
+				gm = gameObject->childrens[i];
 
-			bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, treeFlags, gm->mName.c_str());
-
-			if(ImGui::IsItemHovered())
-			{
-				hoveredItem = gm;
-			}
-
-			if (ImGui::IsItemClicked())
-			{
-				actualMesh = gm;
-				InfoGWindow = true;
-
-				if(moveEntityTo != nullptr && isMovingParent)
+				if (gm->childrens.size() > 0)
 				{
-					moveEntityTo->ChangeParent(gm);
-					isMovingParent = false;
-				}
-			}
-
-			if(ImGui::BeginPopupContextItem())
-			{
-				if(ImGui::BeginMenu("Add Entity")) 
-				{
-					AddEntity(gm);
-
-					ImGui::EndMenu();
-				}
-
-				if (ImGui::BeginMenu("Add Component"))
-				{
-					AddComponentInInspector(gm);
-
-					ImGui::EndMenu();
-				}
-
-				if (ImGui::MenuItem("Change Parent To:"))
-				{
-					moveEntityTo = gm;
-					isMovingParent = true;
-				}
-
-				if (ImGui::MenuItem("Delete Entity"))
-				{
-					gm->mParent->DeleteChild(gm);
-				}
-
-				ImGui::EndPopup();
-			}
-
-			if (isOpen)
-			{
-				HierarchyWindowDisplay(gm);
-				ImGui::TreePop();
-			}
-		}
-		else
-		{
-			int gmFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-
-			if (gm == actualMesh)
-			{
-				gmFlags |= ImGuiTreeNodeFlags_Selected;
-			}
-			else
-			{
-				gmFlags |= ImGuiTreeNodeFlags_None;
-			}
-
-			ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, gm->mName.c_str());
-
-			if (ImGui::IsItemHovered())
-			{
-				hoveredItem = gm;
-			}
-
-			if (ImGui::IsItemClicked())
-			{
-				actualMesh = gm;
-				InfoGWindow = true;
-
-				if (moveEntityTo != nullptr && isMovingParent)
-				{
-					moveEntityTo->ChangeParent(gm);
-					isMovingParent = false;
-				}
-			}
-
-			if (ImGui::BeginPopupContextItem())
-			{
-				if (ImGui::BeginMenu("Add Entity"))
-				{
-					AddEntity(gm);
-
-					ImGui::EndMenu();
-				}
-
-				if (ImGui::BeginMenu("Add Component"))
-				{
-					AddComponentInInspector(gm);
-
-					ImGui::EndMenu();
-				}
-
-				if (ImGui::MenuItem("Change Parent To:"))
-				{
-					moveEntityTo = gm; 
-					isMovingParent = true;
-				}
-
-				if(ImGui::MenuItem("Move Into Child List:"))
-				{
-					OG_ChildListPos = gm->SearchChildPosInVector();
-					OG_ChildList = gm->mParent->childrens;
-
-					if (OG_ChildListPos != -1)
+					if (gm == actualMesh)
 					{
-						isMovingChild = true;
+						treeFlags |= ImGuiTreeNodeFlags_Selected;
 					}
 					else
 					{
-						LOG(LogTypeCase::L_ERROR, "Child Was not found in Parent list");
+						treeFlags |= ImGuiTreeNodeFlags_None;
 					}
-				}
 
-				if (gm->mParent != App->scene->AllGameObjectManagers.at(0))
-				{
-					if (ImGui::MenuItem("Quit Parent"))
+					bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, treeFlags, gm->mName.c_str());
+
+					if (ImGui::IsItemHovered())
 					{
-						gm->ChangeParent(App->scene->Root);
+						hoveredItem = gm;
+					}
+
+					if (ImGui::IsItemClicked())
+					{
+						actualMesh = gm;
+						InfoGWindow = true;
+
+						if (moveEntityTo != nullptr && isMovingParent)
+						{
+							moveEntityTo->ChangeParent(gm);
+							isMovingParent = false;
+						}
+					}
+
+					if (ImGui::BeginPopupContextItem())
+					{
+						if (ImGui::BeginMenu("Add Entity"))
+						{
+							AddEntity(gm);
+
+							ImGui::EndMenu();
+						}
+
+						if (ImGui::BeginMenu("Add Component"))
+						{
+							AddComponentInInspector(gm);
+
+							ImGui::EndMenu();
+						}
+
+						if (ImGui::MenuItem("Change Parent To:"))
+						{
+							moveEntityTo = gm;
+							isMovingParent = true;
+						}
+
+						if (ImGui::MenuItem("Delete Entity"))
+						{
+							gm->mParent->DeleteChild(gm);
+						}
+
+						ImGui::EndPopup();
+					}
+
+					if (isOpen)
+					{
+						HierarchyWindowDisplay(gm);
+						ImGui::TreePop();
 					}
 				}
-
-				if (ImGui::MenuItem("Delete Entity"))
+				else
 				{
-					gm->mParent->DeleteChild(gm);
-				}
+					int gmFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
-				ImGui::EndPopup();
+					if (gameObject != nullptr)
+					{
+						if (gameObject->childrens[i] != nullptr)
+						{
+							if (gm == actualMesh)
+							{
+								gmFlags |= ImGuiTreeNodeFlags_Selected;
+							}
+							else
+							{
+								gmFlags |= ImGuiTreeNodeFlags_None;
+							}
+
+							ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, gm->mName.c_str());
+
+							if (ImGui::IsItemHovered())
+							{
+								hoveredItem = gm;
+							}
+
+							if (ImGui::IsItemClicked())
+							{
+								actualMesh = gm;
+								InfoGWindow = true;
+
+								if (moveEntityTo != nullptr && isMovingParent)
+								{
+									moveEntityTo->ChangeParent(gm);
+									isMovingParent = false;
+								}
+							}
+
+							if (ImGui::BeginPopupContextItem())
+							{
+								if (ImGui::BeginMenu("Add Entity"))
+								{
+									AddEntity(gm);
+
+									ImGui::EndMenu();
+								}
+
+								if (ImGui::BeginMenu("Add Component"))
+								{
+									AddComponentInInspector(gm);
+
+									ImGui::EndMenu();
+								}
+
+								if (ImGui::MenuItem("Change Parent To:"))
+								{
+									moveEntityTo = gm;
+									isMovingParent = true;
+								}
+
+								if (ImGui::MenuItem("Move Into Child List:"))
+								{
+									OG_ChildListPos = gm->SearchChildPosInVector();
+									OG_ChildList = gm->mParent->childrens;
+
+									if (OG_ChildListPos != -1)
+									{
+										isMovingChild = true;
+									}
+									else
+									{
+										LOG(LogTypeCase::L_ERROR, "Child Was not found in Parent list");
+									}
+								}
+
+								if (gm->mParent != App->scene->AllGameObjectManagers.at(0))
+								{
+									if (ImGui::MenuItem("Quit Parent"))
+									{
+										gm->ChangeParent(App->scene->Root);
+									}
+								}
+
+								if (ImGui::MenuItem("Delete Entity"))
+								{
+									gm->mParent->DeleteChild(gm);
+								}
+
+								ImGui::EndPopup();
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -1302,30 +1311,34 @@ void ModuleEditor::ResourceWindowDisplay()
 
 	for (iterator; iterator != app->resource->AllResourcesMap.end(); iterator++)
 	{
-		int R_Flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-
-		if (iterator->second == actualResource)
+		if (iterator->second != nullptr)
 		{
-			R_Flags |= ImGuiTreeNodeFlags_Selected;
-		}
-		else
-		{
-			R_Flags |= ImGuiTreeNodeFlags_None;
-		}
 
-		bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, R_Flags, iterator->second->name.c_str());
+			int R_Flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
-		if (ImGui::IsItemHovered())
-		{
-			hoveredResource = iterator->second;
+			if (iterator->second == actualResource)
+			{
+				R_Flags |= ImGuiTreeNodeFlags_Selected;
+			}
+			else
+			{
+				R_Flags |= ImGuiTreeNodeFlags_None;
+			}
+
+			bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, R_Flags, iterator->second->name.c_str());
+
+			if (ImGui::IsItemHovered())
+			{
+				hoveredResource = iterator->second;
+			}
+
+			if (ImGui::IsItemClicked())
+			{
+				actualResource = iterator->second;
+			}
+
+			i++;
 		}
-
-		if (ImGui::IsItemClicked())
-		{
-			actualResource = iterator->second;
-		}
-
-		i++;
 	}
 }
 
@@ -1563,18 +1576,27 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 	ImGui::End();
 }
 
-void ModuleEditor::ResourceAssetWindow(ResourceElement* actualResource)
+void ModuleEditor::ResourceAssetWindow()
 {
 	ImVec2 size4 = { 500, 200 };
 	ImGui::SetNextWindowSize(size4);
 
 	ImGui::Begin("Resources", &ResourceWindow);
 
-	ImGui::Text("Name: %s", actualResource->name.c_str());
-	ImGui::Text("Assets Path: %s", actualResource->AssetsPath.c_str());
-	ImGui::Text("Library Path: %s", actualResource->LibraryPath.c_str());
-	ImGui::Text("UUID: %d", actualResource->UUID);
-	ImGui::Text("In use: %d", actualResource->resourceCounter);
+	if(actualResource != nullptr)
+	{
+		ImGui::Text("Name: %s", actualResource->name.c_str());
+		ImGui::Text("Assets Path: %s", actualResource->AssetsPath.c_str());
+		ImGui::Text("Library Path: %s", actualResource->LibraryPath.c_str());
+		ImGui::Text("UUID: %d", actualResource->UUID);
+		ImGui::Text("In use: %d", actualResource->resourceCounter);
+
+		if (ImGui::Button("Delete Resource"))
+		{
+			delete actualResource;
+			actualResource = nullptr;
+		}
+	}
 
 	ImGui::End();
 }

@@ -32,7 +32,7 @@ public:
 	void HierarchyWindowDisplay(GameObjectManager* gameObject);
 	void ResourceWindowDisplay();
 	void InfoGameObjectWindow(GameObjectManager* gameObject);
-	void ResourceAssetWindow(ResourceElement* actualResource);
+	void ResourceAssetWindow();
 	void OsOpenInShell(const char* path); 
 
 public:
