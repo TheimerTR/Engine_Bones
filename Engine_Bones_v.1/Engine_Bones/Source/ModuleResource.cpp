@@ -1,7 +1,9 @@
 #include "ModuleResource.h"
 #include "ResourceElement.h"
+#include "ResourceTexture.h"
 #include "FileSystemManager.h"
 #include "ImporterMesh.h"
+#include "ImporterTexture.h"
 
 ModuleResource::ModuleResource(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -62,6 +64,15 @@ ResourceElement* ModuleResource::LoadResourceElement(const char* LibraryPath)
 			LOG(LogTypeCase::L_CASUAL, "Resource extension .mesh");
 			temp_ResourceElement = R_Mesh;
 			temp_ResourceElement->type = ResourceTypes::R_MESH;
+		}
+
+		if (strcmp(extension.data(), "texture") == 0)
+		{
+			ResourceTexture* R_Texture = new ResourceTexture();
+			Importer::ImporterTexture::Load(R_Texture->texture, buffer);
+			LOG(LogTypeCase::L_CASUAL, "Resource extension .texture");
+			temp_ResourceElement = R_Texture;
+			temp_ResourceElement->type = ResourceTypes::R_TEXTURE;
 		}
 	}
 	else

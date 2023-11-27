@@ -378,6 +378,9 @@
     <ClInclude Include="Source\ResourceElement.h">
       <Filter>Sources\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ResourceTexture.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -588,6 +591,9 @@
       <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Source\ResourceElement.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ResourceTexture.cpp">
       <Filter>Sources\Resources</Filter>
     </ClCompile>
   </ItemGroup>

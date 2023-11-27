@@ -15,6 +15,7 @@ enum class ResourceTypes
 	R_MESH,
 	R_MODEL,
 	R_MATERIAL,
+	R_TEXTURE,
 	R_NONE
 };
 
