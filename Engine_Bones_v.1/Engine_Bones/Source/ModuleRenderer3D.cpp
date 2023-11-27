@@ -173,9 +173,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glLoadIdentity();
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf((GLfloat*)ActiveCameraEditor->GetProjectionMatrix().v);
 
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
@@ -261,6 +258,11 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	ActiveCameraEditor->SetRatio(ratio); 
 
 	glViewport(0, 0, width, height);
+
+
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf((GLfloat*)ActiveCameraEditor->GetProjectionMatrix().v);
 	//glLoadIdentity();
 
 	///*todo: USE MATHGEOLIB here BEFORE 1st delivery! (TIP: Use MathGeoLib/Geometry/Frustum.h, view and projection matrices are managed internally.)*/

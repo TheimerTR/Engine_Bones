@@ -3,14 +3,14 @@
 
 ComponentCamera::ComponentCamera(GameObjectManager* gameObject) : ComponentManager(gameObject)
 {
-	frustum.type = FrustumType::PerspectiveFrustum; 
+	frustum.type = FrustumType::PerspectiveFrustum;
 	frustum.nearPlaneDistance = 0.1f; 
-	frustum.farPlaneDistance = 500.f; 
+	frustum.farPlaneDistance = 1000.f; 
 	frustum.front = float3::unitZ; 
 	frustum.up = float3::unitY; 
 
 	frustum.verticalFov = 60.0f * DEGTORAD; 
-	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * 1.3f);
+	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * 1.7f);
 
 	if (gameObject != nullptr) {
 		Owner = gameObject; 
@@ -71,7 +71,7 @@ void ComponentCamera::EndDraw()
 void ComponentCamera::SetRatio(float ratio)
 {
 	frustum.verticalFov = 60.0f * DEGTORAD;
-	frustum.horizontalFov = ratio * atanf(tanf(frustum.verticalFov / 2.0f) * 1.3f);
+	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * ratio);
 }
 
 math::float4x4 ComponentCamera::GetViewMatrix()
