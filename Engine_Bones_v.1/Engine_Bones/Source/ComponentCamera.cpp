@@ -11,7 +11,7 @@ ComponentCamera::ComponentCamera(GameObjectManager* gameObject) : ComponentManag
 	height = 9;
 	aspect_ratio = width / height; // We set aspect ratio 16:9 by now
 
-	near_plane = 0.2;
+	near_plane = 1.0;
 	far_plane = 1000;
 	vertical_fov = 60; /* In degrees */
 
@@ -70,19 +70,7 @@ void ComponentCamera::UpdateFrustum()
 
 void ComponentCamera::Draw()
 {
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBegin(GL_LINES);
-	glLineWidth(3.0f);
-	glColor4f(0.25f, 1.0f, 0.0f, 1.0f);
-
-	for (uint i = 0; i < 12; i++)
-	{
-		glVertex3f(frustum.Edge(i).a.x, frustum.Edge(i).a.y, frustum.Edge(i).a.z);
-		glVertex3f(frustum.Edge(i).b.x, frustum.Edge(i).b.y, frustum.Edge(i).b.z);
-	}
-
-	glEnd();
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	  
 }
 
 void ComponentCamera::EndDraw()

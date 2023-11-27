@@ -94,70 +94,71 @@ update_status ModuleCamera3D::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) cameraEditor->frustum.pos.y += speed;
 	if(App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) cameraEditor->frustum.pos.y -= speed;
 	
-	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)  cameraEditor->frustum.pos += Z * speed;
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) cameraEditor->frustum.pos -= Z * speed;
+	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)  newPos -= cameraEditor->frustum.front * speed;
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos += cameraEditor->frustum.front * speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) cameraEditor->frustum.pos -= X * speed;
-	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) cameraEditor->frustum.pos += X * speed;
+	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= cameraEditor->frustum.WorldRight() * speed;
+	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += cameraEditor->frustum.WorldRight() * speed;
 
-	//if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) Focus(); 
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) Focus(); 
 
-	//if (App->input->GetMouseZ() != 0) {
+	if (App->input->GetMouseZ() != 0) {
 
-	//	if (App->input->GetMouseZ() > 0) {
-	//		newPos -= Z * speed * 4;
-	//	}
+		if (App->input->GetMouseZ() > 0) {
+			newPos -= cameraEditor->frustum.front * speed * 4;
+		}
 
-	//	else if (App->input->GetMouseZ() < 0) {
-	//		newPos += Z * speed * 4;
-	//	}
-	//}
-	//
+		else if (App->input->GetMouseZ() < 0) {
+			newPos += cameraEditor->frustum.front * speed * 4;
+		}
+	}
+	
+	cameraEditor->frustum.pos += newPos; 
 
 	//Position += newPos;
 	////Reference += newPos;
 
 	//// Mouse motion ----------------
 
-	//if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
-	//{
-	//	int dx = -App->input->GetMouseXMotion();
-	//	int dy = -App->input->GetMouseYMotion();
+	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	{
+		int dx = -App->input->GetMouseXMotion();
+		int dy = -App->input->GetMouseYMotion();
 
-	//	float Sensitivity = 0.35f * dt;
+		float Sensitivity = 0.35f * dt;
 
-	//	//Position -= Reference;
+		//Position -= Reference;
 
-	//	if(dx != 0)
-	//	{
-	//		float DeltaX = (float)dx * Sensitivity;
+		if(dx != 0)
+		{
+			float DeltaX = (float)dx * Sensitivity;
 
-	//		float3 rotationAxis(0.0f, 1.0f, 0.0f);
-	//		Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX);
+			float3 rotationAxis(0.0f, 1.0f, 0.0f);
+			Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX); 
 
-	//		X = rotationQuat * X;
-	//		Y = rotationQuat * Y;
-	//		Z = rotationQuat * Z;
-	//	}
+			X = rotationQuat * X;
+			Y = rotationQuat * Y;
+			Z = rotationQuat * Z;
+		}
 
-	//	if(dy != 0)
-	//	{
-	//		float DeltaY = (float)dy * Sensitivity;
+		if(dy != 0)
+		{
+			float DeltaY = (float)dy * Sensitivity;
 
-	//		Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
+			Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
 
-	//		Y = rotationQuat * Y;
-	//		Z = rotationQuat * Z;
+			Y = rotationQuat * Y;
+			Z = rotationQuat * Z;
 
-	//		if(Y.y < 0.0f)
-	//		{
-	//			Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-	//			Y = Z.Cross(X);
-	//		}
-	//	}
+			if(Y.y < 0.0f)
+			{
+				Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+				Y = Z.Cross(X);
+			}
+		}
 
-	//	//Reference = Z * Reference.Length();
-	//}
+		//Reference = Z * Reference.Length();
+	}
 
 	//if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	//{
@@ -234,7 +235,7 @@ void ModuleCamera3D::Focus(){
 	selectedScale.y = gameObject->mTransform->GetScale().y;
 	selectedScale.z = gameObject->mTransform->GetScale().z;
 
-	Position = selectedPos + (Position - selectedPos).Normalized() * 10;
+	cameraEditor->frustum.pos = selectedPos + (cameraEditor->frustum.pos - selectedPos).Normalized() * 10;
 	LookAt(selectedPos);
 
 }
