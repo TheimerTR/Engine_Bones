@@ -28,11 +28,7 @@ public:
 
 	void Focus(); 
 
-	float4x4 ModuleCamera3D::ViewMatrixOpenGL();
-
 private:
-
-	void CalculateViewMatrix();
 
 public:
 	
@@ -42,10 +38,6 @@ public:
 	//ComponentCamera camera; 
 
 private:
-
-	mat4x4 ViewMatrix;
-
-	Frustum F_Camera;
 
 	ComponentCamera* cameraEditor; 
 

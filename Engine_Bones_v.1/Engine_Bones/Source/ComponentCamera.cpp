@@ -13,10 +13,15 @@ ComponentCamera::ComponentCamera(GameObjectManager* gameObject) : ComponentManag
 	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * 1.3f);
 
 	if (gameObject != nullptr) {
+		Owner = gameObject; 
 		frustum.pos = gameObject->mTransform->GetPosition();
 	}
 
-	else { frustum.pos = float3::zero; } 
+	else 
+	{
+		Owner = app->scene->Root; 
+		frustum.pos = float3::zero; 
+	} 
 }
 
 ComponentCamera::~ComponentCamera() {
@@ -41,20 +46,21 @@ void ComponentCamera::LookAt(const float3& Spot)
 
 void ComponentCamera::Draw()
 {
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	/*glEnable(GL_DEPTH_TEST);*/
 
-	glLoadIdentity();
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(GetProjectionMatrix());
+	//glDepthFunc(GL_LESS);
+	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(GetViewMatrix());
+	//glLoadIdentity();
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadMatrixf(GetProjectionMatrix());
 
-	Color c = { 0.0f, 0.0f, 0.0f, 1.0f };
-	glClearColor(c.r, c.g, c.b, c.a);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glMatrixMode(GL_MODELVIEW);
+	//glLoadMatrixf(GetViewMatrix());
+
+	//Color c = { 0.0f, 0.0f, 0.0f, 1.0f };
+	//glClearColor(c.r, c.g, c.b, c.a);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void ComponentCamera::EndDraw()
@@ -68,20 +74,18 @@ void ComponentCamera::SetRatio(float ratio)
 	frustum.horizontalFov = ratio * atanf(tanf(frustum.verticalFov / 2.0f) * 1.3f);
 }
 
-float* ComponentCamera::GetViewMatrix()
+math::float4x4 ComponentCamera::GetViewMatrix()
 {
 	math::float4x4 mat = frustum.ViewMatrix();
 	mat.Transposed();
 
-	return (float*)mat.v; 
+	return mat; 
 }
 
-float* ComponentCamera::GetProjectionMatrix()
+math::float4x4 ComponentCamera::GetProjectionMatrix()
 {
-	math::float4x4 mat = frustum.ProjectionMatrix();
-	mat.Transposed();
-
-	return (float*)mat.v;
+	math::float4x4 mat = frustum.ProjectionMatrix().Transposed();
+	return mat;
 }
 
 float3 ComponentCamera::GetPosition()

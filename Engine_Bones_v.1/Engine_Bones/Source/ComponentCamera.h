@@ -26,8 +26,8 @@ public:
 
 	void SetRatio(float ratio); 
 
-	float* GetViewMatrix();
-	float* GetProjectionMatrix(); 
+	math::float4x4 GetViewMatrix();
+	math::float4x4 GetProjectionMatrix();
 
 	float3 GetPosition(); 
 
