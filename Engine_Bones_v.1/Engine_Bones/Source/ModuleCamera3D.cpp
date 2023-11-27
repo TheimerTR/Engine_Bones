@@ -22,10 +22,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	Reference = float3(0.0f, 0.0f, 0.0f);
 	ViewMatrix = IdentityMatrix;
 
-	cameraEditor = new ComponentCamera(nullptr);
-
-	cameraEditor->frustum.farPlaneDistance = 5000; 
-	cameraEditor->frustum.pos = float3(8.0f, 3.0f, 8.0f); 
+	
 
 	//CalculateViewMatrix();
 }
@@ -39,6 +36,10 @@ bool ModuleCamera3D::Init()
 	LOG(LogTypeCase::L_CASUAL, "Setting up the camera");
 	bool ret = true;
 
+	cameraEditor = new ComponentCamera(nullptr);
+
+	cameraEditor->frustum.farPlaneDistance = 5000;
+	cameraEditor->frustum.pos = float3(8.0f, 3.0f, 8.0f);
 
 	App->renderer3D->SetCameraEditor(cameraEditor);
 
