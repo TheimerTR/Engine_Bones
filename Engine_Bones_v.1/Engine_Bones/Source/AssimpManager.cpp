@@ -164,10 +164,10 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	{
 		if (i < scene->mNumMeshes)
 		{
-			Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
-
 			char* buffer = nullptr;
 			uint size = 0;
+
+			Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
 			size = Importer::ImporterMesh::Save(R_Mesh, &buffer);
 
 			R_Mesh->name = _ParentObj->mName;
@@ -193,6 +193,40 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			{
 				app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
 			}
+
+			app->resource->AllResourcesMap[R_Mesh->getUUID()] = R_Mesh;
+
+			if (texturePath != NULL)
+			{
+				ResourceTexture* R_Texture = new ResourceTexture();
+
+				buffer = nullptr;
+				size = 0;
+
+				R_Texture->texture->path = texturePath;
+				R_Texture->name = texturePath;
+
+				Importer::ImporterTexture::ImportTexture(R_Texture, buffer, size);
+				Importer::ImporterTexture::Load(R_Texture->texture, texturePath);
+
+				size = Importer::ImporterTexture::Save(&buffer);
+
+				TexturesManager* texturesManager = new TexturesManager();
+				ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
+				C_Texture->SetTexture(R_Texture->texture);
+
+				pathToMeta = TEXTURES_PATH;
+				pathToMeta.append(std::to_string(C_Texture->UUID));
+				pathToMeta.append(".texture");
+
+				if (size > 0)
+				{
+					app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
+				}
+
+				app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
+			}
+
 			RELEASE_ARRAY(buffer);
 		}
 	}
@@ -200,11 +234,22 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	{
 		char* buffer = nullptr;
 		uint size = app->physFSManager->Load(ExistInMeta.c_str(), &buffer);
-		string path = MODELS_FOLDER + _ParentObj->mName;
+		string path = "";
 
 		if (size > 0)
 		{
 			JsonManager js(buffer);
+
+			int type = js.getNumber("Type");
+
+			if ((ResourceTypes)type == ResourceTypes::R_MESH)
+			{
+				path = MODELS_FOLDER + _ParentObj->mName;
+			}
+			if ((ResourceTypes)type == ResourceTypes::R_TEXTURE)
+			{
+				path = TEXTURES_FOLDER + _ParentObj->mName;
+			}
 
 			map<uint32, ResourceElement*>::iterator iterator = app->resource->AllResourcesMap.find(js.getNumber("UID"));
 
@@ -232,6 +277,24 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 							ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
 							//R_MeshToComponent->mesh->local_aabb = R_MeshToComponent->local_aabb;
 							C_Mesh->SetMesh(R_MeshToComponent->mesh);
+						}
+						if (ResourceToGameobject->type == ResourceTypes::R_TEXTURE)
+						{
+							ResourceTexture* R_Texture = (ResourceTexture*)ResourceToGameobject;
+
+							buffer = nullptr;
+							size = 0;
+
+							R_Texture->texture->path = texturePath;
+
+							Importer::ImporterTexture::ImportTexture(R_Texture, buffer, size);
+							Importer::ImporterTexture::Load(R_Texture->texture, texturePath);
+
+							TexturesManager* texturesManager = new TexturesManager();
+							ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
+							C_Texture->SetTexture(R_Texture->texture);
+
+							RELEASE_ARRAY(buffer);
 						}
 					}
 				}
@@ -299,6 +362,27 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 								ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
 								C_Mesh->SetMesh(R_MeshToComponent->mesh);
 							}
+
+							if (ResourceToGameobject->type == ResourceTypes::R_TEXTURE)
+							{
+								ResourceTexture* R_Texture = (ResourceTexture*)ResourceToGameobject;
+
+								buffer = nullptr;
+								size = 0;
+
+								R_Texture->texture->path = texturePath;
+
+								Importer::ImporterTexture::ImportTexture(R_Texture, buffer, size);
+								Importer::ImporterTexture::Load(R_Texture->texture, texturePath);
+
+								app->scene->AllResources.push_back(R_Texture);
+
+								TexturesManager* texturesManager = new TexturesManager();
+								ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
+								C_Texture->SetTexture(R_Texture->texture);
+
+								RELEASE_ARRAY(buffer);
+							}
 						}
 					}
 
@@ -315,22 +399,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	ComponentTransform* transform = new ComponentTransform(nullptr);
 
 	AplicateTransform(_ParentObj, pos, scale, rot);
-
-	if (texturePath != NULL)
-	{
-		Texture* texture = new Texture();
-		Importer::ImporterTexture::Load(texture, texturePath);
-
-		char* buffer = nullptr;
-
-		Importer::ImporterTexture::Save(texture, &buffer);
-
-		TexturesManager* texturesManager = new TexturesManager();
-		ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
-		C_Texture->SetTexture(texture);
-
-		RELEASE_ARRAY(buffer);
-	}
 
 	if (!app->physFSManager->Exists(ExistInMeta.c_str()))
 	{
@@ -560,6 +628,14 @@ void AssimpManager::MetaFileCreator(GameObjectManager* gameObject)
 			string UUID = std::to_string(gameObject->mComponents[i]->UUID);
 			name_UUID.append(UUID);
 			name_UUID.append(".mesh");
+		}
+
+		if (gameObject->mComponents[i]->Type == ComponentType::MATERIAL)
+		{
+			name_UUID = "Library/Textures/";
+			string UUID = std::to_string(gameObject->mComponents[i]->UUID);
+			name_UUID.append(UUID);
+			name_UUID.append(".texture");
 		}
 
 		jsNode.addNumber("Type", gameObject->mComponents[i]->Type);

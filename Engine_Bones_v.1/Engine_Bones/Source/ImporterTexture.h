@@ -9,6 +9,7 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "TextureManager.h"
+#include "ResourceTexture.h"
 
 #include <vector>
 #include <stdio.h>
@@ -24,8 +25,9 @@ namespace Importer
 	namespace ImporterTexture
 	{
 		void InitDevil();
-		uint64 Save(const Texture* texture = nullptr, char** fileBuffer = nullptr);
-		void Load(Texture* texture = nullptr, const char* fileBuffer = nullptr);
+		void ImportTexture(ResourceTexture* R_Texture = nullptr, const char* buffer = nullptr, uint size = 0);
+		uint64 Save(char** buffer = nullptr);
+		void Load(Texture* texture = nullptr, const char* buffer = nullptr);
 	}
 };
 

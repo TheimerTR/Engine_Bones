@@ -8,8 +8,18 @@ void Importer::ImporterTexture::InitDevil()
     ilutRenderer(ILUT_OPENGL);
 }
 
-uint64 Importer::ImporterTexture::Save(const Texture* texture, char** fileBuffer)
+void Importer::ImporterTexture::ImportTexture(ResourceTexture* R_Texture, const char* buffer, uint size)
 {
+	if (ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, size))
+	{
+		R_Texture->id = ilutGLBindTexImage();
+	}
+}
+
+uint64 Importer::ImporterTexture::Save(char** buffer)
+{
+	ilEnable(IL_FILE_OVERWRITE);
+
     ILuint size;
     ILubyte* data;
     ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
@@ -18,13 +28,13 @@ uint64 Importer::ImporterTexture::Save(const Texture* texture, char** fileBuffer
     if (size > 0) {
         data = new ILubyte[size]; // allocate data buffer
         if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
-            *fileBuffer = (char*)data;
+            *buffer = (char*)data;
     }
 
     return size;
 }
 
-void Importer::ImporterTexture::Load(Texture* texture, const char* fileBuffer)
+void Importer::ImporterTexture::Load(Texture* texture, const char* buffer)
 {
 	ILboolean success;
 	ILuint Devil_Texure;
@@ -33,7 +43,7 @@ void Importer::ImporterTexture::Load(Texture* texture, const char* fileBuffer)
 	ilGenImages(1, &Devil_Texure);
 	ilBindImage(Devil_Texure);
 	//ilLoadL(IL_TYPE_UNKNOWN, path, _id);
-	success = ilLoadImage(fileBuffer);
+	success = ilLoadImage(buffer);
 	TextID = ilutGLBindTexImage();
 
 	uint Text_Size = ilSaveL(IL_DDS, NULL, 0);
@@ -55,7 +65,7 @@ void Importer::ImporterTexture::Load(Texture* texture, const char* fileBuffer)
 		}
 	}
 
-	texture->path = fileBuffer;
+	texture->path = buffer;
 	texture->TextureID = TextID;
 	texture->imageWidth = ilGetInteger(IL_IMAGE_WIDTH);
 	texture->imageHeight = ilGetInteger(IL_IMAGE_HEIGHT);

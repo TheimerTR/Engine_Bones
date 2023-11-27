@@ -189,6 +189,7 @@
     <ClInclude Include="Source\Primitive.h" />
     <ClInclude Include="Source\ResourceElement.h" />
     <ClInclude Include="Source\ResourceMesh.h" />
+    <ClInclude Include="Source\ResourceTexture.h" />
     <ClInclude Include="Source\TextureManager.h" />
     <ClInclude Include="Source\Timer.h" />
     <ClInclude Include="Source\ComponentTransform.h" />
@@ -263,6 +264,7 @@
     <ClCompile Include="Source\Primitive.cpp" />
     <ClCompile Include="Source\ResourceElement.cpp" />
     <ClCompile Include="Source\ResourceMesh.cpp" />
+    <ClCompile Include="Source\ResourceTexture.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
