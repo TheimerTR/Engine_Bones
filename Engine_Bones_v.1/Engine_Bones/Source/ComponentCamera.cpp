@@ -3,20 +3,32 @@
 
 ComponentCamera::ComponentCamera(GameObjectManager* gameObject) : ComponentManager(gameObject)
 {
-	frustum.type = FrustumType::PerspectiveFrustum;
-	frustum.nearPlaneDistance = 0.1f; 
-	frustum.farPlaneDistance = 1000.f; 
-	frustum.front = float3::unitZ; 
-	frustum.up = float3::unitY; 
+	UUID = app->RandomGenerator.Int();
+	Type = ComponentType::CAMERA;
 
-	frustum.verticalFov = 60.0f * DEGTORAD; 
-	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * 1.7f);
+	/* Set camera vars*/
+	width = 16;
+	height = 9;
+	aspect_ratio = width / height; // We set aspect ratio 16:9 by now
+
+	near_plane = 0.2;
+	far_plane = 1000;
+	vertical_fov = 60; /* In degrees */
+
+	/* Set frustum vars */
+	frustum.type = PerspectiveFrustum;
+	frustum.pos.Set(0, 0, 0);
+	frustum.front.Set(0, 0, 1);
+	frustum.up.Set(0, 1, 0);
+	frustum.nearPlaneDistance = near_plane;
+	frustum.farPlaneDistance = far_plane;
+	frustum.verticalFov = vertical_fov * DEGTORAD;
+	frustum.horizontalFov = Atan(aspect_ratio * Tan(frustum.verticalFov / 2)) * 2;
 
 	if (gameObject != nullptr) {
 		Owner = gameObject; 
 		frustum.pos = gameObject->mTransform->GetPosition();
 	}
-
 	else 
 	{
 		Owner = app->scene->Root; 
@@ -31,36 +43,46 @@ ComponentCamera::~ComponentCamera() {
 
 bool ComponentCamera::Update()
 {
-	float3 points[8];
-	frustum.GetCornerPoints(points);
+	UpdateFrustum();
 
 	return true; 
 }
 
 void ComponentCamera::LookAt(const float3& Spot) 
 {
-	frustum.front = (Spot - frustum.pos).Normalized();
-	float3 X = (float3(0.0f, 1.0f, 0.0f).Cross(frustum.front)).Normalized();
-	frustum.up = frustum.front.Cross(X);
+	float3 direction = Spot - frustum.pos;
+	float3x3 matrix = float3x3::LookAt(frustum.front, direction.Normalized(), frustum.up, float3(0, 1, 0));
+
+	frustum.front = matrix.MulDir(frustum.front).Normalized();
+	frustum.up = matrix.MulDir(frustum.up).Normalized();
+}
+
+void ComponentCamera::UpdateFrustum()
+{
+	const ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Owner->GetComponentGameObject(ComponentType::TRANSFORM));
+
+	float4x4 trans = transform->mGlobalMatrix;
+
+	frustum.pos = trans.TranslatePart();
+	frustum.front = trans.WorldZ().Normalized();
+	frustum.up = frustum.front.Cross(-frustum.WorldRight()).Normalized();
 }
 
 void ComponentCamera::Draw()
 {
-	/*glEnable(GL_DEPTH_TEST);*/
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBegin(GL_LINES);
+	glLineWidth(3.0f);
+	glColor4f(0.25f, 1.0f, 0.0f, 1.0f);
 
-	//glDepthFunc(GL_LESS);
-	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	for (uint i = 0; i < 12; i++)
+	{
+		glVertex3f(frustum.Edge(i).a.x, frustum.Edge(i).a.y, frustum.Edge(i).a.z);
+		glVertex3f(frustum.Edge(i).b.x, frustum.Edge(i).b.y, frustum.Edge(i).b.z);
+	}
 
-	//glLoadIdentity();
-	//glMatrixMode(GL_PROJECTION);
-	//glLoadMatrixf(GetProjectionMatrix());
-
-	//glMatrixMode(GL_MODELVIEW);
-	//glLoadMatrixf(GetViewMatrix());
-
-	//Color c = { 0.0f, 0.0f, 0.0f, 1.0f };
-	//glClearColor(c.r, c.g, c.b, c.a);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnd();
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void ComponentCamera::EndDraw()
@@ -68,24 +90,39 @@ void ComponentCamera::EndDraw()
 	glDisable(GL_DEPTH_TEST);
 }
 
+void ComponentCamera::SetPos(float3 pos)
+{
+	frustum.pos = pos;
+}
+
+void ComponentCamera::SetFov(float vertical)
+{
+	frustum.verticalFov = vertical * DEGTORAD;
+	frustum.horizontalFov = Atan(this->aspect_ratio * Tan(frustum.verticalFov / 2)) * 2;
+}
+
 void ComponentCamera::SetRatio(float ratio)
 {
-	frustum.verticalFov = 60.0f * DEGTORAD;
-	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * ratio);
+	this->aspect_ratio = ratio;
+	frustum.horizontalFov = Atan(this->aspect_ratio * Tan(frustum.verticalFov / 2)) * 2;
 }
 
-math::float4x4 ComponentCamera::GetViewMatrix()
+float* ComponentCamera::GetViewMatrix() const
 {
-	math::float4x4 mat = frustum.ViewMatrix();
-	mat.Transposed();
+	static float4x4 matrix;
+	matrix = frustum.ViewMatrix();
+	matrix.Transpose();
 
-	return mat; 
+	return (float*)matrix.v;
 }
 
-math::float4x4 ComponentCamera::GetProjectionMatrix()
+float* ComponentCamera::GetProjectionMatrix() const
 {
-	math::float4x4 mat = frustum.ProjectionMatrix().Transposed();
-	return mat;
+	static float4x4 matrix;
+	matrix = frustum.ProjectionMatrix();
+	matrix.Transpose();
+
+	return (float*)matrix.v;
 }
 
 float3 ComponentCamera::GetPosition()

@@ -68,6 +68,8 @@ bool ModuleEditor::Init()
 
 	numcap = true; 
 
+	actualResource = App->resource->AllResourcesMap.begin()->second;
+
 	// Cheking Version of ImGuI and Init the Context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();

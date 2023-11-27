@@ -45,6 +45,8 @@ public:
 
 	void SetCameraEditor(ComponentCamera* camera); 
 
+	void UpdateProjection(ComponentCamera* cam);
+
 public:
 
 	Light lights[MAX_LIGHTS];

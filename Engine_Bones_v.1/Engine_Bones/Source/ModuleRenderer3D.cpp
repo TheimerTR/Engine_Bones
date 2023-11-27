@@ -91,8 +91,12 @@ bool ModuleRenderer3D::Init()
 			LOG(LogTypeCase::L_CASUAL, "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 
 		//Initialize Modelview Matrix
-		//glMatrixMode(GL_MODELVIEW);
-		//glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
+		//Initialize Modelview Matrix
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 
 		//Check for error
 		error = glGetError();
@@ -158,10 +162,6 @@ bool ModuleRenderer3D::Init()
 	App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 	App->editor->actualMesh = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 	App->editor->actualMesh->isSelected = true;
-	App->editor->actualResource = App->scene->AllResources[0];
-
-	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Grid.axis = true;
 
@@ -171,12 +171,13 @@ bool ModuleRenderer3D::Init()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
+	UpdateProjection(ActiveCameraEditor);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
 	glLoadIdentity();
+
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf((GLfloat*)ActiveCameraEditor->GetViewMatrix().v);
+	glLoadMatrixf((GLfloat*)ActiveCameraEditor->GetViewMatrix());
 
 /*	LOG(LogTypeCase::L_CASUAL ,"view");*/ 
 
@@ -251,28 +252,33 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
+void ModuleRenderer3D::UpdateProjection(ComponentCamera* cam)
+{
+	if (cam != nullptr)
+	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+
+		glLoadMatrixf(cam->GetProjectionMatrix());
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+	}
+}
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	float ratio = (float)width / float(height); 
-	ActiveCameraEditor->SetRatio(ratio); 
-
+	float ratio = (float)width / (float)height;
+	ActiveCameraEditor->SetRatio(ratio);
 	glViewport(0, 0, width, height);
 
-
-	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf((GLfloat*)ActiveCameraEditor->GetProjectionMatrix().v);
-	//glLoadIdentity();
+	glLoadIdentity();
 
-	///*todo: USE MATHGEOLIB here BEFORE 1st delivery! (TIP: Use MathGeoLib/Geometry/Frustum.h, view and projection matrices are managed internally.)*/
-	//ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	//glLoadMatrixf(ProjectionMatrix.M);
+	glLoadMatrixf(ActiveCameraEditor->GetProjectionMatrix());
 
-	//glLoadMatrixf((GLfloat*)ActiveCameraEditor->GetProjectionMatrix().v);
-
-	//glMatrixMode(GL_MODELVIEW);
-	//glLoadMatrixf(ActiveCameraEditor->GetViewMatrix());
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }
 
 void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* transform ,ComponentMaterial* texture)

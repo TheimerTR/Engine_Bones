@@ -39,22 +39,23 @@ bool ModuleCamera3D::Init()
 	cameraEditor = new ComponentCamera(nullptr);
 
 	//cameraEditor->frustum.farPlaneDistance = 5000;
-	cameraEditor->frustum.pos = float3(8.0f, 3.0f, 8.0f);
+	cameraEditor->frustum.Translate(float3(8.0, 3.0, 8.0));
 
-	cameraEditor->LookAt(float3::zero);
+	LookAt(float3::zero);
 
-	App->renderer3D->SetCameraEditor(cameraEditor);
-
-	
+	//App->renderer3D->SetCameraEditor(cameraEditor);
 
 	return ret; 
 }
 
 bool ModuleCamera3D::Start()
 {
-
 	bool ret = true; 
 
+	App->renderer3D->SetCameraEditor(cameraEditor);
+
+	// Projection matrix for
+	App->renderer3D->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	return ret;
 }
@@ -258,17 +259,8 @@ void ModuleCamera3D::Look(const float3&Position, const float3&Reference, bool Ro
 // -----------------------------------------------------------------
 void ModuleCamera3D::LookAt( const float3&Spot)
 {
-	//Reference = Spot;
-
-	//Z = (cameraEditor->frustum.pos - Spot).Normalized();
-	//X = (float3(0.0f, 1.0f, 0.0f).Cross(Z)).Normalized();
-	//Y = Z.Cross(X);
-
-	//cameraEditor->LookAt(Spot); 
-
-	//CalculateViewMatrix();
+	cameraEditor->LookAt(Spot);
 }
-
 
 // -----------------------------------------------------------------
 void ModuleCamera3D::Move(const float3&Movement)

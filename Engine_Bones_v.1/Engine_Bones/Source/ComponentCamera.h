@@ -18,22 +18,33 @@ public:
 	~ComponentCamera();
 
 	bool Update(); 
+	void UpdateFrustum();
 
 	void LookAt(const float3& Spot); 
 	void Draw(); 
 	void EndDraw(); 
 	//float* GetViewMatrix();
 
+	void SetPos(float3 pos);
 	void SetRatio(float ratio); 
+	void SetFov(float vertical);
 
-	math::float4x4 GetViewMatrix();
-	math::float4x4 GetProjectionMatrix();
+	float* GetViewMatrix() const;
+	float* GetProjectionMatrix() const;
 
 	float3 GetPosition(); 
 
 public:
 
 	Frustum frustum;
+
+private:
+	float width = 0.0f;
+	float height = 0.0f;
+	float aspect_ratio = 0.0f;
+	float near_plane = 0.0f;
+	float far_plane = 0.0f;
+	float vertical_fov = 0.0f;
 
 private:
 
