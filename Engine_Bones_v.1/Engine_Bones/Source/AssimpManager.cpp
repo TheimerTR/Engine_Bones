@@ -356,25 +356,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 					//ResourceElement* resource = new ResourceElement(name.c_str(), path.c_str(), (ResourceTypes)type, numberId);
 					//resource->resourceCounter += 1;
 
-					if ((ResourceTypes)type == ResourceTypes::R_MODEL)
-					{
-						JSArray meshesArr = js.getArray("Meshes");
-
-						for (int i = 0; i < meshesArr.GetSize(); i++)
-						{
-							JsonManager meshInModel = meshesArr.getNode(i);
-							resource->MeshesChildrensInModel.push_back(meshInModel.getString("Path"));
-						}
-
-						JSArray compArr = js.getArray("Components");
-
-						for (int i = 0; i < compArr.GetSize(); i++)
-						{
-							JsonManager compInModel = compArr.getNode(i);
-							resource->ComponentsInModel.push_back(compInModel.getString("Library_path"));
-						}
-					}
-
 					for (int j = 0; j < resource->ComponentsInModel.size(); j++)
 					{
 						ResourceElement* ResourceToGameobject = nullptr;
@@ -431,10 +412,14 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 								FileSystem::StringDivide(texturePath, &textureName, nullptr);
 
 								R_Texture->texture->Name = textureName;
+								R_Texture->AssetsPath = texturePath;
 
 								//ResourceToGameobject->name = textureName;
 
-								app->resource->AllResourcesMap[R_Texture->UUID] = (ResourceTexture*)R_Texture;
+								if (!CheckNotDuplicateFromAssets(R_Texture))
+								{
+									app->resource->AllResourcesMap[R_Texture->UUID] = (ResourceTexture*)R_Texture;
+								}
 
 								RELEASE_ARRAY(buffer);
 							}
