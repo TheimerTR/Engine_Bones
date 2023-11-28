@@ -167,8 +167,8 @@ void Importer::ImporterMesh::Load(ResourceMesh* M_mesh, const char* fileBuffer)
 		cursor += bytes;
 	}
 
-	M_mesh->mesh->local_aabb.SetNegativeInfinity();
-	M_mesh->mesh->local_aabb.Enclose((float3*)M_mesh->mesh->vertex, M_mesh->mesh->num_vertex);
+	//M_mesh->mesh->local_aabb.SetNegativeInfinity();
+	//M_mesh->mesh->local_aabb.Enclose((float3*)M_mesh->mesh->vertex, M_mesh->mesh->num_vertex);
 
 	AssimpManager::SetBuffers(M_mesh->mesh);
 }

@@ -30,8 +30,12 @@ ComponentMesh::~ComponentMesh()
 void ComponentMesh::SetMesh(Mesh* T_Mesh)
 {
 	C_Mesh = T_Mesh;
+	
+	C_Mesh->local_aabb.SetNegativeInfinity(); 
+	C_Mesh->local_aabb.Enclose((float3*)C_Mesh->vertex, C_Mesh->num_vertex); 
 
 	obb = C_Mesh->local_aabb;
+	obb.Transform(Owner->mTransform->GetGlobalMatrix()); 
 	
 	global_aabb.SetNegativeInfinity();
 	global_aabb.Enclose(obb); 
@@ -50,13 +54,36 @@ void ComponentMesh::Enable()
 
 bool ComponentMesh::Update()
 {
-	float3 points[8];
-	global_aabb.GetCornerPoints(points);
-	app->renderer3D->DrawBox(points, float3(245.f, 16.f, 16.f));
+	//float3 points[8];
+	//global_aabb.GetCornerPoints(points);
+	//app->renderer3D->DrawBox(points, float3(245.f, 16.f, 16.f));
 
-	float3 points2[8];
-	obb.GetCornerPoints(points2);
-	app->renderer3D->DrawBox(points2, float3(0.0f, 152.f, 70.f));
+	//float3 points2[8];
+	//obb.GetCornerPoints(points2);
+	//app->renderer3D->DrawBox(points2, float3(0.0f, 152.f, 70.f));
+
+	glBegin(GL_LINES); 
+	glLineWidth(3.0f); 
+	glColor4f(0.0f, 152.f, 70.f, 1.0f); 
+
+	for (uint i = 0; i < 12; i++)
+	{
+		glVertex3d(obb.Edge(i).a.x, obb.Edge(i).a.y, obb.Edge(i).a.z); 
+		glVertex3d(obb.Edge(i).b.x, obb.Edge(i).b.y, obb.Edge(i).b.z); 
+	}
+
+	glColor4f(245.f, 16.f, 16.f, 1.0f);
+
+	for (uint i = 0; i < 12; i++)
+	{
+		glVertex3d(global_aabb.Edge(i).a.x, global_aabb.Edge(i).a.y, global_aabb.Edge(i).a.z);
+		glVertex3d(global_aabb.Edge(i).b.x, global_aabb.Edge(i).b.y, global_aabb.Edge(i).b.z);
+	}
+
+	glEnd(); 
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f); 
+
+	Owner->mTransform->UpdateBox(); 
 
 	return true;
 }
