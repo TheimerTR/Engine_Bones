@@ -189,12 +189,15 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			pathToMeta.append(std::to_string(C_Mesh->UUID));
 			pathToMeta.append(".mesh");
 
+			R_Mesh->LibraryPath = pathToMeta;
+
 			if (size > 0)
 			{
 				app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
 			}
 
 			app->resource->AllResourcesMap[R_Mesh->getUUID()] = R_Mesh;
+			app->resource->AllResourcesMap[R_Mesh->getUUID()]->resourceCounter += 1;
 
 			if (texturePath != NULL)
 			{
@@ -219,12 +222,25 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				pathToMeta.append(std::to_string(C_Texture->UUID));
 				pathToMeta.append(".texture");
 
+				R_Texture->LibraryPath = pathToMeta;
+				R_Texture->AssetsPath = texturePath;
+
+				string textureName = "";
+
+				FileSystem::StringDivide(texturePath, &textureName, nullptr);
+
+				R_Texture->texture->Name = textureName;
+
 				if (size > 0)
 				{
 					app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
 				}
 
-				app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
+				if(!CheckNotDuplicateFromAssets(R_Texture))
+				{
+					app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
+					app->resource->AllResourcesMap[R_Texture->getUUID()]->resourceCounter += 1;
+				}
 			}
 
 			RELEASE_ARRAY(buffer);
@@ -254,7 +270,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 			map<uint32, ResourceElement*>::iterator iterator = app->resource->AllResourcesMap.find(js.getNumber("UID"));
 
-			uint32 toCheck = 0;
 			uint32 numberId = js.getNumber("UID");
 			string name = js.getString("Name");
 
@@ -277,22 +292,9 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				resource->ComponentsInModel.push_back(compInModel.getString("Library_path"));
 			}
 
-			map<uint32, ResourceElement*>::iterator iteratorExistence = app->resource->AllResourcesMap.begin();
-			for(iteratorExistence; iteratorExistence != app->resource->AllResourcesMap.end(); iteratorExistence++)
-			{
-				for (int h = 0; h < resource->ComponentsInModel.size(); h++)
-				{
-					if (resource->ComponentsInModel[h] == iteratorExistence->second->LibraryPath)
-					{
-						toCheck = iteratorExistence->second->UUID;
-						iteratorExistence->second->resourceCounter += 1;
-					}
-				}
-			}
-
 			_ParentObj->UUID = numberId;
 
-			if(toCheck > 0)
+			if(CheckResourceComponentsExistence(resource))
 			{
 				for (int j = 0; j < resource->ComponentsInModel.size(); j++)
 				{
@@ -705,4 +707,41 @@ void AssimpManager::MetaFileCreator(GameObjectManager* gameObject)
 	}
 
 	RELEASE_ARRAY(buffer);
+}
+
+bool AssimpManager::CheckResourceComponentsExistence(ResourceElement* R_Element)
+{
+	bool Exist = false;
+
+	map<uint32, ResourceElement*>::iterator iteratorExistence = app->resource->AllResourcesMap.begin();
+	for (iteratorExistence; iteratorExistence != app->resource->AllResourcesMap.end(); iteratorExistence++)
+	{
+		for (int h = 0; h < R_Element->ComponentsInModel.size(); h++)
+		{
+			if (R_Element->ComponentsInModel[h] == iteratorExistence->second->LibraryPath)
+			{
+				Exist = true;
+				iteratorExistence->second->resourceCounter += 1;
+			}
+		}
+	}
+
+	return Exist;
+}
+
+bool AssimpManager::CheckNotDuplicateFromAssets(ResourceElement* R_Element)
+{
+	bool Exist = false;
+
+	map<uint32, ResourceElement*>::iterator iteratorExistence = app->resource->AllResourcesMap.begin();
+	for (iteratorExistence; iteratorExistence != app->resource->AllResourcesMap.end(); iteratorExistence++)
+	{
+		if (R_Element->AssetsPath == iteratorExistence->second->AssetsPath)
+		{
+			Exist = true;
+			iteratorExistence->second->resourceCounter += 1;
+		}
+	}
+
+	return Exist;
 }

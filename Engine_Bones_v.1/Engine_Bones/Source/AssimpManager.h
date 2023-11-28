@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "JsonManager.h"
 #include "External/MathGeoLib/include/MathGeoLib.h"
+#include "ResourceElement.h"
 #include<vector>
 #include<map>
 
@@ -14,6 +15,7 @@
 #pragma comment (lib, "External/Assimp/libx86/assimp.lib")
 
 class GameObjectManager;
+class ResourceElement;
 class TextureManager;
 class JsonManager;
 class JSArray;
@@ -85,6 +87,9 @@ namespace AssimpManager
 	void SetBuffers(Mesh* M_mesh);
 
 	void MetaFileCreator(GameObjectManager* gameObject);
+
+	bool CheckNotDuplicateFromAssets(ResourceElement* R_Element);
+	bool CheckResourceComponentsExistence(ResourceElement* R_Element);
 
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
 
