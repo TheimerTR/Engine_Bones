@@ -1306,7 +1306,6 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 
 void ModuleEditor::ResourceWindowDisplay()
 {
-
 	map<uint32, ResourceElement*>::iterator iterator = app->resource->AllResourcesMap.begin();
 
 	int i = 0;

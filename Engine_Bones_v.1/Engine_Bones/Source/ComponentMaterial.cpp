@@ -21,6 +21,7 @@ ComponentMaterial::ComponentMaterial(GameObjectManager* gameObject) : ComponentM
 	this->UUID = app->RandomIntGenerator();
 }
 
+
 ComponentMaterial::~ComponentMaterial()
 {
 	if (texture->TextureID != 0)

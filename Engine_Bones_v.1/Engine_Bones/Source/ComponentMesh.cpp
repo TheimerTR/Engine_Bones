@@ -17,7 +17,7 @@
 ComponentMesh::ComponentMesh(GameObjectManager* gameObject) : ComponentManager(gameObject)
 {
 	C_Mesh = new Mesh();
-	Name = "";
+	Name = gameObject->mName.c_str();
 	this->UUID = app->RandomIntGenerator();
 }
 

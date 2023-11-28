@@ -40,7 +40,7 @@ ResourceElement* ModuleResource::CreateResource(const char* name, ResourceTypes 
 		break;
 	}
 
-	AllResourcesMap[R_Temp->UUID] = R_Temp;
+	//AllResourcesMap[R_Temp->UUID] = R_Temp;
 
 	return R_Temp;
 }
