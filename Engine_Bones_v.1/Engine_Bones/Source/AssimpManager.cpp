@@ -241,6 +241,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			JsonManager js(buffer);
 
 			int type = js.getNumber("Type");
+			uint32 Parent = js.getNumber("Parent");
 
 			if ((ResourceTypes)type == ResourceTypes::R_MESH)
 			{
@@ -257,23 +258,46 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			uint32 numberId = js.getNumber("UID");
 			string name = js.getString("Name");
 
-			for(int h = 0; h < app->scene->AllResources.size(); h++)
+			ResourceElement* resource = new ResourceElement(name.c_str(), path.c_str(), (ResourceTypes)type, numberId);
+			resource->resourceCounter += 1;
+
+			JSArray meshesArr = js.getArray("Meshes");
+
+			for (int i = 0; i < meshesArr.GetSize(); i++)
 			{
-				if(numberId == app->scene->AllResources[h]->UUID)
+				JsonManager meshInModel = meshesArr.getNode(i);
+				resource->MeshesChildrensInModel.push_back(meshInModel.getString("Path"));
+			}
+
+			JSArray compArr = js.getArray("Components");
+
+			for (int i = 0; i < compArr.GetSize(); i++)
+			{
+				JsonManager compInModel = compArr.getNode(i);
+				resource->ComponentsInModel.push_back(compInModel.getString("Library_path"));
+			}
+
+			map<uint32, ResourceElement*>::iterator iteratorExistence = app->resource->AllResourcesMap.begin();
+			for(iteratorExistence; iteratorExistence != app->resource->AllResourcesMap.end(); iteratorExistence++)
+			{
+				for (int h = 0; h < resource->ComponentsInModel.size(); h++)
 				{
-					toCheck = app->scene->AllResources[h]->UUID;
+					if (resource->ComponentsInModel[h] == iteratorExistence->second->LibraryPath)
+					{
+						toCheck = iteratorExistence->second->UUID;
+						iteratorExistence->second->resourceCounter += 1;
+					}
 				}
 			}
 
+			_ParentObj->UUID = numberId;
+
 			if(toCheck > 0)
 			{
-				_ParentObj->UUID = numberId;
-				app->resource->AllResourcesMap[numberId]->resourceCounter += 1;
-
-				for (int j = 0; j < app->resource->AllResourcesMap[numberId]->ComponentsInModel.size(); j++)
+				for (int j = 0; j < resource->ComponentsInModel.size(); j++)
 				{
 					ResourceElement* ResourceToGameobject = nullptr;
-					ResourceToGameobject = app->resource->LoadResourceElement(app->resource->AllResourcesMap[numberId]->ComponentsInModel[j].c_str());
+					ResourceToGameobject = app->resource->LoadResourceElement(resource->ComponentsInModel[j].c_str());
 
 					if (ResourceToGameobject != nullptr)
 					{
@@ -325,13 +349,10 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				}
 				else
 				{
-					uint32 Parent = js.getNumber("Parent");
-					int type = js.getNumber("Type");
+					//_ParentObj->UUID = numberId;
 
-					_ParentObj->UUID = numberId;
-
-					ResourceElement* resource = new ResourceElement(name.c_str(), path.c_str(), (ResourceTypes)type, numberId);
-					resource->resourceCounter += 1;
+					//ResourceElement* resource = new ResourceElement(name.c_str(), path.c_str(), (ResourceTypes)type, numberId);
+					//resource->resourceCounter += 1;
 
 					if ((ResourceTypes)type == ResourceTypes::R_MODEL)
 					{
@@ -369,7 +390,9 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 								Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[i]);
 
 								R_MeshToComponent->name = _ParentObj->mName;
+								R_MeshToComponent->LibraryPath = resource->ComponentsInModel[j];
 								R_MeshToComponent->mesh->Name = R_MeshToComponent->name;
+								R_MeshToComponent->resourceCounter += 1;
 
 								AllMeshes.push_back(R_MeshToComponent->mesh);
 
@@ -378,7 +401,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 								ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
 								C_Mesh->SetMesh(R_MeshToComponent->mesh);
 
-								app->resource->AllResourcesMap[ResourceToGameobject->getUUID()] = ResourceToGameobject;
+								app->resource->AllResourcesMap[R_MeshToComponent->getUUID()] = (ResourceTexture*)R_MeshToComponent;
 							}
 
 							if (ResourceToGameobject->type == ResourceTypes::R_TEXTURE)
@@ -389,6 +412,8 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 								size = 0;
 
 								R_Texture->texture->path = texturePath;
+								R_Texture->LibraryPath = resource->ComponentsInModel[j];
+								R_Texture->resourceCounter += 1;
 
 								Importer::ImporterTexture::ImportTexture(R_Texture, buffer, size);
 								Importer::ImporterTexture::Load(R_Texture->texture, texturePath);
@@ -403,9 +428,11 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 								FileSystem::StringDivide(texturePath, &textureName, nullptr);
 
+								R_Texture->texture->Name = textureName;
+
 								//ResourceToGameobject->name = textureName;
 
-								app->resource->AllResourcesMap[ResourceToGameobject->getUUID()] = ResourceToGameobject;
+								app->resource->AllResourcesMap[R_Texture->UUID] = (ResourceTexture*)R_Texture;
 
 								RELEASE_ARRAY(buffer);
 							}

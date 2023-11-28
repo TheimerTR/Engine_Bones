@@ -25,6 +25,7 @@
 #include "ComponentMaterial.h"
 #include "TextureManager.h"
 #include "FileSystemManager.h"
+#include "ResourceTexture.h"
 
 #include"External/Assimp/include/version.h"
 
@@ -1326,7 +1327,22 @@ void ModuleEditor::ResourceWindowDisplay()
 				R_Flags |= ImGuiTreeNodeFlags_None;
 			}
 
-			bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, R_Flags, iterator->second->name.c_str());
+			string name = "";
+
+			if (iterator->second->type == ResourceTypes::R_MESH)
+			{
+				name = iterator->second->name.c_str();
+				name.append(".mesh");
+			}
+
+			if (iterator->second->type == ResourceTypes::R_TEXTURE)
+			{
+				ResourceTexture* texture = (ResourceTexture*)iterator->second;
+				name = texture->texture->Name;
+				name.append(".texture");
+			}
+
+			bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, R_Flags, name.c_str());
 
 			if (ImGui::IsItemHovered())
 			{
