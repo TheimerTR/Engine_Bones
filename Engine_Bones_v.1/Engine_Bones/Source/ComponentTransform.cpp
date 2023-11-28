@@ -131,7 +131,7 @@ void ComponentTransform::UpdateTransformation()
 
 		objectsToTransform->mGlobalMatrix = parent->mGlobalMatrix * objectsToTransform->mLocalMatrix; 
 
-		//objectsToTransform->Owner->mTransform->UpdateBox(); 
+		objectsToTransform->UpdateBox(); 
 
 		
 	}
@@ -140,10 +140,10 @@ void ComponentTransform::UpdateTransformation()
 
 void ComponentTransform::UpdateBox() {
 
-	for (int i = 0; i < app->scene->AllGameObjectManagers.size(); i++) 
-	{
+	//for (int i = 0; i < app->scene->AllGameObjectManagers.size(); i++) 
+	//{
 
-		ComponentMesh* boxesToTransform = dynamic_cast<ComponentMesh*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MESH));
+		ComponentMesh* boxesToTransform = dynamic_cast<ComponentMesh*>(Owner->GetComponentGameObject(ComponentType::MESH));
 
 		if (boxesToTransform != nullptr)
 		{
@@ -153,6 +153,6 @@ void ComponentTransform::UpdateBox() {
 			boxesToTransform->global_aabb.SetNegativeInfinity(); 
 			boxesToTransform->global_aabb.Enclose(boxesToTransform->obb); 
 		}
-	}
+	/*}*/
 }
 

@@ -31,7 +31,7 @@ ComponentCamera::ComponentCamera(GameObjectManager* gameObject) : ComponentManag
 	}
 	else 
 	{
-		Owner = app->scene->Root; 
+		//Owner = app->scene->Root; 
 		frustum.pos = float3::zero; 
 	} 
 }

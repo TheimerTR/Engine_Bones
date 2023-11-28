@@ -100,7 +100,28 @@ update_status ModuleCamera3D::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= cameraEditor->frustum.WorldRight() * speed;
 	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += cameraEditor->frustum.WorldRight() * speed;
 
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) Focus(); 
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+	{
+	
+		Focus(); 
+		//if (app->scene->Selected_GameObject != nullptr)
+		//{
+		//	GameObjectManager* gameObject;
+
+		//	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
+		//	{
+
+		//		if (App->scene->AllGameObjectManagers[i]->isSelected == true) {
+
+		//			 gameObject = App->scene->AllGameObjectManagers[i];
+		//			 Focus(gameObject->mTransform->GetPosition());
+		//		}
+		//	
+	
+		//		
+		//	}
+		//}
+	}
 
 	if (App->input->GetMouseZ() != 0) {
 
@@ -127,25 +148,47 @@ update_status ModuleCamera3D::Update(float dt)
 
 		float Sensitivity = 0.35f * dt;
 
+		Quat rotation; 
+
 		//Position -= Reference;
 
 		if(dx != 0)
 		{
 			float DeltaX = (float)dx * Sensitivity;
 
-			float3 rotationAxis(0.0f, 1.0f, 0.0f);
+			Quat rotationQuat = Quat::identity; 
+
+			rotation = Quat::RotateY(DeltaX); 
+
+			rotationQuat = rotationQuat * rotation; 
+
+			cameraEditor->frustum.front = rotation.Mul(cameraEditor->frustum.front).Normalized();
+			cameraEditor->frustum.up = rotation.Mul(cameraEditor->frustum.up).Normalized();
+
+		/*	float3 rotationAxis(0.0f, 1.0f, 0.0f);
 			Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX); 
 
 			X = rotationQuat * X;
 			Y = rotationQuat * Y;
-			Z = rotationQuat * Z;
+			Z = rotationQuat * Z;*/
 		}
 
 		if(dy != 0)
 		{
 			float DeltaY = (float)dy * Sensitivity;
 
-			Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
+			Quat rotationQuat = Quat::identity; 
+
+			rotation = Quat::RotateAxisAngle(cameraEditor->frustum.WorldRight(), DeltaY); 
+
+			rotationQuat = rotationQuat * rotation; 
+
+			float3 up = rotation.Mul(cameraEditor->frustum.up).Normalized();
+
+			cameraEditor->frustum.front = rotation.Mul(cameraEditor->frustum.front).Normalized();
+			cameraEditor->frustum.up = up;
+
+	/*		Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
 
 			Y = rotationQuat * Y;
 			Z = rotationQuat * Z;
@@ -154,8 +197,10 @@ update_status ModuleCamera3D::Update(float dt)
 			{
 				Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
 				Y = Z.Cross(X);
-			}
+			}*/
 		}
+
+	
 
 		//Reference = Z * Reference.Length();
 	}
@@ -209,7 +254,7 @@ update_status ModuleCamera3D::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void ModuleCamera3D::Focus(){
+void ModuleCamera3D::Focus(/*const float3 &Spot*/){
 
 	ComponentTransform* selected;
 	GameObjectManager* gameObject; 
@@ -219,24 +264,26 @@ void ModuleCamera3D::Focus(){
 		if (App->scene->AllGameObjectManagers[i]->isSelected == true) {
 
 			gameObject = App->scene->AllGameObjectManagers[i];
+
+			float3 selectedPos;
+
+			selectedPos.x = gameObject->mTransform->GetPosition().x;
+			selectedPos.y = gameObject->mTransform->GetPosition().y;
+			selectedPos.z = gameObject->mTransform->GetPosition().z;
+
+			float3 selectedScale;
+
+			selectedScale.x = gameObject->mTransform->GetScale().x;
+			selectedScale.y = gameObject->mTransform->GetScale().y;
+			selectedScale.z = gameObject->mTransform->GetScale().z;
+
+			cameraEditor->frustum.pos = selectedPos + (cameraEditor->frustum.pos - selectedPos).Normalized() * 10;
+			cameraEditor->LookAt(selectedPos);
 		}
 		
 	}
 
-	float3 selectedPos;
-
-	selectedPos.x = gameObject->mTransform->GetPosition().x; 
-	selectedPos.y = gameObject->mTransform->GetPosition().y; 
-	selectedPos.z = gameObject->mTransform->GetPosition().z; 
-
-	float3 selectedScale;
-
-	selectedScale.x = gameObject->mTransform->GetScale().x;
-	selectedScale.y = gameObject->mTransform->GetScale().y;
-	selectedScale.z = gameObject->mTransform->GetScale().z;
-
-	cameraEditor->frustum.pos = selectedPos + (cameraEditor->frustum.pos - selectedPos).Normalized() * 10;
-	LookAt(selectedPos);
+	
 
 }
 

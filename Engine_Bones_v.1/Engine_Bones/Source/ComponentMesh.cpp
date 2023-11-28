@@ -84,7 +84,7 @@ bool ComponentMesh::Update()
 	glEnd(); 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f); 
 
-	Owner->mTransform->UpdateBox(); 
+	//Owner->mTransform->UpdateBox(); 
 
 	return true;
 }
