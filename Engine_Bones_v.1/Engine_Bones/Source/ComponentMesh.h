@@ -5,8 +5,10 @@
 #include "AssimpManager.h"
 #include "External/MathGeoLib/include/Geometry/AABB.h"
 #include "External/MathGeoLib/include/Geometry/OBB.h"
+#include "ComponentTransform.h"
 
 class GameObjectManager;
+class ComponentTransform; 
 
 class ComponentMesh : public ComponentManager
 {
@@ -36,8 +38,6 @@ public:
 
 
 private:
-
-
 
 };
 

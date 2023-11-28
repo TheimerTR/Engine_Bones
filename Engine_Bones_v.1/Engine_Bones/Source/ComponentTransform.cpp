@@ -130,13 +130,17 @@ void ComponentTransform::UpdateTransformation()
 		ComponentTransform* parent = objectsToTransform->Owner->mParent->mTransform; 
 
 		objectsToTransform->mGlobalMatrix = parent->mGlobalMatrix * objectsToTransform->mLocalMatrix; 
+
+		//objectsToTransform->Owner->mTransform->UpdateBox(); 
+
+		
 	}
 	 
 }
 
 void ComponentTransform::UpdateBox() {
 
-	for (int i = 1; i < app->scene->AllGameObjectManagers.size(); i++) 
+	for (int i = 0; i < app->scene->AllGameObjectManagers.size(); i++) 
 	{
 
 		ComponentMesh* boxesToTransform = dynamic_cast<ComponentMesh*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MESH));
