@@ -42,6 +42,7 @@ public:
 
 	ResourceTypes type;
 	uint32 UUID;
+	uint32 ParentUUID;
 
 	vector<string> MeshesChildrensInModel;
 	vector<string> ComponentsInModel;
