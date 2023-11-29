@@ -12,6 +12,9 @@
 #include "TextureManager.h"
 #include "ComponentManager.h"
 #include "ComponentMaterial.h"
+#include "ResourceElement.h"
+#include "ResourceTexture.h"
+#include "ImporterTexture.h"
 
 void FileSystem::ReadFyleType(const char* Path)
 {
@@ -37,7 +40,39 @@ void FileSystem::ReadFyleType(const char* Path)
 			file = "Assets/Textures/" + file;
 			if (app->editor->actualMesh->isSelected)
 			{
+				ResourceTexture* R_Texture = new ResourceTexture();
+
+				char* buffer = nullptr;
+				uint size = 0;
+
+				R_Texture->texture->path = Path;
+				R_Texture->ParentUUID = app->editor->actualMesh->UUID;
+
+				Importer::ImporterTexture::ImportTexture(R_Texture, buffer, size);
+				Importer::ImporterTexture::Load(R_Texture->texture, Path);
+
+				vector<ComponentManager*> objectMeshes = app->editor->actualMesh->GetComponentsGameObject(ComponentType::MATERIAL);
+
+				for (int j = 0; j < objectMeshes.size(); j++)
+				{
+					ComponentMaterial* C_Texture;
+					C_Texture = dynamic_cast<ComponentMaterial*>(objectMeshes[j]);
+					C_Texture->texture->ShowTextures = false;
+				}
+
 				TexturesManager* texturesManager = new TexturesManager();
+				ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
+				C_Texture->SetTexture(R_Texture->texture);
+
+				if (!AssimpManager::CheckNotDuplicateFromAssets(R_Texture))
+				{
+					app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
+					app->resource->AllResourcesMap[R_Texture->getUUID()]->resourceCounter += 1;
+				}
+
+				RELEASE_ARRAY(buffer);
+
+				/*TexturesManager* texturesManager = new TexturesManager();
 				std::vector<ComponentManager*> objectMaterials = (app->editor->actualMesh->GetComponentsGameObject(ComponentType::MATERIAL));
 				
 				if (objectMaterials.size() != 0)
@@ -49,7 +84,7 @@ void FileSystem::ReadFyleType(const char* Path)
 				{
 					ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
 					objectTexture->SetTexture(texturesManager->TexLoader(Path));
-				}
+				}*/
 
 				//ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::MATERIAL));
 				//objectTexture->GetTexture()->TextureID = texturesManager->TexLoader(Path)->TextureID;
