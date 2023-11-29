@@ -13,6 +13,7 @@
 #endif
 
 #include "FileSystemManager.h"
+#include "ComponentTransform.h"
 
 ComponentMesh::ComponentMesh(GameObjectManager* gameObject) : ComponentManager(gameObject)
 {
@@ -40,6 +41,11 @@ void ComponentMesh::SetMesh(Mesh* T_Mesh)
 	
 	global_aabb.SetNegativeInfinity();
 	global_aabb.Enclose(obb); 
+
+	//ComponentTransform* transformation = dynamic_cast<ComponentTransform*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::TRANSFORM));
+	//transformation->transform = true;
+
+	Owner->mTransform->transform = true; 
 
 }
 

@@ -37,6 +37,16 @@ ComponentTransform::~ComponentTransform()
 	mLocalMatrix = float4x4::identity;
 };
 
+//bool ComponentTransform::Update()
+//{
+//	if (transform == true)
+//	{
+//		UpdateTransformation(); 
+//
+//		transform = false; 
+//	}
+//}
+
 void ComponentTransform::ShowInfo() 
 {
 
@@ -117,7 +127,7 @@ const float* ComponentTransform::GetGlobalTransposed()
 
 void ComponentTransform::UpdateTransformation() 
 {
-	mRotation = Quat::FromEulerXYZ(mRotationEuler.x * DEGTORAD, mRotationEuler.y * DEGTORAD, mRotationEuler.z * DEGTORAD); 
+	mRotation = Quat::FromEulerXYZ(mRotationEuler.x * DEGTORAD, mRotationEuler.y * DEGTORAD, mRotationEuler.z * DEGTORAD).Normalized(); 
 	
 	mLocalMatrix = float4x4::FromTRS(mPosition, mRotation, mScale);
 

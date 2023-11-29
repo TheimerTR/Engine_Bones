@@ -25,6 +25,8 @@ public:
 
 	float3 gRotationEuler; 
 
+	bool transform = false; 
+
 public: 
 
 	ComponentTransform(GameObjectManager* gameObject);

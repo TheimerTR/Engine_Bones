@@ -374,6 +374,11 @@ void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* trans
 	{
 		LOG(LogTypeCase::L_ERROR, "Unable to render meshes (No meshes loaded)");
 	}
+
+	if (transform->transform == true) {
+		transform->UpdateTransformation(); 
+		transform = false; 
+	}
 }
 
 void ModuleRenderer3D::DrawBox(float3* points, float3 color)
