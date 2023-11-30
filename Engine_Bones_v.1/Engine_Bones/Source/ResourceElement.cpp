@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ComponentManager.h"
 #include "ComponentMesh.h"
+#include "ComponentMaterial.h"
 
 ResourceElement::ResourceElement()
 {
@@ -40,12 +41,24 @@ ResourceElement::~ResourceElement()
 {
 	app->resource->AllResourcesMap.erase(this->UUID);
 
-	for(int i = 0; i < AssociatedGameObjects.size(); i++)
+	for(int i = 0; i < ParentsUUID.size(); i++)
 	{
-		if(type == ResourceTypes::R_MODEL)
+		for(int h = 0; h < app->scene->AllGameObjectManagers.size(); h++)
 		{
-			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(AssociatedGameObjects[i]->GetComponentGameObject(ComponentType::MESH));
-			AssociatedGameObjects[i]->DeleteComponent(C_Mesh);
+			if(ParentsUUID[i] == app->scene->AllGameObjectManagers[h]->UUID)
+			{
+				if (type == ResourceTypes::R_MESH)
+				{
+					ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(app->scene->AllGameObjectManagers[h]->GetComponentGameObject(ComponentType::MESH));
+					app->scene->AllGameObjectManagers[h]->DeleteComponent(C_Mesh);
+				}
+
+				if(type == ResourceTypes::R_TEXTURE)
+				{
+					ComponentMaterial* C_Mesh = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[h]->GetComponentGameObject(ComponentType::MATERIAL));
+					app->scene->AllGameObjectManagers[h]->DeleteComponent(C_Mesh);
+				}
+			}
 		}
 	}
 	
