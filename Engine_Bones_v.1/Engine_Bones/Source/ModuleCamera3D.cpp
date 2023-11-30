@@ -259,29 +259,57 @@ void ModuleCamera3D::Focus(/*const float3 &Spot*/){
 	ComponentTransform* selected;
 	GameObjectManager* gameObject; 
 
-	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
+	//for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
+	
+	if (App->editor->actualMesh != nullptr)
 	{
-		if (App->scene->AllGameObjectManagers[i]->isSelected == true) {
+		AABB* box;
+		float3 centerObject;
+		float3 scale;
+		ComponentMesh* mesh = dynamic_cast<ComponentMesh*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::MESH));
 
-			gameObject = App->scene->AllGameObjectManagers[i];
+		if(App->editor->actualMesh->mComponents.size() > 0)
+		{
+			if (mesh != nullptr)
+			{
+				if (mesh->C_Mesh != nullptr)
+				{
+					box = &mesh->global_aabb;
+					centerObject = box->Centroid();
+					scale = box->Size();
 
-			float3 selectedPos;
+					cameraEditor->frustum.pos.Set(centerObject.x + scale.x, centerObject.y + scale.y, centerObject.z + scale.z);
 
-			selectedPos.x = gameObject->mTransform->GetPosition().x;
-			selectedPos.y = gameObject->mTransform->GetPosition().y;
-			selectedPos.z = gameObject->mTransform->GetPosition().z;
-
-			float3 selectedScale;
-
-			selectedScale.x = gameObject->mTransform->GetScale().x;
-			selectedScale.y = gameObject->mTransform->GetScale().y;
-			selectedScale.z = gameObject->mTransform->GetScale().z;
-
-			cameraEditor->frustum.pos = selectedPos + (cameraEditor->frustum.pos - selectedPos).Normalized() * 10;
-			cameraEditor->LookAt(selectedPos);
+					LookAt(centerObject);
+				}
+			}
+			else
+			{
+				CheckForMesh(app->editor->actualMesh);
+			}
 		}
+
+		//gameObject = App->editor->actualMesh;
+
+		//float3 selectedPos;
+
+		//selectedPos.x = gameObject->mTransform->GetPosition().x;
+		//selectedPos.y = gameObject->mTransform->GetPosition().y;
+		//selectedPos.z = gameObject->mTransform->GetPosition().z;
+
+		//float3 selectedScale;
+
+		//selectedScale.x = gameObject->mTransform->GetScale().x;
+		//selectedScale.y = gameObject->mTransform->GetScale().y;
+		//selectedScale.z = gameObject->mTransform->GetScale().z;
+
 		
+
+			/*	cameraEditor->frustum.pos = selectedPos + (cameraEditor->frustum.pos - selectedPos).Normalized() * 10;
+				cameraEditor->LookAt(selectedPos);*/
+	
 	}
+	//}
 
 	
 
@@ -315,4 +343,26 @@ void ModuleCamera3D::Move(const float3&Movement)
 {
 	Position += Movement;
 	Reference += Movement;
+}
+
+ComponentMesh* ModuleCamera3D::CheckForMesh(GameObjectManager* gameObject)
+{
+	ComponentMesh* C_Mesh = nullptr;
+
+	for(int i = 0; i < gameObject->childrens.size(); i++)
+	{
+		ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gameObject->childrens[i]->GetComponentGameObject(ComponentType::MESH));
+
+		if(C_Mesh != nullptr)
+		{
+			return C_Mesh;
+		}
+
+		if(gameObject->childrens[i]->childrens.size() > 0)
+		{
+			C_Mesh = CheckForMesh(gameObject->childrens[i]);
+		}
+	}
+
+	return C_Mesh;
 }
