@@ -285,7 +285,18 @@ void ModuleCamera3D::Focus(/*const float3 &Spot*/){
 			}
 			else
 			{
-				CheckForMesh(app->editor->actualMesh);
+				mesh = CheckForMesh(app->editor->actualMesh);
+
+				if (mesh->C_Mesh != nullptr) 
+				{
+					box = &mesh->global_aabb;
+					centerObject = box->Centroid();
+					scale = box->Size();
+
+					cameraEditor->frustum.pos.Set(centerObject.x + scale.x, centerObject.y + scale.y, centerObject.z + scale.z);
+
+					LookAt(centerObject); 
+				}
 			}
 		}
 
