@@ -9,7 +9,6 @@ ResourceElement::ResourceElement()
 	resourceCounter = 0;
 	AssetsPath = "";
 	LibraryPath = "";
-	ParentUUID = 0;
 
 	type = ResourceTypes::R_NONE;
 	UUID = app->RandomGenerator.Int();
@@ -21,7 +20,6 @@ ResourceElement::ResourceElement(ResourceTypes R_type)
 	resourceCounter = 0;
 	AssetsPath = "";
 	LibraryPath = "";
-	ParentUUID = 0;
 
 	this->type = R_type;
 	UUID = app->RandomGenerator.Int();
@@ -33,7 +31,6 @@ ResourceElement::ResourceElement(const char* name, const char* AssetsPath, Resou
 	resourceCounter = 0;
 	this->AssetsPath = AssetsPath;
 	LibraryPath = "";
-	ParentUUID = 0;
 
 	this->type = R_type;
 	UUID = (R_UUID == 0) ? app->RandomGenerator.Int() : R_UUID;

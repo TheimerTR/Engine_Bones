@@ -46,7 +46,7 @@ void FileSystem::ReadFyleType(const char* Path)
 				uint size = 0;
 
 				R_Texture->texture->path = Path;
-				R_Texture->ParentUUID = app->editor->actualMesh->UUID;
+				R_Texture->ParentsUUID.push_back(app->editor->actualMesh->UUID);
 
 				Importer::ImporterTexture::ImportTexture(R_Texture, buffer, size);
 				Importer::ImporterTexture::Load(R_Texture->texture, Path);
@@ -64,7 +64,7 @@ void FileSystem::ReadFyleType(const char* Path)
 				ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
 				C_Texture->SetTexture(R_Texture->texture);
 
-				if (!AssimpManager::CheckNotDuplicateFromAssets(R_Texture))
+				if (!AssimpManager::CheckNotDuplicateFromAssets(R_Texture, app->editor->actualMesh->UUID))
 				{
 					app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
 					app->resource->AllResourcesMap[R_Texture->getUUID()]->resourceCounter += 1;

@@ -1338,7 +1338,7 @@ void ModuleEditor::ResourceWindowDisplay()
 			if (iterator->second->type == ResourceTypes::R_TEXTURE)
 			{
 				ResourceTexture* texture = (ResourceTexture*)iterator->second;
-				name = texture->texture->Name;
+				name = texture->name;
 				name.append(".texture");
 			}
 
