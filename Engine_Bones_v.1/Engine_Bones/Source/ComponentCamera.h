@@ -19,11 +19,13 @@ public:
 
 	bool Update(); 
 	void UpdateFrustum();
+	void UpdateProjection();
 
 	void LookAt(const float3& Spot); 
 	void Draw(); 
 	void EndDraw(); 
-	//float* GetViewMatrix();
+
+	void ShowCameraInfo();
 
 	void SetPos(float3 pos);
 	void SetRatio(float ratio); 
