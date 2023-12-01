@@ -404,6 +404,23 @@ void GameObjectManager::ChangeParent(GameObjectManager* gameObject)
 			this->mParent = nullptr;
 			mParent = gameObject;
 			mParent->childrens.push_back(this);
+
+			float4x4 newTransformation = mTransform->mLocalMatrix = mParent->mTransform->GetGlobalMatrix().Inverted() * mTransform->GetGlobalMatrix();
+
+			float3 position, scale; 
+			Quat rotation; 
+
+			newTransformation.Decompose(position, rotation, scale); 
+
+			//mTransform->mLocalMatrix = mTransform->mLocalMatrix = mParent->mTransform->GetGlobalMatrix().Inverted() * mTransform->GetGlobalMatrix();
+
+			mTransform->mPosition = position; 
+			mTransform->mRotation = rotation; 
+			mTransform->mScale = scale; 
+
+			mTransform->UpdateTransformation(); 
+
+		
 		}
 	}
 }
