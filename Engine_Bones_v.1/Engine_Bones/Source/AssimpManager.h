@@ -88,7 +88,7 @@ namespace AssimpManager
 
 	void MetaFileCreator(GameObjectManager* gameObject);
 
-	bool CheckNotDuplicateFromAssets(ResourceElement* R_Element);
+	bool CheckNotDuplicateFromAssets(ResourceElement* R_Element, uint32 uuid);
 	bool CheckResourceComponentsExistence(ResourceElement* R_Element);
 
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);

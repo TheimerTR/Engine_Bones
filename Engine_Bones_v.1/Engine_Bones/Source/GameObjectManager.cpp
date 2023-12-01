@@ -43,9 +43,12 @@ GameObjectManager::~GameObjectManager()
 
 	for (iterator; iterator != app->resource->AllResourcesMap.end(); iterator++)
 	{
-		if (UUID == iterator->second->ParentUUID)
+		for (int h = 0; h < iterator->second->ParentsUUID.size(); h++)
 		{
-			iterator->second->resourceCounter -= 1;
+			if (UUID == iterator->second->ParentsUUID[h])
+			{
+				iterator->second->resourceCounter -= 1;
+			}
 		}
 	}
 

@@ -119,6 +119,22 @@ void ComponentMaterial::ShowInfo(Texture* texture, int i)
 
 				if (ImGui::Button((std::string("Delete Texture##%s") + to_string(i).c_str()).c_str()))
 				{
+					map<uint32, ResourceElement*>::iterator iterator = app->resource->AllResourcesMap.begin();
+
+					for (iterator; iterator != app->resource->AllResourcesMap.end(); iterator++)
+					{
+						for (int h = 0; h < iterator->second->ParentsUUID.size(); h++)
+						{
+							if (Owner->UUID == iterator->second->ParentsUUID[h])
+							{
+								if (iterator->second->type == ResourceTypes::R_TEXTURE)
+								{
+									iterator->second->resourceCounter -= 1;
+								}
+							}
+						}
+					}
+
 					Owner->DeleteComponent(this);
 				}
 

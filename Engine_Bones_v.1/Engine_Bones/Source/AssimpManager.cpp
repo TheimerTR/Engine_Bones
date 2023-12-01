@@ -171,7 +171,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			size = Importer::ImporterMesh::Save(R_Mesh, &buffer);
 
 			R_Mesh->name = _ParentObj->mName;
-			R_Mesh->ParentUUID = _ParentObj->UUID;
+			R_Mesh->ParentsUUID.push_back(_ParentObj->UUID);
 
 			M_mesh = R_Mesh->mesh;
 			M_mesh->Name = _ParentObj->mName;
@@ -231,14 +231,14 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				FileSystem::StringDivide(texturePath, &textureName, nullptr);
 
 				R_Texture->texture->Name = textureName;
-				R_Texture->ParentUUID = _ParentObj->UUID;
+				R_Texture->ParentsUUID.push_back(_ParentObj->UUID);
 
 				if (size > 0)
 				{
 					app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
 				}
 
-				if(!CheckNotDuplicateFromAssets(R_Texture))
+				if(!CheckNotDuplicateFromAssets(R_Texture, _ParentObj->UUID))
 				{
 					app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
 					app->resource->AllResourcesMap[R_Texture->getUUID()]->resourceCounter += 1;
@@ -316,7 +316,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 							R_MeshToComponent->name = _ParentObj->mName;
 							R_MeshToComponent->mesh->Name = R_MeshToComponent->name;
-							R_MeshToComponent->ParentUUID = _ParentObj->UUID;
+							R_MeshToComponent->ParentsUUID.push_back(_ParentObj->UUID);
 
 							ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
 							//R_MeshToComponent->mesh->local_aabb = R_MeshToComponent->local_aabb;
@@ -330,7 +330,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 							size = 0;
 
 							R_Texture->texture->path = texturePath;
-							R_Texture->ParentUUID = _ParentObj->UUID;
+							R_Texture->ParentsUUID.push_back(_ParentObj->UUID);
 
 							Importer::ImporterTexture::ImportTexture(R_Texture, buffer, size);
 							Importer::ImporterTexture::Load(R_Texture->texture, texturePath);
@@ -375,7 +375,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 								R_MeshToComponent->LibraryPath = resource->ComponentsInModel[j];
 								R_MeshToComponent->mesh->Name = R_MeshToComponent->name;
 								R_MeshToComponent->resourceCounter += 1;
-								R_MeshToComponent->ParentUUID = _ParentObj->UUID;
+								R_MeshToComponent->ParentsUUID.push_back(_ParentObj->UUID);
 
 								AllMeshes.push_back(R_MeshToComponent->mesh);
 
@@ -411,15 +411,16 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 								FileSystem::StringDivide(texturePath, &textureName, nullptr);
 
+								R_Texture->name = textureName;
 								R_Texture->texture->Name = textureName;
 								R_Texture->AssetsPath = texturePath;
-								R_Texture->ParentUUID = _ParentObj->UUID;
 
 								//ResourceToGameobject->name = textureName;
 
-								if (!CheckNotDuplicateFromAssets(R_Texture))
+								if (!CheckNotDuplicateFromAssets(R_Texture, _ParentObj->UUID))
 								{
 									app->resource->AllResourcesMap[R_Texture->UUID] = (ResourceTexture*)R_Texture;
+									R_Texture->ParentsUUID.push_back(_ParentObj->UUID);
 								}
 
 								RELEASE_ARRAY(buffer);
@@ -596,21 +597,25 @@ void AssimpManager::SetBuffers(Mesh* M_mesh)
 	M_mesh->VN = 0;
 	M_mesh->VT = 0;
 
-	glGenBuffers(1, (GLuint*)&(M_mesh->VBO));
+	glGenBuffers(1, &(GLuint)(M_mesh->VBO));
 	glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->vertex, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glGenBuffers(1, (GLuint*)&(M_mesh->EBO));
+	glGenBuffers(1, &(GLuint)(M_mesh->EBO));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * M_mesh->num_index, M_mesh->index, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glGenBuffers(1, (GLuint*)&(M_mesh->VN));
+	glGenBuffers(1, &(GLuint)(M_mesh->VN));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->normals, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glGenBuffers(1, (GLuint*)&(M_mesh->VT));
+	glGenBuffers(1, &(GLuint)(M_mesh->VT));
 	glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex * 2, M_mesh->textures, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void AssimpManager::MetaFileCreator(GameObjectManager* gameObject)
@@ -715,7 +720,7 @@ bool AssimpManager::CheckResourceComponentsExistence(ResourceElement* R_Element)
 	return Exist;
 }
 
-bool AssimpManager::CheckNotDuplicateFromAssets(ResourceElement* R_Element)
+bool AssimpManager::CheckNotDuplicateFromAssets(ResourceElement* R_Element, uint32 uuid)
 {
 	bool Exist = false;
 
@@ -725,6 +730,12 @@ bool AssimpManager::CheckNotDuplicateFromAssets(ResourceElement* R_Element)
 		if (R_Element->AssetsPath == iteratorExistence->second->AssetsPath)
 		{
 			Exist = true;
+
+			if (uuid != -1)
+			{
+				iteratorExistence->second->ParentsUUID.push_back(uuid);
+			}
+
 			iteratorExistence->second->resourceCounter += 1;
 		}
 	}

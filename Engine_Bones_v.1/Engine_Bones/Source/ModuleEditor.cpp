@@ -49,14 +49,16 @@ bool ModuleEditor::Init()
 {
 	AboutWindow = false;
 	LogOutput = false; 
-	Hierarchy = false;
+	Hierarchy = true;
 	OpenPreferences = false;
 	DemoWindow = false;
 	OpenAbout = false;
-	InfoGWindow = false;
-	ResourceWindow = false;
+	InfoGWindow = true;
+	ResourceWindow = true;
 	isMovingParent = false;
 	isMovingChild = false;
+	RGB_Mode = false;
+	RGB = false;
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 	Log_current_idx = 3;
@@ -98,6 +100,12 @@ bool ModuleEditor::DrawEditor()
 	ImGui_ImplSDL2_NewFrame();
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui::NewFrame();
+
+	if (RGB)
+	{
+		static double s0 = 0.0;
+		ImGui::PushStyleColor(ImGuiCol_Text, ImCandy::Rainbow(s0));
+	}
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -144,11 +152,10 @@ bool ModuleEditor::DrawEditor()
 					ThemeSelector = 5;
 					ImCandy::Theme_Cyberpunk();
 				}
-				/*if (ImGui::MenuItem("Rainbow"))
+				if (ImGui::MenuItem("RGB (only for Gamers)"))
 				{
-					static double s1 = 0.0;
-					ImGui::PushStyleColor(ImGuiCol_Border, ImCandy::Rainbow(s1));
-				}*/
+					RGB_Mode = !RGB_Mode;
+				}
 
 				ImGui::EndMenu();
 			}
@@ -1001,28 +1008,33 @@ bool ModuleEditor::DrawEditor()
 			}
 
 			ImGui::EndPopup();
-		
-
 	}
 
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
+	if (RGB)
+	{
+		ImGui::PopStyleColor();
+	}
 
-		// Rendering
-		ImGui::Render();
-		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+	RGB = RGB_Mode;
 
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
-			SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-		}
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	// Rendering
+	ImGui::Render();
+	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
-		return true;
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
+		SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
+	}
+
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+	return true;
 }
 
 void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
@@ -1173,6 +1185,34 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 						}
 					}
 
+					if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+					{
+						ImGui::SetDragDropPayload("GameObject", &gm->UUID, sizeof(unsigned long));
+
+						ImGui::Text(gm->mName.c_str());
+
+						ImGui::EndDragDropSource();
+					}
+
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+						{
+							IM_ASSERT(payload->DataSize == sizeof(unsigned long));
+							unsigned long payload_n = *(unsigned long*)payload->Data;
+
+							for (int h = 0; h < App->scene->AllGameObjectManagers.size(); h++)
+							{
+								if (payload_n == App->scene->AllGameObjectManagers[h]->UUID)
+								{
+									App->scene->AllGameObjectManagers[h]->ChangeParent(gm);
+								}
+							}
+						}
+
+						ImGui::EndDragDropTarget();
+					}
+
 					if (ImGui::BeginPopupContextItem())
 					{
 						if (ImGui::BeginMenu("Add Entity"))
@@ -1243,6 +1283,34 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 									moveEntityTo->ChangeParent(gm);
 									isMovingParent = false;
 								}
+							}
+
+							if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+							{
+								ImGui::SetDragDropPayload("GameObject", &gm->UUID, sizeof(unsigned long));
+
+								ImGui::Text(gm->mName.c_str());
+
+								ImGui::EndDragDropSource();
+							}
+
+							if (ImGui::BeginDragDropTarget())
+							{
+								if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+								{
+									IM_ASSERT(payload->DataSize == sizeof(unsigned long));
+									unsigned long payload_n = *(unsigned long*)payload->Data;
+
+									for (int h = 0; h < App->scene->AllGameObjectManagers.size(); h++)
+									{
+										if (payload_n == App->scene->AllGameObjectManagers[h]->UUID)
+										{
+											App->scene->AllGameObjectManagers[h]->ChangeParent(gm);
+										}
+									}
+								}
+
+								ImGui::EndDragDropTarget();
 							}
 
 							if (ImGui::BeginPopupContextItem())
@@ -1338,7 +1406,7 @@ void ModuleEditor::ResourceWindowDisplay()
 			if (iterator->second->type == ResourceTypes::R_TEXTURE)
 			{
 				ResourceTexture* texture = (ResourceTexture*)iterator->second;
-				name = texture->texture->Name;
+				name = texture->name;
 				name.append(".texture");
 			}
 
