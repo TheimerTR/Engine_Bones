@@ -597,22 +597,22 @@ void AssimpManager::SetBuffers(Mesh* M_mesh)
 	M_mesh->VN = 0;
 	M_mesh->VT = 0;
 
-	glGenBuffers(1, (GLuint*)&(M_mesh->VBO));
+	glGenBuffers(1, &(GLuint)(M_mesh->VBO));
 	glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->vertex, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glGenBuffers(1, (GLuint*)&(M_mesh->EBO));
+	glGenBuffers(1, &(GLuint)(M_mesh->EBO));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * M_mesh->num_index, M_mesh->index, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glGenBuffers(1, (GLuint*)&(M_mesh->VN));
+	glGenBuffers(1, &(GLuint)(M_mesh->VN));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->normals, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glGenBuffers(1, (GLuint*)&(M_mesh->VT));
+	glGenBuffers(1, &(GLuint)(M_mesh->VT));
 	glBindBuffer(GL_ARRAY_BUFFER, M_mesh->VT);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * M_mesh->num_Tex * 2, M_mesh->textures, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

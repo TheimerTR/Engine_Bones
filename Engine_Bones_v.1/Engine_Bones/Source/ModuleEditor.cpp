@@ -1173,6 +1173,34 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 						}
 					}
 
+					if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+					{
+						ImGui::SetDragDropPayload("GameObject", &gm->UUID, sizeof(unsigned long));
+
+						ImGui::Text(gm->mName.c_str());
+
+						ImGui::EndDragDropSource();
+					}
+
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+						{
+							IM_ASSERT(payload->DataSize == sizeof(unsigned long));
+							unsigned long payload_n = *(unsigned long*)payload->Data;
+
+							for (int h = 0; h < App->scene->AllGameObjectManagers.size(); h++)
+							{
+								if (payload_n == App->scene->AllGameObjectManagers[h]->UUID)
+								{
+									App->scene->AllGameObjectManagers[h]->ChangeParent(gm);
+								}
+							}
+						}
+
+						ImGui::EndDragDropTarget();
+					}
+
 					if (ImGui::BeginPopupContextItem())
 					{
 						if (ImGui::BeginMenu("Add Entity"))
@@ -1243,6 +1271,34 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 									moveEntityTo->ChangeParent(gm);
 									isMovingParent = false;
 								}
+							}
+
+							if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+							{
+								ImGui::SetDragDropPayload("GameObject", &gm->UUID, sizeof(unsigned long));
+
+								ImGui::Text(gm->mName.c_str());
+
+								ImGui::EndDragDropSource();
+							}
+
+							if (ImGui::BeginDragDropTarget())
+							{
+								if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+								{
+									IM_ASSERT(payload->DataSize == sizeof(unsigned long));
+									unsigned long payload_n = *(unsigned long*)payload->Data;
+
+									for (int h = 0; h < App->scene->AllGameObjectManagers.size(); h++)
+									{
+										if (payload_n == App->scene->AllGameObjectManagers[h]->UUID)
+										{
+											App->scene->AllGameObjectManagers[h]->ChangeParent(gm);
+										}
+									}
+								}
+
+								ImGui::EndDragDropTarget();
 							}
 
 							if (ImGui::BeginPopupContextItem())
