@@ -49,14 +49,16 @@ bool ModuleEditor::Init()
 {
 	AboutWindow = false;
 	LogOutput = false; 
-	Hierarchy = false;
+	Hierarchy = true;
 	OpenPreferences = false;
 	DemoWindow = false;
 	OpenAbout = false;
-	InfoGWindow = false;
-	ResourceWindow = false;
+	InfoGWindow = true;
+	ResourceWindow = true;
 	isMovingParent = false;
 	isMovingChild = false;
+	RGB_Mode = false;
+	RGB = false;
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 	Log_current_idx = 3;
@@ -99,8 +101,11 @@ bool ModuleEditor::DrawEditor()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui::NewFrame();
 
-	static double s0 = 0.0;
-	ImGui::PushStyleColor(ImGuiCol_Text, ImCandy::Rainbow(s0));
+	if (RGB)
+	{
+		static double s0 = 0.0;
+		ImGui::PushStyleColor(ImGuiCol_Text, ImCandy::Rainbow(s0));
+	}
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -147,12 +152,10 @@ bool ModuleEditor::DrawEditor()
 					ThemeSelector = 5;
 					ImCandy::Theme_Cyberpunk();
 				}
-				//if (ImGui::MenuItem("Rainbow"))
-				//{
-				//	static double s1 = 0.0;
-				//	ImCandy::Rainbow(s1);
-				//	//ImGui::PushStyleColor(ImGuiCol_Border, ImCandy::Rainbow(s1));
-				//}
+				if (ImGui::MenuItem("RGB (only for Gamers)"))
+				{
+					RGB_Mode = !RGB_Mode;
+				}
 
 				ImGui::EndMenu();
 			}
@@ -1007,27 +1010,31 @@ bool ModuleEditor::DrawEditor()
 			ImGui::EndPopup();
 	}
 
+	if (RGB)
+	{
+		ImGui::PopStyleColor();
+	}
 
-	ImGui::PopStyleColor();
+	RGB = RGB_Mode;
 
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-		// Rendering
-		ImGui::Render();
-		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+	// Rendering
+	ImGui::Render();
+	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
-			SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-		}
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
+		SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
+	}
 
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-		return true;
+	return true;
 }
 
 void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
