@@ -55,15 +55,19 @@ bool ModuleEditor::Init()
 	OpenAbout = false;
 	InfoGWindow = true;
 	ResourceWindow = true;
+	AssetWindow = true;
 	isMovingParent = false;
 	isMovingChild = false;
-	RGB_Mode = false;
-	RGB = false;
+	RGB_Mode = true;
+	RGB = true;
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 	Log_current_idx = 3;
 	OG_ChildListPos = 0;
 	Actual_ChildPos = 0;
+
+	actualDir = "";
+	actualFile = "";
 
 	moveEntityTo = nullptr;
 	hoveredItem = nullptr;
@@ -311,6 +315,12 @@ bool ModuleEditor::DrawEditor()
 				ThemeUpdate();
 				ResourceWindow = !ResourceWindow;
 			}
+			
+			if (ImGui::MenuItem("Assets"))
+			{
+				ThemeUpdate();
+				AssetWindow = !AssetWindow;
+			}
 
 			ImGui::EndMenu();
 		}
@@ -355,6 +365,19 @@ bool ModuleEditor::DrawEditor()
 
 		ResourceWindowDisplay();
 
+		ImGui::End();
+	}
+
+	if(AssetWindow)
+	{
+		ImVec2 pos = { 1000, 200 };
+		ImGui::SetNextWindowSize(pos);
+		string path = "Assets";
+		vector<string> fileList;
+		vector<string> dirList;
+		app->physFSManager->DiscoverFiles(path.c_str(), fileList, dirList);
+		ImGui::Begin("Assets");
+		AssetsWindow(path.c_str(), fileList, dirList, false);
 		ImGui::End();
 	}
 
@@ -1684,6 +1707,312 @@ void ModuleEditor::ResourceAssetWindow()
 	}
 
 	ImGui::End();
+}
+
+void ModuleEditor::AssetsWindow(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list, bool leaf)
+{
+	ImGui::Columns(2, "Assets", true);
+
+	AssetsWindowFolders(directory, file_list, dir_list, false);
+
+	ImGui::NextColumn();
+
+	if (actualDir != "")
+	{
+		string pathToCheck = directory;
+		pathToCheck.append("/");
+		pathToCheck.append(actualDir);
+		vector<string> fileListCheck;
+		vector<string> dirListCheck;
+		app->physFSManager->DiscoverFiles(pathToCheck.c_str(), fileListCheck, dirListCheck);
+
+		if (fileListCheck.size() > 0)
+			{
+
+				for (int i = 0; i < fileListCheck.size(); i++)
+				{
+					int gmFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+					if (fileListCheck.size() > 0)
+					{
+						if (fileListCheck[i] != "")
+						{
+							if (actualFile == fileListCheck[i])
+							{
+								gmFlags |= ImGuiTreeNodeFlags_Selected;
+							}
+							else
+							{
+								gmFlags |= ImGuiTreeNodeFlags_None;
+							}
+
+							ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, fileListCheck[i].c_str());
+
+							if (ImGui::IsItemHovered())
+							{
+								//hoveredItem = gm;
+							}
+
+							if (ImGui::IsItemClicked())
+							{
+								actualFile = fileListCheck[i];
+							}
+
+							/*if (ImGui::BeginPopupContextItem())
+							{
+								if (ImGui::BeginMenu("Add Entity"))
+								{
+									AddEntity(gm);
+
+									ImGui::EndMenu();
+								}
+
+								if (ImGui::BeginMenu("Add Component"))
+								{
+									AddComponentInInspector(gm);
+
+									ImGui::EndMenu();
+								}
+
+								if (ImGui::MenuItem("Change Parent To:"))
+								{
+									moveEntityTo = gm;
+									isMovingParent = true;
+								}
+
+								if (ImGui::MenuItem("Move Into Child List:"))
+								{
+									OG_ChildListPos = gm->SearchChildPosInVector();
+									OG_ChildList = gm->mParent->childrens;
+
+									if (OG_ChildListPos != -1)
+									{
+										isMovingChild = true;
+									}
+									else
+									{
+										LOG(LogTypeCase::L_ERROR, "Child Was not found in Parent list");
+									}
+								}
+
+								if (gm->mParent != App->scene->AllGameObjectManagers.at(0))
+								{
+									if (ImGui::MenuItem("Quit Parent"))
+									{
+										gm->ChangeParent(App->scene->Root);
+									}
+								}
+
+								if (ImGui::MenuItem("Delete Entity"))
+								{
+									gm->mParent->DeleteChild(gm);
+								}*/
+						}
+					}
+				}
+			}
+	}
+}
+
+void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list, bool leaf)
+{
+	for (int i = 0; i < dir_list.size(); i++)
+	{
+		string pathToCheck = directory;
+		pathToCheck.append("/");
+		pathToCheck.append(dir_list[i]);
+		vector<string> fileListCheck;
+		vector<string> dirListCheck;
+		app->physFSManager->DiscoverFiles(pathToCheck.c_str(), fileListCheck, dirListCheck);
+
+		if (dirListCheck.size() > 0)
+		{
+			if (dir_list.size() > 0)
+			{
+				if (dir_list[i] != "")
+				{
+					if (actualDir == dir_list[i])
+					{
+						treeFlags |= ImGuiTreeNodeFlags_Selected;
+					}
+					else
+					{
+						treeFlags |= ImGuiTreeNodeFlags_None;
+					}
+
+					bool isOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, treeFlags, dir_list[i].c_str());
+
+					if (ImGui::IsItemHovered())
+					{
+
+					}
+
+					if (ImGui::IsItemClicked())
+					{
+						actualDir = dir_list[i];
+					}
+
+					/*if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+					{
+						ImGui::SetDragDropPayload("GameObject", &gm->UUID, sizeof(unsigned long));
+
+						ImGui::Text(gm->mName.c_str());
+
+						ImGui::EndDragDropSource();
+					}
+
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+						{
+							IM_ASSERT(payload->DataSize == sizeof(unsigned long));
+							unsigned long payload_n = *(unsigned long*)payload->Data;
+
+							for (int h = 0; h < App->scene->AllGameObjectManagers.size(); h++)
+							{
+								if (payload_n == App->scene->AllGameObjectManagers[h]->UUID)
+								{
+									App->scene->AllGameObjectManagers[h]->ChangeParent(gm);
+								}
+							}
+						}
+
+						ImGui::EndDragDropTarget();
+					}*/
+
+					//if (ImGui::BeginPopupContextItem())
+					//{
+					//	if (ImGui::BeginMenu("Add Entity"))
+					//	{
+					//		AddEntity(gm);
+
+					//		ImGui::EndMenu();
+					//	}
+
+					//	if (ImGui::BeginMenu("Add Component"))
+					//	{
+					//		AddComponentInInspector(gm);
+
+					//		ImGui::EndMenu();
+					//	}
+
+					//	if (ImGui::MenuItem("Change Parent To:"))
+					//	{
+					//		moveEntityTo = gm;
+					//		isMovingParent = true;
+					//	}
+
+					//	if (ImGui::MenuItem("Delete Entity"))
+					//	{
+					//		gm->mParent->DeleteChild(gm);
+					//	}
+
+					//	ImGui::EndPopup();
+					//}
+
+					if (isOpen)
+					{
+						string path = directory;
+						path.append("/");
+						path.append(dir_list[i]);
+						vector<string> fileList;
+						vector<string> dirList;
+						app->physFSManager->DiscoverFiles(path.c_str(), fileList, dirList);
+
+						if (dirList.size() > 0)
+						{
+							AssetsWindowFolders(path.c_str(), fileList, dirList, true);
+							ImGui::TreePop();
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			int gmFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+			if (dir_list.size() > 0)
+			{
+				if (dir_list[i] != "")
+				{
+					if (actualDir == dir_list[i])
+					{
+						gmFlags |= ImGuiTreeNodeFlags_Selected;
+					}
+					else
+					{
+						gmFlags |= ImGuiTreeNodeFlags_None;
+					}
+
+					ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, dir_list[i].c_str());
+
+					if (ImGui::IsItemClicked())
+					{
+						actualDir = dir_list[i];
+					}
+
+					/*if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+					{
+						ImGui::SetDragDropPayload("GameObject", &gm->UUID, sizeof(unsigned long));
+
+						ImGui::Text(gm->mName.c_str());
+
+						ImGui::EndDragDropSource();
+					}
+
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+						{
+							IM_ASSERT(payload->DataSize == sizeof(unsigned long));
+							unsigned long payload_n = *(unsigned long*)payload->Data;
+
+							for (int h = 0; h < App->scene->AllGameObjectManagers.size(); h++)
+							{
+								if (payload_n == App->scene->AllGameObjectManagers[h]->UUID)
+								{
+									App->scene->AllGameObjectManagers[h]->ChangeParent(gm);
+								}
+							}
+						}
+
+						ImGui::EndDragDropTarget();
+					}*/
+
+					//if (ImGui::BeginPopupContextItem())
+					//{
+					//	if (ImGui::BeginMenu("Add Entity"))
+					//	{
+					//		AddEntity(gm);
+
+					//		ImGui::EndMenu();
+					//	}
+
+					//	if (ImGui::BeginMenu("Add Component"))
+					//	{
+					//		AddComponentInInspector(gm);
+
+					//		ImGui::EndMenu();
+					//	}
+
+					//	if (ImGui::MenuItem("Change Parent To:"))
+					//	{
+					//		moveEntityTo = gm;
+					//		isMovingParent = true;
+					//	}
+
+					//	if (ImGui::MenuItem("Delete Entity"))
+					//	{
+					//		gm->mParent->DeleteChild(gm);
+					//	}
+
+					//	ImGui::EndPopup();
+					//}
+				}
+			}
+		}
+	}
 }
 
 void ModuleEditor::DefaultConfig()

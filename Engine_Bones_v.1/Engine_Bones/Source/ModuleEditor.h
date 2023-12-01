@@ -33,6 +33,8 @@ public:
 	void ResourceWindowDisplay();
 	void InfoGameObjectWindow(GameObjectManager* gameObject);
 	void ResourceAssetWindow();
+	void AssetsWindow(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list, bool leaf);
+	void AssetsWindowFolders(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list, bool leaf);
 	void OsOpenInShell(const char* path); 
 
 public:
@@ -48,12 +50,15 @@ public:
 
 	bool copy, AboutWindow, OpenPreferences, LogOutput, Vsync, Gl_Grid, Gl_DepthTest, Gl_CullFace, Gl_Ligthing, Gl_ColorMaterial, Gl_Texture2D,
 		Gl_LineSmooth, Gl_PolygonSmooth, Gl_AlphaTest, DemoWindow, OpenAbout, DR_Normals, changeDebug, Hierarchy, InfoGWindow, ResourceWindow, isMovingParent,
-		isMovingChild, numcap, RGB_Mode, RGB;
+		isMovingChild, numcap, RGB_Mode, RGB, AssetWindow;
 
 	int ThemeSelector;
 	int item_current_idx;
 	int Log_current_idx;
 	int SelectPrimitive;
+
+	string actualDir;
+	string actualFile;
 
 	GameObjectManager* actualMesh;
 	GameObjectManager* moveEntityTo;
