@@ -168,20 +168,17 @@ bool ModuleRenderer3D::Init()
 	return ret;
 }
 
+bool ModuleRenderer3D::Start()
+{
+	ActiveCameraEditor->UpdateProjection();
+
+	return true; 
+}
+
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-	UpdateProjection(ActiveCameraEditor);
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf((GLfloat*)ActiveCameraEditor->GetViewMatrix());
-
-/*	LOG(LogTypeCase::L_CASUAL ,"view");*/ 
-
-	//ActiveCameraEditor->Draw(); 
+	ActiveCameraEditor->Draw(); 
 
 	// light 0 on cam pos
 	lights[0].SetPos(ActiveCameraEditor->GetPosition().x, ActiveCameraEditor->GetPosition().y, ActiveCameraEditor->GetPosition().z);
@@ -252,19 +249,19 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
-void ModuleRenderer3D::UpdateProjection(ComponentCamera* cam)
-{
-	if (cam != nullptr)
-	{
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-
-		glLoadMatrixf(cam->GetProjectionMatrix());
-
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-	}
-}
+//void ModuleRenderer3D::UpdateProjection(ComponentCamera* cam)
+//{
+//	if (cam != nullptr)
+//	{
+//		glMatrixMode(GL_PROJECTION);
+//		glLoadIdentity();
+//
+//		glLoadMatrixf(cam->GetProjectionMatrix());
+//
+//		glMatrixMode(GL_MODELVIEW);
+//		glLoadIdentity();
+//	}
+//}
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {

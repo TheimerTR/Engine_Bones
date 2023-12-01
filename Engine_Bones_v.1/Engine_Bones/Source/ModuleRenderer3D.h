@@ -33,6 +33,9 @@ public:
 	~ModuleRenderer3D();
 
 	bool Init();
+
+	bool Start(); 
+
 	update_status PreUpdate(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
@@ -45,7 +48,7 @@ public:
 
 	void SetCameraEditor(ComponentCamera* camera); 
 
-	void UpdateProjection(ComponentCamera* cam);
+	//void UpdateProjection(ComponentCamera* cam);
 
 public:
 

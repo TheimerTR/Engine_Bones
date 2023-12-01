@@ -68,14 +68,38 @@ void ComponentCamera::UpdateFrustum()
 	frustum.up = frustum.front.Cross(-frustum.WorldRight()).Normalized();
 }
 
+void ComponentCamera::UpdateProjection()
+{
+	if (this != nullptr)
+	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+
+		glLoadMatrixf(this->GetProjectionMatrix());
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+	}
+
+}
+
 void ComponentCamera::Draw()
 {
-	  
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf((GLfloat*)this->GetViewMatrix());
 }
 
 void ComponentCamera::EndDraw()
 {
 	glDisable(GL_DEPTH_TEST);
+}
+
+void ComponentCamera::ShowCameraInfo()
+{
+
 }
 
 void ComponentCamera::SetPos(float3 pos)
