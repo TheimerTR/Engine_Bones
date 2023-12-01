@@ -58,8 +58,8 @@ bool ModuleEditor::Init()
 	AssetWindow = true;
 	isMovingParent = false;
 	isMovingChild = false;
-	RGB_Mode = true;
-	RGB = true;
+	RGB_Mode = false;
+	RGB = false;
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 	Log_current_idx = 3;
