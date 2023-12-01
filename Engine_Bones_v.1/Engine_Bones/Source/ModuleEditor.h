@@ -34,7 +34,7 @@ public:
 	void InfoGameObjectWindow(GameObjectManager* gameObject);
 	void ResourceAssetWindow();
 	void AssetsWindow(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list, bool leaf);
-	void AssetsWindowFolders(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list, bool leaf);
+	void AssetsWindowFolders(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list, bool& leaf);
 	void OsOpenInShell(const char* path); 
 
 public:

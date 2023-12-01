@@ -1713,52 +1713,49 @@ void ModuleEditor::AssetsWindow(const char* directory, std::vector<std::string>&
 {
 	ImGui::Columns(2, "Assets", true);
 
-	AssetsWindowFolders(directory, file_list, dir_list, false);
+	AssetsWindowFolders(directory, file_list, dir_list, leaf);
 
 	ImGui::NextColumn();
 
 	if (actualDir != "")
 	{
-		string pathToCheck = directory;
-		pathToCheck.append("/");
-		pathToCheck.append(actualDir);
 		vector<string> fileListCheck;
 		vector<string> dirListCheck;
-		app->physFSManager->DiscoverFiles(pathToCheck.c_str(), fileListCheck, dirListCheck);
+		app->physFSManager->DiscoverFiles(actualDir.c_str(), fileListCheck, dirListCheck);
 
 		if (fileListCheck.size() > 0)
+		{
+
+			for (int i = 0; i < fileListCheck.size(); i++)
 			{
+				int gmFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
-				for (int i = 0; i < fileListCheck.size(); i++)
+				if (fileListCheck.size() > 0)
 				{
-					int gmFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-
-					if (fileListCheck.size() > 0)
+					if (fileListCheck[i] != "")
 					{
-						if (fileListCheck[i] != "")
+						if (actualFile == fileListCheck[i])
 						{
-							if (actualFile == fileListCheck[i])
-							{
-								gmFlags |= ImGuiTreeNodeFlags_Selected;
-							}
-							else
-							{
-								gmFlags |= ImGuiTreeNodeFlags_None;
-							}
+							gmFlags |= ImGuiTreeNodeFlags_Selected;
+						}
+						else
+						{
+							gmFlags |= ImGuiTreeNodeFlags_None;
+						}
 
-							ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, fileListCheck[i].c_str());
+						ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, fileListCheck[i].c_str());
 
-							if (ImGui::IsItemHovered())
-							{
-								//hoveredItem = gm;
-							}
+						if (ImGui::IsItemHovered())
+						{
+							//hoveredItem = gm;
+						}
 
-							if (ImGui::IsItemClicked())
-							{
-								actualFile = fileListCheck[i];
-							}
+						if (ImGui::IsItemClicked())
+						{
+							actualFile = fileListCheck[i];
+						}
 
-							/*if (ImGui::BeginPopupContextItem())
+						/*if (ImGui::BeginPopupContextItem())
 							{
 								if (ImGui::BeginMenu("Add Entity"))
 								{
@@ -1807,14 +1804,14 @@ void ModuleEditor::AssetsWindow(const char* directory, std::vector<std::string>&
 								{
 									gm->mParent->DeleteChild(gm);
 								}*/
-						}
 					}
 				}
 			}
+		}
 	}
 }
 
-void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list, bool leaf)
+void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list, bool& leaf)
 {
 	for (int i = 0; i < dir_list.size(); i++)
 	{
@@ -1849,7 +1846,10 @@ void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::s
 
 					if (ImGui::IsItemClicked())
 					{
-						actualDir = dir_list[i];
+						actualDir = directory;
+						actualDir.append("/");
+						actualDir.append(dir_list[i]);
+						leaf = false;
 					}
 
 					/*if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -1921,9 +1921,10 @@ void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::s
 
 						if (dirList.size() > 0)
 						{
-							AssetsWindowFolders(path.c_str(), fileList, dirList, true);
-							ImGui::TreePop();
+							AssetsWindowFolders(path.c_str(), fileList, dirList, leaf);
 						}
+
+						ImGui::TreePop();
 					}
 				}
 			}
@@ -1932,7 +1933,7 @@ void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::s
 		{
 			int gmFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
-			if (dir_list.size() > 0)
+			if (!dir_list.empty())
 			{
 				if (dir_list[i] != "")
 				{
@@ -1949,7 +1950,10 @@ void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::s
 
 					if (ImGui::IsItemClicked())
 					{
-						actualDir = dir_list[i];
+						actualDir = directory;
+						actualDir.append("/");
+						actualDir.append(dir_list[i]);
+						leaf = true;
 					}
 
 					/*if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
