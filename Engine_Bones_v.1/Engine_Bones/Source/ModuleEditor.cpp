@@ -99,6 +99,9 @@ bool ModuleEditor::DrawEditor()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui::NewFrame();
 
+	static double s0 = 0.0;
+	ImGui::PushStyleColor(ImGuiCol_Text, ImCandy::Rainbow(s0));
+
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -144,11 +147,12 @@ bool ModuleEditor::DrawEditor()
 					ThemeSelector = 5;
 					ImCandy::Theme_Cyberpunk();
 				}
-				/*if (ImGui::MenuItem("Rainbow"))
-				{
-					static double s1 = 0.0;
-					ImGui::PushStyleColor(ImGuiCol_Border, ImCandy::Rainbow(s1));
-				}*/
+				//if (ImGui::MenuItem("Rainbow"))
+				//{
+				//	static double s1 = 0.0;
+				//	ImCandy::Rainbow(s1);
+				//	//ImGui::PushStyleColor(ImGuiCol_Border, ImCandy::Rainbow(s1));
+				//}
 
 				ImGui::EndMenu();
 			}
@@ -1001,9 +1005,10 @@ bool ModuleEditor::DrawEditor()
 			}
 
 			ImGui::EndPopup();
-		
-
 	}
+
+
+	ImGui::PopStyleColor();
 
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 
