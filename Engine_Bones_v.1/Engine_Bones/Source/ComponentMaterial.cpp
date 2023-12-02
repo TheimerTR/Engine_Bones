@@ -79,7 +79,10 @@ void ComponentMaterial::ShowInfo(Texture* texture, int i)
 	{
 		if (texture != nullptr)
 		{
-			FileSystem::StringDivide(texture->path, &texture->Name, nullptr);
+			if (texture->path != nullptr)
+			{
+				FileSystem::StringDivide(texture->path, &texture->Name, nullptr);
+			}
 
 			if (ImGui::TreeNode("%s##2", texture->Name.c_str()))
 			{

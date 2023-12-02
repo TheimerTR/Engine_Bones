@@ -1734,7 +1734,7 @@ void ModuleEditor::AssetsWindow(const char* directory, std::vector<std::string>&
 				{
 					if (fileListCheck[i] != "")
 					{
-						if (actualFile == fileListCheck[i])
+						if (selectedFile == fileListCheck[i])
 						{
 							gmFlags |= ImGuiTreeNodeFlags_Selected;
 						}
@@ -1752,58 +1752,25 @@ void ModuleEditor::AssetsWindow(const char* directory, std::vector<std::string>&
 
 						if (ImGui::IsItemClicked())
 						{
-							actualFile = fileListCheck[i];
+							selectedFile = fileListCheck[i];
+							actualFile = actualDir;
+							actualFile.append("/");
+							actualFile.append(fileListCheck[i]);
 						}
 
-						/*if (ImGui::BeginPopupContextItem())
+						if (ImGui::BeginPopupContextItem())
+						{
+							actualFile = actualDir;
+							actualFile.append("/");
+							actualFile.append(fileListCheck[i]);
+
+							if (ImGui::MenuItem("Import to Scene"))
 							{
-								if (ImGui::BeginMenu("Add Entity"))
-								{
-									AddEntity(gm);
+								ImportToScene(actualFile);
+							}
 
-									ImGui::EndMenu();
-								}
-
-								if (ImGui::BeginMenu("Add Component"))
-								{
-									AddComponentInInspector(gm);
-
-									ImGui::EndMenu();
-								}
-
-								if (ImGui::MenuItem("Change Parent To:"))
-								{
-									moveEntityTo = gm;
-									isMovingParent = true;
-								}
-
-								if (ImGui::MenuItem("Move Into Child List:"))
-								{
-									OG_ChildListPos = gm->SearchChildPosInVector();
-									OG_ChildList = gm->mParent->childrens;
-
-									if (OG_ChildListPos != -1)
-									{
-										isMovingChild = true;
-									}
-									else
-									{
-										LOG(LogTypeCase::L_ERROR, "Child Was not found in Parent list");
-									}
-								}
-
-								if (gm->mParent != App->scene->AllGameObjectManagers.at(0))
-								{
-									if (ImGui::MenuItem("Quit Parent"))
-									{
-										gm->ChangeParent(App->scene->Root);
-									}
-								}
-
-								if (ImGui::MenuItem("Delete Entity"))
-								{
-									gm->mParent->DeleteChild(gm);
-								}*/
+							ImGui::EndPopup();
+						}
 					}
 				}
 			}
@@ -1828,7 +1795,7 @@ void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::s
 			{
 				if (dir_list[i] != "")
 				{
-					if (actualDir == dir_list[i])
+					if (selectedDir == dir_list[i])
 					{
 						treeFlags |= ImGuiTreeNodeFlags_Selected;
 					}
@@ -1846,6 +1813,7 @@ void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::s
 
 					if (ImGui::IsItemClicked())
 					{
+						selectedDir = dir_list[i];
 						actualDir = directory;
 						actualDir.append("/");
 						actualDir.append(dir_list[i]);
@@ -1937,7 +1905,7 @@ void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::s
 			{
 				if (dir_list[i] != "")
 				{
-					if (actualDir == dir_list[i])
+					if (selectedDir == dir_list[i])
 					{
 						gmFlags |= ImGuiTreeNodeFlags_Selected;
 					}
@@ -1950,6 +1918,7 @@ void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::s
 
 					if (ImGui::IsItemClicked())
 					{
+						selectedDir = dir_list[i];
 						actualDir = directory;
 						actualDir.append("/");
 						actualDir.append(dir_list[i]);
@@ -2016,6 +1985,20 @@ void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::s
 				}
 			}
 		}
+	}
+}
+
+void ModuleEditor::ImportToScene(string path)
+{
+	string name;
+	string extension;
+
+	FileSystem::StringDivide(path.c_str(), &name, &extension);
+
+	if (strcmp(extension.data(), "fbx") == 0)
+	{
+		AssimpManager::AssimpLoader(path.c_str());
+		LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
 	}
 }
 
