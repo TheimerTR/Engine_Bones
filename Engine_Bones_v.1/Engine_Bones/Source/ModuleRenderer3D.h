@@ -48,6 +48,8 @@ public:
 
 	void SetCameraEditor(ComponentCamera* camera); 
 
+	void SetCameraGame(ComponentCamera* game); 
+
 	//void UpdateProjection(ComponentCamera* cam);
 
 public:
@@ -59,8 +61,8 @@ public:
 	bool OpenWindow; 
 	bool Wireframe;
 
-	ComponentCamera* ActiveCameraEditor; 
-	ComponentCamera* cameraGame; 
+	ComponentCamera* ActiveCameraEditor = nullptr; 
+	ComponentCamera* cameraGame = nullptr; 
 
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;

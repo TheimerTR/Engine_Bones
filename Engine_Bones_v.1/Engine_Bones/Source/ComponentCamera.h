@@ -36,9 +36,16 @@ public:
 
 	float3 GetPosition(); 
 
+	void FrameBuffer(int w, int h); 
+
 public:
 
 	Frustum frustum;
+
+	uint frameID = 0;
+	uint frameTexture = 0;
+	uint rbo = 0;
+	uint frameDepth = 0;
 
 private:
 	float width = 0.0f;
@@ -47,6 +54,8 @@ private:
 	float near_plane = 0.0f;
 	float far_plane = 0.0f;
 	float vertical_fov = 0.0f;
+
+
 
 private:
 

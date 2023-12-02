@@ -85,15 +85,32 @@ void ComponentCamera::UpdateProjection()
 
 void ComponentCamera::Draw()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+
 	glLoadIdentity();
+
+	//glLoadIdentity();
+;
+
+	//glLoadIdentity();
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf((GLfloat*)this->GetProjectionMatrix());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf((GLfloat*)this->GetViewMatrix());
+
+	glBindFramebuffer(GL_FRAMEBUFFER, frameID);
+
+	glClearColor(0.08f, 0.08f, 0.08f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
 }
 
 void ComponentCamera::EndDraw()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDisable(GL_DEPTH_TEST);
 }
 
@@ -140,5 +157,48 @@ float* ComponentCamera::GetProjectionMatrix() const
 float3 ComponentCamera::GetPosition()
 {
 	return frustum.pos; 
+}
+
+void ComponentCamera::FrameBuffer(int w, int h)
+{
+	SetRatio((float)w / (float)h); 
+
+	if (frameID != 0)
+		glDeleteFramebuffers(1, (GLuint*)&frameID);
+
+	if (frameTexture != 0)
+		glDeleteTextures(1, (GLuint*)&frameTexture);
+
+	if (rbo != 0)
+		glDeleteRenderbuffers(1, (GLuint*)&rbo);
+
+	glGenFramebuffers(1, (GLuint*)&frameID); 
+	glBindFramebuffer(GL_FRAMEBUFFER, frameID); 
+
+	glGenTextures(1, (GLuint*)&frameTexture); 
+	glBindTexture(GL_TEXTURE_2D, frameTexture); 
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frameTexture, 0);
+	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, rbo, 0);
+
+	glGenRenderbuffers(1, (GLuint*)&rbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, w, h);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		LOG(LogTypeCase::L_ERROR, "Error Framebuffer");
+	}
+
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
 }
 

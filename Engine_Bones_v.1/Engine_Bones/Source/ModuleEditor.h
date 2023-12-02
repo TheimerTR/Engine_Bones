@@ -38,6 +38,8 @@ public:
 	void ImportToScene(string path);
 	void OsOpenInShell(const char* path); 
 
+	void CreateDockingSpace(); 
+
 public:
 
 	struct l_Logs
@@ -77,7 +79,13 @@ public:
 	float WinBright;
 	int treeFlags;
 
+	string name; 
+	string nameGame; 
+
 	string caps = "caps: ";
+
+	float viewportSizex; 
+	float viewportSizey; 
 };
 
 #endif
