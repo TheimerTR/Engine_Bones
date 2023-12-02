@@ -165,12 +165,14 @@ bool ModuleRenderer3D::Init()
 
 	Grid.axis = true;
 
+	OnResize(app->window->width, app->window->height); 
+
 	return ret;
 }
 
 bool ModuleRenderer3D::Start()
 {
-	ActiveCameraEditor->UpdateProjection();
+	//ActiveCameraEditor->UpdateProjection();
 
 	return true; 
 }
@@ -186,12 +188,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
-	return UPDATE_CONTINUE;
-}
-
-// PostUpdate present buffer to screen
-update_status ModuleRenderer3D::PostUpdate(float dt)
-{
 	if (Wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
@@ -200,13 +196,13 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 	{
 		std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
-		
+
 		for (int j = 0; j < objectMeshes.size(); j++)
 		{
 			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
 			ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
 			ComponentTransform* objectTransform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
-			
+
 			if (objectTexture != nullptr)
 			{
 				RenderDraw(objectMesh, objectTransform, objectTexture);
@@ -216,20 +212,116 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 				RenderDraw(objectMesh, objectTransform);
 			}
 		}
-	}
+
 	
+	}
 	if (App->editor->Gl_Grid)
 	{
 		Grid.Render();
 	}
 
+	App->scene->Root->Update();
+
+
+
+	return UPDATE_CONTINUE;
+}
+
+// PostUpdate present buffer to screen
+update_status ModuleRenderer3D::PostUpdate(float dt)
+{
+
+
+	ActiveCameraEditor->EndDraw();
+
+	if (cameraGame != nullptr)
+	{
+		cameraGame->Draw(); 
+
+		for (uint i = 0; i < MAX_LIGHTS; ++i)
+			lights[i].Render();
+
+		if (Wireframe)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		else
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
+		{
+			std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
+
+			for (int j = 0; j < objectMeshes.size(); j++)
+			{
+				ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
+				ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
+				ComponentTransform* objectTransform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
+
+				if (objectTexture != nullptr)
+				{
+					RenderDraw(objectMesh, objectTransform, objectTexture);
+				}
+				else
+				{
+					RenderDraw(objectMesh, objectTransform);
+				}
+			}
+		}
+
+
+
+		if (App->editor->Gl_Grid)
+		{
+			Grid.Render();
+		}
+
+		App->scene->Root->Update();
+
+		cameraGame->EndDraw(); 
+	}
+
+	//if (Wireframe)
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//else
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	//for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
+	//{
+	//	std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
+	//	
+	//	for (int j = 0; j < objectMeshes.size(); j++)
+	//	{
+	//		ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
+	//		ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
+	//		ComponentTransform* objectTransform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
+	//		
+	//		if (objectTexture != nullptr)
+	//		{
+	//			RenderDraw(objectMesh, objectTransform, objectTexture);
+	//		}
+	//		else
+	//		{
+	//			RenderDraw(objectMesh, objectTransform);
+	//		}
+	//	}
+	//}
+
+
+	//
+	//if (App->editor->Gl_Grid)
+	//{
+	//	Grid.Render();
+	//}
+
+	glClearColor(0.08f, 0.08f, 0.08f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	App->editor->DrawEditor();
 
-	App->scene->Root->Update(); 
+ 
+
+	//ImGui::Render();
 
 	SDL_GL_SwapWindow(App->window->window);
-
-	//ActiveCameraEditor->EndDraw(); 
 
 	return UPDATE_CONTINUE;
 }
@@ -266,16 +358,24 @@ bool ModuleRenderer3D::CleanUp()
 void ModuleRenderer3D::OnResize(int width, int height)
 {
 	float ratio = (float)width / (float)height;
-	ActiveCameraEditor->SetRatio(ratio);
+	//ActiveCameraEditor->SetRatio(ratio);
 	glViewport(0, 0, width, height);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	app->window->width = width; 
+	app->window->height = height;
 
-	glLoadMatrixf(ActiveCameraEditor->GetProjectionMatrix());
+	if (ActiveCameraEditor != nullptr)
+	{/*
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();*/
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+		glLoadMatrixf(ActiveCameraEditor->GetProjectionMatrix());
+
+		ActiveCameraEditor->FrameBuffer(width, height);
+
+		/*glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();*/
+	}
 }
 
 void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* transform ,ComponentMaterial* texture)
@@ -378,46 +478,61 @@ void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* trans
 	}
 }
 
-void ModuleRenderer3D::DrawBox(float3* points, float3 color)
-{
-	glColor3fv(&color.x);
-	glLineWidth(2.f);
-	glBegin(GL_LINES);
-
-	//Draw plane
-	glVertex3fv(&points[0].x);
-	glVertex3fv(&points[2].x);
-	glVertex3fv(&points[2].x);
-	glVertex3fv(&points[6].x);
-	glVertex3fv(&points[6].x);
-	glVertex3fv(&points[4].x);
-	glVertex3fv(&points[4].x);
-	glVertex3fv(&points[0].x);
-
-	glVertex3fv(&points[0].x);
-	glVertex3fv(&points[1].x);
-	glVertex3fv(&points[1].x);
-	glVertex3fv(&points[3].x);
-	glVertex3fv(&points[3].x);
-	glVertex3fv(&points[2].x);
-	glVertex3fv(&points[4].x);
-	glVertex3fv(&points[5].x);
-
-	glVertex3fv(&points[6].x);
-	glVertex3fv(&points[7].x);
-	glVertex3fv(&points[5].x);
-	glVertex3fv(&points[7].x);
-	glVertex3fv(&points[3].x);
-	glVertex3fv(&points[7].x);
-	glVertex3fv(&points[1].x);
-	glVertex3fv(&points[5].x);
-
-	glEnd();
-	glLineWidth(1.f);
-	glColor3f(1.f, 1.f, 1.f);
-}
+//void ModuleRenderer3D::DrawBox(float3* points, float3 color)
+//{
+//	glColor3fv(&color.x);
+//	glLineWidth(2.f);
+//	glBegin(GL_LINES);
+//
+//	//Draw plane
+//	glVertex3fv(&points[0].x);
+//	glVertex3fv(&points[2].x);
+//	glVertex3fv(&points[2].x);
+//	glVertex3fv(&points[6].x);
+//	glVertex3fv(&points[6].x);
+//	glVertex3fv(&points[4].x);
+//	glVertex3fv(&points[4].x);
+//	glVertex3fv(&points[0].x);
+//
+//	glVertex3fv(&points[0].x);
+//	glVertex3fv(&points[1].x);
+//	glVertex3fv(&points[1].x);
+//	glVertex3fv(&points[3].x);
+//	glVertex3fv(&points[3].x);
+//	glVertex3fv(&points[2].x);
+//	glVertex3fv(&points[4].x);
+//	glVertex3fv(&points[5].x);
+//
+//	glVertex3fv(&points[6].x);
+//	glVertex3fv(&points[7].x);
+//	glVertex3fv(&points[5].x);
+//	glVertex3fv(&points[7].x);
+//	glVertex3fv(&points[3].x);
+//	glVertex3fv(&points[7].x);
+//	glVertex3fv(&points[1].x);
+//	glVertex3fv(&points[5].x);
+//
+//	glEnd();
+//	glLineWidth(1.f);
+//	glColor3f(1.f, 1.f, 1.f);
+//}
 
 void ModuleRenderer3D::SetCameraEditor(ComponentCamera* camera)
 {
 	ActiveCameraEditor = camera;
+
+	if (ActiveCameraEditor != nullptr)
+	{
+		ActiveCameraEditor->FrameBuffer(app->window->width, app->window->height); 
+	}
+}
+
+void ModuleRenderer3D::SetCameraGame(ComponentCamera* game)
+{
+	cameraGame = game; 
+
+	if (cameraGame != nullptr)
+	{
+		cameraGame->FrameBuffer(app->window->width, app->window->height);
+	}
 }

@@ -120,3 +120,10 @@ void ModuleScene::PushGameObject(GameObjectManager* gameObject)
 {
 	AllGameObjectManagers.push_back(gameObject);
 }
+
+void ModuleScene::CreateGameCamera()
+{
+	GameObjectManager* gameObject = new GameObjectManager("camera", Root); 
+	ComponentCamera* camera = dynamic_cast<ComponentCamera*>(gameObject->AddComponent(ComponentType::CAMERA));
+	App->renderer3D->SetCameraGame(camera); 
+}

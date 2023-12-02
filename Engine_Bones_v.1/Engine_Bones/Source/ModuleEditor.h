@@ -37,6 +37,8 @@ public:
 	void AssetsWindowFolders(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list, bool& leaf);
 	void OsOpenInShell(const char* path); 
 
+	void CreateDockingSpace(); 
+
 public:
 
 	struct l_Logs
@@ -74,7 +76,13 @@ public:
 	float WinBright;
 	int treeFlags;
 
+	string name; 
+	string nameGame; 
+
 	string caps = "caps: ";
+
+	float viewportSizex; 
+	float viewportSizey; 
 };
 
 #endif

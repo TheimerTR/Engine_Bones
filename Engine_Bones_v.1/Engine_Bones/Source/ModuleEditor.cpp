@@ -75,6 +75,9 @@ bool ModuleEditor::Init()
 
 	numcap = true; 
 
+	name = "scene";
+	nameGame = "game"; 
+
 	actualResource = App->resource->AllResourcesMap.begin()->second;
 
 	// Cheking Version of ImGuI and Init the Context
@@ -101,9 +104,34 @@ bool ModuleEditor::Init()
 bool ModuleEditor::DrawEditor()
 {
 	// Create a New frame for ImGuy
-	ImGui_ImplSDL2_NewFrame();
 	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
+	
+	viewportSizex = ImGui::GetWindowSize().x; 
+	viewportSizey = ImGui::GetWindowSize().y; 
+
+	if (ImGui::Begin(name.c_str(), NULL))
+	{
+		ImVec2 size = ImGui::GetContentRegionAvail();
+
+		App->renderer3D->ActiveCameraEditor->SetRatio(ImGui::GetContentRegionAvail().x / ImGui::GetContentRegionAvail().y);
+		ImGui::Image((ImTextureID)App->renderer3D->ActiveCameraEditor->frameTexture, size, ImVec2(0, 1), ImVec2(1, 0));
+	}
+	ImGui::End();
+
+	if (ImGui::Begin(nameGame.c_str(), NULL))
+	{
+		if (App->renderer3D->cameraGame != nullptr && App->renderer3D->cameraGame->frameID != 0) {
+			ImVec2 size = ImGui::GetContentRegionAvail();
+
+			App->renderer3D->cameraGame->SetRatio(ImGui::GetContentRegionAvail().x / ImGui::GetContentRegionAvail().y);
+			ImGui::Image((ImTextureID)App->renderer3D->cameraGame->frameTexture, size, ImVec2(0, 1), ImVec2(1, 0));
+		}
+	}
+	ImGui::End();
+
+	CreateDockingSpace();
 
 	if (RGB)
 	{
@@ -281,6 +309,16 @@ bool ModuleEditor::DrawEditor()
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::BeginMenu("Camera"))
+			{
+				if (ImGui::MenuItem("GameCamera"))
+				{
+					app->scene->CreateGameCamera();
+				}
+
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMenu();
 		}
 		
@@ -337,6 +375,8 @@ bool ModuleEditor::DrawEditor()
 		}
 	}
 	ImGui::EndMainMenuBar();
+
+	
 
 	//Demo Window
 	if(DemoWindow)
@@ -1040,11 +1080,13 @@ bool ModuleEditor::DrawEditor()
 
 	RGB = RGB_Mode;
 
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
 
 	// Rendering
 	ImGui::Render();
-	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	//glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
@@ -1055,7 +1097,7 @@ bool ModuleEditor::DrawEditor()
 		SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
 	}
 
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	return true;
 }
@@ -2149,4 +2191,53 @@ void ModuleEditor::OsOpenInShell(const char* path)
 	snprintf(command, 256, "%s \"%s\"", open_executable, path);
 	system(command);
 #endif
+}
+
+void ModuleEditor::CreateDockingSpace()
+{
+	static bool opt_fullscreen = true;
+	static bool opt_padding = false;
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+	ImGuiIO& io = ImGui::GetIO(); /*(void)io;*/
+
+	// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+	// because it would be confusing to have two docking targets within each others.
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
+	if (opt_fullscreen)
+	{
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->WorkPos);
+		ImGui::SetNextWindowSize(viewport->WorkSize);
+		ImGui::SetNextWindowViewport(viewport->ID);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove
+			| ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+	}
+	else { dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode; }
+
+	//// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
+	//// and handle the pass-thru hole, so we ask Begin() to not render a background.
+	if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) { window_flags |= ImGuiWindowFlags_NoBackground; }
+
+	// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
+	// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
+	// all active windows docked into it will lose their parent and become undocked.
+	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
+	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
+	if (!opt_padding) { ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)); }
+	ImGui::Begin("DockSpace", NULL, window_flags);
+
+	if (!opt_padding) { ImGui::PopStyleVar(); }
+
+	if (opt_fullscreen) { ImGui::PopStyleVar(2); }
+
+	// Submit the DockSpace
+	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+	{
+		ImGuiID dockspace_id = ImGui::GetID("DockSpace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+	}
+	ImGui::End();
 }

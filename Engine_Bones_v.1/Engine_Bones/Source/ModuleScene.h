@@ -26,6 +26,8 @@ public:
 
 	void PushGameObject(GameObjectManager* gameObject);
 
+	void CreateGameCamera(); 
+
 public:
 	vector<GameObjectManager*> AllGameObjectManagers;
 	GameObjectManager* Root = nullptr;
