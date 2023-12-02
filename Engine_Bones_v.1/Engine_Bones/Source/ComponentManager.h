@@ -14,9 +14,9 @@ using namespace std;
 
 enum ComponentType 
 {
-	TRANSFORM,
 	MESH,
 	MATERIAL,
+	TRANSFORM,
 	SHOWNMATERIAL,
 	CAMERA,
 	NONE,

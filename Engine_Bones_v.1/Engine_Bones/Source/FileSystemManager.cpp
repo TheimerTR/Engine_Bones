@@ -49,7 +49,7 @@ void FileSystem::ReadFyleType(const char* Path)
 				R_Texture->ParentsUUID.push_back(app->editor->actualMesh->UUID);
 
 				Importer::ImporterTexture::ImportTexture(R_Texture, buffer, size);
-				Importer::ImporterTexture::Load(R_Texture->texture, Path);
+				Importer::ImporterTexture::Load(R_Texture, Path, size);
 
 				vector<ComponentManager*> objectMeshes = app->editor->actualMesh->GetComponentsGameObject(ComponentType::MATERIAL);
 
