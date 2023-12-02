@@ -138,15 +138,27 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	float3 scale(scaling.x, scaling.y, scaling.z);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
-	GameObjectManager* _ParentObj = new GameObjectManager(Name, _Parent);
+	GameObjectManager* _ParentObj;
+
+	std::string nameChildren = actualObj->mName.C_Str();
+	int found = nameChildren.find_first_of("$");
+
+	if (found == std::string::npos)
+	{
+		_ParentObj = new GameObjectManager(Name, _Parent);
+	}
+	else
+	{
+		_ParentObj = _Parent;
+	}
 
 	/*AplicateTransform(_ParentObj, pos, scale, rot);*/
 
-	if (actualObj->mNumChildren > 0 && numMeshes > 1)
+	if (actualObj->mNumChildren > 0)
 	{
-		for (i; i < numMeshes; i++)
+		for (i = 0; i < actualObj->mNumChildren; i++)
 		{
-			GameObjectNodeTree(scene, actualObj->mChildren[i]->mNumChildren + i, i, actualObj->mChildren[i], _ParentObj, actualObj->mChildren[i]->mName.C_Str(), Path, texturePath);
+			GameObjectNodeTree(scene, actualObj->mChildren[i]->mNumChildren, i, actualObj->mChildren[i], _ParentObj, actualObj->mChildren[i]->mName.C_Str(), Path, texturePath);
 		}
 	}
 
@@ -443,13 +455,13 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 	if (!app->physFSManager->Exists(ExistInMeta.c_str()))
 	{
-		GameObjectManager* gameObject;
-		MetaFileCreator(_ParentObj);
+		/*GameObjectManager* gameObject;
+		MetaFileCreator(_ParentObj, Path);*/
 
-		for (int f = 0; f < _ParentObj->childrens.size(); f++)
+		if(_ParentObj->childrens.empty())
 		{
-			gameObject = _ParentObj->childrens[f];
-			MetaFileCreator(gameObject);
+			//gameObject = _ParentObj->childrens[f];
+			MetaFileCreator(_ParentObj, Path);
 		}
 	}
 
@@ -618,7 +630,7 @@ void AssimpManager::SetBuffers(Mesh* M_mesh)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void AssimpManager::MetaFileCreator(GameObjectManager* gameObject)
+void AssimpManager::MetaFileCreator(GameObjectManager* gameObject, const char* path)
 {
 	//string nameToMeta;
 	//string extensionToMeta;
@@ -641,6 +653,7 @@ void AssimpManager::MetaFileCreator(GameObjectManager* gameObject)
 	//gameObject->mName = nameToMeta;
 
 	json.addString("Name", gameObject->mName.c_str());
+	json.addString("Assets_Path", path);
 	json.addNumber("Parent", gameObject->mParent->UUID);
 	//json.addString("Extension", extensionToMeta.c_str());
 	json.addNumber("UID", gameObject->UUID);
@@ -720,6 +733,23 @@ bool AssimpManager::CheckResourceComponentsExistence(ResourceElement* R_Element)
 	return Exist;
 }
 
+bool AssimpManager::CheckStringComponentsExistence(string Component)
+{
+	bool Exist = false;
+
+	map<uint32, ResourceElement*>::iterator iteratorExistence = app->resource->AllResourcesMap.begin();
+	for (iteratorExistence; iteratorExistence != app->resource->AllResourcesMap.end(); iteratorExistence++)
+	{
+		if (Component == iteratorExistence->second->AssetsPath)
+		{
+			Exist = true;
+			iteratorExistence->second->resourceCounter += 1;
+		}
+	}
+
+	return Exist;
+}
+
 bool AssimpManager::CheckNotDuplicateFromAssets(ResourceElement* R_Element, uint32 uuid)
 {
 	bool Exist = false;
@@ -741,4 +771,272 @@ bool AssimpManager::CheckNotDuplicateFromAssets(ResourceElement* R_Element, uint
 	}
 
 	return Exist;
+}
+
+bool AssimpManager::ImportOnlyTexture(const char* Path)
+{
+	bool Exist = true;
+
+	ResourceTexture* R_Texture = new ResourceTexture();
+
+	char* buffer = nullptr;
+	uint size = 0;
+
+	string T_name = "";
+	FileSystem::StringDivide(Path, &T_name, nullptr);
+
+	R_Texture->texture->path = Path;
+	R_Texture->texture->Name = T_name;
+	R_Texture->ParentsUUID.push_back(app->editor->actualMesh->UUID);
+
+	Importer::ImporterTexture::ImportTexture(R_Texture, buffer, size);
+	Importer::ImporterTexture::Load(R_Texture->texture, Path);
+
+	vector<ComponentManager*> objectMeshes = app->editor->actualMesh->GetComponentsGameObject(ComponentType::MATERIAL);
+
+	for (int j = 0; j < objectMeshes.size(); j++)
+	{
+		ComponentMaterial* C_Texture;
+		C_Texture = dynamic_cast<ComponentMaterial*>(objectMeshes[j]);
+		C_Texture->texture->ShowTextures = false;
+	}
+
+	TexturesManager* texturesManager = new TexturesManager();
+	ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
+	C_Texture->SetTexture(R_Texture->texture);
+
+	if (!AssimpManager::CheckNotDuplicateFromAssets(R_Texture, app->editor->actualMesh->UUID))
+	{
+		app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
+		app->resource->AllResourcesMap[R_Texture->getUUID()]->resourceCounter += 1;
+	}
+
+	RELEASE_ARRAY(buffer);
+
+	return Exist;
+}
+
+void AssimpManager::MetaExistenceLoader(const char* Path)
+{
+	char* buffer = nullptr;
+	uint size = app->physFSManager->Load(Path, &buffer);
+	string path = Path;
+
+	if (size > 0)
+	{
+		JsonManager js(buffer);
+
+		int type = js.getNumber("Type");
+		string pathToAssets = js.getString("Assets_Path");
+		uint32 Parent = js.getNumber("Parent");
+		uint32 numberId = js.getNumber("UID");
+		string name = js.getString("Name");
+
+		const aiScene* scene = aiImportFile(pathToAssets.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
+
+		string FileName = "";
+
+		FileSystem::StringDivide(pathToAssets.c_str(), &FileName, nullptr);
+
+		GameObjectManager* gm = new GameObjectManager(FileName, app->scene->Root);
+
+		aiVector3D translation, scaling;
+		aiQuaternion rotation;
+
+		scene->mRootNode->mTransformation.Decompose(scaling, rotation, translation);
+		float3 pos(translation.x, translation.y, translation.z);
+		float3 scale(scaling.x, scaling.y, scaling.z);
+		Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+
+		gm->UUID = numberId;
+
+		//map<uint32, ResourceElement*>::iterator iterator = app->resource->AllResourcesMap.find(js.getNumber("UID"));
+
+		//ResourceElement* resource = iterator->second;
+		ResourceElement* resource = new ResourceElement(FileName.c_str(), pathToAssets.c_str(), ResourceTypes::R_MODEL, numberId);
+		resource->resourceCounter += 1;
+
+		JSArray meshesArr = js.getArray("Meshes");
+
+		for (int i = 0; i < meshesArr.GetSize(); i++)
+		{
+			JsonManager meshInModel = meshesArr.getNode(i);
+			resource->MeshesChildrensInModel.push_back(meshInModel.getString("Path"));
+		}
+
+		JSArray compArr = js.getArray("Components");
+
+		for (int i = 0; i < compArr.GetSize(); i++)
+		{
+			JsonManager compInModel = compArr.getNode(i);
+			resource->ComponentsInModel.push_back(compInModel.getString("Library_path"));
+		}
+
+		for (int i = 0; i < scene->mNumMeshes; i++)
+		{
+			for (int h = 0; h < resource->ComponentsInModel.size(); h++)
+			{
+				if (CheckStringComponentsExistence(resource->ComponentsInModel[h]))
+				{
+					for (int j = 0; j < resource->ComponentsInModel.size(); j++)
+					{
+						ResourceElement* ResourceToGameobject = nullptr;
+						ResourceToGameobject = app->resource->LoadResourceElement(resource->ComponentsInModel[j].c_str());
+
+						if (ResourceToGameobject != nullptr)
+						{
+							ResourceToGameobject->UUID = numberId;
+							ResourceToGameobject->name = name;
+
+							if (ResourceToGameobject->type == ResourceTypes::R_MESH)
+							{
+								ResourceMesh* R_MeshToComponent = (ResourceMesh*)ResourceToGameobject;
+
+								Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[i]);
+
+								R_MeshToComponent->name = gm->mName;
+								R_MeshToComponent->mesh->Name = R_MeshToComponent->name;
+								R_MeshToComponent->ParentsUUID.push_back(gm->UUID);
+
+								ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gm->AddComponent(ComponentType::MESH));
+								//R_MeshToComponent->mesh->local_aabb = R_MeshToComponent->local_aabb;
+								C_Mesh->SetMesh(R_MeshToComponent->mesh);
+							}
+							/*if (ResourceToGameobject->type == ResourceTypes::R_TEXTURE)
+							{
+								ResourceTexture* R_Texture = (ResourceTexture*)ResourceToGameobject;
+
+								buffer = nullptr;
+								size = 0;
+
+								R_Texture->texture->path = texturePath;
+								R_Texture->ParentsUUID.push_back(_ParentObj->UUID);
+
+								Importer::ImporterTexture::ImportTexture(R_Texture, buffer, size);
+								Importer::ImporterTexture::Load(R_Texture->texture, texturePath);
+
+								TexturesManager* texturesManager = new TexturesManager();
+								ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
+								C_Texture->SetTexture(R_Texture->texture);
+
+								RELEASE_ARRAY(buffer);
+							}*/
+						}
+					}
+				}
+				else
+				{
+					for (int j = 0; j < resource->ComponentsInModel.size(); j++)
+					{
+						ResourceElement* ResourceToGameobject = nullptr;
+						ResourceToGameobject = app->resource->LoadResourceElement(resource->ComponentsInModel[j].c_str());
+
+						if (ResourceToGameobject != nullptr)
+						{
+							ResourceToGameobject->UUID = numberId;
+							ResourceToGameobject->name = resource->name;
+
+							if (ResourceToGameobject->type == ResourceTypes::R_MESH)
+							{
+								ResourceMesh* R_MeshToComponent = (ResourceMesh*)ResourceToGameobject;
+
+								Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[i]);
+
+								R_MeshToComponent->name = gm->mName;
+								R_MeshToComponent->LibraryPath = resource->ComponentsInModel[j];
+								R_MeshToComponent->mesh->Name = R_MeshToComponent->name;
+								R_MeshToComponent->resourceCounter += 1;
+								R_MeshToComponent->ParentsUUID.push_back(gm->UUID);
+
+								AllMeshes.push_back(R_MeshToComponent->mesh);
+
+								app->scene->AllResources.push_back(ResourceToGameobject);
+
+								ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gm->AddComponent(ComponentType::MESH));
+								C_Mesh->SetMesh(R_MeshToComponent->mesh);
+
+								app->resource->AllResourcesMap[R_MeshToComponent->getUUID()] = (ResourceTexture*)R_MeshToComponent;
+							}
+
+							//if (ResourceToGameobject->type == ResourceTypes::R_TEXTURE)
+							//{
+							//	ResourceTexture* R_Texture = (ResourceTexture*)ResourceToGameobject;
+
+							//	buffer = nullptr;
+							//	size = 0;
+
+							//	R_Texture->texture->path = texturePath;
+							//	R_Texture->LibraryPath = resource->ComponentsInModel[j];
+							//	R_Texture->resourceCounter += 1;
+
+							//	Importer::ImporterTexture::ImportTexture(R_Texture, buffer, size);
+							//	Importer::ImporterTexture::Load(R_Texture->texture, texturePath);
+
+							//	app->scene->AllResources.push_back(ResourceToGameobject);
+
+							//	TexturesManager* texturesManager = new TexturesManager();
+							//	ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
+							//	C_Texture->SetTexture(R_Texture->texture);
+
+							//	string textureName = "";
+
+							//	FileSystem::StringDivide(texturePath, &textureName, nullptr);
+
+							//	R_Texture->name = textureName;
+							//	R_Texture->texture->Name = textureName;
+							//	R_Texture->AssetsPath = texturePath;
+
+							//	//ResourceToGameobject->name = textureName;
+
+							//	if (!CheckNotDuplicateFromAssets(R_Texture, _ParentObj->UUID))
+							//	{
+							//		app->resource->AllResourcesMap[R_Texture->UUID] = (ResourceTexture*)R_Texture;
+							//		R_Texture->ParentsUUID.push_back(_ParentObj->UUID);
+							//	}
+
+							//	RELEASE_ARRAY(buffer);
+							//}
+						}
+					}
+
+						resource->AssociatedGameObjects.push_back(gm);
+					}
+				}
+			}
+
+		Mesh* M_mesh = new Mesh();
+
+		M_mesh->Name = gm->mName;
+
+		//Components here
+		ComponentTransform* transform = new ComponentTransform(nullptr);
+
+		AplicateTransform(gm, pos, scale, rot);
+
+		int C = 0;
+		for (int m = 0; m < app->scene->AllGameObjectManagers.size(); m++)
+		{
+			if (C > 0)
+			{
+				std::string s = std::to_string(C);
+				gm->mName = M_mesh->Name + s;
+				int compare = strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), gm->mName.c_str());
+
+				if (compare == 0)
+				{
+					std::string stri = std::to_string(C++);
+					gm->mName = M_mesh->Name + s;
+				}
+			}
+
+			if (strcmp(app->scene->AllGameObjectManagers.at(m)->mName.c_str(), gm->mName.c_str()) == 0)
+			{
+				if (C == 0)
+				{
+					gm->mName = M_mesh->Name;
+					C++;
+				}
+			}
+		}
+	}
 }

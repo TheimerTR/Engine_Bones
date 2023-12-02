@@ -69,7 +69,7 @@ ResourceElement* ModuleResource::LoadResourceElement(const char* LibraryPath)
 		if (strcmp(extension.data(), "texture") == 0)
 		{
 			ResourceTexture* R_Texture = new ResourceTexture();
-			Importer::ImporterTexture::Load(R_Texture, buffer, size);
+			Importer::ImporterTexture::Load(R_Texture->texture, buffer);
 			LOG(LogTypeCase::L_CASUAL, "Resource extension .texture");
 			temp_ResourceElement = R_Texture;
 			temp_ResourceElement->type = ResourceTypes::R_TEXTURE;

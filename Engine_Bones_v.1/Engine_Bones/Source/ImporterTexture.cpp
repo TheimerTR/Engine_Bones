@@ -10,7 +10,7 @@ void Importer::ImporterTexture::InitDevil()
 
 void Importer::ImporterTexture::ImportTexture(ResourceTexture* R_Texture, const char* buffer, uint size)
 {
-	if (ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, size))
+	if (ilLoadL(IL_DDS, (const void*)buffer, size))
 	{
 		R_Texture->id = ilutGLBindTexImage();
 	}

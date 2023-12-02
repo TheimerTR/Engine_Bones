@@ -452,7 +452,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (l_Logs.Type[i] == LogTypeCase::L_CASUAL)
 					{
-                         ImGui::Text("%s", l_Logs.Log[i].c_str());
+                         ImGui::TextWrapped("%s", l_Logs.Log[i].c_str());
 					}
 				}
 				break;
@@ -463,7 +463,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (l_Logs.Type[i] == LogTypeCase::L_WARNING)
 					{
-						ImGui::Text("%s", l_Logs.Log[i].c_str());
+						ImGui::TextWrapped("%s", l_Logs.Log[i].c_str());
 					}
 				}
 				break;
@@ -474,7 +474,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (l_Logs.Type[i] == LogTypeCase::L_ERROR)
 					{
-						ImGui::Text("%s", l_Logs.Log[i].c_str());
+						ImGui::TextWrapped("%s", l_Logs.Log[i].c_str());
 					}
 				}
 				break;
@@ -483,7 +483,7 @@ bool ModuleEditor::DrawEditor()
 
 				for (int i = 0; i < l_Logs.Log.size(); i++)
 				{
-					ImGui::Text("%s", l_Logs.Log[i].c_str());
+					ImGui::TextWrapped("%s", l_Logs.Log[i].c_str());
 				}
 				break;
 
@@ -1406,7 +1406,6 @@ void ModuleEditor::ResourceWindowDisplay()
 	{
 		if (iterator->second != nullptr)
 		{
-
 			int R_Flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
 			if (iterator->second == actualResource)
@@ -1725,51 +1724,56 @@ void ModuleEditor::AssetsWindow(const char* directory, std::vector<std::string>&
 
 		if (fileListCheck.size() > 0)
 		{
-
 			for (int i = 0; i < fileListCheck.size(); i++)
 			{
 				int gmFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
 				if (fileListCheck.size() > 0)
 				{
-					if (fileListCheck[i] != "")
+					string ext = "";
+					FileSystem::StringDivide(fileListCheck[i].c_str(), nullptr, &ext);
+
+					if (strcmp(ext.data(), "meta") != 0)
 					{
-						if (selectedFile == fileListCheck[i])
+						if (fileListCheck[i] != "")
 						{
-							gmFlags |= ImGuiTreeNodeFlags_Selected;
-						}
-						else
-						{
-							gmFlags |= ImGuiTreeNodeFlags_None;
-						}
-
-						ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, fileListCheck[i].c_str());
-
-						if (ImGui::IsItemHovered())
-						{
-							//hoveredItem = gm;
-						}
-
-						if (ImGui::IsItemClicked())
-						{
-							selectedFile = fileListCheck[i];
-							actualFile = actualDir;
-							actualFile.append("/");
-							actualFile.append(fileListCheck[i]);
-						}
-
-						if (ImGui::BeginPopupContextItem())
-						{
-							actualFile = actualDir;
-							actualFile.append("/");
-							actualFile.append(fileListCheck[i]);
-
-							if (ImGui::MenuItem("Import to Scene"))
+							if (selectedFile == fileListCheck[i])
 							{
-								ImportToScene(actualFile);
+								gmFlags |= ImGuiTreeNodeFlags_Selected;
+							}
+							else
+							{
+								gmFlags |= ImGuiTreeNodeFlags_None;
 							}
 
-							ImGui::EndPopup();
+							ImGui::TreeNodeEx((void*)(intptr_t)i, gmFlags, fileListCheck[i].c_str());
+
+							//if (ImGui::IsItemHovered())
+							//{
+							//	//hoveredItem = gm;
+							//}
+
+							if (ImGui::IsItemClicked())
+							{
+								selectedFile = fileListCheck[i];
+								actualFile = actualDir;
+								actualFile.append("/");
+								actualFile.append(fileListCheck[i]);
+							}
+
+							if (ImGui::BeginPopupContextItem())
+							{
+								actualFile = actualDir;
+								actualFile.append("/");
+								actualFile.append(fileListCheck[i]);
+
+								if (ImGui::MenuItem("Import to Scene"))
+								{
+									ImportToScene(actualFile);
+								}
+
+								ImGui::EndPopup();
+							}
 						}
 					}
 				}
@@ -1820,64 +1824,6 @@ void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::s
 						leaf = false;
 					}
 
-					/*if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
-					{
-						ImGui::SetDragDropPayload("GameObject", &gm->UUID, sizeof(unsigned long));
-
-						ImGui::Text(gm->mName.c_str());
-
-						ImGui::EndDragDropSource();
-					}
-
-					if (ImGui::BeginDragDropTarget())
-					{
-						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
-						{
-							IM_ASSERT(payload->DataSize == sizeof(unsigned long));
-							unsigned long payload_n = *(unsigned long*)payload->Data;
-
-							for (int h = 0; h < App->scene->AllGameObjectManagers.size(); h++)
-							{
-								if (payload_n == App->scene->AllGameObjectManagers[h]->UUID)
-								{
-									App->scene->AllGameObjectManagers[h]->ChangeParent(gm);
-								}
-							}
-						}
-
-						ImGui::EndDragDropTarget();
-					}*/
-
-					//if (ImGui::BeginPopupContextItem())
-					//{
-					//	if (ImGui::BeginMenu("Add Entity"))
-					//	{
-					//		AddEntity(gm);
-
-					//		ImGui::EndMenu();
-					//	}
-
-					//	if (ImGui::BeginMenu("Add Component"))
-					//	{
-					//		AddComponentInInspector(gm);
-
-					//		ImGui::EndMenu();
-					//	}
-
-					//	if (ImGui::MenuItem("Change Parent To:"))
-					//	{
-					//		moveEntityTo = gm;
-					//		isMovingParent = true;
-					//	}
-
-					//	if (ImGui::MenuItem("Delete Entity"))
-					//	{
-					//		gm->mParent->DeleteChild(gm);
-					//	}
-
-					//	ImGui::EndPopup();
-					//}
-
 					if (isOpen)
 					{
 						string path = directory;
@@ -1924,64 +1870,6 @@ void ModuleEditor::AssetsWindowFolders(const char* directory, std::vector<std::s
 						actualDir.append(dir_list[i]);
 						leaf = true;
 					}
-
-					/*if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
-					{
-						ImGui::SetDragDropPayload("GameObject", &gm->UUID, sizeof(unsigned long));
-
-						ImGui::Text(gm->mName.c_str());
-
-						ImGui::EndDragDropSource();
-					}
-
-					if (ImGui::BeginDragDropTarget())
-					{
-						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
-						{
-							IM_ASSERT(payload->DataSize == sizeof(unsigned long));
-							unsigned long payload_n = *(unsigned long*)payload->Data;
-
-							for (int h = 0; h < App->scene->AllGameObjectManagers.size(); h++)
-							{
-								if (payload_n == App->scene->AllGameObjectManagers[h]->UUID)
-								{
-									App->scene->AllGameObjectManagers[h]->ChangeParent(gm);
-								}
-							}
-						}
-
-						ImGui::EndDragDropTarget();
-					}*/
-
-					//if (ImGui::BeginPopupContextItem())
-					//{
-					//	if (ImGui::BeginMenu("Add Entity"))
-					//	{
-					//		AddEntity(gm);
-
-					//		ImGui::EndMenu();
-					//	}
-
-					//	if (ImGui::BeginMenu("Add Component"))
-					//	{
-					//		AddComponentInInspector(gm);
-
-					//		ImGui::EndMenu();
-					//	}
-
-					//	if (ImGui::MenuItem("Change Parent To:"))
-					//	{
-					//		moveEntityTo = gm;
-					//		isMovingParent = true;
-					//	}
-
-					//	if (ImGui::MenuItem("Delete Entity"))
-					//	{
-					//		gm->mParent->DeleteChild(gm);
-					//	}
-
-					//	ImGui::EndPopup();
-					//}
 				}
 			}
 		}
@@ -2000,6 +1888,30 @@ void ModuleEditor::ImportToScene(string path)
 		AssimpManager::AssimpLoader(path.c_str());
 		LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
 	}
+
+	//if (strcmp(extension.data(), "meta") == 0)
+	//{
+	//	AssimpManager::MetaExistenceLoader(path.c_str());
+	//	LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
+	//}
+
+	if (strcmp(extension.data(), "dds") == 0)
+	{
+		AssimpManager::ImportOnlyTexture(path.c_str());
+		LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
+	}
+	
+	if (strcmp(extension.data(), "png") == 0)
+	{
+		AssimpManager::ImportOnlyTexture(path.c_str());
+		LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
+	}
+	
+	//if (strcmp(extension.data(), "mesh") == 0)
+	//{
+	//	AssimpManager::AssimpLoader(path.c_str());
+	//	LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
+	//}
 }
 
 void ModuleEditor::DefaultConfig()

@@ -71,6 +71,8 @@ namespace AssimpManager
 
 	void SimpleAssimpLoader(const char* Path, GameObjectManager* gameObject, const char* texturePath = nullptr);
 
+	void MetaExistenceLoader(const char* Path);
+
 	void ChangeDebugMode(bool type);
 
 	void CleanUp();
@@ -86,10 +88,13 @@ namespace AssimpManager
 
 	void SetBuffers(Mesh* M_mesh);
 
-	void MetaFileCreator(GameObjectManager* gameObject);
+	void MetaFileCreator(GameObjectManager* gameObject, const char* path);
 
 	bool CheckNotDuplicateFromAssets(ResourceElement* R_Element, uint32 uuid);
 	bool CheckResourceComponentsExistence(ResourceElement* R_Element);
+	bool CheckStringComponentsExistence(string Component);
+
+	bool ImportOnlyTexture(const char* Path);
 
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
 
