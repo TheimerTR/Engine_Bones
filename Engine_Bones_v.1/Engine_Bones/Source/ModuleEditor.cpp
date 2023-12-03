@@ -111,6 +111,9 @@ bool ModuleEditor::DrawEditor()
 	viewportSizex = ImGui::GetWindowSize().x; 
 	viewportSizey = ImGui::GetWindowSize().y; 
 
+
+	CreateDockingSpace();
+
 	if (ImGui::Begin(name.c_str(), NULL))
 	{
 		ImVec2 size = ImGui::GetContentRegionAvail();
@@ -130,8 +133,6 @@ bool ModuleEditor::DrawEditor()
 		}
 	}
 	ImGui::End();
-
-	CreateDockingSpace();
 
 	if (RGB)
 	{
