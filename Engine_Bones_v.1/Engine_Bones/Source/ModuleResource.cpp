@@ -55,11 +55,14 @@ ResourceElement* ModuleResource::LoadResourceElement(const char* LibraryPath)
 	if (size > 0)
 	{
 		string extension = "";
-		FileSystem::StringDivide(LibraryPath, nullptr, &extension);
+		string Name = "";
+		FileSystem::StringDivide(LibraryPath, &Name, &extension);
 
 		if (strcmp(extension.data(), "mesh") == 0)
 		{
 			ResourceMesh* R_Mesh = new ResourceMesh();
+			R_Mesh->name = Name;
+			R_Mesh->mesh->Path = LibraryPath;
 			Importer::ImporterMesh::Load(R_Mesh, buffer);
 			LOG(LogTypeCase::L_CASUAL, "Resource extension .mesh");
 			temp_ResourceElement = R_Mesh;
@@ -69,6 +72,7 @@ ResourceElement* ModuleResource::LoadResourceElement(const char* LibraryPath)
 		if (strcmp(extension.data(), "texture") == 0)
 		{
 			ResourceTexture* R_Texture = new ResourceTexture();
+			R_Texture->name = Name;
 			Importer::ImporterTexture::Load(R_Texture->texture, buffer);
 			LOG(LogTypeCase::L_CASUAL, "Resource extension .texture");
 			temp_ResourceElement = R_Texture;

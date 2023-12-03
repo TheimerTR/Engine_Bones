@@ -60,9 +60,27 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 
 		string newPath = "";
 
-		if (!app->physFSManager->Exists(path))
+		string nPath = app->physFSManager->NormalizePath(path);
+		string Div_String(nPath);
+		FileSystem:: CompatibleString(Div_String);
+
+		size_t pos_File = Div_String.find("Assets");
+
+		if(pos_File > 1000)
 		{
-			app->physFSManager->DuplicateFile(path, dstFolder.c_str(), newPath);
+			if (!app->physFSManager->Exists(path))
+			{
+				app->physFSManager->DuplicateFile(path, dstFolder.c_str(), newPath);
+			}
+		}
+		else
+		{
+			nPath = Div_String.substr(pos_File);
+
+			if (!app->physFSManager->Exists(nPath.c_str()))
+			{
+				app->physFSManager->DuplicateFile(path, dstFolder.c_str(), newPath);
+			}
 		}
 
 		GameObjectNodeTree(scene, scene->mNumMeshes, 0, scene->mRootNode, app->scene->Root, FileName.c_str(), path, pathTexture );
@@ -208,6 +226,9 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			{
 				app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
 			}
+
+			Importer::ImporterMesh::Load(R_Mesh, buffer);
+			Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
 
 			app->resource->AllResourcesMap[R_Mesh->getUUID()] = R_Mesh;
 			app->resource->AllResourcesMap[R_Mesh->getUUID()]->resourceCounter += 1;
@@ -621,7 +642,7 @@ void AssimpManager::SetBuffers(Mesh* M_mesh)
 
 	glGenBuffers(1, &(GLuint)(M_mesh->VN));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_vertex * 3, M_mesh->normals, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_index * 3, M_mesh->normals, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glGenBuffers(1, &(GLuint)(M_mesh->VT));

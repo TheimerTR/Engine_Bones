@@ -120,11 +120,7 @@ void Importer::ImporterMesh::Load(ResourceMesh* M_mesh, const char* fileBuffer)
 {
 	const char* cursor = fileBuffer;
 
-	string FileName = "";
-
-	FileSystem::StringDivide(fileBuffer, &FileName, nullptr);
-
-	M_mesh->mesh->Path = FileName;
+	M_mesh->mesh->Name = M_mesh->name;
 
 	// amount of indices / vertices / normals / texture_coords
 	uint ranges[4];
@@ -167,5 +163,5 @@ void Importer::ImporterMesh::Load(ResourceMesh* M_mesh, const char* fileBuffer)
 		cursor += bytes;
 	}
 
-	AssimpManager::SetBuffers(M_mesh->mesh);
+	//AssimpManager::SetBuffers(M_mesh->mesh);
 }
