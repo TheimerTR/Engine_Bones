@@ -79,6 +79,12 @@ void ComponentMaterial::ShowInfo(Texture* texture, int i)
 	{
 		if (texture != nullptr)
 		{
+			string new_Path = "";
+			new_Path.append(TEXTURES_FOLDER);
+			new_Path.append(texture->Name);
+
+			texture->path = new_Path.c_str();
+
 			if (texture->path != nullptr)
 			{
 				FileSystem::StringDivide(texture->path, &texture->Name, nullptr);
