@@ -20,6 +20,7 @@ void FileSystem::ReadFyleType(const char* Path)
 {
 	string file;
 	string extension;
+	string pathNomralized;
 
 	if (Path != nullptr)
 	{
@@ -33,6 +34,7 @@ void FileSystem::ReadFyleType(const char* Path)
 		{
 		case FileType::MODEL_3D:
 			file = "Assets/ModelsFbx/" + file;
+			//pathNomralized = app->physFSManager->NormalizePath(Path);
 			AssimpManager::AssimpLoader(Path);
 			LOG(LogTypeCase::L_CASUAL, "Model Type: MODEL 3D");
 			break;

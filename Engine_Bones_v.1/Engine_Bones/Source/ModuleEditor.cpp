@@ -1812,6 +1812,8 @@ void ModuleEditor::AssetsWindow(const char* directory, std::vector<std::string>&
 								if (ImGui::MenuItem("Import to Scene"))
 								{
 									ImportToScene(actualFile);
+									ComponentMaterial* C_Mat = dynamic_cast<ComponentMaterial*>(actualMesh->mComponents.at(actualMesh->mComponents.size() - 1));
+									C_Mat->texture->path = actualFile.c_str();
 								}
 
 								ImGui::EndPopup();
@@ -1939,13 +1941,13 @@ void ModuleEditor::ImportToScene(string path)
 
 	if (strcmp(extension.data(), "dds") == 0)
 	{
-		AssimpManager::ImportOnlyTexture(path.c_str());
+		AssimpManager::ImportOnlyTexture(path);
 		LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
 	}
 	
 	if (strcmp(extension.data(), "png") == 0)
 	{
-		AssimpManager::ImportOnlyTexture(path.c_str());
+		AssimpManager::ImportOnlyTexture(path);
 		LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
 	}
 	

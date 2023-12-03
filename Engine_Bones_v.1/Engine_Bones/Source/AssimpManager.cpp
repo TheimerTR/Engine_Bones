@@ -773,7 +773,7 @@ bool AssimpManager::CheckNotDuplicateFromAssets(ResourceElement* R_Element, uint
 	return Exist;
 }
 
-bool AssimpManager::ImportOnlyTexture(const char* Path)
+bool AssimpManager::ImportOnlyTexture(string Path)
 {
 	bool Exist = true;
 
@@ -783,14 +783,14 @@ bool AssimpManager::ImportOnlyTexture(const char* Path)
 	uint size = 0;
 
 	string T_name = "";
-	FileSystem::StringDivide(Path, &T_name, nullptr);
+	FileSystem::StringDivide(Path.c_str(), &T_name, nullptr);
 
-	R_Texture->texture->path = Path;
+	R_Texture->texture->path = Path.c_str();
 	R_Texture->texture->Name = T_name;
 	R_Texture->ParentsUUID.push_back(app->editor->actualMesh->UUID);
 
 	Importer::ImporterTexture::ImportTexture(R_Texture, buffer, size);
-	Importer::ImporterTexture::Load(R_Texture->texture, Path);
+	Importer::ImporterTexture::Load(R_Texture->texture, Path.c_str());
 
 	vector<ComponentManager*> objectMeshes = app->editor->actualMesh->GetComponentsGameObject(ComponentType::MATERIAL);
 

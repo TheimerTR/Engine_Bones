@@ -94,7 +94,7 @@ namespace AssimpManager
 	bool CheckResourceComponentsExistence(ResourceElement* R_Element);
 	bool CheckStringComponentsExistence(string Component);
 
-	bool ImportOnlyTexture(const char* Path);
+	bool ImportOnlyTexture(string Path);
 
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
 
