@@ -140,7 +140,7 @@ void Importer::ImporterMesh::Load(ResourceMesh* M_mesh, const char* fileBuffer)
 	cursor += bytes;
 
 	// Load vertex
-	bytes = sizeof(uint) * M_mesh->mesh->num_vertex * 3;
+	bytes = sizeof(float) * M_mesh->mesh->num_vertex * 3;
 	M_mesh->mesh->vertex = new float[M_mesh->mesh->num_vertex * 3];
 	memcpy(M_mesh->mesh->vertex, cursor, bytes);
 	cursor += bytes;
@@ -157,8 +157,8 @@ void Importer::ImporterMesh::Load(ResourceMesh* M_mesh, const char* fileBuffer)
 	// Load textures
 	if (M_mesh->mesh->num_Tex > 0)
 	{
-		bytes = sizeof(uint) * M_mesh->mesh->num_Tex * 2;
-		M_mesh->mesh->textures = new math::float2[M_mesh->mesh->num_vertex];
+		bytes = sizeof(float) * M_mesh->mesh->num_Tex * 2;
+		M_mesh->mesh->textures = new float[M_mesh->mesh->num_Tex];
 		memcpy(M_mesh->mesh->textures, cursor, bytes);
 		cursor += bytes;
 	}
