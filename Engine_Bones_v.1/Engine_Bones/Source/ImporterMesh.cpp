@@ -41,7 +41,7 @@ void Importer::ImporterMesh::ImportMesh(ResourceMesh* M_mesh, const aiMesh* aiMe
 
 		for (uint i = 0; i < M_mesh->mesh->num_index; i += 3)
 		{
-			float3 x0(M_mesh->mesh->vertex[(M_mesh->mesh->index[i] * 3)], M_mesh->mesh->vertex[(M_mesh->mesh->index[i] * 3) + 1], M_mesh->mesh->vertex[(M_mesh->mesh->index[i] * 3) + 2]);
+			/*float3 x0(M_mesh->mesh->vertex[(M_mesh->mesh->index[i] * 3)], M_mesh->mesh->vertex[(M_mesh->mesh->index[i] * 3) + 1], M_mesh->mesh->vertex[(M_mesh->mesh->index[i] * 3) + 2]);
 			float3 x1(M_mesh->mesh->vertex[(M_mesh->mesh->index[i + 1] * 3)], M_mesh->mesh->vertex[(M_mesh->mesh->index[i + 1] * 3) + 1], M_mesh->mesh->vertex[(M_mesh->mesh->index[i + 1] * 3) + 2]);
 			float3 x2(M_mesh->mesh->vertex[(M_mesh->mesh->index[i + 2] * 3)], M_mesh->mesh->vertex[(M_mesh->mesh->index[i + 2] * 3) + 1], M_mesh->mesh->vertex[(M_mesh->mesh->index[i + 2] * 3) + 2]);
 
@@ -55,7 +55,7 @@ void Importer::ImporterMesh::ImportMesh(ResourceMesh* M_mesh, const aiMesh* aiMe
 
 			M_mesh->mesh->center_normal[i] = normalized.Normalized().x;
 			M_mesh->mesh->center_normal[i + 1] = normalized.Normalized().y;
-			M_mesh->mesh->center_normal[i + 2] = normalized.Normalized().z;
+			M_mesh->mesh->center_normal[i + 2] = normalized.Normalized().z;*/
 		}
 	}
 

@@ -232,7 +232,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 					app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
 				}
 
-				Importer::ImporterMesh::Load(R_Mesh, buffer);
+				//Importer::ImporterMesh::Load(R_Mesh, buffer);
 				//Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
 
 				app->resource->AllResourcesMap[R_Mesh->getUUID()] = R_Mesh;
