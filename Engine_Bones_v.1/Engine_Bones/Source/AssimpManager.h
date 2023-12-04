@@ -44,7 +44,7 @@ struct Mesh
 	uint* normals_Faces = nullptr;
 
 	uint num_Tex = 0;
-	float* textures = nullptr;
+	math::float2* textures = nullptr;
 
 	string Path;
 	//bool isSelected;
