@@ -158,7 +158,7 @@ void Importer::ImporterMesh::Load(ResourceMesh* M_mesh, const char* fileBuffer)
 	if (M_mesh->mesh->num_Tex > 0)
 	{
 		bytes = sizeof(uint) * M_mesh->mesh->num_Tex * 2;
-		M_mesh->mesh->textures = new math::float2[M_mesh->mesh->num_vertex];
+		M_mesh->mesh->textures = new math::float2[M_mesh->mesh->num_vertex * 2];
 		memcpy(M_mesh->mesh->textures, cursor, bytes);
 		cursor += bytes;
 	}

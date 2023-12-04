@@ -170,6 +170,10 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 		_ParentObj = _Parent;
 	}
 
+	ComponentTransform* transform = new ComponentTransform(nullptr);
+
+	AplicateTransform(_ParentObj, pos, scale, rot);
+
 	/*AplicateTransform(_ParentObj, pos, scale, rot);*/
 
 	if (actualObj->mNumChildren > 0)
@@ -209,9 +213,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 			app->scene->AllResources.push_back(R_Mesh);
 
-			//Components here
-			ComponentTransform* transform = new ComponentTransform(nullptr);
-
 			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
 			C_Mesh->SetMesh(M_mesh);
 
@@ -228,7 +229,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 			}
 
 			Importer::ImporterMesh::Load(R_Mesh, buffer);
-			Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
+			//Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
 
 			app->resource->AllResourcesMap[R_Mesh->getUUID()] = R_Mesh;
 			app->resource->AllResourcesMap[R_Mesh->getUUID()]->resourceCounter += 1;
@@ -469,11 +470,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 	M_mesh->Name = _ParentObj->mName;
 
-	//Components here
-	ComponentTransform* transform = new ComponentTransform(nullptr);
-
-	AplicateTransform(_ParentObj, pos, scale, rot);
-
 	if (!app->physFSManager->Exists(ExistInMeta.c_str()))
 	{
 		/*GameObjectManager* gameObject;
@@ -642,7 +638,7 @@ void AssimpManager::SetBuffers(Mesh* M_mesh)
 
 	glGenBuffers(1, &(GLuint)(M_mesh->VN));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, M_mesh->VN);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_index * 3, M_mesh->normals, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * M_mesh->num_normals * 3, M_mesh->normals, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glGenBuffers(1, &(GLuint)(M_mesh->VT));

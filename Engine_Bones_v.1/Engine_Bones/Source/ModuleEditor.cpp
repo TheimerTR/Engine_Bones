@@ -1932,6 +1932,12 @@ void ModuleEditor::ImportToScene(string path)
 		LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
 	}
 
+	if (strcmp(extension.data(), "FBX") == 0)
+	{
+		AssimpManager::AssimpLoader(path.c_str());
+		LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
+	}
+
 	//if (strcmp(extension.data(), "meta") == 0)
 	//{
 	//	AssimpManager::MetaExistenceLoader(path.c_str());
