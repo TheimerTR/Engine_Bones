@@ -83,6 +83,7 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 			}
 		}
 
+		m_Counter = 0;
 		GameObjectNodeTree(scene, scene->mNumMeshes, 0, scene->mRootNode, app->scene->Root, FileName.c_str(), path, pathTexture );
 
 		aiReleaseImport(scene);
@@ -203,8 +204,9 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				char* buffer = nullptr;
 				uint size = 0;
 
-				Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
+				Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[m_Counter]);
 				size = Importer::ImporterMesh::Save(R_Mesh, &buffer);
+				m_Counter++;
 
 				R_Mesh->name = _ParentObj->mName;
 				R_Mesh->ParentsUUID.push_back(_ParentObj->UUID);

@@ -99,6 +99,8 @@ namespace AssimpManager
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
 
 	vector<Mesh*> AllMeshes;
+
+	int m_Counter;
 };
 
 #endif // ASSMIPMANAGER_H_
