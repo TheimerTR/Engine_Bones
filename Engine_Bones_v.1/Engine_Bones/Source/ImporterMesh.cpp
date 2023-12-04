@@ -38,25 +38,6 @@ void Importer::ImporterMesh::ImportMesh(ResourceMesh* M_mesh, const aiMesh* aiMe
 		M_mesh->mesh->center_normal = new float[aiMesh->mNumFaces * 3];
 		M_mesh->mesh->center = new float[aiMesh->mNumFaces * 3];
 		M_mesh->mesh->faces = aiMesh->mNumFaces;
-
-		for (uint i = 0; i < M_mesh->mesh->num_index; i += 3)
-		{
-			/*float3 x0(M_mesh->mesh->vertex[(M_mesh->mesh->index[i] * 3)], M_mesh->mesh->vertex[(M_mesh->mesh->index[i] * 3) + 1], M_mesh->mesh->vertex[(M_mesh->mesh->index[i] * 3) + 2]);
-			float3 x1(M_mesh->mesh->vertex[(M_mesh->mesh->index[i + 1] * 3)], M_mesh->mesh->vertex[(M_mesh->mesh->index[i + 1] * 3) + 1], M_mesh->mesh->vertex[(M_mesh->mesh->index[i + 1] * 3) + 2]);
-			float3 x2(M_mesh->mesh->vertex[(M_mesh->mesh->index[i + 2] * 3)], M_mesh->mesh->vertex[(M_mesh->mesh->index[i + 2] * 3) + 1], M_mesh->mesh->vertex[(M_mesh->mesh->index[i + 2] * 3) + 2]);
-
-			float3 v0 = x1 - x0;
-			float3 v1 = x2 - x1;
-			float3 normalized = v0.Cross(v1);
-
-			M_mesh->mesh->center[i] = (x0.x + x1.x + x2.x) / 3;
-			M_mesh->mesh->center[i + 1] = (x0.y + x1.y + x2.y) / 3;
-			M_mesh->mesh->center[i + 2] = (x0.z + x1.z + x2.z) / 3;
-
-			M_mesh->mesh->center_normal[i] = normalized.Normalized().x;
-			M_mesh->mesh->center_normal[i + 1] = normalized.Normalized().y;
-			M_mesh->mesh->center_normal[i + 2] = normalized.Normalized().z;*/
-		}
 	}
 
 	uint UV_Index = 0;
