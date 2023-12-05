@@ -230,8 +230,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-
-
 	ActiveCameraEditor->EndDraw();
 
 	if (cameraGame != nullptr)
@@ -266,8 +264,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 				}
 			}
 		}
-
-
 
 		if (App->editor->Gl_Grid)
 		{
@@ -380,7 +376,6 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* transform ,ComponentMaterial* texture)
 {
-
 	if (mesh != nullptr)
 	{
 		if (transform != nullptr)
@@ -404,6 +399,25 @@ void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* trans
 				{
 					glVertex3f(mesh->GetMesh()->center[i], mesh->GetMesh()->center[i + 1], mesh->GetMesh()->center[i + 2]);
 					glVertex3f(mesh->GetMesh()->center[i] + mesh->GetMesh()->center_normal[i] * 2, mesh->GetMesh()->center[i + 1] + mesh->GetMesh()->center_normal[i + 1] * 2, mesh->GetMesh()->center[i + 2] + mesh->GetMesh()->center_normal[i + 2] * 2);
+				}
+
+				for (uint i = 0; i < mesh->GetMesh()->num_index; i += 3)
+				{
+					float3 x0(mesh->GetMesh()->vertex[(mesh->GetMesh()->index[i] * 3)], mesh->GetMesh()->vertex[(mesh->GetMesh()->index[i] * 3) + 1], mesh->GetMesh()->vertex[(mesh->GetMesh()->index[i] * 3) + 2]);
+					float3 x1(mesh->GetMesh()->vertex[(mesh->GetMesh()->index[i + 1] * 3)], mesh->GetMesh()->vertex[(mesh->GetMesh()->index[i + 1] * 3) + 1], mesh->GetMesh()->vertex[(mesh->GetMesh()->index[i + 1] * 3) + 2]);
+					float3 x2(mesh->GetMesh()->vertex[(mesh->GetMesh()->index[i + 2] * 3)], mesh->GetMesh()->vertex[(mesh->GetMesh()->index[i + 2] * 3) + 1], mesh->GetMesh()->vertex[(mesh->GetMesh()->index[i + 2] * 3) + 2]);
+
+					float3 v0 = x1 - x0;
+					float3 v1 = x2 - x1;
+					float3 normalized = v0.Cross(v1);
+
+					mesh->GetMesh()->center[i] = (x0.x + x1.x + x2.x) / 3;
+					mesh->GetMesh()->center[i + 1] = (x0.y + x1.y + x2.y) / 3;
+					mesh->GetMesh()->center[i + 2] = (x0.z + x1.z + x2.z) / 3;
+
+					mesh->GetMesh()->center_normal[i] = normalized.Normalized().x;
+					mesh->GetMesh()->center_normal[i + 1] = normalized.Normalized().y;
+					mesh->GetMesh()->center_normal[i + 2] = normalized.Normalized().z;
 				}
 
 				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
