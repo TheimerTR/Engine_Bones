@@ -66,6 +66,19 @@ void ComponentCamera::UpdateFrustum()
 	frustum.pos = trans.TranslatePart();
 	frustum.front = trans.WorldZ().Normalized();
 	frustum.up = frustum.front.Cross(-frustum.WorldRight()).Normalized();
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBegin(GL_LINES);
+	glLineWidth(3.0f);
+	glColor4f(0.25f, 1.0f, 0.0f, 1.0f);
+
+	for (uint i = 0; i < 12; i++)
+	{
+		glVertex3f(frustum.Edge(i).a.x, frustum.Edge(i).a.y, frustum.Edge(i).a.z);
+		glVertex3f(frustum.Edge(i).b.x, frustum.Edge(i).b.y, frustum.Edge(i).b.z);
+	}
+
+	glEnd();
 }
 
 void ComponentCamera::UpdateProjection()
@@ -200,5 +213,29 @@ void ComponentCamera::FrameBuffer(int w, int h)
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
+}
+
+void ComponentCamera::Culling()
+{
+	//vector<ComponentManager> ObjectsToCull;
+
+	//for (int i = 1; i < app->scene->AllGameObjectManagers.size(); i++)
+	//{
+	//	if (app->scene->AllGameObjectManagers[i]->isActive == true)
+	//	{
+	//		//ObjectsToCull.push_back(app->scene->AllGameObjectManagers[i]);
+
+	//		ComponentMesh* ObjectsToCull = dynamic_cast<ComponentMesh*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MESH));
+
+	//		/*if(ObjectsToCull->global_aabb != nullptr)*/
+
+	//		if(ContainsAABox)
+	//	}
+	//}
+
+	////while (ObjectsToCull.empty() == false)
+	////{
+
+	////}
 }
 

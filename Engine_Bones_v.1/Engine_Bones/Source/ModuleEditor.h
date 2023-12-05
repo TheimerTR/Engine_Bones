@@ -86,6 +86,7 @@ public:
 
 	float viewportSizex; 
 	float viewportSizey; 
+
 };
 
 #endif

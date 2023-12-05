@@ -37,6 +37,7 @@ public:
 	
 	//You won't need this after using Frustum
 	float3 X, Y, Z, Position, Reference;
+	bool OnScene; 
 	
 	//ComponentCamera camera; 
 

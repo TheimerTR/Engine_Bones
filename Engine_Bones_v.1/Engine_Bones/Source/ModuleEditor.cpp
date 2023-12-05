@@ -119,6 +119,7 @@ bool ModuleEditor::DrawEditor()
 		ImVec2 size = ImGui::GetContentRegionAvail();
 
 		App->renderer3D->ActiveCameraEditor->SetRatio(ImGui::GetContentRegionAvail().x / ImGui::GetContentRegionAvail().y);
+		app->camera->OnScene = ImGui::IsWindowHovered();
 		ImGui::Image((ImTextureID)App->renderer3D->ActiveCameraEditor->frameTexture, size, ImVec2(0, 1), ImVec2(1, 0));
 	}
 	ImGui::End();

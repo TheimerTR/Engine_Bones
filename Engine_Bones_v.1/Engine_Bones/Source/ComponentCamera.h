@@ -38,6 +38,8 @@ public:
 
 	void FrameBuffer(int w, int h); 
 
+	void Culling(); 
+
 public:
 
 	Frustum frustum;
