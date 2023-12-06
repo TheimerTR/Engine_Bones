@@ -358,6 +358,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 								ResourceMesh* R_MeshToComponent = (ResourceMesh*)ResourceToGameobject;
 
 								Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[m_Counter]);
+								m_Counter++;
 
 								R_MeshToComponent->name = _ParentObj->mName;
 								R_MeshToComponent->mesh->Name = R_MeshToComponent->name;
@@ -415,6 +416,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 									ResourceMesh* R_MeshToComponent = (ResourceMesh*)ResourceToGameobject;
 
 									Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[m_Counter]);
+									m_Counter++;
 
 									R_MeshToComponent->name = _ParentObj->mName;
 									R_MeshToComponent->LibraryPath = resource->ComponentsInModel[j];
