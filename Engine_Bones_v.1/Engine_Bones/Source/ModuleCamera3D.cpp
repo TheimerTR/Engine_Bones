@@ -76,6 +76,8 @@ update_status ModuleCamera3D::PreUpdate(float dt)
 //	glMatrixMode(GL_MODELVIEW);
 //	glLoadMatrixf((GLfloat*)ViewMatrixOpenGL().v);
 //
+
+
 	return UPDATE_CONTINUE;
 }
 
@@ -86,6 +88,8 @@ update_status ModuleCamera3D::Update(float dt)
 	//// Implement a debug camera with keys and mouse
 	//// Now we can make this movememnt frame rate independant!
 	ImGuiIO& io = ImGui::GetIO();
+
+	cameraEditor->Culling();
 
 	if (OnScene == true)
 	{

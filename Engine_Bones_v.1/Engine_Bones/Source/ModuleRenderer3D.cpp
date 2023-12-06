@@ -185,6 +185,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	ActiveCameraEditor->Draw(); 
 
+/*	ActiveCameraEditor->Culling()*/; 
+
 	// light 0 on cam pos
 	lights[0].SetPos(ActiveCameraEditor->GetPosition().x, ActiveCameraEditor->GetPosition().y, ActiveCameraEditor->GetPosition().z);
 
