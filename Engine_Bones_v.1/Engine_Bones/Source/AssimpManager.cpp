@@ -209,6 +209,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				m_Counter++;
 
 				R_Mesh->name = _ParentObj->mName;
+				R_Mesh->mesh->Name = _ParentObj->mName;
 				R_Mesh->ParentsUUID.push_back(_ParentObj->UUID);
 
 				M_mesh = R_Mesh->mesh;
@@ -218,7 +219,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				app->scene->AllResources.push_back(R_Mesh);
 
 				ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
-				C_Mesh->SetMesh(M_mesh);
 
 				string pathToMeta;
 				pathToMeta = MESHES_PATH;
@@ -232,8 +232,15 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 					app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
 				}
 
+				/*ResourceElement* ResourceToGameobject = nullptr;
+				ResourceToGameobject = app->resource->LoadResourceElement(pathToMeta.c_str());
+
+				ResourceMesh* R_MeshToComponent = (ResourceMesh*)ResourceToGameobject;*/
+
 				//Importer::ImporterMesh::Load(R_Mesh, buffer);
 				//Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
+
+				C_Mesh->SetMesh(R_Mesh->mesh);
 
 				app->resource->AllResourcesMap[R_Mesh->getUUID()] = R_Mesh;
 				app->resource->AllResourcesMap[R_Mesh->getUUID()]->resourceCounter += 1;
@@ -259,7 +266,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 					pathToMeta = TEXTURES_PATH;
 					pathToMeta.append(std::to_string(C_Texture->UUID));
-					pathToMeta.append(".texture");
+					pathToMeta.append(".dds");
 
 					R_Texture->LibraryPath = pathToMeta;
 					R_Texture->AssetsPath = texturePath;
@@ -350,7 +357,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 							{
 								ResourceMesh* R_MeshToComponent = (ResourceMesh*)ResourceToGameobject;
 
-								Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[i]);
+								Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[m_Counter]);
 
 								R_MeshToComponent->name = _ParentObj->mName;
 								R_MeshToComponent->mesh->Name = R_MeshToComponent->name;
@@ -407,7 +414,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 								{
 									ResourceMesh* R_MeshToComponent = (ResourceMesh*)ResourceToGameobject;
 
-									Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[i]);
+									Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[m_Counter]);
 
 									R_MeshToComponent->name = _ParentObj->mName;
 									R_MeshToComponent->LibraryPath = resource->ComponentsInModel[j];
@@ -714,7 +721,7 @@ void AssimpManager::MetaFileCreator(GameObjectManager* gameObject, const char* p
 			name_UUID = "Library/Textures/";
 			string UUID = std::to_string(gameObject->mComponents[i]->UUID);
 			name_UUID.append(UUID);
-			name_UUID.append(".texture");
+			name_UUID.append(".dds");
 		}
 
 		jsNode.addNumber("Type", gameObject->mComponents[i]->Type);

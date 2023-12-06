@@ -109,8 +109,8 @@ void Importer::ImporterMesh::Load(ResourceMesh* M_mesh, const char* fileBuffer)
 	memcpy(ranges, cursor, bytes);
 	cursor += bytes;
 
-	M_mesh->mesh->num_index = ranges[0];
-	M_mesh->mesh->num_vertex = ranges[1];
+	M_mesh->mesh->num_vertex = ranges[0];
+	M_mesh->mesh->num_index = ranges[1];
 	M_mesh->mesh->num_normals = ranges[2];
 	M_mesh->mesh->num_Tex = ranges[3];
 

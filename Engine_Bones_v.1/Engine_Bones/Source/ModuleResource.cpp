@@ -69,12 +69,12 @@ ResourceElement* ModuleResource::LoadResourceElement(const char* LibraryPath)
 			temp_ResourceElement->type = ResourceTypes::R_MESH;
 		}
 
-		if (strcmp(extension.data(), "texture") == 0)
+		if (strcmp(extension.data(), "dds") == 0)
 		{
 			ResourceTexture* R_Texture = new ResourceTexture();
 			R_Texture->name = Name;
 			Importer::ImporterTexture::Load(R_Texture->texture, buffer);
-			LOG(LogTypeCase::L_CASUAL, "Resource extension .texture");
+			LOG(LogTypeCase::L_CASUAL, "Resource extension .dds");
 			temp_ResourceElement = R_Texture;
 			temp_ResourceElement->type = ResourceTypes::R_TEXTURE;
 		}
