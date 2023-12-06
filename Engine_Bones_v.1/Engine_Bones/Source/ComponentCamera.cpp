@@ -43,6 +43,8 @@ ComponentCamera::~ComponentCamera() {
 
 bool ComponentCamera::Update()
 {
+	//Culling(); 
+
 	UpdateFrustum();
 
 	return true; 
@@ -219,23 +221,57 @@ void ComponentCamera::Culling()
 {
 	//vector<ComponentManager> ObjectsToCull;
 
-	//for (int i = 1; i < app->scene->AllGameObjectManagers.size(); i++)
+	bool IsInside = true; 
+
+	for (int i = 1; i < app->scene->AllGameObjectManagers.size(); i++)
+	{
+		if (app->scene->AllGameObjectManagers[i]->isActive == true)
+		{
+			//ObjectsToCull.push_back(app->scene->AllGameObjectManagers[i]);
+
+			ComponentMesh* ObjectsToCull = dynamic_cast<ComponentMesh*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MESH));
+
+			/*if(ObjectsToCull->global_aabb != nullptr)*/
+			if (ObjectsToCull != nullptr)
+			{
+				float3 aabbPoints[8];
+				ObjectsToCull->global_aabb.GetCornerPoints(aabbPoints);
+
+				for (int p = 0; p < 6; p++)
+				{
+					int InCount = 8;
+
+					for (int i = 0; i < 8; i++)
+					{
+						if (frustum.GetPlane(p).IsOnPositiveSide(aabbPoints[i]))
+						{
+							InCount--;
+						}
+					}
+
+					if (InCount == 0)
+					{
+						IsInside = false;
+					}
+				}
+
+				if (IsInside == true)
+				{
+					ObjectsToCull->isActive = true;
+				}
+
+				else
+				{
+					ObjectsToCull->isActive = false;
+				}
+
+			}
+		}
+	}
+
+	//while (ObjectsToCull.empty() == false)
 	//{
-	//	if (app->scene->AllGameObjectManagers[i]->isActive == true)
-	//	{
-	//		//ObjectsToCull.push_back(app->scene->AllGameObjectManagers[i]);
 
-	//		ComponentMesh* ObjectsToCull = dynamic_cast<ComponentMesh*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MESH));
-
-	//		/*if(ObjectsToCull->global_aabb != nullptr)*/
-
-	//		if(ContainsAABox)
-	//	}
 	//}
-
-	////while (ObjectsToCull.empty() == false)
-	////{
-
-	////}
 }
 
