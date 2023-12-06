@@ -221,7 +221,7 @@ void ComponentCamera::Culling()
 {
 	//vector<ComponentManager> ObjectsToCull;
 
-	bool IsInside = true; 
+	bool IsInside = false; 
 
 	for (int i = 1; i < app->scene->AllGameObjectManagers.size(); i++)
 	{
@@ -234,28 +234,7 @@ void ComponentCamera::Culling()
 			/*if(ObjectsToCull->global_aabb != nullptr)*/
 			if (ObjectsToCull != nullptr)
 			{
-				float3 aabbPoints[8];
-				ObjectsToCull->global_aabb.GetCornerPoints(aabbPoints);
-
-				for (int p = 0; p < 6; p++)
-				{
-					int InCount = 8;
-
-					for (int i = 0; i < 8; i++)
-					{
-						if (frustum.GetPlane(p).IsOnPositiveSide(aabbPoints[i]))
-						{
-							InCount--;
-						}
-					}
-
-					if (InCount == 0)
-					{
-						IsInside = false;
-					}
-				}
-
-				if (IsInside == true)
+				if (InsideCulling(ObjectsToCull->global_aabb) == true)
 				{
 					ObjectsToCull->isActive = true;
 				}
@@ -264,7 +243,6 @@ void ComponentCamera::Culling()
 				{
 					ObjectsToCull->isActive = false;
 				}
-
 			}
 		}
 	}
@@ -273,5 +251,48 @@ void ComponentCamera::Culling()
 	//{
 
 	//}
+}
+
+bool ComponentCamera::InsideCulling(const AABB& box)
+{
+	float3 aabbPoints[8];
+	int TotalIn = 0;
+	box.GetCornerPoints(aabbPoints);
+
+	for (int p = 0; p < 6; p++)
+	{
+		int InCount = 8;
+		int PointIn = 1;
+
+		for (int i = 0; i < 8; i++)
+		{
+			if (frustum.GetPlane(p).IsOnPositiveSide(aabbPoints[i]))
+			{
+				PointIn = 0;
+				InCount--;
+			}
+		}
+
+		if (InCount == 0)
+		{
+			return false;
+
+		}
+
+		TotalIn += PointIn;
+	}
+
+	return true; 
+
+	//if (/*IsInside == true ||*/ TotalIn == 6)
+	//{
+	//	ObjectsToCull->isActive = true;
+	//}
+
+	//else
+	//{
+	//	ObjectsToCull->isActive = true;
+	//}
+
 }
 

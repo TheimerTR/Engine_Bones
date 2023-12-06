@@ -38,7 +38,9 @@ public:
 
 	void FrameBuffer(int w, int h); 
 
-	void Culling(); 
+	void Culling();
+
+	bool InsideCulling(const AABB& box); 
 
 public:
 
