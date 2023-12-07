@@ -18,6 +18,7 @@ ComponentMaterial::ComponentMaterial(GameObjectManager* gameObject) : ComponentM
 {
 	texture = new Texture();
 	CM_TextureID = NULL;
+	Material = true;
 	this->UUID = app->RandomIntGenerator();
 }
 
@@ -97,6 +98,15 @@ void ComponentMaterial::ShowInfo(Texture* texture, int i)
 				ImGui::Text("Texture ID: %d", texture->TextureID);
 				ImGui::Text("Texture Size: Width:%d x Height:%d", texture->imageWidth, texture->imageHeight);
 				ImGui::Checkbox((std::string("Show Texture##%s") + to_string(i).c_str()).c_str(), &texture->ShowTextures);
+
+				float col[4] = { colorTexture.r, colorTexture.g, colorTexture.b, colorTexture.a };
+
+				ImGui::ColorEdit4("Material Color", col);
+
+				colorTexture.r = col[0];
+				colorTexture.g = col[1];
+				colorTexture.b = col[2];
+				colorTexture.a = col[3];
 
 				if (ImGui::Button((std::string("Select Texture##%s") + to_string(i).c_str()).c_str()))
 				{

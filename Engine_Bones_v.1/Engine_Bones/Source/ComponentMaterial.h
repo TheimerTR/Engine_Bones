@@ -4,6 +4,7 @@
 #include "ComponentManager.h"
 #include "AssimpManager.h"
 #include "TextureManager.h"
+#include "Color.h"
 
 class GameObjectManager;
 
@@ -12,6 +13,9 @@ class ComponentMaterial : public ComponentManager
 public:
 	Texture* texture;
 	uint CM_TextureID;
+
+	bool Material;
+	Color colorTexture;
 
 public:
 

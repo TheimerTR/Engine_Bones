@@ -318,10 +318,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	App->editor->DrawEditor();
 
- 
-
-	//ImGui::Render();
-
 	SDL_GL_SwapWindow(App->window->window);
 
 	return UPDATE_CONTINUE;
@@ -465,6 +461,15 @@ void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* trans
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->GetMesh()->VT);
 			glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
+			if (texture != nullptr)
+			{
+				if (texture->Material)
+				{
+					//glColor4f(0.30980, 0.4590, 0.05882, 1);
+					glColor4f(texture->colorTexture.r, texture->colorTexture.g, texture->colorTexture.b, texture->colorTexture.a);
+				}
+			}
+
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->GetMesh()->EBO);
 			glDrawElements(GL_TRIANGLES, mesh->GetMesh()->num_index, GL_UNSIGNED_INT, NULL);
 
@@ -495,6 +500,8 @@ void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* trans
 		transform->UpdateTransformation(); 
 		transform = false; 
 	}
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 //void ModuleRenderer3D::DrawBox(float3* points, float3 color)
