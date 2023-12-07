@@ -272,7 +272,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				}
 				else
 				{
-					R_Texture->SetColor(Color(0, 0, 0, 1));
+					R_Texture->SetColor(Color(1, 1, 1, 1));
 				}
 
 				if (R_Texture->texture->path != "")
@@ -286,6 +286,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 					TexturesManager* texturesManager = new TexturesManager();
 					ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
 					C_Texture->SetTexture(R_Texture->texture);
+					C_Texture->colorTexture = R_Texture->colors;
 
 					pathToMeta = TEXTURES_PATH;
 					pathToMeta.append(std::to_string(C_Texture->UUID));

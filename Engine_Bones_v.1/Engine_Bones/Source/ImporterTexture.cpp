@@ -36,10 +36,10 @@ uint Importer::ImporterTexture::ImportTexture(aiMaterial* mat, ResourceTexture* 
 
 		nameTexture = TEXTURES_FOLDER + nameTexture; 
 		R_Texture->texture->path = nameTexture.c_str();
-	}
 
-	Importer::ImporterTexture::Load(R_Texture->texture, R_Texture->texture->path);
-	size = Importer::ImporterTexture::Save(R_Texture, buffer);
+		Importer::ImporterTexture::Load(R_Texture->texture, R_Texture->texture->path);
+		size = Importer::ImporterTexture::Save(R_Texture, buffer);
+	}
 
 	return size;
 }
@@ -48,7 +48,7 @@ uint64 Importer::ImporterTexture::Save(ResourceTexture* R_text, char** buffer)
 {
 	ilEnable(IL_FILE_OVERWRITE);
 
-    ILuint size;
+    ILuint size = 0;
     ILubyte* data;
 
 	ilBindImage(R_text->texture->TextureID);

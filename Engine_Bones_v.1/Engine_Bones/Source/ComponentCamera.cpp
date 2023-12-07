@@ -252,7 +252,6 @@ void ComponentCamera::Culling()
 				{
 					ObjectsToCull->isActive = true;
 				}
-
 				else
 				{
 					ObjectsToCull->isActive = false;
