@@ -47,6 +47,10 @@ public:
 	vector<string> MeshesChildrensInModel;
 	vector<string> ComponentsInModel;
 	vector<string> ComponentsNames;
+	vector<float> Resource_red;
+	vector<float> Resource_green;
+	vector<float> Resource_blue;
+	vector<float> Resource_alpha;
 	vector<GameObjectManager*> AssociatedGameObjects;
 
 public:

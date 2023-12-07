@@ -231,14 +231,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 					app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
 				}
 
-				/*ResourceElement* ResourceToGameobject = nullptr;
-				ResourceToGameobject = app->resource->LoadResourceElement(pathToMeta.c_str());
-
-				ResourceMesh* R_MeshToComponent = (ResourceMesh*)ResourceToGameobject;*/
-
-				//Importer::ImporterMesh::Load(R_Mesh, buffer);
-				//Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
-
 				C_Mesh->SetMesh(R_Mesh->mesh);
 
 				app->resource->AllResourcesMap[R_Mesh->getUUID()] = R_Mesh;
@@ -272,17 +264,11 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				}
 				else
 				{
-					R_Texture->SetColor(Color(1, 1, 1, 1));
+					R_Texture->SetColor(Color(0, 0, 0, 0));
 				}
 
 				if (R_Texture->texture->path != "")
 				{
-					if (texturePath != NULL)
-					{
-						Importer::ImporterTexture::Load(R_Texture->texture, R_Texture->texture->path);
-						size = Importer::ImporterTexture::Save(R_Texture, &buffer);
-					}
-
 					TexturesManager* texturesManager = new TexturesManager();
 					ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
 					C_Texture->SetTexture(R_Texture->texture);
@@ -358,6 +344,126 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 					JsonManager compInModel = compArr.getNode(i);
 					resource->ComponentsInModel.push_back(compInModel.getString("Library_path"));
 					resource->ComponentsNames.push_back(compInModel.getString("Component_Name"));
+
+					string resourceExtension = "";
+
+					FileSystem::StringDivide(resource->ComponentsInModel[i].c_str(), nullptr, &resourceExtension);
+
+					if (strcmp(resourceExtension.data(), "dds") == 0)
+					{
+						resource->Resource_red.push_back(compInModel.getNumber("Color_Red"));
+						resource->Resource_green.push_back(compInModel.getNumber("Color_Green"));
+						resource->Resource_blue.push_back(compInModel.getNumber("Color_Blue"));
+						resource->Resource_alpha.push_back(compInModel.getNumber("Color_Alpha"));
+					}
+
+					if((resource->ComponentsInModel[i] != "") && (!app->physFSManager->Exists(resource->ComponentsInModel[i].c_str())))
+					{
+						app->physFSManager->Remove(ExistInMeta.c_str());
+						
+						if (i < scene->mNumMeshes)
+						{
+							if (m_Counter < scene->mNumMaterials)
+							{
+								char* buffer = nullptr;
+								uint size = 0;
+
+								Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[m_Counter]);
+								size = Importer::ImporterMesh::Save(R_Mesh, &buffer);
+
+								R_Mesh->name = _ParentObj->mName;
+								R_Mesh->mesh->Name = _ParentObj->mName;
+								R_Mesh->ParentsUUID.push_back(_ParentObj->UUID);
+
+								M_mesh = R_Mesh->mesh;
+								M_mesh->Name = _ParentObj->mName;
+								AllMeshes.push_back(M_mesh);
+
+								app->scene->AllResources.push_back(R_Mesh);
+
+								ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(_ParentObj->AddComponent(ComponentType::MESH));
+
+								string pathToMeta;
+								pathToMeta = MESHES_PATH;
+								pathToMeta.append(std::to_string(C_Mesh->UUID));
+								pathToMeta.append(".mesh");
+
+								R_Mesh->LibraryPath = pathToMeta;
+
+								if (size > 0)
+								{
+									app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
+								}
+
+								C_Mesh->SetMesh(R_Mesh->mesh);
+
+								app->resource->AllResourcesMap[R_Mesh->getUUID()] = R_Mesh;
+								app->resource->AllResourcesMap[R_Mesh->getUUID()]->resourceCounter += 1;
+
+								ResourceTexture* R_Texture = new ResourceTexture();
+
+								buffer = nullptr;
+								size = 0;
+
+								if (texturePath != NULL)
+								{
+									R_Texture->texture->path = texturePath;
+									R_Texture->name = texturePath;
+
+									R_Texture->AssetsPath = texturePath;
+
+									string textureName = "";
+
+									FileSystem::StringDivide(texturePath, &textureName, nullptr);
+
+									R_Texture->texture->Name = textureName;
+								}
+
+								R_Mesh->mesh->num_Materials = scene->mNumMaterials;
+								aiMaterial* mat = scene->mMaterials[scene->mMeshes[m_Counter]->mMaterialIndex];
+
+								if (mat != nullptr)
+								{
+									size = Importer::ImporterTexture::ImportTexture(mat, R_Texture, &buffer);
+								}
+								else
+								{
+									R_Texture->SetColor(Color(1, 1, 1, 1));
+								}
+
+								if (R_Texture->texture->path != "")
+								{
+									TexturesManager* texturesManager = new TexturesManager();
+									ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
+									C_Texture->SetTexture(R_Texture->texture);
+									C_Texture->colorTexture = R_Texture->colors;
+
+									pathToMeta = TEXTURES_PATH;
+									pathToMeta.append(std::to_string(C_Texture->UUID));
+									pathToMeta.append(".dds");
+
+									R_Texture->LibraryPath = pathToMeta;
+
+									R_Texture->ParentsUUID.push_back(_ParentObj->UUID);
+
+									if (size > 0)
+									{
+										app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
+									}
+
+									if (!CheckNotDuplicateFromAssets(R_Texture, _ParentObj->UUID))
+									{
+										app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
+										app->resource->AllResourcesMap[R_Texture->getUUID()]->resourceCounter += 1;
+									}
+								}
+
+								m_Counter++;
+
+								RELEASE_ARRAY(buffer);
+							}
+						}
+					}
 				}
 
 				_ParentObj->UUID = numberId;
@@ -406,6 +512,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 								TexturesManager* texturesManager = new TexturesManager();
 								ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
 								C_Texture->SetTexture(R_Texture->texture);
+								C_Texture->colorTexture = R_Texture->colors;
 
 								RELEASE_ARRAY(buffer);
 							}
@@ -487,6 +594,10 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 										R_Texture->name = ResourceToGameobject->name;
 										R_Texture->texture->Name = ResourceToGameobject->name;
+										R_Texture->colors.r = resource->Resource_red[0];
+										R_Texture->colors.g = resource->Resource_green[0];
+										R_Texture->colors.b = resource->Resource_blue[0];
+										R_Texture->colors.a = resource->Resource_alpha[0];
 										//R_Texture->AssetsPath = texturePath;
 									}
 
@@ -507,8 +618,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 									TexturesManager* texturesManager = new TexturesManager();
 									ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
 									C_Texture->SetTexture(R_Texture->texture);
-
-
+									C_Texture->colorTexture = R_Texture->colors;
 
 									//ResourceToGameobject->name = textureName;
 
@@ -778,6 +888,10 @@ void AssimpManager::MetaFileCreator(GameObjectManager* gameObject, const char* p
 			string UUID = std::to_string(gameObject->mComponents[i]->UUID);
 			name_UUID.append(UUID);
 			name_UUID.append(".dds");
+			jsNode.addNumber("Color_Red", material->colorTexture.r);
+			jsNode.addNumber("Color_Green", material->colorTexture.g);
+			jsNode.addNumber("Color_Blue", material->colorTexture.b);
+			jsNode.addNumber("Color_Alpha", material->colorTexture.a);
 		}
 
 		jsNode.addString("Component_Name", CompName);
