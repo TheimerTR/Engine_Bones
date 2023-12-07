@@ -3,6 +3,7 @@
 
 #include "External/Glew/include/glew.h"
 #include "External/ImGui/imgui.h"
+#include "External/ImGuizmo/ImGuizmo.h"
 #include "External/ImGui/backends/imgui_impl_sdl2.h"
 #include "External/ImGui/backends/imgui_impl_opengl3.h"
 #include <stdio.h>
@@ -107,6 +108,8 @@ bool ModuleEditor::DrawEditor()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
+
+	//ImGuizmo::BeginFrame(); 
 	
 	viewportSizex = ImGui::GetWindowSize().x; 
 	viewportSizey = ImGui::GetWindowSize().y; 
@@ -1655,7 +1658,7 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 	{
 		std::vector<ComponentManager*> objectMeshes = gameObject->GetComponentsGameObject(ComponentType::MESH);
 		std::vector<ComponentManager*> objectMaterials = gameObject->GetComponentsGameObject(ComponentType::MATERIAL);
-		std::vector<ComponentManager*> objectCameras = gameObject->GetComponentsGameObject(ComponentType::CAMERA);
+		ComponentCamera* objectCamera = dynamic_cast<ComponentCamera*>(gameObject->GetComponentGameObject(ComponentType::CAMERA));
 
 		//ComponentMesh* objectMesh = (ComponentMesh*)gameObject->GetComponentGameObject(ComponentType::MESH);
 		//ComponentMaterial* objectTexture = (ComponentMaterial*)gameObject->GetComponentGameObject(ComponentType::MATERIAL);
@@ -1704,6 +1707,13 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 		transform = gameObject->mTransform; 
 
 		transform->ShowInfo();
+
+		if (objectCamera != nullptr)
+		{
+			objectCamera->ShowCameraInfo();
+		}
+
+	
 
 		if (ImGui::Button("Add Component"))
 		{

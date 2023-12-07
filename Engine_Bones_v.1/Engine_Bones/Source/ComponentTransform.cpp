@@ -49,7 +49,7 @@ ComponentTransform::~ComponentTransform()
 
 void ComponentTransform::ShowInfo() 
 {
-
+	
 	if (ImGui::TreeNode("Transform##1"))
 	{
 		//ImGui::Text("Local Position"); 

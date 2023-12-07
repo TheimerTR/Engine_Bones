@@ -1,5 +1,6 @@
 #include "ComponentCamera.h"
 #include "GameObjectManager.h"
+#include "External/ImGui/imgui.h"
 
 ComponentCamera::ComponentCamera(GameObjectManager* gameObject) : ComponentManager(gameObject)
 {
@@ -131,7 +132,24 @@ void ComponentCamera::EndDraw()
 
 void ComponentCamera::ShowCameraInfo()
 {
+	if (ImGui::TreeNode("Camera##1"))
+	{
+		ImGui::Text("Clipping Planes"); 
 
+		if (ImGui::DragFloat("Near", &near_plane, 0.1f, 0.0f))
+		{
+			frustum.nearPlaneDistance = near_plane;
+		}
+
+		if (ImGui::DragFloat("Far", &far_plane, 0.1f))
+		{
+			frustum.farPlaneDistance = far_plane;
+		}
+
+		//ImGui::Checkbox("Culling", &culling);
+
+		ImGui::TreePop();
+	}
 }
 
 void ComponentCamera::SetPos(float3 pos)
@@ -219,19 +237,15 @@ void ComponentCamera::FrameBuffer(int w, int h)
 
 void ComponentCamera::Culling()
 {
-	//vector<ComponentManager> ObjectsToCull;
-
 	bool IsInside = false; 
+
 
 	for (int i = 1; i < app->scene->AllGameObjectManagers.size(); i++)
 	{
 		if (app->scene->AllGameObjectManagers[i]->isActive == true)
 		{
-			//ObjectsToCull.push_back(app->scene->AllGameObjectManagers[i]);
-
 			ComponentMesh* ObjectsToCull = dynamic_cast<ComponentMesh*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MESH));
 
-			/*if(ObjectsToCull->global_aabb != nullptr)*/
 			if (ObjectsToCull != nullptr)
 			{
 				if (InsideCulling(ObjectsToCull->global_aabb) == true)
@@ -244,12 +258,9 @@ void ComponentCamera::Culling()
 				}
 			}
 		}
+
+
 	}
-
-	//while (ObjectsToCull.empty() == false)
-	//{
-
-	//}
 }
 
 bool ComponentCamera::InsideCulling(const AABB& box)

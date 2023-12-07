@@ -89,7 +89,7 @@ update_status ModuleCamera3D::Update(float dt)
 	//// Now we can make this movememnt frame rate independant!
 	ImGuiIO& io = ImGui::GetIO();
 
-	cameraEditor->Culling();
+	//cameraEditor->Culling();
 
 	if (OnScene == true)
 	{
