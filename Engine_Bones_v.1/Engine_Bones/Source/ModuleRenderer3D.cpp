@@ -158,7 +158,7 @@ bool ModuleRenderer3D::Init()
 	TexturesManager* texturesManager = new TexturesManager();
 	texturesManager->SetCheckerTexture();
 
-	AssimpManager::AssimpLoader("Assets/ModelsFbx/HousesCity.fbx", "Assets/Textures/Building_V01_C.png");
+	AssimpManager::AssimpLoader("Assets/ModelsFbx/StreetWithTexturesReady.fbx");
 	AssimpManager::AssimpLoader("Assets/ModelsFbx/MyFloor.fbx", nullptr);
 	AssimpManager::AssimpLoader("Assets/ModelsFbx/GrassStreet.fbx", nullptr);
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/CrossRoad.fbx", nullptr);

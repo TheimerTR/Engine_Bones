@@ -1,4 +1,5 @@
 #include "ImporterTexture.h"
+#include "FileSystemManager.h"
 
 void Importer::ImporterTexture::InitDevil()
 {
@@ -8,54 +9,92 @@ void Importer::ImporterTexture::InitDevil()
     ilutRenderer(ILUT_OPENGL);
 }
 
-void Importer::ImporterTexture::ImportTexture(ResourceTexture* R_Texture, const char* buffer, uint size)
+uint Importer::ImporterTexture::ImportTexture(aiMaterial* mat, ResourceTexture* R_Texture, char** buffer)
 {
-	if (ilLoadL(IL_DDS, (const void*)buffer, size))
+	uint size = 0;
+
+	//Colors Material
+	aiColor4D colors;
+	aiString pathToTexture;
+	std::string nameTexture;
+	std::string extTexture;
+
+	//if (ilLoadL(IL_DDS, (const void*)buffer, size))
+	//{
+	//	R_Texture->id = ilutGLBindTexImage();
+	//}
+
+	if (mat->Get(AI_MATKEY_COLOR_DIFFUSE, colors) == AI_SUCCESS)
 	{
-		R_Texture->id = ilutGLBindTexImage();
+		R_Texture->SetColor((Color(colors.r, colors.g, colors.b, colors.a)));
 	}
+
+	if (mat->GetTexture(aiTextureType_DIFFUSE, 0, &pathToTexture) == AI_SUCCESS)
+	{
+		FileSystem::StringDivide(pathToTexture.C_Str(), &nameTexture, &extTexture);
+		R_Texture->texture->Name = nameTexture;
+
+		nameTexture = TEXTURES_FOLDER + nameTexture; 
+		R_Texture->texture->path = nameTexture.c_str();
+	}
+
+	Importer::ImporterTexture::Load(R_Texture->texture, R_Texture->texture->path);
+	size = Importer::ImporterTexture::Save(R_Texture, buffer);
+
+	return size;
 }
 
-uint64 Importer::ImporterTexture::Save(char** buffer)
+uint64 Importer::ImporterTexture::Save(ResourceTexture* R_text, char** buffer)
 {
 	ilEnable(IL_FILE_OVERWRITE);
 
     ILuint size;
     ILubyte* data;
-    ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
-    size = ilSaveL(IL_DDS, nullptr, 0); // Get the size of the data buffer
 
-    if (size > 0) 
+	ilBindImage(R_text->texture->TextureID);
+
+	if (ilLoadImage(R_text->texture->path))
 	{
-        data = new ILubyte[size]; // allocate data buffer
-        if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
-            *buffer = (char*)data;
-    }
+		ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
+			size = ilSaveL(IL_DDS, nullptr, 0); // Get the size of the data buffer
+
+			if (size > 0)
+			{
+				data = new ILubyte[size]; // allocate data buffer
+					if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
+						*buffer = (char*)data;
+			}
+	}
+
+	ilBindImage(0);
 
     return size;
 }
 
-void Importer::ImporterTexture::Load(Texture* texture, const char* buffer)
+void Importer::ImporterTexture::Load(Texture* texture, const char* buffer, uint size)
 {
+	//ILuint Il_Tex;
+
+	//ilGenImages(1, &Il_Tex);
+	//ilBindImage(Il_Tex);
+
+	//ilLoadL(IL_DDS, (const void*)buffer, size);
+	//texture->TextureID = (ilutGLBindTexImage());
+	//ilDeleteImages(1, &Il_Tex);
+
 	ILboolean success;
 	ILuint Devil_Texure;
 	uint TextID;
 
 	ilGenImages(1, &Devil_Texure);
 	ilBindImage(Devil_Texure);
-	//ilLoadL(IL_TYPE_UNKNOWN, path, _id);
 	success = ilLoadImage(buffer);
 	TextID = ilutGLBindTexImage();
-
-	uint Text_Size = ilSaveL(IL_DDS, NULL, 0);
-	char* Text_Data = new char[Text_Size];
 
 	ilDeleteImages(1, &Devil_Texure);
 
 	if (success)
 	{
-		//success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-
 		if (!success || TextID == NULL)
 		{
 			LOG(LogTypeCase::L_ERROR, "DEVIL can't load Image");
@@ -72,4 +111,24 @@ void Importer::ImporterTexture::Load(Texture* texture, const char* buffer)
 	texture->imageHeight = ilGetInteger(IL_IMAGE_HEIGHT);
 	texture->imageType = ilGetInteger(IL_IMAGE_TYPE);
 	texture->imageFormat = ilGetInteger(IL_IMAGE_FORMAT);
+}
+
+void Importer::ImporterTexture::ImportTextureWithMeta(aiMaterial* mat, ResourceTexture* R_Texture, const char* buffer, uint size)
+{
+	//Colors Material
+	aiColor4D colors;
+	aiString pathToTexture;
+	std::string nameTexture;
+	std::string extTexture;
+
+	if (mat->GetTexture(aiTextureType_DIFFUSE, 0, &pathToTexture) == AI_SUCCESS)
+	{
+		FileSystem::StringDivide(pathToTexture.C_Str(), &nameTexture, &extTexture);
+		R_Texture->texture->Name = nameTexture;
+
+		nameTexture = TEXTURES_FOLDER + nameTexture;
+		R_Texture->texture->path = nameTexture.c_str();
+	}
+
+	Importer::ImporterTexture::Load(R_Texture->texture, R_Texture->texture->path);
 }

@@ -25,9 +25,10 @@ namespace Importer
 	namespace ImporterTexture
 	{
 		void InitDevil();
-		void ImportTexture(ResourceTexture* R_Texture = nullptr, const char* buffer = nullptr, uint size = 0);
-		uint64 Save(char** buffer = nullptr);
-		void Load(Texture* texture = nullptr, const char* buffer = nullptr);
+		uint ImportTexture(aiMaterial* mat, ResourceTexture* R_Texture = nullptr, char** buffer = nullptr);
+		void ImportTextureWithMeta(aiMaterial* mat, ResourceTexture* R_Texture = nullptr, const char* buffer = nullptr, uint size = 0);
+		uint64 Save(ResourceTexture* R_text, char** buffer = nullptr);
+		void Load(Texture* texture = nullptr, const char* buffer = nullptr, uint size = 0);
 	}
 };
 
