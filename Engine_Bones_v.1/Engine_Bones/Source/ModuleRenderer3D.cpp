@@ -241,6 +241,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	{
 		cameraGame->Draw(); 
 
+	    cameraGame->Culling();
+
 		for (uint i = 0; i < MAX_LIGHTS; ++i)
 			lights[i].Render();
 
