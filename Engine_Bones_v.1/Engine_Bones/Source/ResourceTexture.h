@@ -16,10 +16,15 @@ public:
 	ResourceTexture();
 	ResourceTexture(const char* Rname, const char* Rassetspath, const char* Rlibrarypath, uint32 Ruuid);
 
+	void SetColor(Color color);
+
 	uint id;
 	string path;
 
 	Texture* texture;
+
+	//Colors Material
+	Color colors;
 
 	uint UUID;
 	uint size;

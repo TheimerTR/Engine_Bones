@@ -18,3 +18,8 @@ ResourceTexture::ResourceTexture(const char* Rname, const char* Rassetspath, con
 	path = "";
 	texture = new Texture();
 }
+
+void ResourceTexture::SetColor(Color color)
+{
+	this->colors = color;
+}

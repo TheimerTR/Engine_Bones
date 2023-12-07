@@ -46,6 +46,7 @@ public:
 
 	vector<string> MeshesChildrensInModel;
 	vector<string> ComponentsInModel;
+	vector<string> ComponentsNames;
 	vector<GameObjectManager*> AssociatedGameObjects;
 
 public:

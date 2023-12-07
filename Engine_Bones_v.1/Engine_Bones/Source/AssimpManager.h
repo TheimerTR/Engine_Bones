@@ -46,6 +46,8 @@ struct Mesh
 	uint num_Tex = 0;
 	math::float2* textures = nullptr;
 
+	uint num_Materials = 0;
+
 	string Path;
 	//bool isSelected;
 	bool ShowNormals = false;
@@ -61,7 +63,7 @@ struct Mesh
 	//uint VNF;
 	uint VT;
 
-	//
+	//Abb boxes
 	AABB local_aabb; 
 };
 

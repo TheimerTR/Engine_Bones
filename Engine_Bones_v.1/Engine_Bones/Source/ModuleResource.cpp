@@ -73,7 +73,7 @@ ResourceElement* ModuleResource::LoadResourceElement(const char* LibraryPath)
 		{
 			ResourceTexture* R_Texture = new ResourceTexture();
 			R_Texture->name = Name;
-			Importer::ImporterTexture::Load(R_Texture->texture, buffer);
+			Importer::ImporterTexture::Load(R_Texture->texture, LibraryPath);
 			LOG(LogTypeCase::L_CASUAL, "Resource extension .dds");
 			temp_ResourceElement = R_Texture;
 			temp_ResourceElement->type = ResourceTypes::R_TEXTURE;
