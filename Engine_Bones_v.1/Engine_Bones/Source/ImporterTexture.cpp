@@ -73,15 +73,6 @@ uint64 Importer::ImporterTexture::Save(ResourceTexture* R_text, char** buffer)
 
 void Importer::ImporterTexture::Load(Texture* texture, const char* buffer, uint size)
 {
-	//ILuint Il_Tex;
-
-	//ilGenImages(1, &Il_Tex);
-	//ilBindImage(Il_Tex);
-
-	//ilLoadL(IL_DDS, (const void*)buffer, size);
-	//texture->TextureID = (ilutGLBindTexImage());
-	//ilDeleteImages(1, &Il_Tex);
-
 	ILboolean success;
 	ILuint Devil_Texure;
 	uint TextID;
@@ -111,24 +102,4 @@ void Importer::ImporterTexture::Load(Texture* texture, const char* buffer, uint 
 	texture->imageHeight = ilGetInteger(IL_IMAGE_HEIGHT);
 	texture->imageType = ilGetInteger(IL_IMAGE_TYPE);
 	texture->imageFormat = ilGetInteger(IL_IMAGE_FORMAT);
-}
-
-void Importer::ImporterTexture::ImportTextureWithMeta(aiMaterial* mat, ResourceTexture* R_Texture, const char* buffer, uint size)
-{
-	//Colors Material
-	aiColor4D colors;
-	aiString pathToTexture;
-	std::string nameTexture;
-	std::string extTexture;
-
-	if (mat->GetTexture(aiTextureType_DIFFUSE, 0, &pathToTexture) == AI_SUCCESS)
-	{
-		FileSystem::StringDivide(pathToTexture.C_Str(), &nameTexture, &extTexture);
-		R_Texture->texture->Name = nameTexture;
-
-		nameTexture = TEXTURES_FOLDER + nameTexture;
-		R_Texture->texture->path = nameTexture.c_str();
-	}
-
-	Importer::ImporterTexture::Load(R_Texture->texture, R_Texture->texture->path);
 }

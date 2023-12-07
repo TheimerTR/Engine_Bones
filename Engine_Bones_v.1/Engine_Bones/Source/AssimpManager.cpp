@@ -266,7 +266,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 				R_Mesh->mesh->num_Materials = scene->mNumMaterials;
 				aiMaterial* mat = scene->mMaterials[scene->mMeshes[m_Counter]->mMaterialIndex];
 
-				if ((mat != nullptr) && (m_Counter < R_Mesh->mesh->num_Materials))
+				if (mat != nullptr)
 				{
 					size = Importer::ImporterTexture::ImportTexture(mat, R_Texture, &buffer);
 				}
@@ -305,7 +305,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 						app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
 						app->resource->AllResourcesMap[R_Texture->getUUID()]->resourceCounter += 1;
 					}
-
 				}
 
 				m_Counter++;
