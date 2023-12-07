@@ -58,6 +58,9 @@
     <Filter Include="Sources\Resources">
       <UniqueIdentifier>{7385dd2b-5dd0-4220-a870-4acb345bc1f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\ImGuizmo">
+      <UniqueIdentifier>{158d6796-92c2-4af5-9bdb-c326a38af045}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Module.h">
@@ -381,6 +384,24 @@
     <ClInclude Include="Source\ResourceTexture.h">
       <Filter>Sources\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="Source\External\ImGuizmo\GraphEditor.h">
+      <Filter>Sources\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External\ImGuizmo\ImCurveEdit.h">
+      <Filter>Sources\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External\ImGuizmo\ImGradient.h">
+      <Filter>Sources\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External\ImGuizmo\ImGuizmo.h">
+      <Filter>Sources\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External\ImGuizmo\ImSequencer.h">
+      <Filter>Sources\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External\ImGuizmo\ImZoomSlider.h">
+      <Filter>Sources\ImGuizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -595,6 +616,21 @@
     </ClCompile>
     <ClCompile Include="Source\ResourceTexture.cpp">
       <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGuizmo\GraphEditor.cpp">
+      <Filter>Sources\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGuizmo\ImCurveEdit.cpp">
+      <Filter>Sources\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGuizmo\ImGradient.cpp">
+      <Filter>Sources\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGuizmo\ImGuizmo.cpp">
+      <Filter>Sources\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGuizmo\ImSequencer.cpp">
+      <Filter>Sources\ImGuizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

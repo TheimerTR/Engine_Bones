@@ -109,7 +109,7 @@ bool ModuleEditor::DrawEditor()
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
-	//ImGuizmo::BeginFrame(); 
+	ImGuizmo::BeginFrame(); 
 	
 	viewportSizex = ImGui::GetWindowSize().x; 
 	viewportSizey = ImGui::GetWindowSize().y; 
