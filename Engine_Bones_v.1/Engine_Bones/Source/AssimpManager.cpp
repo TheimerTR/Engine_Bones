@@ -989,6 +989,7 @@ bool AssimpManager::ImportOnlyTexture(string Path)
 	R_Texture->ParentsUUID.push_back(app->editor->actualMesh->UUID);
 
 	Importer::ImporterTexture::Load(R_Texture->texture, Path.c_str());
+	size = Importer::ImporterTexture::Save(R_Texture, &buffer);
 
 	vector<ComponentManager*> objectMeshes = app->editor->actualMesh->GetComponentsGameObject(ComponentType::MATERIAL);
 
@@ -1003,8 +1004,21 @@ bool AssimpManager::ImportOnlyTexture(string Path)
 	ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
 	C_Texture->SetTexture(R_Texture->texture);
 
-	if (!AssimpManager::CheckNotDuplicateFromAssets(R_Texture, app->editor->actualMesh->UUID))
+	string pathToMeta = "";
+
+	pathToMeta = TEXTURES_PATH;
+	pathToMeta.append(std::to_string(C_Texture->UUID));
+	pathToMeta.append(".dds");
+
+	R_Texture->LibraryPath = pathToMeta;
+
+	if (!AssimpManager::CheckResourceComponentsExistence(R_Texture))
 	{
+		if (size > 0)
+		{
+			app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
+		}
+
 		app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
 		app->resource->AllResourcesMap[R_Texture->getUUID()]->resourceCounter += 1;
 	}
