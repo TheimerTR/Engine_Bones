@@ -1,6 +1,7 @@
 #include "ComponentTransform.h"
 #include "GameObjectManager.h"
 #include "External/ImGui/imgui.h"
+#include "External/ImGuizmo/ImGuizmo.h"
 #include "Application.h"
 
 
@@ -37,15 +38,55 @@ ComponentTransform::~ComponentTransform()
 	mLocalMatrix = float4x4::identity;
 };
 
-//bool ComponentTransform::Update()
-//{
-//	if (transform == true)
-//	{
-//		UpdateTransformation(); 
-//
-//		transform = false; 
-//	}
-//}
+bool ComponentTransform::Update()
+{
+
+	//if (app->editor->actualMesh != nullptr && app->editor->startScene == true)
+	//{
+	//	ImGuiIO& io = ImGui::GetIO();
+	//	ImGuizmo::Enable(true);
+
+	//	/*ImGuizmo::SetRect(app->editor->scenePos.x, app->editor->scenePos.y, app->editor->sceneSize.x, app->editor->sceneSize.y);*/
+
+
+	//	ImGuizmo::OPERATION CurrentOperation(ImGuizmo::TRANSLATE); 
+
+	//	if (io.WantTextInput == false)
+	//	{
+	//		if(app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+	//		{
+	//			CurrentOperation = ImGuizmo::TRANSLATE; 
+	//		}
+
+	//		else if(app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	//		{
+	//			CurrentOperation = ImGuizmo::ROTATE;
+	//		}
+	//		else if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	//		{
+	//			CurrentOperation = ImGuizmo::SCALE;
+	//		}
+	//	}
+
+	//	ImGuizmo::Manipulate(app->renderer3D->ActiveCameraEditor->GetViewMatrix(), app->renderer3D->ActiveCameraEditor->GetProjectionMatrix(), CurrentOperation, ImGuizmo::MODE::LOCAL, mGlobalMatrix.Transposed().ptr());
+
+	//	if (ImGuizmo::IsUsing())
+	//	{
+	//		if (Owner->mParent == nullptr)
+	//		{
+	//			localTransform = mGlobalMatrix; 
+	//		}
+
+	//		else
+	//		{
+	//			UpdateTransformation(); 
+	//		}
+	//	}
+	//} 
+
+	return true; 
+
+}
 
 void ComponentTransform::ShowInfo() 
 {

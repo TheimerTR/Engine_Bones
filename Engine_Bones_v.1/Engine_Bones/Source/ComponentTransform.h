@@ -32,6 +32,8 @@ public:
 	ComponentTransform(GameObjectManager* gameObject);
 	~ComponentTransform();
 
+	bool Update();
+
 	void ShowInfo(); 
 
 	void SetTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation); 
@@ -48,7 +50,7 @@ public:
 
 	
 private: 
-
+	float4x4 localTransform = math::float4x4::identity;
 	//GameObjectManager* gameObject; 
 
 	//void UpdateMatrix(Transforms* trans) 

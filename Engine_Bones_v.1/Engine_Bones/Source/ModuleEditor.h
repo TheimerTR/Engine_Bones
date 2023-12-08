@@ -87,6 +87,12 @@ public:
 	float viewportSizex; 
 	float viewportSizey; 
 
+	bool startScene = false; 
+
+	//ImVec2 sceneSize = ImVec2(0, 0);
+	//ImVec2 scenePos  = ImVec2(0, 0);
+
+
 };
 
 #endif
