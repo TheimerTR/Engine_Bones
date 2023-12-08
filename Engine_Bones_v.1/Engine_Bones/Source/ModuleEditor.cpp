@@ -37,6 +37,7 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	mFPSLOG.reserve(MAX_LOG_FPS);
 	l_Logs.Log.reserve(MAX_LOG_FPS);
 	l_Logs.Type.reserve(MAX_LOG_FPS);
+
 }
 
 ModuleEditor::~ModuleEditor()
@@ -119,11 +120,49 @@ bool ModuleEditor::DrawEditor()
 
 	if (ImGui::Begin(name.c_str(), NULL))
 	{
-		ImVec2 size = ImGui::GetContentRegionAvail();
+		ImVec2 sceneSize = ImGui::GetContentRegionAvail();
+		ImVec2 scenePos = ImGui::GetWindowPos();
 
 		App->renderer3D->ActiveCameraEditor->SetRatio(ImGui::GetContentRegionAvail().x / ImGui::GetContentRegionAvail().y);
 		app->camera->OnScene = ImGui::IsWindowHovered();
-		ImGui::Image((ImTextureID)App->renderer3D->ActiveCameraEditor->frameTexture, size, ImVec2(0, 1), ImVec2(1, 0));
+
+		ImGui::Image((ImTextureID)App->renderer3D->ActiveCameraEditor->frameTexture, sceneSize, ImVec2(0, 1), ImVec2(1, 0));
+		startScene = true;
+
+		//ImGuizmo::Enable(true);
+
+		ImGuizmo::OPERATION CurrentOperation(ImGuizmo::TRANSLATE);
+
+		if (actualMesh != nullptr)
+		{
+			if (!ImGuizmo::IsUsing())
+			{
+				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+				{
+					CurrentOperation = ImGuizmo::TRANSLATE;
+				}
+
+				else if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+				{
+					CurrentOperation = ImGuizmo::ROTATE;
+				}
+				else if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+				{
+					CurrentOperation = ImGuizmo::SCALE;
+				}
+			}
+		}
+
+		ImGuizmo::SetRect(scenePos.x, scenePos.y, sceneSize.x, sceneSize.y);
+
+		ImGuizmo::SetDrawlist();
+
+		ComponentTransform* transform = actualMesh->mTransform; 
+		float4x4 globalTransposed = transform->GetGlobalMatrix().Transposed(); 
+
+		ImGuizmo::Manipulate(app->renderer3D->ActiveCameraEditor->GetViewMatrix(), app->renderer3D->ActiveCameraEditor->GetProjectionMatrix(), CurrentOperation, ImGuizmo::MODE::LOCAL, transform->mGlobalMatrix.Transposed().ptr());
+
+
 	}
 	ImGui::End();
 
