@@ -213,11 +213,24 @@ update_status ModuleCamera3D::Update(float dt)
 			float3 scale;
 			ComponentMesh* mesh = dynamic_cast<ComponentMesh*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::MESH));
 
-			box = &mesh->global_aabb;
-			centerObject = box->Centroid();
-			scale = box->Size();
+			float distance = 0;
 
-			float distance = cameraEditor->frustum.pos.Distance(centerObject);
+			if (mesh != nullptr)
+			{
+				box = &mesh->global_aabb;
+				centerObject = box->Centroid();
+				scale = box->Size();
+
+				distance = cameraEditor->frustum.pos.Distance(centerObject);
+			}
+			else
+			{
+				ComponentTransform* transform = dynamic_cast<ComponentTransform*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::TRANSFORM));
+				centerObject.x = transform->mPosition.x;
+				centerObject.y = transform->mPosition.y;
+				centerObject.z = transform->mPosition.z;
+				distance = cameraEditor->frustum.pos.Distance(centerObject);
+			}
 
 			if (dx != 0)
 			{
@@ -304,29 +317,6 @@ void ModuleCamera3D::Focus(/*const float3 &Spot*/){
 
 				LookAt(centerObject);
 			}
-			/*else
-			{
-				mesh = CheckForMesh(app->editor->actualMesh);
-
-				if (mesh != nullptr)
-				{
-					if (mesh->C_Mesh != nullptr)
-					{
-						box = &mesh->global_aabb;
-						centerObject = box->Centroid();
-						scale = box->Size();
-
-						cameraEditor->frustum.pos.Set(centerObject.x + scale.x, centerObject.y + scale.y, centerObject.z + scale.z);
-
-						LookAt(centerObject);
-					}
-				}
-				else
-				{
-					ComponentTransform* transform = dynamic_cast<ComponentTransform*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::TRANSFORM));
-					cameraEditor->frustum.pos.Set(transform->gPosition.x + transform->gScale.x, transform->gPosition.y + transform->gScale.y, transform->gPosition.z + transform->gScale.z);
-				}
-			}*/
 		}
 
 		//gameObject = App->editor->actualMesh;
@@ -349,10 +339,6 @@ void ModuleCamera3D::Focus(/*const float3 &Spot*/){
 				cameraEditor->LookAt(selectedPos);*/
 	
 	}
-	//}
-
-	
-
 }
 
 // -----------------------------------------------------------------
