@@ -296,19 +296,37 @@ void ModuleCamera3D::Focus(/*const float3 &Spot*/){
 			}
 			else
 			{
+				ComponentTransform* transform = dynamic_cast<ComponentTransform*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::TRANSFORM));
+				cameraEditor->frustum.pos.Set(transform->mPosition.x + transform->mScale.x, transform->mPosition.y + transform->mScale.y * 2, transform->mPosition.z + (transform->mScale.z * 2) / 2);
+				centerObject.x = transform->mPosition.x;
+				centerObject.y = transform->mPosition.y;
+				centerObject.z = transform->mPosition.z;
+
+				LookAt(centerObject);
+			}
+			/*else
+			{
 				mesh = CheckForMesh(app->editor->actualMesh);
 
-				if (mesh->C_Mesh != nullptr) 
+				if (mesh != nullptr)
 				{
-					box = &mesh->global_aabb;
-					centerObject = box->Centroid();
-					scale = box->Size();
+					if (mesh->C_Mesh != nullptr)
+					{
+						box = &mesh->global_aabb;
+						centerObject = box->Centroid();
+						scale = box->Size();
 
-					cameraEditor->frustum.pos.Set(centerObject.x + scale.x, centerObject.y + scale.y, centerObject.z + scale.z);
+						cameraEditor->frustum.pos.Set(centerObject.x + scale.x, centerObject.y + scale.y, centerObject.z + scale.z);
 
-					LookAt(centerObject); 
+						LookAt(centerObject);
+					}
 				}
-			}
+				else
+				{
+					ComponentTransform* transform = dynamic_cast<ComponentTransform*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::TRANSFORM));
+					cameraEditor->frustum.pos.Set(transform->gPosition.x + transform->gScale.x, transform->gPosition.y + transform->gScale.y, transform->gPosition.z + transform->gScale.z);
+				}
+			}*/
 		}
 
 		//gameObject = App->editor->actualMesh;

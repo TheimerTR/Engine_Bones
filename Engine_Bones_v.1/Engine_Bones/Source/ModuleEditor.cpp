@@ -157,12 +157,16 @@ bool ModuleEditor::DrawEditor()
 
 		ImGuizmo::SetDrawlist();
 
-		ComponentTransform* transform = actualMesh->mTransform; 
-		float4x4 globalTransposed = transform->GetGlobalMatrix().Transposed(); 
+		if (actualMesh != nullptr)
+		{
+			if (actualMesh->mTransform != nullptr)
+			{
+				ComponentTransform* transform = actualMesh->mTransform;
+				float4x4 globalTransposed = transform->GetGlobalMatrix().Transposed();
 
-		ImGuizmo::Manipulate(app->renderer3D->ActiveCameraEditor->GetViewMatrix(), app->renderer3D->ActiveCameraEditor->GetProjectionMatrix(), CurrentOperation, ImGuizmo::MODE::LOCAL, transform->mGlobalMatrix.Transposed().ptr());
-
-
+				ImGuizmo::Manipulate(app->renderer3D->ActiveCameraEditor->GetViewMatrix(), app->renderer3D->ActiveCameraEditor->GetProjectionMatrix(), CurrentOperation, ImGuizmo::MODE::LOCAL, transform->mGlobalMatrix.Transposed().ptr());
+			}
+		}
 	}
 	ImGui::End();
 

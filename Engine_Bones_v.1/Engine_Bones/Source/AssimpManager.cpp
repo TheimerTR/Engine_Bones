@@ -66,7 +66,7 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 
 		size_t pos_File = Div_String.find("Assets");
 
-		if(pos_File > 1000)
+		if(pos_File != string::npos)
 		{
 			if (!app->physFSManager->Exists(path))
 			{
