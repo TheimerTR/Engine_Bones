@@ -3,57 +3,60 @@
 
 void Importer::ImporterMesh::ImportMesh(ResourceMesh* M_mesh, const aiMesh* aiMesh)
 {
-	M_mesh->mesh->num_vertex = aiMesh->mNumVertices;
-	M_mesh->mesh->vertex = new float[M_mesh->mesh->num_vertex * 3];
-	memcpy(M_mesh->mesh->vertex, aiMesh->mVertices, sizeof(float) * M_mesh->mesh->num_vertex * 3);
-	LOG(LogTypeCase::L_CASUAL, "New mesh with %d vertices", M_mesh->mesh->num_vertex);
-
-	if (aiMesh->HasFaces())
+	if (M_mesh != nullptr && aiMesh != nullptr)
 	{
-		M_mesh->mesh->num_index = aiMesh->mNumFaces * 3;
-		M_mesh->mesh->index = new uint[M_mesh->mesh->num_index]; // assume each face is a triangle
+		M_mesh->mesh->num_vertex = aiMesh->mNumVertices;
+		M_mesh->mesh->vertex = new float[M_mesh->mesh->num_vertex * 3];
+		memcpy(M_mesh->mesh->vertex, aiMesh->mVertices, sizeof(float) * M_mesh->mesh->num_vertex * 3);
+		LOG(LogTypeCase::L_CASUAL, "New mesh with %d vertices", M_mesh->mesh->num_vertex);
 
-		for (uint d = 0; d < aiMesh->mNumFaces; ++d)
+		if (aiMesh->HasFaces())
 		{
-			if (aiMesh->mFaces[d].mNumIndices != 3)
+			M_mesh->mesh->num_index = aiMesh->mNumFaces * 3;
+			M_mesh->mesh->index = new uint[M_mesh->mesh->num_index]; // assume each face is a triangle
+
+			for (uint d = 0; d < aiMesh->mNumFaces; ++d)
 			{
-				LOG(LogTypeCase::L_WARNING, "WARNING, geometry face with != 3 indices!");
+				if (aiMesh->mFaces[d].mNumIndices != 3)
+				{
+					LOG(LogTypeCase::L_WARNING, "WARNING, geometry face with != 3 indices!");
+				}
+				else
+				{
+					memcpy(&M_mesh->mesh->index[d * 3], aiMesh->mFaces[d].mIndices, 3 * sizeof(uint));
+					//memcpy(&M_mesh->normals_Faces[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
+				}
 			}
-			else
+
+			LOG(LogTypeCase::L_CASUAL, "With %d indices", M_mesh->mesh->num_index);
+		}
+
+		if (aiMesh->HasNormals())
+		{
+			M_mesh->mesh->num_normals = aiMesh->mNumVertices;
+			M_mesh->mesh->normals = new float[M_mesh->mesh->num_normals * 3];
+			memcpy(M_mesh->mesh->normals, aiMesh->mNormals, sizeof(float) * M_mesh->mesh->num_normals * 3);
+
+			M_mesh->mesh->center_normal = new float[aiMesh->mNumFaces * 3];
+			M_mesh->mesh->center = new float[aiMesh->mNumFaces * 3];
+			M_mesh->mesh->faces = aiMesh->mNumFaces;
+		}
+
+		uint UV_Index = 0;
+		if (aiMesh->HasTextureCoords(UV_Index))
+		{
+			M_mesh->mesh->num_Tex = aiMesh->mNumVertices;
+			M_mesh->mesh->textures = new math::float2[aiMesh->mNumVertices];
+
+			for (int j = 0; j < M_mesh->mesh->num_Tex; j++)
 			{
-				memcpy(&M_mesh->mesh->index[d * 3], aiMesh->mFaces[d].mIndices, 3 * sizeof(uint));
-				//memcpy(&M_mesh->normals_Faces[d * 3], scene->mMeshes[i]->mFaces[d].mIndices, 3 * sizeof(uint));
+				M_mesh->mesh->textures[j].x = aiMesh->mTextureCoords[UV_Index][j].x;
+				M_mesh->mesh->textures[j].y = aiMesh->mTextureCoords[UV_Index][j].y;
 			}
 		}
 
-		LOG(LogTypeCase::L_CASUAL, "With %d indices", M_mesh->mesh->num_index);
+		AssimpManager::SetBuffers(M_mesh->mesh);
 	}
-
-	if (aiMesh->HasNormals())
-	{
-		M_mesh->mesh->num_normals = aiMesh->mNumVertices;
-		M_mesh->mesh->normals = new float[M_mesh->mesh->num_normals * 3];
-		memcpy(M_mesh->mesh->normals, aiMesh->mNormals, sizeof(float) * M_mesh->mesh->num_normals * 3);
-
-		M_mesh->mesh->center_normal = new float[aiMesh->mNumFaces * 3];
-		M_mesh->mesh->center = new float[aiMesh->mNumFaces * 3];
-		M_mesh->mesh->faces = aiMesh->mNumFaces;
-	}
-
-	uint UV_Index = 0;
-	if (aiMesh->HasTextureCoords(UV_Index))
-	{
-		M_mesh->mesh->num_Tex = aiMesh->mNumVertices;
-		M_mesh->mesh->textures = new math::float2[aiMesh->mNumVertices];
-
-		for (int j = 0; j < M_mesh->mesh->num_Tex; j++)
-		{
-			M_mesh->mesh->textures[j].x = aiMesh->mTextureCoords[UV_Index][j].x;
-			M_mesh->mesh->textures[j].y = aiMesh->mTextureCoords[UV_Index][j].y;
-		}
-	}
-
-	AssimpManager::SetBuffers(M_mesh->mesh);
 }
 
 uint64 Importer::ImporterMesh::Save(const ResourceMesh* M_mesh, char** fileBuffer)
