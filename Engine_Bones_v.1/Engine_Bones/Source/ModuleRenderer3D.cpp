@@ -159,7 +159,7 @@ bool ModuleRenderer3D::Init()
 	texturesManager->SetCheckerTexture();
 
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/DefinitiveStreet.fbx", nullptr);
-	AssimpManager::AssimpLoader("Assets/ModelsFbx/StreetAll.fbx");
+	AssimpManager::AssimpLoader("Assets/ModelsFbx/Street.fbx");
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/GrassStreet.fbx");
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/FloorRoad.fbx");
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/Houses.fbx");

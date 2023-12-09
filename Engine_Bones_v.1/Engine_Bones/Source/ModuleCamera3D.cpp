@@ -423,11 +423,14 @@ void ModuleCamera3D::CreateRayCast()
 
 	float dist = SearchForNear(hitMap, &distancesOrder);
 
-	GameObjectManager* NearestGameObject = hitMap.find(dist)->second;
-
-	if(!CheckTriangleIntersection(NearestGameObject, RayCast, dist, distancesOrder, hitMap))
+	if (dist > 0 && !hitMap.empty())
 	{
-		app->editor->actualMesh = nullptr;
+		GameObjectManager* NearestGameObject = hitMap.find(dist)->second;
+
+		if (!CheckTriangleIntersection(NearestGameObject, RayCast, dist, distancesOrder, hitMap))
+		{
+			app->editor->actualMesh = nullptr;
+		}
 	}
 }
 
@@ -515,16 +518,21 @@ float ModuleCamera3D::SearchForNear(map<float, GameObjectManager*> hits, vector<
 {
 	map<float, GameObjectManager*>::iterator iterator = hits.begin();
 
-	float dist = iterator->first;
+	float dist = 0;
 
-	for (iterator; iterator != hits.end(); iterator++)
+	if (!hits.empty())
 	{
-		if (dist > iterator->first)
-		{
-			dist = iterator->first;
-		}
+		dist = iterator->first;
 
-		AllDistances->push_back(iterator->first);
+		for (iterator; iterator != hits.end(); iterator++)
+		{
+			if (dist > iterator->first)
+			{
+				dist = iterator->first;
+			}
+
+			AllDistances->push_back(iterator->first);
+		}
 	}
 	
 	return dist;
