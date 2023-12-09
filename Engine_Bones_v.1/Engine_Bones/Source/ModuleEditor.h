@@ -4,6 +4,8 @@
 #include "Module.h"
 #include "Application.h"
 #include "AssimpManager.h"
+#include "External/ImGui/imgui.h"
+#include "External/ImGuizmo/ImGuizmo.h"
 #include "GameObjectManager.h"
 #include "ResourceElement.h"
 #include "External/ImGui/imgui.h"
@@ -91,6 +93,7 @@ public:
 	bool startScene = false; 
 
 	ImVec2 scenePos;
+	ImGuizmo::OPERATION CurrentOperation;
 
 	//ImVec2 sceneSize = ImVec2(0, 0);
 	//ImVec2 scenePos  = ImVec2(0, 0);

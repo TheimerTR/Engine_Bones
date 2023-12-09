@@ -2,8 +2,6 @@
 #include "ModuleRenderer3D.h"
 
 #include "External/Glew/include/glew.h"
-#include "External/ImGui/imgui.h"
-#include "External/ImGuizmo/ImGuizmo.h"
 #include "External/ImGui/backends/imgui_impl_sdl2.h"
 #include "External/ImGui/backends/imgui_impl_opengl3.h"
 #include <stdio.h>
@@ -102,6 +100,8 @@ bool ModuleEditor::Init()
 
 	DefaultConfig();
 
+	CurrentOperation = ImGuizmo::OPERATION::TRANSLATE;
+
 	return true;
 }
 
@@ -132,8 +132,6 @@ bool ModuleEditor::DrawEditor()
 		startScene = true;
 
 		//ImGuizmo::Enable(true);
-
-		ImGuizmo::OPERATION CurrentOperation(ImGuizmo::TRANSLATE);
 
 		if (actualMesh != nullptr)
 		{
@@ -166,7 +164,10 @@ bool ModuleEditor::DrawEditor()
 				ComponentTransform* transform = actualMesh->mTransform;
 				float4x4 globalTransposed = transform->GetGlobalMatrix().Transposed();
 
-				ImGuizmo::Manipulate(app->renderer3D->ActiveCameraEditor->GetViewMatrix(), app->renderer3D->ActiveCameraEditor->GetProjectionMatrix(), CurrentOperation, ImGuizmo::MODE::LOCAL, transform->mGlobalMatrix.Transposed().ptr());
+				if (ImGuizmo::Manipulate(app->renderer3D->ActiveCameraEditor->GetViewMatrix(), app->renderer3D->ActiveCameraEditor->GetProjectionMatrix(), CurrentOperation, ImGuizmo::MODE::LOCAL, globalTransposed.ptr()))
+				{
+					transform->UpdateGuizmoTransformation(globalTransposed.Transposed()); 
+				}
 			}
 		}
 	}

@@ -40,6 +40,8 @@ public:
 
 	void UpdateTransformation(); 
 
+	void UpdateGuizmoTransformation(float4x4& globalTransformation); 
+
 	void UpdateBox(); 
 
 	float3 GetPosition(); 
