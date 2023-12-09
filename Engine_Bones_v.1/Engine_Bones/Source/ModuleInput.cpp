@@ -142,3 +142,8 @@ bool ModuleInput::CleanUp()
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }
+
+float3 ModuleInput::GetMousePosition()
+{
+	return float3(mouse_x, mouse_y, mouse_z);
+}

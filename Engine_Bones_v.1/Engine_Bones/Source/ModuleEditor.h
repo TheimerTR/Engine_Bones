@@ -6,6 +6,7 @@
 #include "AssimpManager.h"
 #include "GameObjectManager.h"
 #include "ResourceElement.h"
+#include "External/ImGui/imgui.h"
 
 #include <vector>
 #include <stdio.h>
@@ -89,10 +90,10 @@ public:
 
 	bool startScene = false; 
 
+	ImVec2 scenePos;
+
 	//ImVec2 sceneSize = ImVec2(0, 0);
 	//ImVec2 scenePos  = ImVec2(0, 0);
-
-
 };
 
 #endif

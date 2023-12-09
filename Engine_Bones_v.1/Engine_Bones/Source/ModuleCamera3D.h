@@ -12,6 +12,11 @@
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
 
+#include<vector>
+#include<map>
+
+using namespace std;
+
 class ModuleCamera3D : public Module
 {
 public:
@@ -31,19 +36,19 @@ public:
 
 	void Focus(/*const float3 &Spot*/); 
 
+	void CreateRayCast();
+	void SearchForHits(map<float, GameObjectManager*> hits, GameObjectManager* Root, LineSegment &rayCast);
+
 private:
 
 public:
 	
-	//You won't need this after using Frustum
 	float3 X, Y, Z, Position, Reference;
 	bool OnScene; 
-	
-	//ComponentCamera camera; 
+
+	LineSegment RayCast;
 
 private:
 
 	ComponentCamera* cameraEditor; 
-
-	//Frustum mMainCamera; Some help here :)
 };

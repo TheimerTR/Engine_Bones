@@ -68,6 +68,8 @@ bool ModuleEditor::Init()
 	OG_ChildListPos = 0;
 	Actual_ChildPos = 0;
 
+	scenePos = ImVec2(0, 0);
+
 	actualDir = "";
 	actualFile = "";
 
@@ -121,7 +123,7 @@ bool ModuleEditor::DrawEditor()
 	if (ImGui::Begin(name.c_str(), NULL))
 	{
 		ImVec2 sceneSize = ImGui::GetContentRegionAvail();
-		ImVec2 scenePos = ImGui::GetWindowPos();
+		scenePos = ImGui::GetWindowPos();
 
 		App->renderer3D->ActiveCameraEditor->SetRatio(ImGui::GetContentRegionAvail().x / ImGui::GetContentRegionAvail().y);
 		app->camera->OnScene = ImGui::IsWindowHovered();
@@ -168,6 +170,7 @@ bool ModuleEditor::DrawEditor()
 			}
 		}
 	}
+
 	ImGui::End();
 
 	if (ImGui::Begin(nameGame.c_str(), NULL))
@@ -423,8 +426,6 @@ bool ModuleEditor::DrawEditor()
 		}
 	}
 	ImGui::EndMainMenuBar();
-
-	
 
 	//Demo Window
 	if(DemoWindow)

@@ -5,6 +5,7 @@
 #include "GameObjectManager.h"
 #include "External/MathGeoLib/include/Math/Quat.h"
 #include "ModuleInput.h"
+#include "External/ImGuizmo/ImGuizmo.h"
 #include "External/Glew/include/glew.h" // extension lib
 #include "External\SDL\include\SDL_opengl.h"
 #include "External/ImGui/backends/imgui_impl_opengl3.h"
@@ -93,7 +94,6 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if (OnScene == true)
 	{
-
 		float3 newPos(0, 0, 0);
 		float speed = 3.0f * dt;
 		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
@@ -110,9 +110,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		{
-
 			Focus();
-
 		}
 
 		if (App->input->GetMouseZ() != 0) {
@@ -172,6 +170,11 @@ update_status ModuleCamera3D::Update(float dt)
 				cameraEditor->frustum.up = up;
 			}
 
+		}
+
+		if(App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE && (!ImGuizmo::IsUsing() && !ImGuizmo::IsOver()))
+		{
+			CreateRayCast();
 		}
 
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
@@ -244,8 +247,6 @@ update_status ModuleCamera3D::Update(float dt)
 
 				cameraEditor->frustum.front = rotation.Mul(cameraEditor->frustum.front).Normalized();
 				cameraEditor->frustum.up = rotation.Mul(cameraEditor->frustum.up).Normalized();
-
-
 			}
 
 			if (dy != 0)
@@ -391,4 +392,53 @@ ComponentMesh* ModuleCamera3D::CheckForMesh(GameObjectManager* gameObject)
 	}
 
 	return C_Mesh;
+}
+
+void ModuleCamera3D::CreateRayCast()
+{
+	if (App->scene->Root->childrens.empty()) return;
+
+	float2 originPoint = float2((App->input->GetMousePosition().x - App->editor->scenePos.x) / App->editor->viewportSizex, (App->input->GetMousePosition().y - App->editor->scenePos.y) / App->editor->viewportSizey);
+
+	originPoint.x = (originPoint.x - 0.5F) * 2;
+	originPoint.y = -(originPoint.y - 0.5F) * 2;
+
+	if(originPoint.x > 1 || originPoint.x < -1)
+	{
+		return;
+	}
+
+	if(originPoint.y > 1 || originPoint.y < -1)
+	{
+		return;
+	}
+
+	RayCast = cameraEditor->frustum.UnProjectLineSegment(originPoint.x, originPoint.y);
+
+	map<float, GameObjectManager*> hitMap;
+
+	SearchForHits(hitMap, App->scene->Root, RayCast);
+}
+
+void ModuleCamera3D::SearchForHits(map<float, GameObjectManager*> hits, GameObjectManager* Root, LineSegment& rayCast)
+{
+	float dist  = 0, dist_out = 0;
+
+	ComponentMesh* meshRoot = dynamic_cast<ComponentMesh*>(Root->GetComponentGameObject(ComponentType::MESH));
+
+	if (meshRoot != nullptr)
+	{
+		if (rayCast.Intersects(meshRoot->global_aabb, dist, dist_out))
+		{
+			hits[dist] = Root;
+		}
+	}
+
+	if(!Root->childrens.empty())
+	{
+		for (int i = 0; i < Root->childrens.size(); i++)
+		{
+			SearchForHits(hits, Root->childrens[i], rayCast);
+		}
+	}
 }
