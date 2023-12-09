@@ -53,7 +53,7 @@ public:
 
 	bool culling = true; 
 	bool uncull = false; 
-	bool gameCreated = false; 
+	bool activeGame; 
 
 private:
 	float width = 0.0f;

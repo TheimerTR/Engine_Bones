@@ -175,7 +175,7 @@ bool ModuleEditor::DrawEditor()
 
 	if (ImGui::Begin(nameGame.c_str(), NULL))
 	{
-		if (App->renderer3D->cameraGame != nullptr && App->renderer3D->cameraGame->frameID != 0) {
+		if (App->renderer3D->cameraGame != nullptr && App->renderer3D->cameraGame->frameID != 0 && App->renderer3D->cameraGame->activeGame == true) {
 			ImVec2 size = ImGui::GetContentRegionAvail();
 
 			App->renderer3D->cameraGame->SetRatio(ImGui::GetContentRegionAvail().x / ImGui::GetContentRegionAvail().y);

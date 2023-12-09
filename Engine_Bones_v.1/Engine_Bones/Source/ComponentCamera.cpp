@@ -108,11 +108,6 @@ void ComponentCamera::Draw()
 
 	glLoadIdentity();
 
-	//glLoadIdentity();
-;
-
-	//glLoadIdentity();
-
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf((GLfloat*)this->GetProjectionMatrix());
 
@@ -123,7 +118,6 @@ void ComponentCamera::Draw()
 
 	glClearColor(0.08f, 0.08f, 0.08f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
 }
 
@@ -137,6 +131,8 @@ void ComponentCamera::ShowCameraInfo()
 {
 	if (ImGui::TreeNode("Camera##1"))
 	{
+		ImGui::Checkbox("Active", &activeGame);
+
 		ImGui::Text("Clipping Planes"); 
 
 		if (ImGui::DragFloat("Near", &near_plane, 0.1f, 0.0f))
@@ -239,8 +235,6 @@ void ComponentCamera::FrameBuffer(int w, int h)
 	}
 
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
 }
 
 void ComponentCamera::Culling()

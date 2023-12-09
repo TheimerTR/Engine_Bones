@@ -239,10 +239,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	ActiveCameraEditor->EndDraw();
 
+	CheckingActiveGame(); 
+
 	if (cameraGame != nullptr)
 	{
-		cameraGame->gameCreated = true; 
-
 		cameraGame->Draw(); 
 
 		if (cameraGame->culling == true)
@@ -291,39 +291,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 		cameraGame->EndDraw(); 
 	}
-
-	//if (Wireframe)
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//else
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-	//for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
-	//{
-	//	std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
-	//	
-	//	for (int j = 0; j < objectMeshes.size(); j++)
-	//	{
-	//		ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
-	//		ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
-	//		ComponentTransform* objectTransform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
-	//		
-	//		if (objectTexture != nullptr)
-	//		{
-	//			RenderDraw(objectMesh, objectTransform, objectTexture);
-	//		}
-	//		else
-	//		{
-	//			RenderDraw(objectMesh, objectTransform);
-	//		}
-	//	}
-	//}
-
-
-	//
-	//if (App->editor->Gl_Grid)
-	//{
-	//	Grid.Render();
-	//}
 
 	glClearColor(0.08f, 0.08f, 0.08f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -528,10 +495,34 @@ void ModuleRenderer3D::SetCameraEditor(ComponentCamera* camera)
 
 void ModuleRenderer3D::SetCameraGame(ComponentCamera* game)
 {
-	cameraGame = game; 
+	if (cameraGame != nullptr)
+	cameraGame->activeGame = false;
+
+	cameraGame = game;
+
+	cameraGame->activeGame = true;
 
 	if (cameraGame != nullptr)
 	{
 		cameraGame->FrameBuffer(app->window->width, app->window->height);
+	}
+}
+
+void ModuleRenderer3D::CheckingActiveGame()
+{
+	if (cameraGame != nullptr)
+	{
+		for (int i = 0; i < app->scene->AllGameObjectManagers.size(); i++)
+		{
+			ComponentCamera* cameras = dynamic_cast<ComponentCamera*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::CAMERA));
+
+			if (cameras != nullptr)
+			{
+				if (cameras->activeGame == true && cameraGame != cameras)
+				{
+					SetCameraGame(cameras);
+				}
+			}
+		}
 	}
 }

@@ -50,6 +50,8 @@ public:
 
 	void SetCameraGame(ComponentCamera* game); 
 
+	void CheckingActiveGame(); 
+
 	//void UpdateProjection(ComponentCamera* cam);
 
 public:
