@@ -162,14 +162,14 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	std::string nameChildren = actualObj->mName.C_Str();
 	int found = nameChildren.find_first_of("$");
 
-	//if (found == std::string::npos)
-	//{
+	if (found == std::string::npos)
+	{
 		_ParentObj = new GameObjectManager(Name, _Parent);
-	//}
-	//else
-	//{
-	//	_ParentObj = _Parent;
-	//}
+	}
+	else
+	{
+		_ParentObj = _Parent;
+	}
 
 	ComponentTransform* transform = new ComponentTransform(nullptr);
 
@@ -255,12 +255,14 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 					R_Texture->texture->Name = textureName;
 				}
 
+				aiMaterial* mat = nullptr;
+
 				R_Mesh->mesh->num_Materials = scene->mNumMaterials;
-				aiMaterial* mat = scene->mMaterials[scene->mMeshes[m_Counter]->mMaterialIndex];
+				mat = scene->mMaterials[scene->mMeshes[m_Counter]->mMaterialIndex];
 
 				if (mat != nullptr)
 				{
-					size = Importer::ImporterTexture::ImportTexture(mat, R_Texture, &buffer);
+					size = Importer::ImporterTexture::ImportTexture(mat, R_Texture, &buffer, true);
 				}
 				else
 				{
@@ -357,7 +359,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 						resource->Resource_alpha.push_back(compInModel.getNumber("Color_Alpha"));
 					}
 
-					if((resource->ComponentsInModel[i] != "") && (!app->physFSManager->Exists(resource->ComponentsInModel[i].c_str())))
+					if((resource->ComponentsNames[i] != "Material") && (resource->ComponentsInModel[i] != "") && (!app->physFSManager->Exists(resource->ComponentsInModel[i].c_str())))
 					{
 						app->physFSManager->Remove(ExistInMeta.c_str());
 						
@@ -534,6 +536,16 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 						{
 							ResourceElement* ResourceToGameobject = nullptr;
 							ResourceToGameobject = app->resource->LoadResourceElement(resource->ComponentsInModel[j].c_str());
+
+							if (strcmp(resource->ComponentsNames[j].data(), "Material") == 0)
+							{
+								string Name = "";
+								FileSystem::StringDivide(resource->ComponentsInModel[j].c_str(), &Name, nullptr);
+
+								ResourceToGameobject = new ResourceTexture();
+								ResourceToGameobject->name = Name;
+								ResourceToGameobject->type = ResourceTypes::R_TEXTURE;
+							}
 
 							if (ResourceToGameobject != nullptr)
 							{

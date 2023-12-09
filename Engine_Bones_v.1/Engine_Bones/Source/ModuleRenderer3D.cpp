@@ -158,9 +158,11 @@ bool ModuleRenderer3D::Init()
 	TexturesManager* texturesManager = new TexturesManager();
 	texturesManager->SetCheckerTexture();
 
-	AssimpManager::AssimpLoader("Assets/ModelsFbx/GrassStreet.fbx", nullptr);
-	AssimpManager::AssimpLoader("Assets/ModelsFbx/MyFloor.fbx", nullptr);
-	AssimpManager::AssimpLoader("Assets/ModelsFbx/StreetWithTexturesReady.fbx");
+	//AssimpManager::AssimpLoader("Assets/ModelsFbx/DefinitiveStreet.fbx", nullptr);
+	AssimpManager::AssimpLoader("Assets/ModelsFbx/StreetAll.fbx");
+	//AssimpManager::AssimpLoader("Assets/ModelsFbx/GrassStreet.fbx");
+	//AssimpManager::AssimpLoader("Assets/ModelsFbx/FloorRoad.fbx");
+	//AssimpManager::AssimpLoader("Assets/ModelsFbx/Houses.fbx");
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/CrossRoad.fbx", nullptr);
 	App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 	App->editor->actualMesh = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);

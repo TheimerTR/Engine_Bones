@@ -9,7 +9,7 @@ void Importer::ImporterTexture::InitDevil()
     ilutRenderer(ILUT_OPENGL);
 }
 
-uint Importer::ImporterTexture::ImportTexture(aiMaterial* mat, ResourceTexture* R_Texture, char** buffer)
+uint Importer::ImporterTexture::ImportTexture(aiMaterial* mat, ResourceTexture* R_Texture, char** buffer, bool Save)
 {
 	uint size = 0;
 
@@ -38,7 +38,16 @@ uint Importer::ImporterTexture::ImportTexture(aiMaterial* mat, ResourceTexture* 
 		R_Texture->texture->path = nameTexture.c_str();
 
 		Importer::ImporterTexture::Load(R_Texture->texture, R_Texture->texture->path);
-		size = Importer::ImporterTexture::Save(R_Texture, buffer);
+
+		if (Save == true)
+		{
+			size = Importer::ImporterTexture::Save(R_Texture, buffer);
+		}
+	}
+	else
+	{
+		nameTexture = "Material";
+		R_Texture->texture->Name = nameTexture.c_str();
 	}
 
 	return size;
@@ -56,14 +65,14 @@ uint64 Importer::ImporterTexture::Save(ResourceTexture* R_text, char** buffer)
 	if (ilLoadImage(R_text->texture->path))
 	{
 		ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
-			size = ilSaveL(IL_DDS, nullptr, 0); // Get the size of the data buffer
+		size = ilSaveL(IL_DDS, nullptr, 0); // Get the size of the data buffer
 
-			if (size > 0)
-			{
-				data = new ILubyte[size]; // allocate data buffer
-					if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
-						*buffer = (char*)data;
-			}
+		if (size > 0)
+		{
+			data = new ILubyte[size]; // allocate data buffer
+				if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
+					*buffer = (char*)data;
+		}
 	}
 
 	ilBindImage(0);
