@@ -419,23 +419,15 @@ void ModuleCamera3D::CreateRayCast()
 
 	SearchForHits(&hitMap, App->scene->Root, RayCast);
 
-	map<float, GameObjectManager*>::iterator iterator = hitMap.begin();
+	vector<float> distancesOrder;
 
-	float dist = iterator->first;
-
-	for (iterator; iterator != hitMap.end(); iterator++)
-	{
-		if(dist > iterator->first)
-		{
-			dist = iterator->first;
-		}
-	}
+	float dist = SearchForNear(hitMap, &distancesOrder);
 
 	GameObjectManager* NearestGameObject = hitMap.find(dist)->second;
 
-	if(!CheckTriangleIntersection(NearestGameObject, RayCast))
+	if(!CheckTriangleIntersection(NearestGameObject, RayCast, dist, distancesOrder, hitMap))
 	{
-		
+		app->editor->actualMesh = nullptr;
 	}
 }
 
@@ -465,18 +457,18 @@ void ModuleCamera3D::SearchForHits(map<float, GameObjectManager*>* hits, GameObj
 	}
 }
 
-bool ModuleCamera3D::CheckTriangleIntersection(GameObjectManager* gm, LineSegment& rayCast)
+bool ModuleCamera3D::CheckTriangleIntersection(GameObjectManager* gm, LineSegment& rayCast, float actualDist, vector<float> distances, map<float, GameObjectManager*> hits)
 {
 	bool ret = false;
 
 	ComponentMesh* GM_mesh = dynamic_cast<ComponentMesh*>(gm->GetComponentGameObject(ComponentType::MESH));
 	ComponentTransform* GM_transform = dynamic_cast<ComponentTransform*>(gm->GetComponentGameObject(ComponentType::TRANSFORM));
 
-	if(GM_mesh != nullptr)
+	if (GM_mesh != nullptr)
 	{
-		if(GM_mesh->C_Mesh != nullptr)
+		if (GM_mesh->C_Mesh != nullptr)
 		{
-			for(int i = 0; i < GM_mesh->C_Mesh->num_index; i += 3)
+			for (int i = 0; i < GM_mesh->C_Mesh->num_index; i += 3)
 			{
 				int index_1 = 0, index_2 = 0, index_3 = 0;
 				float3 index_point_1, index_point_2, index_point_3;
@@ -493,13 +485,62 @@ bool ModuleCamera3D::CheckTriangleIntersection(GameObjectManager* gm, LineSegmen
 				Triangle GM_Triangle = Triangle(index_point_1, index_point_2, index_point_3);
 				GM_Triangle.Transform(GM_transform->GetGlobalMatrix());
 
-				if(rayCast.Intersects(GM_Triangle, nullptr, nullptr))
+				if (rayCast.Intersects(GM_Triangle, nullptr, nullptr))
 				{
 					App->editor->actualMesh = gm;
+					ret = true;
 				}
 			}
 		}
 	}
 
+	if (!ret)
+	{
+		if (distances.size() > 1)
+		{
+			distances.erase(find(distances.begin(), distances.end(), actualDist));
+
+			float newGmDist = SearchForNearOnlyDistances(distances);
+
+			GameObjectManager* NewGm = hits.find(newGmDist)->second;
+
+			ret = CheckTriangleIntersection(NewGm, rayCast, newGmDist, distances, hits);
+		}
+	}
+
 	return ret;
+}
+
+float ModuleCamera3D::SearchForNear(map<float, GameObjectManager*> hits, vector<float>* AllDistances)
+{
+	map<float, GameObjectManager*>::iterator iterator = hits.begin();
+
+	float dist = iterator->first;
+
+	for (iterator; iterator != hits.end(); iterator++)
+	{
+		if (dist > iterator->first)
+		{
+			dist = iterator->first;
+		}
+
+		AllDistances->push_back(iterator->first);
+	}
+	
+	return dist;
+}
+
+float ModuleCamera3D::SearchForNearOnlyDistances(vector<float> AllDistances)
+{
+	float dist = AllDistances[0];
+
+	for (int i = 0; i < AllDistances.size(); i++)
+	{
+		if (dist > AllDistances[i])
+		{
+			dist = AllDistances[i];
+		}
+	}
+
+	return dist;
 }

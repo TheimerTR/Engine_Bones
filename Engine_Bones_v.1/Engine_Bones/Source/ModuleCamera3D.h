@@ -34,11 +34,13 @@ public:
 	//float* GetViewMatrix();
 	ComponentMesh* CheckForMesh(GameObjectManager* gameObject);
 
-	void Focus(/*const float3 &Spot*/); 
+	void Focus(/*const float3 &Spot*/);
 
 	void CreateRayCast();
 	void SearchForHits(map<float, GameObjectManager*>* hits, GameObjectManager* Root, LineSegment &rayCast);
-	bool CheckTriangleIntersection(GameObjectManager* gm, LineSegment &rayCast);
+	bool CheckTriangleIntersection(GameObjectManager* gm, LineSegment &rayCast, float actualDist, vector<float> distances, map<float, GameObjectManager*> hits);
+	float SearchForNear(map<float, GameObjectManager*> hits, vector<float>* AllDistances);
+	float SearchForNearOnlyDistances(vector<float> AllDistances);
 
 private:
 
