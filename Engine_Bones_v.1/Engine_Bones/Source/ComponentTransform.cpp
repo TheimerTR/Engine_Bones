@@ -146,7 +146,7 @@ void ComponentTransform::UpdateGuizmoTransformation(float4x4 &globalTransformati
 
 	mLocalMatrix.Decompose(mPosition, mRotation, mScale); 
 
-	mRotationEuler = mRotation.ToEulerXYX() * RADTODEG; 
+	mRotationEuler = mRotation.ToEulerXYZ() * RADTODEG; 
 
 	UpdateTransformation(); 
 }
