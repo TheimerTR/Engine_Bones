@@ -17,7 +17,6 @@
 #include <iostream>
 
 //todo: REMOVE this before 1st delivery!!
-#include "glmath.h"
 
 #define MAX_LIGHTS 8
 
@@ -44,8 +43,6 @@ public:
 
 	void RenderDraw(ComponentMesh* mesh, ComponentTransform* transform, ComponentMaterial* texture = nullptr);
 
-	void DrawBox(float3* points, float3 color); 
-
 	void SetCameraEditor(ComponentCamera* camera); 
 
 	void SetCameraGame(ComponentCamera* game); 
@@ -65,7 +62,4 @@ public:
 
 	ComponentCamera* ActiveCameraEditor = nullptr; 
 	ComponentCamera* cameraGame = nullptr; 
-
-	//You won't need this after using Frustum
-	mat4x4 ProjectionMatrix;
 };

@@ -92,8 +92,6 @@ update_status ModuleCamera3D::Update(float dt)
 
 	//cameraEditor->Culling();
 
-	if (OnScene == true)
-	{
 		float3 newPos(0, 0, 0);
 		float speed = 3.0f * dt;
 		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
@@ -112,6 +110,9 @@ update_status ModuleCamera3D::Update(float dt)
 		{
 			Focus();
 		}
+
+		if (OnScene == true)
+		{
 
 		if (App->input->GetMouseZ() != 0) {
 
