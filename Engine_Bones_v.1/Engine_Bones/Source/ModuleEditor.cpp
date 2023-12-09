@@ -1761,8 +1761,6 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 			objectCamera->ShowCameraInfo();
 		}
 
-	
-
 		if (ImGui::Button("Add Component"))
 		{
 			ImGui::OpenPopup("AddComponent");
