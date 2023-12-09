@@ -1,7 +1,6 @@
 #include "ComponentTransform.h"
 #include "GameObjectManager.h"
 #include "External/ImGui/imgui.h"
-#include "External/ImGuizmo/ImGuizmo.h"
 #include "Application.h"
 
 
@@ -184,9 +183,28 @@ void ComponentTransform::UpdateTransformation()
 
 		objectsToTransform->UpdateBox(); 
 
-		
 	}
-	 
+}
+
+void ComponentTransform::UpdateGuizmoTransformation(float4x4 &globalTransformation)
+{
+	mGlobalMatrix = globalTransformation; 
+
+	for (int i = 1; i < app->scene->AllGameObjectManagers.size(); i++)
+	{
+		ComponentTransform* objectsToTransform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
+
+		ComponentTransform* parent = objectsToTransform->Owner->mParent->mTransform;
+
+		objectsToTransform->mLocalMatrix = parent->mGlobalMatrix.Inverted() * objectsToTransform->mGlobalMatrix; 
+
+		objectsToTransform->UpdateBox(); 
+	}
+
+	mLocalMatrix.Decompose(mPosition, mRotation, mScale); 
+
+	mRotationEuler = mRotation.ToEulerXYX() * RADTODEG; 
+
 }
 
 void ComponentTransform::UpdateBox() {
