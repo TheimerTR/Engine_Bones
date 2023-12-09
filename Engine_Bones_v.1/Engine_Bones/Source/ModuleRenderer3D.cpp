@@ -245,7 +245,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	{
 		cameraGame->Draw(); 
 
-		if (cameraGame->culling == true)
+		if (cameraGame->culling == true && cameraGame->activeGame == true)
 		{
 			cameraGame->Culling();
 		}
