@@ -122,7 +122,7 @@ bool ModuleEditor::DrawEditor()
 
 	if (ImGui::Begin(name.c_str(), NULL))
 	{
-		ImVec2 sceneSize = ImGui::GetContentRegionAvail();
+		sceneSize = ImGui::GetContentRegionAvail();
 		scenePos = ImGui::GetWindowPos();
 
 		App->renderer3D->ActiveCameraEditor->SetRatio(ImGui::GetContentRegionAvail().x / ImGui::GetContentRegionAvail().y);

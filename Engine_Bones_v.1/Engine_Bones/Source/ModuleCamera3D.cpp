@@ -398,10 +398,10 @@ void ModuleCamera3D::CreateRayCast()
 {
 	if (App->scene->Root->childrens.empty()) return;
 
-	float2 originPoint = float2((App->input->GetMousePosition().x - App->editor->scenePos.x) / App->editor->viewportSizex, (App->input->GetMousePosition().y - App->editor->scenePos.y) / App->editor->viewportSizey);
+	float2 originPoint = float2((App->input->GetMousePosition().x - App->editor->scenePos.x) / App->editor->sceneSize.x, (App->input->GetMousePosition().y - App->editor->scenePos.y) / App->editor->sceneSize.y);
 
 	originPoint.x = (originPoint.x - 0.5F) * 2;
-	originPoint.y = -(originPoint.y - 0.5F) * 2;
+	originPoint.y = -((originPoint.y - 0.5F) * 2);
 
 	if(originPoint.x > 1 || originPoint.x < -1)
 	{
@@ -417,10 +417,29 @@ void ModuleCamera3D::CreateRayCast()
 
 	map<float, GameObjectManager*> hitMap;
 
-	SearchForHits(hitMap, App->scene->Root, RayCast);
+	SearchForHits(&hitMap, App->scene->Root, RayCast);
+
+	map<float, GameObjectManager*>::iterator iterator = hitMap.begin();
+
+	float dist = iterator->first;
+
+	for (iterator; iterator != hitMap.end(); iterator++)
+	{
+		if(dist > iterator->first)
+		{
+			dist = iterator->first;
+		}
+	}
+
+	GameObjectManager* NearestGameObject = hitMap.find(dist)->second;
+
+	if(!CheckTriangleIntersection(NearestGameObject, RayCast))
+	{
+		
+	}
 }
 
-void ModuleCamera3D::SearchForHits(map<float, GameObjectManager*> hits, GameObjectManager* Root, LineSegment& rayCast)
+void ModuleCamera3D::SearchForHits(map<float, GameObjectManager*>* hits, GameObjectManager* Root, LineSegment& rayCast)
 {
 	float dist  = 0, dist_out = 0;
 
@@ -430,7 +449,7 @@ void ModuleCamera3D::SearchForHits(map<float, GameObjectManager*> hits, GameObje
 	{
 		if (rayCast.Intersects(meshRoot->global_aabb, dist, dist_out))
 		{
-			hits[dist] = Root;
+			hits->insert({dist, Root});
 		}
 	}
 
@@ -438,7 +457,49 @@ void ModuleCamera3D::SearchForHits(map<float, GameObjectManager*> hits, GameObje
 	{
 		for (int i = 0; i < Root->childrens.size(); i++)
 		{
-			SearchForHits(hits, Root->childrens[i], rayCast);
+			/*if (Root->childrens[i]->isEnabled())
+			{*/
+				SearchForHits(hits, Root->childrens[i], rayCast);
+			//}
 		}
 	}
+}
+
+bool ModuleCamera3D::CheckTriangleIntersection(GameObjectManager* gm, LineSegment& rayCast)
+{
+	bool ret = false;
+
+	ComponentMesh* GM_mesh = dynamic_cast<ComponentMesh*>(gm->GetComponentGameObject(ComponentType::MESH));
+	ComponentTransform* GM_transform = dynamic_cast<ComponentTransform*>(gm->GetComponentGameObject(ComponentType::TRANSFORM));
+
+	if(GM_mesh != nullptr)
+	{
+		if(GM_mesh->C_Mesh != nullptr)
+		{
+			for(int i = 0; i < GM_mesh->C_Mesh->num_index; i += 3)
+			{
+				int index_1 = 0, index_2 = 0, index_3 = 0;
+				float3 index_point_1, index_point_2, index_point_3;
+
+				index_1 = GM_mesh->C_Mesh->index[i] * 3;
+				index_point_1 = float3(&GM_mesh->C_Mesh->vertex[index_1]);
+
+				index_2 = GM_mesh->C_Mesh->index[i + 1] * 3;
+				index_point_2 = float3(&GM_mesh->C_Mesh->vertex[index_2]);
+
+				index_3 = GM_mesh->C_Mesh->index[i + 2] * 3;
+				index_point_3 = float3(&GM_mesh->C_Mesh->vertex[index_3]);
+
+				Triangle GM_Triangle = Triangle(index_point_1, index_point_2, index_point_3);
+				GM_Triangle.Transform(GM_transform->GetGlobalMatrix());
+
+				if(rayCast.Intersects(GM_Triangle, nullptr, nullptr))
+				{
+					App->editor->actualMesh = gm;
+				}
+			}
+		}
+	}
+
+	return ret;
 }

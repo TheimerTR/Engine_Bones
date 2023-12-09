@@ -93,6 +93,7 @@ public:
 	bool startScene = false; 
 
 	ImVec2 scenePos;
+	ImVec2 sceneSize;
 	ImGuizmo::OPERATION CurrentOperation;
 
 	//ImVec2 sceneSize = ImVec2(0, 0);

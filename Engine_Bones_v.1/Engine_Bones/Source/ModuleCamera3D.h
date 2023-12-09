@@ -37,7 +37,8 @@ public:
 	void Focus(/*const float3 &Spot*/); 
 
 	void CreateRayCast();
-	void SearchForHits(map<float, GameObjectManager*> hits, GameObjectManager* Root, LineSegment &rayCast);
+	void SearchForHits(map<float, GameObjectManager*>* hits, GameObjectManager* Root, LineSegment &rayCast);
+	bool CheckTriangleIntersection(GameObjectManager* gm, LineSegment &rayCast);
 
 private:
 
