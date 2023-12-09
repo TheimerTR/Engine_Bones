@@ -20,6 +20,7 @@ ComponentMesh::ComponentMesh(GameObjectManager* gameObject) : ComponentManager(g
 	C_Mesh = new Mesh();
 	Name = gameObject->mName.c_str();
 	isActive = true;
+	isVisible = true; 
 	this->UUID = app->RandomIntGenerator();
 }
 

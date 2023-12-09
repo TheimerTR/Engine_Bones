@@ -113,10 +113,6 @@ bool ModuleEditor::DrawEditor()
 	ImGui::NewFrame();
 
 	ImGuizmo::BeginFrame(); 
-	
-	viewportSizex = ImGui::GetWindowSize().x; 
-	viewportSizey = ImGui::GetWindowSize().y; 
-
 
 	CreateDockingSpace();
 

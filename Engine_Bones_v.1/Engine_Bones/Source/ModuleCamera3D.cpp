@@ -187,29 +187,6 @@ update_status ModuleCamera3D::Update(float dt)
 			float DeltaY = (float)dy * Sensitivity;
 			float DeltaX = (float)dx * Sensitivity;
 
-			/*	AABB* box;
-				float3 centerObject;
-				float3 scale;
-				ComponentMesh* mesh = dynamic_cast<ComponentMesh*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::MESH));
-
-				box = &mesh->global_aabb;
-				centerObject = box->Centroid();
-				scale = box->Size();
-
-				float distance = cameraEditor->frustum.pos.Distance(centerObject);
-
-				float3 focus = (centerObject + scale);
-
-				float3 direction = cameraEditor->frustum.pos - centerObject;
-
-				Quat quat_x(cameraEditor->frustum.WorldRight(), DeltaY);
-				Quat quat_y(cameraEditor->frustum.up, DeltaX);
-				direction = quat_x.Transform(direction);
-				direction = quat_y.Transform(direction);
-
-				cameraEditor->frustum.pos = centerObject + direction;
-				LookAt(centerObject); */
-
 			Quat rotation;
 			AABB* box;
 			float3 centerObject;
@@ -319,25 +296,6 @@ void ModuleCamera3D::Focus(/*const float3 &Spot*/){
 				LookAt(centerObject);
 			}
 		}
-
-		//gameObject = App->editor->actualMesh;
-
-		//float3 selectedPos;
-
-		//selectedPos.x = gameObject->mTransform->GetPosition().x;
-		//selectedPos.y = gameObject->mTransform->GetPosition().y;
-		//selectedPos.z = gameObject->mTransform->GetPosition().z;
-
-		//float3 selectedScale;
-
-		//selectedScale.x = gameObject->mTransform->GetScale().x;
-		//selectedScale.y = gameObject->mTransform->GetScale().y;
-		//selectedScale.z = gameObject->mTransform->GetScale().z;
-
-		
-
-			/*	cameraEditor->frustum.pos = selectedPos + (cameraEditor->frustum.pos - selectedPos).Normalized() * 10;
-				cameraEditor->LookAt(selectedPos);*/
 	
 	}
 }

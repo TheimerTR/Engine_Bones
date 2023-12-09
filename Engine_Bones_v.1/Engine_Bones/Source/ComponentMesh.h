@@ -16,6 +16,7 @@ public:
 	Mesh* C_Mesh;
 	const char* Name;
 	bool isActive;
+	bool isVisible; 
 
 public:
 
