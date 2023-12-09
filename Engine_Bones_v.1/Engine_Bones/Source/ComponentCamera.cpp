@@ -149,6 +149,11 @@ void ComponentCamera::ShowCameraInfo()
 			frustum.farPlaneDistance = far_plane;
 		}
 
+		if(ImGui::SliderFloat("FOV", &vertical_fov, 1, 180))
+		{
+			SetFov(vertical_fov);
+		}
+
 		ImGui::Checkbox("Culling", &culling);
 
 		ImGui::TreePop();
