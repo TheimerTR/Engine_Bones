@@ -239,9 +239,17 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	if (cameraGame != nullptr)
 	{
+		cameraGame->gameCreated = true; 
+
 		cameraGame->Draw(); 
 
-	    cameraGame->Culling();
+		if (cameraGame->culling == true)
+		{
+			cameraGame->Culling();
+		}
+
+		else { cameraGame->UnCull();  }
+	
 
 		for (uint i = 0; i < MAX_LIGHTS; ++i)
 			lights[i].Render();
@@ -446,7 +454,7 @@ void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* trans
 			glBindTexture(GL_TEXTURE_2D, 1);
 		}
 
-		if (mesh->isActive)
+		if (mesh->isVisible)
 		{
 			glEnableClientState(GL_VERTEX_ARRAY);
 			glEnableClientState(GL_NORMAL_ARRAY);
@@ -505,45 +513,6 @@ void ModuleRenderer3D::RenderDraw(ComponentMesh* mesh, ComponentTransform* trans
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
-
-//void ModuleRenderer3D::DrawBox(float3* points, float3 color)
-//{
-//	glColor3fv(&color.x);
-//	glLineWidth(2.f);
-//	glBegin(GL_LINES);
-//
-//	//Draw plane
-//	glVertex3fv(&points[0].x);
-//	glVertex3fv(&points[2].x);
-//	glVertex3fv(&points[2].x);
-//	glVertex3fv(&points[6].x);
-//	glVertex3fv(&points[6].x);
-//	glVertex3fv(&points[4].x);
-//	glVertex3fv(&points[4].x);
-//	glVertex3fv(&points[0].x);
-//
-//	glVertex3fv(&points[0].x);
-//	glVertex3fv(&points[1].x);
-//	glVertex3fv(&points[1].x);
-//	glVertex3fv(&points[3].x);
-//	glVertex3fv(&points[3].x);
-//	glVertex3fv(&points[2].x);
-//	glVertex3fv(&points[4].x);
-//	glVertex3fv(&points[5].x);
-//
-//	glVertex3fv(&points[6].x);
-//	glVertex3fv(&points[7].x);
-//	glVertex3fv(&points[5].x);
-//	glVertex3fv(&points[7].x);
-//	glVertex3fv(&points[3].x);
-//	glVertex3fv(&points[7].x);
-//	glVertex3fv(&points[1].x);
-//	glVertex3fv(&points[5].x);
-//
-//	glEnd();
-//	glLineWidth(1.f);
-//	glColor3f(1.f, 1.f, 1.f);
-//}
 
 void ModuleRenderer3D::SetCameraEditor(ComponentCamera* camera)
 {

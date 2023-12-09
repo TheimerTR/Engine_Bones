@@ -39,8 +39,8 @@ public:
 	void FrameBuffer(int w, int h); 
 
 	void Culling();
-
 	bool InsideCulling(const AABB& box); 
+	void UnCull();
 
 public:
 
@@ -51,7 +51,9 @@ public:
 	uint rbo = 0;
 	uint frameDepth = 0;
 
-	bool culling = false; 
+	bool culling = true; 
+	bool uncull = false; 
+	bool gameCreated = false; 
 
 private:
 	float width = 0.0f;

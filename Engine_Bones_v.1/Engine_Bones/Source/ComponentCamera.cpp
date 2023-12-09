@@ -5,7 +5,7 @@
 ComponentCamera::ComponentCamera(GameObjectManager* gameObject) : ComponentManager(gameObject)
 {
 	UUID = app->RandomGenerator.Int();
-	Type = ComponentType::CAMERA;
+	//Type = ComponentType::CAMERA;
 
 	/* Set camera vars*/
 	width = 16;
@@ -37,14 +37,17 @@ ComponentCamera::ComponentCamera(GameObjectManager* gameObject) : ComponentManag
 	} 
 }
 
-ComponentCamera::~ComponentCamera() {
-
-
+ComponentCamera::~ComponentCamera() 
+{
+	uncull = true; 
 }
 
 bool ComponentCamera::Update()
 {
-	//Culling(); 
+	if (uncull == true)
+	{
+		UnCull(); 
+	}
 
 	UpdateFrustum();
 
@@ -146,7 +149,7 @@ void ComponentCamera::ShowCameraInfo()
 			frustum.farPlaneDistance = far_plane;
 		}
 
-		//ImGui::Checkbox("Culling", &culling);
+		ImGui::Checkbox("Culling", &culling);
 
 		ImGui::TreePop();
 	}
@@ -250,16 +253,14 @@ void ComponentCamera::Culling()
 			{
 				if (InsideCulling(ObjectsToCull->global_aabb) == true)
 				{
-					ObjectsToCull->isActive = true;
+					ObjectsToCull->isVisible = true;
 				}
 				else
 				{
-					ObjectsToCull->isActive = false;
+					ObjectsToCull->isVisible = false;
 				}
 			}
 		}
-
-
 	}
 }
 
@@ -293,16 +294,23 @@ bool ComponentCamera::InsideCulling(const AABB& box)
 	}
 
 	return true; 
+}
 
-	//if (/*IsInside == true ||*/ TotalIn == 6)
-	//{
-	//	ObjectsToCull->isActive = true;
-	//}
+void ComponentCamera::UnCull()
+{
+	for (int i = 1; i < app->scene->AllGameObjectManagers.size(); i++)
+	{
+		if (app->scene->AllGameObjectManagers[i]->isActive == true)
+		{
+			ComponentMesh* ObjectsToCull = dynamic_cast<ComponentMesh*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MESH));
+		
+			if (ObjectsToCull != nullptr)
+			{
+				ObjectsToCull->isVisible = true;
+			}
+		}
+	}
 
-	//else
-	//{
-	//	ObjectsToCull->isActive = true;
-	//}
-
+	uncull = false; 
 }
 
