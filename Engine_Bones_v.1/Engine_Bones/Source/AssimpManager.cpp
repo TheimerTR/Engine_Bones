@@ -260,7 +260,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 				if (mat != nullptr)
 				{
-					size = Importer::ImporterTexture::ImportTexture(mat, R_Texture, &buffer);
+					size = Importer::ImporterTexture::ImportTexture(mat, R_Texture, &buffer, true);
 				}
 				else
 				{

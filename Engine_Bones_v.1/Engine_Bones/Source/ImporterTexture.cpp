@@ -9,7 +9,7 @@ void Importer::ImporterTexture::InitDevil()
     ilutRenderer(ILUT_OPENGL);
 }
 
-uint Importer::ImporterTexture::ImportTexture(aiMaterial* mat, ResourceTexture* R_Texture, char** buffer)
+uint Importer::ImporterTexture::ImportTexture(aiMaterial* mat, ResourceTexture* R_Texture, char** buffer, bool Save)
 {
 	uint size = 0;
 
@@ -38,7 +38,11 @@ uint Importer::ImporterTexture::ImportTexture(aiMaterial* mat, ResourceTexture* 
 		R_Texture->texture->path = nameTexture.c_str();
 
 		Importer::ImporterTexture::Load(R_Texture->texture, R_Texture->texture->path);
-		size = Importer::ImporterTexture::Save(R_Texture, buffer);
+
+		if (Save == true)
+		{
+			size = Importer::ImporterTexture::Save(R_Texture, buffer);
+		}
 	}
 
 	return size;
