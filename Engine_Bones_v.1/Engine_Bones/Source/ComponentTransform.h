@@ -32,8 +32,6 @@ public:
 	ComponentTransform(GameObjectManager* gameObject);
 	~ComponentTransform();
 
-	bool Update();
-
 	void ShowInfo(); 
 
 	void SetTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation); 
