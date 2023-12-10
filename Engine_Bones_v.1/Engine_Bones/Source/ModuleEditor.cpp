@@ -48,7 +48,7 @@ ModuleEditor::~ModuleEditor()
 bool ModuleEditor::Init()
 {
 	AboutWindow = false;
-	LogOutput = false; 
+	LogOutput = true; 
 	Hierarchy = true;
 	OpenPreferences = false;
 	DemoWindow = false;
@@ -58,8 +58,8 @@ bool ModuleEditor::Init()
 	AssetWindow = true;
 	isMovingParent = false;
 	isMovingChild = false;
-	RGB_Mode = false;
-	RGB = false;
+	RGB_Mode = true;
+	RGB = true;
 	PauseAndPlayWindow = true;
 	isRunning = false;
 	ThemeSelector = 2;
@@ -269,49 +269,105 @@ bool ModuleEditor::DrawEditor()
 			{
 				if (ImGui::MenuItem("Cube"))
 				{
-					AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx");
-					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					if (!app->scene->GameTime.running)
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
 				}
 				if (ImGui::MenuItem("Cylinder"))
 				{
-					AssimpManager::AssimpLoader("Assets/Primitives/Cylinder.fbx");
+					if (!app->scene->GameTime.running)
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Cylinder.fbx");
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
 				}
 				if (ImGui::MenuItem("Pyramid"))
 				{
-					AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
-					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					if (!app->scene->GameTime.running)
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
 				}
 				if (ImGui::MenuItem("Torus"))
 				{
-					AssimpManager::AssimpLoader("Assets/Primitives/Torus.fbx");
-					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					if (!app->scene->GameTime.running)
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Torus.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
 				}
 				if (ImGui::MenuItem("Sphere"))
 				{
-					AssimpManager::AssimpLoader("Assets/Primitives/Sphere.fbx");
-					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					if (!app->scene->GameTime.running)
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Sphere.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
 				}
 				if (ImGui::MenuItem("Plane"))
 				{
-					AssimpManager::AssimpLoader("Assets/Primitives/Plane.fbx");
-					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					if (!app->scene->GameTime.running)
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Plane.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
 				}
 				if (ImGui::MenuItem("Icosphere"))
 				{
-					AssimpManager::AssimpLoader("Assets/Primitives/Icosphere.fbx");
-					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					if (!app->scene->GameTime.running)
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Icosphere.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
 				}
 				if (ImGui::MenuItem("Monkey"))
 				{
-					AssimpManager::AssimpLoader("Assets/Primitives/Monkey.fbx");
-					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					if (!app->scene->GameTime.running)
+					{
+						AssimpManager::AssimpLoader("Assets/Primitives/Monkey.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
 				}
 
 				ImGui::EndMenu();
@@ -321,28 +377,56 @@ bool ModuleEditor::DrawEditor()
 			{
 				if (ImGui::MenuItem("House"))
 				{
-					AssimpManager::AssimpLoader("Assets/ModelsFbx/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
-					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					if (!app->scene->GameTime.running)
+					{
+						AssimpManager::AssimpLoader("Assets/ModelsFbx/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
 				}
 				if (ImGui::MenuItem("Warrior"))
 				{
-					AssimpManager::AssimpLoader("Assets/ModelsFbx/warrior.fbx");
-					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					if (!app->scene->GameTime.running)
+					{
+						AssimpManager::AssimpLoader("Assets/ModelsFbx/warrior.fbx");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
 				}
 				if (ImGui::MenuItem("Clean Bot"))
 				{
-					AssimpManager::AssimpLoader("Assets/ModelsFbx/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
-					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					if (!app->scene->GameTime.running)
+					{
+						AssimpManager::AssimpLoader("Assets/ModelsFbx/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
 				}
 
 				if (ImGui::MenuItem("Cat"))
 				{
-					AssimpManager::AssimpLoader("Assets/ModelsFbx/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
-					App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-					App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					if (!app->scene->GameTime.running)
+					{
+						AssimpManager::AssimpLoader("Assets/ModelsFbx/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
+						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
 				}
 
 				ImGui::EndMenu();
@@ -1779,129 +1863,213 @@ void ModuleEditor::ResourceWindowDisplay()
 
 void ModuleEditor::AddEntity(GameObjectManager* gm)
 {
-	if (!App->scene->GameTime.running)
+	if (ImGui::MenuItem("Create Empty"))
 	{
-		if (ImGui::MenuItem("Create Empty"))
+		if (!App->scene->GameTime.running)
 		{
 			actualMesh->CreateEmptyObject(gm);
 		}
-
-		if (ImGui::BeginMenu("Render Primitive"))
+		else
 		{
-			if (ImGui::MenuItem("Cube"))
+			LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+		}
+	}
+
+	if (ImGui::BeginMenu("Render Primitive"))
+	{
+		if (ImGui::MenuItem("Cube"))
+		{
+			if (!App->scene->GameTime.running)
 			{
 				AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
 			}
-			if (ImGui::MenuItem("Cylinder"))
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
+		}
+		if (ImGui::MenuItem("Cylinder"))
+		{
+			if (!App->scene->GameTime.running)
 			{
 				AssimpManager::AssimpLoader("Assets/Primitives/Cylinder.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
 			}
-			if (ImGui::MenuItem("Pyramid"))
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
+		}
+		if (ImGui::MenuItem("Pyramid"))
+		{
+			if (!App->scene->GameTime.running)
 			{
 				AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
 			}
-			if (ImGui::MenuItem("Torus"))
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
+		}
+		if (ImGui::MenuItem("Torus"))
+		{
+			if (!App->scene->GameTime.running)
 			{
 				AssimpManager::AssimpLoader("Assets/Primitives/Torus.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
 			}
-			if (ImGui::MenuItem("Sphere"))
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
+		}
+		if (ImGui::MenuItem("Sphere"))
+		{
+			if (!App->scene->GameTime.running)
 			{
 				AssimpManager::AssimpLoader("Assets/Primitives/Sphere.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
 			}
-			if (ImGui::MenuItem("Plane"))
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
+		}
+		if (ImGui::MenuItem("Plane"))
+		{
+			if (!App->scene->GameTime.running)
 			{
 				AssimpManager::AssimpLoader("Assets/Primitives/Plane.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
 			}
-			if (ImGui::MenuItem("Icosphere"))
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
+		}
+		if (ImGui::MenuItem("Icosphere"))
+		{
+			if (!App->scene->GameTime.running)
 			{
 				AssimpManager::AssimpLoader("Assets/Primitives/Icosphere.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
 			}
-			if (ImGui::MenuItem("Monkey"))
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
+		}
+		if (ImGui::MenuItem("Monkey"))
+		{
+			if (!App->scene->GameTime.running)
 			{
 				AssimpManager::AssimpLoader("Assets/Primitives/Monkey.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
 			}
-
-			ImGui::EndMenu();
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
 		}
 
-		if (ImGui::BeginMenu("Render Obj"))
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::BeginMenu("Render Obj"))
+	{
+		if (ImGui::MenuItem("House"))
 		{
-			if (ImGui::MenuItem("House"))
+			if (!App->scene->GameTime.running)
 			{
 				AssimpManager::AssimpLoader("Assets/ModelsFbx/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildrenWithChildrens(gm);
 			}
-			if (ImGui::MenuItem("Warrior"))
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
+		}
+		if (ImGui::MenuItem("Warrior"))
+		{
+			if (!App->scene->GameTime.running)
 			{
 				AssimpManager::AssimpLoader("Assets/ModelsFbx/warrior.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
 			}
-			if (ImGui::MenuItem("Clean Bot"))
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
+		}
+		if (ImGui::MenuItem("Clean Bot"))
+		{
+			if (!App->scene->GameTime.running)
 			{
 				AssimpManager::AssimpLoader("Assets/ModelsFbx/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
 			}
-			if (ImGui::MenuItem("Cat"))
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
+		}
+		if (ImGui::MenuItem("Cat"))
+		{
+			if (!App->scene->GameTime.running)
 			{
 				AssimpManager::AssimpLoader("Assets/ModelsFbx/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
 			}
-
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Camera"))
-		{
-			if (!App->scene->GameTime.running)
-			{
-				if (ImGui::MenuItem("GameCamera"))
-				{
-					app->scene->CreateGameCamera();
-				}
-			}
 			else
 			{
 				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
 			}
-
-			ImGui::EndMenu();
 		}
+
+		ImGui::EndMenu();
 	}
-	else
+
+	if (ImGui::BeginMenu("Camera"))
 	{
-		LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+		if (!App->scene->GameTime.running)
+		{
+			if (ImGui::MenuItem("GameCamera"))
+			{
+				app->scene->CreateGameCamera();
+			}
+		}
+		else
+		{
+			LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+		}
+
+		ImGui::EndMenu();
 	}
 }
 
