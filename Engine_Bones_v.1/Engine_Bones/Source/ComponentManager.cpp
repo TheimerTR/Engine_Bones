@@ -1,8 +1,8 @@
 #include "ComponentManager.h"
-#include "GameObjectManager.h"
+#include "GameObject.h"
 #include "Application.h"
 
-ComponentManager::ComponentManager(GameObjectManager* gameObject) : active(true), Owner(gameObject), Type(ComponentType::NONE)
+ComponentManager::ComponentManager(GameObject* gameObject) : active(true), Owner(gameObject), Type(ComponentType::NONE)
 {
 	
 };

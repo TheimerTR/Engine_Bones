@@ -2,7 +2,7 @@
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	Root = new GameObjectManager("ROOT NODE", nullptr);
+	Root = new GameObject("ROOT NODE", nullptr);
 	Root->UUID = 0;
 	AllGameObjectManagers.push_back(Root);
 	Selected_GameObject = Root;
@@ -142,19 +142,19 @@ bool ModuleScene::CleanUp()
 	return true;
 }
 
-void ModuleScene::PushGameObject(GameObjectManager* gameObject)
+void ModuleScene::PushGameObject(GameObject* gameObject)
 {
 	AllGameObjectManagers.push_back(gameObject);
 }
 
 void ModuleScene::CreateGameCamera(                                                                                                                                                                                   )
 {
-	GameObjectManager* gameObject = new GameObjectManager("camera", Root); 
+	GameObject* gameObject = new GameObject("camera", Root);
 	ComponentCamera* camera = dynamic_cast<ComponentCamera*>(gameObject->AddComponent(ComponentType::CAMERA));
 	App->renderer3D->SetCameraGame(camera); 
 }
 
-void ModuleScene::AddCameraComponent(GameObjectManager* gm)
+void ModuleScene::AddCameraComponent(GameObject* gm)
 {
 	ComponentCamera* camera = dynamic_cast<ComponentCamera*>(gm->AddComponent(ComponentType::CAMERA));
 	App->renderer3D->SetCameraGame(camera);

@@ -4,7 +4,7 @@
 #include "Module.h"
 #include "Application.h"
 #include "ResourceMesh.h"
-#include "GameObjectManager.h"
+#include "GameObject.h"
 #include "ResourceElement.h"
 
 #include <vector>

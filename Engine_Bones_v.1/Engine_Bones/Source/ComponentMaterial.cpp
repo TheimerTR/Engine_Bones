@@ -1,5 +1,5 @@
 #include "ComponentMaterial.h"
-#include "GameObjectManager.h"
+#include "GameObject.h"
 
 #include "External/Glew/include/glew.h"
 #include "External/ImGui/imgui.h"
@@ -14,7 +14,7 @@
 
 #include "FileSystemManager.h"
 
-ComponentMaterial::ComponentMaterial(GameObjectManager* gameObject) : ComponentManager(gameObject)
+ComponentMaterial::ComponentMaterial(GameObject* gameObject) : ComponentManager(gameObject)
 {
 	texture = new Texture();
 	CM_TextureID = NULL;
@@ -133,7 +133,7 @@ void ComponentMaterial::ShowInfo(Texture* texture, int i)
 
 							if (texture->path != pathTex.c_str())
 							{
-								texture = AssimpManager::ChangeTexture(pathTex);
+								texture = ResourceManager::ChangeTexture(pathTex);
 								this->SetTexture(texture);
 							}
 						}
@@ -218,7 +218,7 @@ void ComponentMaterial::ShowInfo(Texture* texture, int i)
 
 							pathTex.append(fileListCheck[j]);
 
-							texture = AssimpManager::ChangeTexture(pathTex);
+							texture = ResourceManager::ChangeTexture(pathTex);
 							this->SetTexture(texture);
 
 							colorTexture.r = 1;

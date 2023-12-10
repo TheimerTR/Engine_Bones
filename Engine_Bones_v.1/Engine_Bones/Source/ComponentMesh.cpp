@@ -1,5 +1,5 @@
 #include "ComponentMesh.h"
-#include "GameObjectManager.h"
+#include "GameObject.h"
 
 #include "External/Glew/include/glew.h"
 #include "External/ImGui/imgui.h"
@@ -15,7 +15,7 @@
 #include "FileSystemManager.h"
 #include "ComponentTransform.h"
 
-ComponentMesh::ComponentMesh(GameObjectManager* gameObject) : ComponentManager(gameObject)
+ComponentMesh::ComponentMesh(GameObject* gameObject) : ComponentManager(gameObject)
 {
 	C_Mesh = new Mesh();
 	Name = gameObject->mName.c_str();
@@ -26,7 +26,7 @@ ComponentMesh::ComponentMesh(GameObjectManager* gameObject) : ComponentManager(g
 
 ComponentMesh::~ComponentMesh()
 {
-	AssimpManager::Clear_Mesh(C_Mesh);
+	ResourceManager::Clear_Mesh(C_Mesh);
 	Name = "";
 }
 

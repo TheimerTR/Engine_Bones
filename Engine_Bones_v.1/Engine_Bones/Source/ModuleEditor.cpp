@@ -18,7 +18,7 @@
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "C_Math.h"
-#include "AssimpManager.h"
+#include "ResourceManager.h"
 #include "ComponentManager.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
@@ -62,6 +62,9 @@ bool ModuleEditor::Init()
 	RGB = true;
 	PauseAndPlayWindow = true;
 	isRunning = false;
+	aabbDraw = true;
+	obbDraw = true;
+
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 	Log_current_idx = 3;
@@ -260,7 +263,7 @@ bool ModuleEditor::DrawEditor()
 		{
 			if (ImGui::MenuItem("Create Empty"))
 			{
-				GameObjectManager* gameObject = new GameObjectManager("Empty_Object", app->scene->Root);
+				GameObject* gameObject = new GameObject("Empty_Object", app->scene->Root);
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 			}
@@ -271,7 +274,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (!app->scene->GameTime.running)
 					{
-						AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx");
+						ResourceManager::ResourceLoader("Assets/Primitives/Cube.fbx");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -284,7 +287,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (!app->scene->GameTime.running)
 					{
-						AssimpManager::AssimpLoader("Assets/Primitives/Cylinder.fbx");
+						ResourceManager::ResourceLoader("Assets/Primitives/Cylinder.fbx");
 					}
 					else
 					{
@@ -295,7 +298,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (!app->scene->GameTime.running)
 					{
-						AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
+						ResourceManager::ResourceLoader("Assets/Primitives/Pyramid.fbx");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -308,7 +311,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (!app->scene->GameTime.running)
 					{
-						AssimpManager::AssimpLoader("Assets/Primitives/Torus.fbx");
+						ResourceManager::ResourceLoader("Assets/Primitives/Torus.fbx");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -321,7 +324,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (!app->scene->GameTime.running)
 					{
-						AssimpManager::AssimpLoader("Assets/Primitives/Sphere.fbx");
+						ResourceManager::ResourceLoader("Assets/Primitives/Sphere.fbx");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -334,7 +337,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (!app->scene->GameTime.running)
 					{
-						AssimpManager::AssimpLoader("Assets/Primitives/Plane.fbx");
+						ResourceManager::ResourceLoader("Assets/Primitives/Plane.fbx");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -347,7 +350,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (!app->scene->GameTime.running)
 					{
-						AssimpManager::AssimpLoader("Assets/Primitives/Icosphere.fbx");
+						ResourceManager::ResourceLoader("Assets/Primitives/Icosphere.fbx");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -360,7 +363,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (!app->scene->GameTime.running)
 					{
-						AssimpManager::AssimpLoader("Assets/Primitives/Monkey.fbx");
+						ResourceManager::ResourceLoader("Assets/Primitives/Monkey.fbx");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -379,7 +382,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (!app->scene->GameTime.running)
 					{
-						AssimpManager::AssimpLoader("Assets/ModelsFbx/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
+						ResourceManager::ResourceLoader("Assets/ModelsFbx/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -392,7 +395,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (!app->scene->GameTime.running)
 					{
-						AssimpManager::AssimpLoader("Assets/ModelsFbx/warrior.fbx");
+						ResourceManager::ResourceLoader("Assets/ModelsFbx/warrior.fbx");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -405,7 +408,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (!app->scene->GameTime.running)
 					{
-						AssimpManager::AssimpLoader("Assets/ModelsFbx/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
+						ResourceManager::ResourceLoader("Assets/ModelsFbx/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -419,7 +422,7 @@ bool ModuleEditor::DrawEditor()
 				{
 					if (!app->scene->GameTime.running)
 					{
-						AssimpManager::AssimpLoader("Assets/ModelsFbx/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
+						ResourceManager::ResourceLoader("Assets/ModelsFbx/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
 						App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 						App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 					}
@@ -1125,7 +1128,7 @@ bool ModuleEditor::DrawEditor()
 					//Debug Mode
 					if (ImGui::Checkbox("Debug Rendering Mode", &changeDebug))
 					{
-						AssimpManager::ChangeDebugMode(changeDebug);
+						ResourceManager::ChangeDebugMode(changeDebug);
 					};
 
 					//Gl_Grid
@@ -1298,7 +1301,7 @@ bool ModuleEditor::DrawEditor()
 	return true;
 }
 
-void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
+void ModuleEditor::HierarchyWindowDisplay(GameObject* gameObject)
 {
 	//Add Items in Root
 	if (!ImGui::IsItemHovered())
@@ -1318,7 +1321,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					{
 						if (!App->scene->GameTime.running)
 						{
-							AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx");
+							ResourceManager::ResourceLoader("Assets/Primitives/Cube.fbx");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 						}
@@ -1331,7 +1334,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					{
 						if (!App->scene->GameTime.running)
 						{
-							AssimpManager::AssimpLoader("Assets/Primitives/Cylinder.fbx");
+							ResourceManager::ResourceLoader("Assets/Primitives/Cylinder.fbx");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 						}
@@ -1344,7 +1347,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					{
 						if (!App->scene->GameTime.running)
 						{
-							AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
+							ResourceManager::ResourceLoader("Assets/Primitives/Pyramid.fbx");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 						}
@@ -1357,7 +1360,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					{
 						if (!App->scene->GameTime.running)
 						{
-							AssimpManager::AssimpLoader("Assets/Primitives/Torus.fbx");
+							ResourceManager::ResourceLoader("Assets/Primitives/Torus.fbx");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 						}
@@ -1370,7 +1373,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					{
 						if (!App->scene->GameTime.running)
 						{
-							AssimpManager::AssimpLoader("Assets/Primitives/Sphere.fbx");
+							ResourceManager::ResourceLoader("Assets/Primitives/Sphere.fbx");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 						}
@@ -1383,7 +1386,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					{
 						if (!App->scene->GameTime.running)
 						{
-							AssimpManager::AssimpLoader("Assets/Primitives/Plane.fbx");
+							ResourceManager::ResourceLoader("Assets/Primitives/Plane.fbx");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 						}
@@ -1396,7 +1399,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					{
 						if (!App->scene->GameTime.running)
 						{
-							AssimpManager::AssimpLoader("Assets/Primitives/Icosphere.fbx");
+							ResourceManager::ResourceLoader("Assets/Primitives/Icosphere.fbx");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 						}
@@ -1409,7 +1412,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					{
 						if (!App->scene->GameTime.running)
 						{
-							AssimpManager::AssimpLoader("Assets/Primitives/Monkey.fbx");
+							ResourceManager::ResourceLoader("Assets/Primitives/Monkey.fbx");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 						}
@@ -1428,7 +1431,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					{
 						if (!App->scene->GameTime.running)
 						{
-							AssimpManager::AssimpLoader("Assets/ModelsFbx/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
+							ResourceManager::ResourceLoader("Assets/ModelsFbx/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 						}
@@ -1441,7 +1444,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					{
 						if (!App->scene->GameTime.running)
 						{
-							AssimpManager::AssimpLoader("Assets/ModelsFbx/warrior.fbx");
+							ResourceManager::ResourceLoader("Assets/ModelsFbx/warrior.fbx");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 						}
@@ -1454,7 +1457,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					{
 						if (!App->scene->GameTime.running)
 						{
-							AssimpManager::AssimpLoader("Assets/ModelsFbx/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
+							ResourceManager::ResourceLoader("Assets/ModelsFbx/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 						}
@@ -1467,7 +1470,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 					{
 						if (!App->scene->GameTime.running)
 						{
-							AssimpManager::AssimpLoader("Assets/ModelsFbx/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
+							ResourceManager::ResourceLoader("Assets/ModelsFbx/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
 							App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 							App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 						}
@@ -1505,7 +1508,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 	}
 
 	//Start TreeNode
-	GameObjectManager* gm = nullptr;
+	GameObject* gm = nullptr;
 
 	treeFlags = ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_OpenOnArrow;
 
@@ -1861,7 +1864,7 @@ void ModuleEditor::ResourceWindowDisplay()
 	}
 }
 
-void ModuleEditor::AddEntity(GameObjectManager* gm)
+void ModuleEditor::AddEntity(GameObject* gm)
 {
 	if (ImGui::MenuItem("Create Empty"))
 	{
@@ -1881,7 +1884,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 		{
 			if (!App->scene->GameTime.running)
 			{
-				AssimpManager::AssimpLoader("Assets/Primitives/Cube.fbx");
+				ResourceManager::ResourceLoader("Assets/Primitives/Cube.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
@@ -1895,7 +1898,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 		{
 			if (!App->scene->GameTime.running)
 			{
-				AssimpManager::AssimpLoader("Assets/Primitives/Cylinder.fbx");
+				ResourceManager::ResourceLoader("Assets/Primitives/Cylinder.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
@@ -1909,7 +1912,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 		{
 			if (!App->scene->GameTime.running)
 			{
-				AssimpManager::AssimpLoader("Assets/Primitives/Pyramid.fbx");
+				ResourceManager::ResourceLoader("Assets/Primitives/Pyramid.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
@@ -1923,7 +1926,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 		{
 			if (!App->scene->GameTime.running)
 			{
-				AssimpManager::AssimpLoader("Assets/Primitives/Torus.fbx");
+				ResourceManager::ResourceLoader("Assets/Primitives/Torus.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
@@ -1937,7 +1940,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 		{
 			if (!App->scene->GameTime.running)
 			{
-				AssimpManager::AssimpLoader("Assets/Primitives/Sphere.fbx");
+				ResourceManager::ResourceLoader("Assets/Primitives/Sphere.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
@@ -1951,7 +1954,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 		{
 			if (!App->scene->GameTime.running)
 			{
-				AssimpManager::AssimpLoader("Assets/Primitives/Plane.fbx");
+				ResourceManager::ResourceLoader("Assets/Primitives/Plane.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
@@ -1965,7 +1968,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 		{
 			if (!App->scene->GameTime.running)
 			{
-				AssimpManager::AssimpLoader("Assets/Primitives/Icosphere.fbx");
+				ResourceManager::ResourceLoader("Assets/Primitives/Icosphere.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
@@ -1979,7 +1982,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 		{
 			if (!App->scene->GameTime.running)
 			{
-				AssimpManager::AssimpLoader("Assets/Primitives/Monkey.fbx");
+				ResourceManager::ResourceLoader("Assets/Primitives/Monkey.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
@@ -1999,7 +2002,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 		{
 			if (!App->scene->GameTime.running)
 			{
-				AssimpManager::AssimpLoader("Assets/ModelsFbx/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
+				ResourceManager::ResourceLoader("Assets/ModelsFbx/BakerHouse.fbx", "Assets/Textures/Baker_house.dds");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildrenWithChildrens(gm);
@@ -2013,7 +2016,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 		{
 			if (!App->scene->GameTime.running)
 			{
-				AssimpManager::AssimpLoader("Assets/ModelsFbx/warrior.fbx");
+				ResourceManager::ResourceLoader("Assets/ModelsFbx/warrior.fbx");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
@@ -2027,7 +2030,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 		{
 			if (!App->scene->GameTime.running)
 			{
-				AssimpManager::AssimpLoader("Assets/ModelsFbx/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
+				ResourceManager::ResourceLoader("Assets/ModelsFbx/CleanBot.fbx", "Assets/Textures/Clean_bot_Material_baseColor.dds");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
@@ -2041,7 +2044,7 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 		{
 			if (!App->scene->GameTime.running)
 			{
-				AssimpManager::AssimpLoader("Assets/ModelsFbx/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
+				ResourceManager::ResourceLoader("Assets/ModelsFbx/Cat.fbx", "Assets/Textures/Tex_Cat_Carrot.dds");
 				App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
 				App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
 				AddChildren(gm);
@@ -2073,12 +2076,12 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 	}
 }
 
-void ModuleEditor::AddChildren(GameObjectManager* gm)
+void ModuleEditor::AddChildren(GameObject* gm)
 {
 	if (!App->scene->GameTime.running)
 	{
-		GameObjectManager* Children = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-		GameObjectManager* Parent = Children->mParent;
+		GameObject* Children = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+		GameObject* Parent = Children->mParent;
 
 		while (Parent->mParent != App->scene->Root)
 		{
@@ -2097,7 +2100,7 @@ void ModuleEditor::AddChildren(GameObjectManager* gm)
 	gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));*/
 }
 
-void ModuleEditor::AddChildrenWithChildrens(GameObjectManager* gm)
+void ModuleEditor::AddChildrenWithChildrens(GameObject* gm)
 {
 	if (!App->scene->GameTime.running)
 	{
@@ -2111,7 +2114,7 @@ void ModuleEditor::AddChildrenWithChildrens(GameObjectManager* gm)
 	}
 }
 
-void ModuleEditor::AddComponentInInspector(GameObjectManager* gm)
+void ModuleEditor::AddComponentInInspector(GameObject* gm)
 {
 	/*if (ImGui::BeginMenu("Mesh"))
 	{
@@ -2153,7 +2156,7 @@ void ModuleEditor::AddComponentInInspector(GameObjectManager* gm)
 	}
 }
 
-void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
+void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 {
 	ImVec2 size4 = { 350, 400 };
 	ImGui::SetNextWindowSize(size4);
@@ -2466,13 +2469,13 @@ void ModuleEditor::ImportToScene(string path)
 
 	if (strcmp(extension.data(), "fbx") == 0)
 	{
-		AssimpManager::AssimpLoader(path.c_str());
+		ResourceManager::ResourceLoader(path.c_str());
 		LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
 	}
 
 	if (strcmp(extension.data(), "FBX") == 0)
 	{
-		AssimpManager::AssimpLoader(path.c_str());
+		ResourceManager::ResourceLoader(path.c_str());
 		LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
 	}
 
@@ -2486,7 +2489,7 @@ void ModuleEditor::ImportToScene(string path)
 	{
 		if (actualMesh != nullptr)
 		{
-			AssimpManager::ImportOnlyTexture(path);
+			ResourceManager::ImportOnlyTexture(path);
 			LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
 			ComponentMaterial* C_Mat = dynamic_cast<ComponentMaterial*>(actualMesh->mComponents.at(actualMesh->mComponents.size() - 1));
 			C_Mat->texture->path = path.c_str();
@@ -2497,7 +2500,7 @@ void ModuleEditor::ImportToScene(string path)
 	{
 		if (actualMesh != nullptr)
 		{
-			AssimpManager::ImportOnlyTexture(path);
+			ResourceManager::ImportOnlyTexture(path);
 			LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
 			ComponentMaterial* C_Mat = dynamic_cast<ComponentMaterial*>(actualMesh->mComponents.at(actualMesh->mComponents.size() - 1));
 			C_Mat->texture->path = path.c_str();
@@ -2508,7 +2511,7 @@ void ModuleEditor::ImportToScene(string path)
 	{
 		if (actualMesh != nullptr)
 		{
-			AssimpManager::ImportOnlyTexture(path);
+			ResourceManager::ImportOnlyTexture(path);
 			LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
 			ComponentMaterial* C_Mat = dynamic_cast<ComponentMaterial*>(actualMesh->mComponents.at(actualMesh->mComponents.size() - 1));
 			C_Mat->texture->path = path.c_str();

@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
-#include "GameObjectManager.h"
+#include "GameObject.h"
 #include "External/MathGeoLib/include/Math/Quat.h"
 #include "ModuleInput.h"
 #include "External/ImGuizmo/ImGuizmo.h"
@@ -260,7 +260,7 @@ update_status ModuleCamera3D::Update(float dt)
 void ModuleCamera3D::Focus(/*const float3 &Spot*/){
 
 	ComponentTransform* selected;
-	GameObjectManager* gameObject; 
+	GameObject* gameObject;
 
 	//for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 	
@@ -331,7 +331,7 @@ void ModuleCamera3D::Move(const float3&Movement)
 	Reference += Movement;
 }
 
-ComponentMesh* ModuleCamera3D::CheckForMesh(GameObjectManager* gameObject)
+ComponentMesh* ModuleCamera3D::CheckForMesh(GameObject* gameObject)
 {
 	ComponentMesh* C_Mesh = nullptr;
 
@@ -374,7 +374,7 @@ void ModuleCamera3D::CreateRayCast()
 
 	RayCast = cameraEditor->frustum.UnProjectLineSegment(originPoint.x, originPoint.y);
 
-	map<float, GameObjectManager*> hitMap;
+	map<float, GameObject*> hitMap;
 
 	SearchForHits(&hitMap, App->scene->Root, RayCast);
 
@@ -384,7 +384,7 @@ void ModuleCamera3D::CreateRayCast()
 
 	if (dist > 0 && !hitMap.empty())
 	{
-		GameObjectManager* NearestGameObject = hitMap.find(dist)->second;
+		GameObject* NearestGameObject = hitMap.find(dist)->second;
 
 		if (!CheckTriangleIntersection(NearestGameObject, RayCast, dist, distancesOrder, hitMap))
 		{
@@ -397,7 +397,7 @@ void ModuleCamera3D::CreateRayCast()
 	}
 }
 
-void ModuleCamera3D::SearchForHits(map<float, GameObjectManager*>* hits, GameObjectManager* Root, LineSegment& rayCast)
+void ModuleCamera3D::SearchForHits(map<float, GameObject*>* hits, GameObject* Root, LineSegment& rayCast)
 {
 	float dist  = 0, dist_out = 0;
 
@@ -423,7 +423,7 @@ void ModuleCamera3D::SearchForHits(map<float, GameObjectManager*>* hits, GameObj
 	}
 }
 
-bool ModuleCamera3D::CheckTriangleIntersection(GameObjectManager* gm, LineSegment& rayCast, float actualDist, vector<float> distances, map<float, GameObjectManager*> hits)
+bool ModuleCamera3D::CheckTriangleIntersection(GameObject* gm, LineSegment& rayCast, float actualDist, vector<float> distances, map<float, GameObject*> hits)
 {
 	bool ret = false;
 
@@ -468,7 +468,7 @@ bool ModuleCamera3D::CheckTriangleIntersection(GameObjectManager* gm, LineSegmen
 
 			float newGmDist = SearchForNearOnlyDistances(distances);
 
-			GameObjectManager* NewGm = hits.find(newGmDist)->second;
+			GameObject* NewGm = hits.find(newGmDist)->second;
 
 			ret = CheckTriangleIntersection(NewGm, rayCast, newGmDist, distances, hits);
 		}
@@ -477,9 +477,9 @@ bool ModuleCamera3D::CheckTriangleIntersection(GameObjectManager* gm, LineSegmen
 	return ret;
 }
 
-float ModuleCamera3D::SearchForNear(map<float, GameObjectManager*> hits, vector<float>* AllDistances)
+float ModuleCamera3D::SearchForNear(map<float, GameObject*> hits, vector<float>* AllDistances)
 {
-	map<float, GameObjectManager*>::iterator iterator = hits.begin();
+	map<float, GameObject*>::iterator iterator = hits.begin();
 
 	float dist = 0;
 

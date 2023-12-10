@@ -2,11 +2,11 @@
 #define COMPONENTMATERIAL_H_
 
 #include "ComponentManager.h"
-#include "AssimpManager.h"
+#include "ResourceManager.h"
 #include "TextureManager.h"
 #include "Color.h"
 
-class GameObjectManager;
+class GameObject;
 
 class ComponentMaterial : public ComponentManager
 {
@@ -19,7 +19,7 @@ public:
 
 public:
 
-	ComponentMaterial(GameObjectManager* gameObject);
+	ComponentMaterial(GameObject* gameObject);
 	~ComponentMaterial();
 
 	void SetTexture(Texture* T_Texture = nullptr);

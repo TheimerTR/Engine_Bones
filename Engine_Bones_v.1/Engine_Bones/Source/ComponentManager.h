@@ -5,10 +5,10 @@
 #include "External/MathGeoLib/include/MathGeoLib.h"
 #include <vector>
 
-#include "AssimpManager.h"
+#include "ResourceManager.h"
 #include "TextureManager.h"
 
-class GameObjectManager;
+class GameObject;
 
 using namespace std;
 
@@ -35,12 +35,12 @@ public:
 public:
 	bool active;
 	ComponentType Type;
-	GameObjectManager* Owner;
+	GameObject* Owner;
 	long unsigned int UUID;
 
 public:
 
-	ComponentManager(GameObjectManager* gameObject);
+	ComponentManager(GameObject* gameObject);
 	~ComponentManager();
 
 };

@@ -10,7 +10,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
-#include "AssimpManager.h"
+#include "ResourceManager.h"
 
 #include "External/Devil/Include/ilut.h"
 #include "External/Devil/Include/ilu.h"

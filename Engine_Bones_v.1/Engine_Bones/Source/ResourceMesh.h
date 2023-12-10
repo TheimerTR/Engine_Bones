@@ -1,7 +1,7 @@
 #ifndef RESOURCEMESH_H_
 #define RESOURCEMESH_H_
 
-#include "AssimpManager.h"
+#include "ResourceManager.h"
 #include "ResourceElement.h"
 #include "Application.h"
 

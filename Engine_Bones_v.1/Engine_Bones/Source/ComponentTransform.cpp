@@ -1,10 +1,10 @@
 #include "ComponentTransform.h"
-#include "GameObjectManager.h"
+#include "GameObject.h"
 #include "External/ImGui/imgui.h"
 #include "Application.h"
 
 
-ComponentTransform::ComponentTransform(GameObjectManager* gameObject) : ComponentManager(gameObject)
+ComponentTransform::ComponentTransform(GameObject* gameObject) : ComponentManager(gameObject)
 {
 	mPosition = float3::zero;
 	mScale = float3::zero;
@@ -75,7 +75,7 @@ void ComponentTransform::ShowInfo()
 
 }
 
-void ComponentTransform::SetTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation)
+void ComponentTransform::SetTransform(GameObject* gameObject, float3 position, float3 scale, Quat rotation)
 {
 	mPosition = position; 
 	mScale = scale; 

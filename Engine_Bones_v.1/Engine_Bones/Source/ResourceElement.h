@@ -8,7 +8,7 @@
 #include <map>
 
 using namespace std;
-class GameObjectManager;
+class GameObject;
 
 enum class ResourceTypes
 {
@@ -51,7 +51,7 @@ public:
 	vector<float> Resource_green;
 	vector<float> Resource_blue;
 	vector<float> Resource_alpha;
-	vector<GameObjectManager*> AssociatedGameObjects;
+	vector<GameObject*> AssociatedGameObjects;
 
 public:
 	uint32 getUUID();
