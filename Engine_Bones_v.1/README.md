@@ -40,3 +40,9 @@ You can add different game cameras from assets and move them using guizmos
 * P to enter in InsertParent mode.
 * C to enter in MoveIntoChildList mode.
 * LShift+P to quit a child from a parent.
+* Use Drag&Drop to reparent.
+
+### Asset Window
+* In the rigth part use Rigth Clic to import scene a valid element.
+
+You can draw aabb and obb with the Preferences->General menu 
