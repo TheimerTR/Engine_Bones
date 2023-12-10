@@ -47,8 +47,6 @@ void ComponentTransform::ShowInfo()
 		//ImGui::InputFloat3("Scale",(float*)&mScale);
 		//ImGui::InputFloat3("Rotation",(float*)&mRotation);
 
-	
-
 		if (ImGui::DragFloat3("Position", &mPosition[0], 0.1f))
 		{
 			UpdateTransformation();

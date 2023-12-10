@@ -6,6 +6,9 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 	Root->UUID = 0;
 	AllGameObjectManagers.push_back(Root);
 	Selected_GameObject = Root;
+
+	GameTime.Restart();
+	GameTime.Stop();
 }
 
 ModuleScene::~ModuleScene()
@@ -21,14 +24,23 @@ update_status ModuleScene::Update(float dt)
 {
 	if (app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
 	{
-		if ((App->editor->actualMesh != nullptr) && (App->scene->AllGameObjectManagers.size() > 0))
+		if (!app->scene->GameTime.running)
 		{
-			App->editor->actualMesh->mParent->DeleteChild(App->editor->actualMesh);
+			if ((App->editor->actualMesh != nullptr) && (App->scene->AllGameObjectManagers.size() > 0))
+			{
+				App->editor->actualMesh->mParent->DeleteChild(App->editor->actualMesh);
+			}
+		}
+		else
+		{
+			LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
 		}
 	}
 	
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
+		App->scene->GameTime.running = false;
+
 		if (App->editor->isMovingParent && !app->editor->isMovingChild)
 		{
 			App->editor->moveEntityTo = nullptr;
@@ -62,38 +74,52 @@ update_status ModuleScene::Update(float dt)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
 		{
-			if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+			if (!app->scene->GameTime.running)
 			{
-				if (App->editor->actualMesh->mParent != App->scene->AllGameObjectManagers.at(0))
+				if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 				{
-					App->editor->actualMesh->ChangeParent(App->scene->Root);
+					if (App->editor->actualMesh->mParent != App->scene->AllGameObjectManagers.at(0))
+					{
+						App->editor->actualMesh->ChangeParent(App->scene->Root);
+					}
+				}
+				else
+				{
+					if (App->editor->actualMesh != nullptr)
+					{
+						App->editor->moveEntityTo = App->editor->actualMesh;
+						App->editor->isMovingParent = true;
+					}
 				}
 			}
 			else
 			{
-				if (App->editor->actualMesh != nullptr)
-				{
-					App->editor->moveEntityTo = App->editor->actualMesh;
-					App->editor->isMovingParent = true;
-				}
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
 			}
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
 		{
-			if (App->editor->actualMesh != nullptr)
+			if (!app->scene->GameTime.running)
 			{
-				App->editor->OG_ChildListPos = App->editor->actualMesh->SearchChildPosInVector();
-				App->editor->OG_ChildList = App->editor->actualMesh->mParent->childrens;
+				if (App->editor->actualMesh != nullptr)
+				{
+					App->editor->OG_ChildListPos = App->editor->actualMesh->SearchChildPosInVector();
+					App->editor->OG_ChildList = App->editor->actualMesh->mParent->childrens;
 
-				if (App->editor->OG_ChildListPos != -1)
-				{
-					App->editor->isMovingChild = true;
+					if (App->editor->OG_ChildListPos != -1)
+					{
+						App->editor->isMovingChild = true;
+					}
+					else
+					{
+						LOG(LogTypeCase::L_ERROR, "Child Was not found in Parent list");
+					}
 				}
-				else
-				{
-					LOG(LogTypeCase::L_ERROR, "Child Was not found in Parent list");
-				}
+			}
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
 			}
 		}
 	}

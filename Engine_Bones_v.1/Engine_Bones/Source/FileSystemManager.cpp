@@ -30,49 +30,56 @@ void FileSystem::ReadFyleType(const char* Path)
 
 		Type = ExtensionType(extension);
 
-		switch (Type)
+		if (!app->scene->GameTime.running)
 		{
-		case FileType::MODEL_3D:
-			file = "Assets/ModelsFbx/" + file;
-			//pathNomralized = app->physFSManager->NormalizePath(Path);
-			AssimpManager::AssimpLoader(Path);
-			LOG(LogTypeCase::L_CASUAL, "Model Type: MODEL 3D");
-			break;
-		case FileType::TEXTURE:
-			file = "Assets/Textures/" + file;
-			if (app->editor->actualMesh->isSelected)
+			switch (Type)
 			{
-				AssimpManager::ImportOnlyTexture(Path);
-
-				/*TexturesManager* texturesManager = new TexturesManager();
-				std::vector<ComponentManager*> objectMaterials = (app->editor->actualMesh->GetComponentsGameObject(ComponentType::MATERIAL));
-				
-				if (objectMaterials.size() != 0)
+			case FileType::MODEL_3D:
+				file = "Assets/ModelsFbx/" + file;
+				//pathNomralized = app->physFSManager->NormalizePath(Path);
+				AssimpManager::AssimpLoader(Path);
+				LOG(LogTypeCase::L_CASUAL, "Model Type: MODEL 3D");
+				break;
+			case FileType::TEXTURE:
+				file = "Assets/Textures/" + file;
+				if (app->editor->actualMesh->isSelected)
 				{
-					ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
-					objectTexture->SetTexture(texturesManager->TexLoader(Path));
+					AssimpManager::ImportOnlyTexture(Path);
+
+					/*TexturesManager* texturesManager = new TexturesManager();
+					std::vector<ComponentManager*> objectMaterials = (app->editor->actualMesh->GetComponentsGameObject(ComponentType::MATERIAL));
+
+					if (objectMaterials.size() != 0)
+					{
+						ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
+						objectTexture->SetTexture(texturesManager->TexLoader(Path));
+					}
+					else
+					{
+						ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
+						objectTexture->SetTexture(texturesManager->TexLoader(Path));
+					}*/
+
+					//ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::MATERIAL));
+					//objectTexture->GetTexture()->TextureID = texturesManager->TexLoader(Path)->TextureID;
 				}
-				else
-				{
-					ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
-					objectTexture->SetTexture(texturesManager->TexLoader(Path));
-				}*/
-
-				//ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::MATERIAL));
-				//objectTexture->GetTexture()->TextureID = texturesManager->TexLoader(Path)->TextureID;
+				LOG(LogTypeCase::L_CASUAL, "Model Type: TEXTURE");
+				break;
+			case FileType::DEFAULT:
+				LOG(LogTypeCase::L_WARNING, "Model Type: DEFAULT");
+				break;
+			default:
+				break;
 			}
-			LOG(LogTypeCase::L_CASUAL, "Model Type: TEXTURE");
-			break;
-		case FileType::DEFAULT:
-			LOG(LogTypeCase::L_WARNING, "Model Type: DEFAULT");
-			break;
-		default:
-			break;
+		}
+		else
+		{
+			LOG(LogTypeCase::L_ERROR, "The file was not imported: %s", Path);
 		}
 	}
 	else
 	{
-		LOG(LogTypeCase::L_ERROR, "The file was not imported: %s", Path);
+		LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
 	}
 }
 

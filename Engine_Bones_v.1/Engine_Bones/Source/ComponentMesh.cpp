@@ -116,23 +116,30 @@ void ComponentMesh::ShowInfo(Mesh* mesh, int i)
 
 		if (ImGui::Button((std::string("Delete Mesh##%s") + to_string(i).c_str()).c_str()))
 		{
-			map<uint32, ResourceElement*>::iterator iterator = app->resource->AllResourcesMap.begin();
-
-			for (iterator; iterator != app->resource->AllResourcesMap.end(); iterator++)
+			if (!app->scene->GameTime.running)
 			{
-				for (int h = 0; h < iterator->second->ParentsUUID.size(); h++)
+				map<uint32, ResourceElement*>::iterator iterator = app->resource->AllResourcesMap.begin();
+
+				for (iterator; iterator != app->resource->AllResourcesMap.end(); iterator++)
 				{
-					if (Owner->UUID == iterator->second->ParentsUUID[h])
+					for (int h = 0; h < iterator->second->ParentsUUID.size(); h++)
 					{
-						if (iterator->second->type == ResourceTypes::R_MESH)
+						if (Owner->UUID == iterator->second->ParentsUUID[h])
 						{
-							iterator->second->resourceCounter -= 1;
+							if (iterator->second->type == ResourceTypes::R_MESH)
+							{
+								iterator->second->resourceCounter -= 1;
+							}
 						}
 					}
 				}
-			}
 
-			Owner->DeleteComponent(this);
+				Owner->DeleteComponent(this);
+			}
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
 		}
 	}
 }

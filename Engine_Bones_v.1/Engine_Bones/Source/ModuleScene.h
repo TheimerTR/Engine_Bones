@@ -34,6 +34,8 @@ public:
 	GameObjectManager* Selected_GameObject = nullptr;
 
 	vector<ResourceElement*> AllResources;
+
+	Timer GameTime;
 };
 
 #endif
