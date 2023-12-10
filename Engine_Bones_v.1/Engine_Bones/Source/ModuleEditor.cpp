@@ -1646,9 +1646,18 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 
 void ModuleEditor::AddChildren(GameObjectManager* gm)
 {
-	App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
+	GameObjectManager* Children = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
+	GameObjectManager* Parent = Children->mParent;
+
+	while(Parent->mParent != App->scene->Root)
+	{
+		Parent = Parent->mParent;
+	}
+
+	Parent->ChangeParent(gm);
+	/*App->scene->Root->childrens.erase(find(App->scene->Root->childrens.begin(), App->scene->Root->childrens.end(), App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)));
 	App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1)->mParent = gm;
-	gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));
+	gm->childrens.push_back(App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1));*/
 }
 
 void ModuleEditor::AddChildrenWithChildrens(GameObjectManager* gm)
@@ -1660,7 +1669,7 @@ void ModuleEditor::AddChildrenWithChildrens(GameObjectManager* gm)
 
 void ModuleEditor::AddComponentInInspector(GameObjectManager* gm)
 {
-	if (ImGui::BeginMenu("Mesh"))
+	/*if (ImGui::BeginMenu("Mesh"))
 	{
 		if (ImGui::MenuItem("Cube"))
 		{
@@ -1678,7 +1687,7 @@ void ModuleEditor::AddComponentInInspector(GameObjectManager* gm)
 		}
 
 		ImGui::EndMenu();
-	}
+	}*/
 
 	if (ImGui::MenuItem("Texture"))
 	{
@@ -1999,18 +2008,35 @@ void ModuleEditor::ImportToScene(string path)
 
 	if (strcmp(extension.data(), "dds") == 0)
 	{
-		AssimpManager::ImportOnlyTexture(path);
-		LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
-		ComponentMaterial* C_Mat = dynamic_cast<ComponentMaterial*>(actualMesh->mComponents.at(actualMesh->mComponents.size() - 1));
-		C_Mat->texture->path = path.c_str();
+		if (actualMesh != nullptr)
+		{
+			AssimpManager::ImportOnlyTexture(path);
+			LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
+			ComponentMaterial* C_Mat = dynamic_cast<ComponentMaterial*>(actualMesh->mComponents.at(actualMesh->mComponents.size() - 1));
+			C_Mat->texture->path = path.c_str();
+		}
 	}
 	
 	if (strcmp(extension.data(), "png") == 0)
 	{
-		AssimpManager::ImportOnlyTexture(path);
-		LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
-		ComponentMaterial* C_Mat = dynamic_cast<ComponentMaterial*>(actualMesh->mComponents.at(actualMesh->mComponents.size() - 1));
-		C_Mat->texture->path = path.c_str();
+		if (actualMesh != nullptr)
+		{
+			AssimpManager::ImportOnlyTexture(path);
+			LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
+			ComponentMaterial* C_Mat = dynamic_cast<ComponentMaterial*>(actualMesh->mComponents.at(actualMesh->mComponents.size() - 1));
+			C_Mat->texture->path = path.c_str();
+		}
+	}
+
+	if (strcmp(extension.data(), "tga") == 0)
+	{
+		if (actualMesh != nullptr)
+		{
+			AssimpManager::ImportOnlyTexture(path);
+			LOG(LogTypeCase::L_CASUAL, ("Importing to scene: %c", path.c_str()));
+			ComponentMaterial* C_Mat = dynamic_cast<ComponentMaterial*>(actualMesh->mComponents.at(actualMesh->mComponents.size() - 1));
+			C_Mat->texture->path = path.c_str();
+		}
 	}
 	
 	//if (strcmp(extension.data(), "mesh") == 0)

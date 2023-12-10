@@ -33,6 +33,7 @@ uint Importer::ImporterTexture::ImportTexture(aiMaterial* mat, ResourceTexture* 
 	{
 		FileSystem::StringDivide(pathToTexture.C_Str(), &nameTexture, &extTexture);
 		R_Texture->texture->Name = nameTexture;
+		R_Texture->name = nameTexture;
 
 		nameTexture = TEXTURES_FOLDER + nameTexture; 
 		R_Texture->texture->path = nameTexture.c_str();
@@ -48,6 +49,7 @@ uint Importer::ImporterTexture::ImportTexture(aiMaterial* mat, ResourceTexture* 
 	{
 		nameTexture = "Material";
 		R_Texture->texture->Name = nameTexture.c_str();
+		R_Texture->name = nameTexture;
 	}
 
 	return size;

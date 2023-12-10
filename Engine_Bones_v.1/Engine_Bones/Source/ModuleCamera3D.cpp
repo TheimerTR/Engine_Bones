@@ -391,6 +391,10 @@ void ModuleCamera3D::CreateRayCast()
 			app->editor->actualMesh = nullptr;
 		}
 	}
+	else
+	{
+		app->editor->actualMesh = nullptr;
+	}
 }
 
 void ModuleCamera3D::SearchForHits(map<float, GameObjectManager*>* hits, GameObjectManager* Root, LineSegment& rayCast)

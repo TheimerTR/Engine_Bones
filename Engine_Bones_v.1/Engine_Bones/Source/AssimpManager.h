@@ -97,6 +97,7 @@ namespace AssimpManager
 	bool CheckStringComponentsExistence(string Component);
 
 	bool ImportOnlyTexture(string Path);
+	Texture* ChangeTexture(string Path);
 
 	//Mesh* LoadMesh(aiMesh* MeshToLoad);
 

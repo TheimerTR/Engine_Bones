@@ -96,49 +96,150 @@ void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* game
 {
 	const aiScene* scene = aiImportFile(Path, aiProcessPreset_TargetRealtime_MaxQuality);
 
+	m_Counter = 0;
+
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		string FileName = "";
-
-		FileSystem::StringDivide(Path, &FileName, nullptr);
-	
 		Mesh* M_mesh = new Mesh();
 		ResourceMesh* R_Mesh = new ResourceMesh();
 
-		M_mesh->Path = Path;
+		R_Mesh->AssetsPath = Path;
 
-		R_Mesh->name = FileName;
+		string ModelName = "";
 
-		for (int i = 0; i < scene->mNumMeshes; i++)
+		FileSystem::StringDivide(Path, &ModelName, nullptr);
+
+		string ExistInMeta;
+		ExistInMeta = MODELS_FOLDER;
+		ExistInMeta.append(ModelName);
+		ExistInMeta.append(".meta");
+
+		if (!app->physFSManager->Exists(ExistInMeta.c_str()))
 		{
-			Mesh* M_mesh = new Mesh();
-
-			Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[i]);
-
 			char* buffer = nullptr;
 			uint size = 0;
 
+			Importer::ImporterMesh::ImportMesh(R_Mesh, scene->mMeshes[m_Counter]);
 			size = Importer::ImporterMesh::Save(R_Mesh, &buffer);
 
+			app->physFSManager->Save(ExistInMeta.c_str(), buffer, size);
+
+			R_Mesh->name = ModelName;
+			R_Mesh->mesh->Name = ModelName;
+			R_Mesh->ParentsUUID.push_back(app->editor->actualMesh->UUID);
+
 			M_mesh = R_Mesh->mesh;
-			M_mesh->Name = FileName;
+			M_mesh->Name = ModelName;
 			AllMeshes.push_back(M_mesh);
 
 			app->scene->AllResources.push_back(R_Mesh);
 
-			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(gameObject->AddComponent(ComponentType::MESH));
-			C_Mesh->SetMesh(M_mesh);
+			ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(app->editor->actualMesh->AddComponent(ComponentType::MESH));
 
 			string pathToMeta;
 			pathToMeta = MESHES_PATH;
 			pathToMeta.append(std::to_string(C_Mesh->UUID));
 			pathToMeta.append(".mesh");
 
+			R_Mesh->LibraryPath = pathToMeta;
+
 			if (size > 0)
 			{
 				app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
 			}
+
+			C_Mesh->SetMesh(R_Mesh->mesh);
+
+			app->resource->AllResourcesMap[R_Mesh->getUUID()] = R_Mesh;
+			app->resource->AllResourcesMap[R_Mesh->getUUID()]->resourceCounter += 1;
+
+			m_Counter++;
+
 			RELEASE_ARRAY(buffer);
+		}
+		else
+		{
+			char* buffer = nullptr;
+			uint size = app->physFSManager->Load(ExistInMeta.c_str(), &buffer);
+			string path = "";
+
+			if (size > 0)
+			{
+				ResourceElement* resource = new ResourceElement(ResourceTypes::R_MESH);
+
+				string pathToMeta;
+				pathToMeta = MESHES_PATH;
+				pathToMeta.append(std::to_string(app->editor->actualMesh->UUID));
+				pathToMeta.append(".mesh");
+
+				resource->LibraryPath = pathToMeta;
+
+				if (CheckResourceComponentsExistence(resource))
+				{
+					ResourceElement* ResourceToGameobject = nullptr;
+					ResourceToGameobject = app->resource->LoadResourceElement(resource->LibraryPath.c_str());
+
+					if (ResourceToGameobject != nullptr)
+					{
+						ResourceToGameobject->UUID = app->editor->actualMesh->UUID;
+						ResourceToGameobject->name = ModelName;
+
+						if (ResourceToGameobject->type == ResourceTypes::R_MESH)
+						{
+							ResourceMesh* R_MeshToComponent = (ResourceMesh*)ResourceToGameobject;
+
+							Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[m_Counter]);
+							m_Counter++;
+
+							R_MeshToComponent->name = ModelName;
+							R_MeshToComponent->mesh->Name = R_MeshToComponent->name;
+							R_MeshToComponent->ParentsUUID.push_back(app->editor->actualMesh->UUID);
+
+							ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(app->editor->actualMesh->AddComponent(ComponentType::MESH));
+							//R_MeshToComponent->mesh->local_aabb = R_MeshToComponent->local_aabb;
+							C_Mesh->SetMesh(R_MeshToComponent->mesh);
+						}
+
+						RELEASE_ARRAY(buffer);
+					}
+				}
+				else
+				{
+					ResourceElement* ResourceToGameobject = nullptr;
+					ResourceToGameobject = app->resource->LoadResourceElement(resource->LibraryPath.c_str());
+
+					if (ResourceToGameobject != nullptr)
+					{
+						ResourceToGameobject->UUID = app->editor->actualMesh->UUID;
+						ResourceToGameobject->name = ModelName;
+
+						if (ResourceToGameobject->type == ResourceTypes::R_MESH)
+						{
+							ResourceMesh* R_MeshToComponent = (ResourceMesh*)ResourceToGameobject;
+
+							Importer::ImporterMesh::ImportMesh(R_MeshToComponent, scene->mMeshes[m_Counter]);
+							m_Counter++;
+
+							R_MeshToComponent->name = ModelName;
+							R_MeshToComponent->LibraryPath = resource->LibraryPath;
+							R_MeshToComponent->mesh->Name = R_MeshToComponent->name;
+							R_MeshToComponent->resourceCounter += 1;
+							R_MeshToComponent->ParentsUUID.push_back(app->editor->actualMesh->UUID);
+
+							AllMeshes.push_back(R_MeshToComponent->mesh);
+
+							app->scene->AllResources.push_back(ResourceToGameobject);
+
+							ComponentMesh* C_Mesh = dynamic_cast<ComponentMesh*>(app->editor->actualMesh->AddComponent(ComponentType::MESH));
+							C_Mesh->SetMesh(R_MeshToComponent->mesh);
+
+							app->resource->AllResourcesMap[R_MeshToComponent->getUUID()] = (ResourceTexture*)R_MeshToComponent;
+						}
+						
+						RELEASE_ARRAY(buffer);
+					}
+				}
+			}
 		}
 	}
 	else
@@ -289,10 +390,13 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 						app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
 					}
 
-					if (!CheckNotDuplicateFromAssets(R_Texture, _ParentObj->UUID))
+					if (R_Texture->name != "Material")
 					{
-						app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
-						app->resource->AllResourcesMap[R_Texture->getUUID()]->resourceCounter += 1;
+						if (!CheckNotDuplicateFromAssets(R_Texture, _ParentObj->UUID))
+						{
+							app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
+							app->resource->AllResourcesMap[R_Texture->getUUID()]->resourceCounter += 1;
+						}
 					}
 				}
 
@@ -477,6 +581,16 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 						ResourceElement* ResourceToGameobject = nullptr;
 						ResourceToGameobject = app->resource->LoadResourceElement(resource->ComponentsInModel[j].c_str());
 
+						if (strcmp(resource->ComponentsNames[j].data(), "Material") == 0)
+						{
+							string Name = "";
+							FileSystem::StringDivide(resource->ComponentsInModel[j].c_str(), &Name, nullptr);
+
+							ResourceToGameobject = new ResourceTexture();
+							ResourceToGameobject->name = Name;
+							ResourceToGameobject->type = ResourceTypes::R_TEXTURE;
+						}
+
 						if (ResourceToGameobject != nullptr)
 						{
 							ResourceToGameobject->UUID = numberId;
@@ -504,12 +618,20 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 								buffer = nullptr;
 								size = 0;
 
-								//size = app->physFSManager->Load(texturePath, &buffer);
+								R_Texture->texture->path = R_Texture->LibraryPath.c_str();
 
-								R_Texture->texture->path = texturePath;
-								R_Texture->ParentsUUID.push_back(_ParentObj->UUID);
+								R_Texture->name = ResourceToGameobject->name;
+								R_Texture->texture->Name = ResourceToGameobject->name;
+								R_Texture->colors.r = resource->Resource_red[0];
+								R_Texture->colors.g = resource->Resource_green[0];
+								R_Texture->colors.b = resource->Resource_blue[0];
+								R_Texture->colors.a = resource->Resource_alpha[0];
 
-								//Importer::ImporterTexture::Load(R_Texture->texture, buffer, size);
+								R_Texture->LibraryPath = resource->ComponentsInModel[j];
+								R_Texture->resourceCounter += 1;
+
+
+								app->scene->AllResources.push_back(ResourceToGameobject);
 
 								TexturesManager* texturesManager = new TexturesManager();
 								ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(_ParentObj->AddComponent(ComponentType::MATERIAL));
@@ -929,6 +1051,7 @@ bool AssimpManager::CheckResourceComponentsExistence(ResourceElement* R_Element)
 	bool Exist = false;
 
 	map<uint32, ResourceElement*>::iterator iteratorExistence = app->resource->AllResourcesMap.begin();
+
 	for (iteratorExistence; iteratorExistence != app->resource->AllResourcesMap.end(); iteratorExistence++)
 	{
 		for (int h = 0; h < R_Element->ComponentsInModel.size(); h++)
@@ -968,23 +1091,120 @@ bool AssimpManager::CheckNotDuplicateFromAssets(ResourceElement* R_Element, uint
 	map<uint32, ResourceElement*>::iterator iteratorExistence = app->resource->AllResourcesMap.begin();
 	for (iteratorExistence; iteratorExistence != app->resource->AllResourcesMap.end(); iteratorExistence++)
 	{
-		if (R_Element->AssetsPath == iteratorExistence->second->AssetsPath)
+		string NameIter = iteratorExistence->second->name;
+		string NameRes = R_Element->name;
+
+		/*if(NameRes == "Material")
 		{
-			Exist = true;
+			ResourceTexture* R_textureIterator = (ResourceTexture*)iteratorExistence->second;
+			ResourceTexture* R_texture = (ResourceTexture*) R_Element;
 
-			if (uuid != -1)
+			if((R_texture->colors.r == R_textureIterator->colors.r) && (R_texture->colors.g == R_textureIterator->colors.g)
+				&& (R_texture->colors.b == R_textureIterator->colors.b) && (R_texture->colors.a == R_textureIterator->colors.a))
 			{
-				iteratorExistence->second->ParentsUUID.push_back(uuid);
-			}
+				Exist = true;
 
-			iteratorExistence->second->resourceCounter += 1;
+				if (uuid != -1)
+				{
+					iteratorExistence->second->ParentsUUID.push_back(uuid);
+				}
+
+				iteratorExistence->second->resourceCounter += 1;
+			}
 		}
+		else
+		{*/
+			if (NameRes == NameIter)
+			{
+				Exist = true;
+
+				if (uuid != -1)
+				{
+					iteratorExistence->second->ParentsUUID.push_back(uuid);
+				}
+
+				iteratorExistence->second->resourceCounter += 1;
+			}
+		//}
 	}
 
 	return Exist;
 }
 
 bool AssimpManager::ImportOnlyTexture(string Path)
+{
+	bool Exist = true;
+
+	ResourceTexture* R_Texture = new ResourceTexture();
+
+	char* buffer = nullptr;
+	uint size = 0;
+
+	string T_name = "";
+	FileSystem::StringDivide(Path.c_str(), &T_name, nullptr);
+
+	R_Texture->texture->path = Path.c_str();
+	R_Texture->texture->Name = T_name;
+	R_Texture->name = T_name;
+	R_Texture->ParentsUUID.push_back(app->editor->actualMesh->UUID);
+
+	Importer::ImporterTexture::Load(R_Texture->texture, Path.c_str());
+	R_Texture->colors.r = 1;
+	R_Texture->colors.g = 1;
+	R_Texture->colors.b = 1;
+	R_Texture->colors.a = 1;
+
+	if(!CheckNotDuplicateFromAssets((ResourceElement*)R_Texture, R_Texture->UUID))
+	{
+		size = Importer::ImporterTexture::Save(R_Texture, &buffer);
+	}
+
+	vector<ComponentManager*> objectMeshes = app->editor->actualMesh->GetComponentsGameObject(ComponentType::MATERIAL);
+
+	for (int j = 0; j < objectMeshes.size(); j++)
+	{
+		ComponentMaterial* C_Texture;
+		C_Texture = dynamic_cast<ComponentMaterial*>(objectMeshes[j]);
+		C_Texture->texture->ShowTextures = false;
+	}
+
+	TexturesManager* texturesManager = new TexturesManager();
+	ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
+	C_Texture->SetTexture(R_Texture->texture);
+
+	C_Texture->colorTexture.r = 1;
+	C_Texture->colorTexture.g = 1;
+	C_Texture->colorTexture.b = 1;
+	C_Texture->colorTexture.a = 1;
+
+	string pathToMeta = "";
+
+	pathToMeta = TEXTURES_PATH;
+	pathToMeta.append(std::to_string(C_Texture->UUID));
+	pathToMeta.append(".dds");
+
+	R_Texture->LibraryPath = pathToMeta;
+
+	if (!AssimpManager::CheckResourceComponentsExistence(R_Texture))
+	{
+		if (!CheckNotDuplicateFromAssets((ResourceElement*)R_Texture, R_Texture->UUID))
+		{
+			if (size > 0)
+			{
+				app->physFSManager->Save(pathToMeta.c_str(), buffer, size);
+			}
+
+			app->resource->AllResourcesMap[R_Texture->getUUID()] = R_Texture;
+			app->resource->AllResourcesMap[R_Texture->getUUID()]->resourceCounter += 1;
+		}
+	}
+
+	RELEASE_ARRAY(buffer);
+
+	return Exist;
+}
+
+Texture* AssimpManager::ChangeTexture(string Path)
 {
 	bool Exist = true;
 
@@ -1005,16 +1225,33 @@ bool AssimpManager::ImportOnlyTexture(string Path)
 
 	vector<ComponentManager*> objectMeshes = app->editor->actualMesh->GetComponentsGameObject(ComponentType::MATERIAL);
 
+	ComponentMaterial* C_TexturetoShow;
+
 	for (int j = 0; j < objectMeshes.size(); j++)
 	{
-		ComponentMaterial* C_Texture;
-		C_Texture = dynamic_cast<ComponentMaterial*>(objectMeshes[j]);
-		C_Texture->texture->ShowTextures = false;
+		C_TexturetoShow = dynamic_cast<ComponentMaterial*>(objectMeshes[j]);
+
+		if (C_TexturetoShow != nullptr)
+		{
+			if (C_TexturetoShow->texture != nullptr)
+			{
+				C_TexturetoShow->texture->ShowTextures = false;
+			}
+		}
 	}
 
-	TexturesManager* texturesManager = new TexturesManager();
-	ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->AddComponent(ComponentType::MATERIAL));
-	C_Texture->SetTexture(R_Texture->texture);
+	if (!objectMeshes.empty())
+	{
+		if (C_TexturetoShow != nullptr)
+		{
+			if (C_TexturetoShow->texture != nullptr)
+			{
+				C_TexturetoShow->texture->ShowTextures = true;
+			}
+		}
+	}
+
+	ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::MATERIAL));
 
 	string pathToMeta = "";
 
@@ -1037,7 +1274,7 @@ bool AssimpManager::ImportOnlyTexture(string Path)
 
 	RELEASE_ARRAY(buffer);
 
-	return Exist;
+	return R_Texture->texture;
 }
 
 void AssimpManager::MetaExistenceLoader(const char* Path)

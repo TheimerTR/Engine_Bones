@@ -117,20 +117,44 @@ void ComponentMaterial::ShowInfo(Texture* texture, int i)
 				{
 					TexturesManager* texturesManager = new TexturesManager();
 
-					if (ImGui::MenuItem((std::string("House Texture##%s") + to_string(i).c_str()).c_str()))
-					{
-						if (texture->path != "Assets/Textures/Baker_house.dds")
-						{
-							this->SetTexture(texturesManager->TexLoader("Assets/Textures/Baker_house.dds"));
-						}
-					}
+					vector<string> fileListCheck;
+					vector<string> dirListCheck;
+					app->physFSManager->DiscoverFiles("Assets/Textures/", fileListCheck, dirListCheck);
 
-					if (ImGui::MenuItem((std::string("Grass Texture##%s") + to_string(i).c_str()).c_str()))
+					string TexName = "";
+
+					for (int j = 0; j < fileListCheck.size(); j++)
 					{
-						if (texture->path != "Assets/Textures/Grass.dds")
+						if (ImGui::MenuItem((fileListCheck[j] + std::string("##%s") + to_string(j).c_str()).c_str()))
 						{
-							this->SetTexture(texturesManager->TexLoader("Assets/Textures/Grass.dds"));
+							string pathTex = "Assets/Textures/";
+
+							pathTex.append(fileListCheck[j]);
+
+							if (texture->path != pathTex.c_str())
+							{
+								texture = AssimpManager::ChangeTexture(pathTex);
+								this->SetTexture(texture);
+							}
 						}
+
+						//if (ImGui::MenuItem((std::string("House Texture##%s") + to_string(i).c_str()).c_str()))
+						//{
+						//	if (texture->path != "Assets/Textures/Baker_house.dds")
+						//	{
+						//		AssimpManager::ImportOnlyTexture("Assets/Textures/Baker_house.dds");
+						//		//this->SetTexture(texturesManager->TexLoader("Assets/Textures/Baker_house.dds"));
+						//	}
+						//}
+
+						//if (ImGui::MenuItem((std::string("Grass Texture##%s") + to_string(i).c_str()).c_str()))
+						//{
+						//	if (texture->path != "Assets/Textures/Grass.dds")
+						//	{
+						//		AssimpManager::ImportOnlyTexture("Assets/Textures/Grass.dds");
+						//		//this->SetTexture(texturesManager->TexLoader("Assets/Textures/Grass.dds"));
+						//	}
+						//}
 					}
 
 					ImGui::EndPopup();
@@ -173,7 +197,31 @@ void ComponentMaterial::ShowInfo(Texture* texture, int i)
 				{
 					TexturesManager* texturesManager = new TexturesManager();
 
-					if (ImGui::MenuItem((std::string("House Texture##%s") + to_string(i).c_str()).c_str()))
+					vector<string> fileListCheck;
+					vector<string> dirListCheck;
+					app->physFSManager->DiscoverFiles("Assets/Textures/", fileListCheck, dirListCheck);
+
+					string TexName = "";
+
+					for (int j = 0; j < fileListCheck.size(); j++)
+					{
+						if (ImGui::MenuItem((fileListCheck[j] + std::string("##%s") + to_string(j).c_str()).c_str()))
+						{
+							string pathTex = "Assets/Textures/";
+
+							pathTex.append(fileListCheck[j]);
+
+							texture = AssimpManager::ChangeTexture(pathTex);
+							this->SetTexture(texture);
+
+							colorTexture.r = 1;
+							colorTexture.g = 1;
+							colorTexture.b = 1;
+							colorTexture.a = 1;
+						}
+					}
+
+					/*if (ImGui::MenuItem((std::string("House Texture##%s") + to_string(i).c_str()).c_str()))
 					{
 						this->SetTexture(texturesManager->TexLoader("Assets/Textures/Baker_house.dds"));
 					}
@@ -181,7 +229,7 @@ void ComponentMaterial::ShowInfo(Texture* texture, int i)
 					if (ImGui::MenuItem((std::string("Grass Texture##%s") + to_string(i).c_str()).c_str()))
 					{
 						this->SetTexture(texturesManager->TexLoader("Assets/Textures/Grass.dds"));
-					}
+					}*/
 
 					ImGui::EndPopup();
 				}
