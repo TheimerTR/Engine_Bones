@@ -408,9 +408,13 @@ void GameObjectManager::ChangeParent(GameObjectManager* gameObject)
 			float3 position, scale; 
 			Quat rotation; 
 
-			mTransform->mLocalMatrix = mParent->mTransform->GetGlobalMatrix().Inverted() * mTransform->GetGlobalMatrix(); 
+			float4x4 newTransformation = mTransform->mLocalMatrix = mParent->mTransform->GetGlobalMatrix().Inverted() * mTransform->GetGlobalMatrix(); 
 
-			mTransform->mLocalMatrix.Decompose(position, rotation, scale); 
+			newTransformation.Decompose(position, rotation, scale);
+
+			mTransform->mPosition = position;
+			mTransform->mRotation = rotation;
+			mTransform->mScale = scale;
 
 			mTransform->mRotationEuler = rotation.ToEulerXYZ() * RADTODEG; 
 
