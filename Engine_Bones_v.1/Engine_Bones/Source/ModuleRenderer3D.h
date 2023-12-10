@@ -7,8 +7,8 @@
 #include "External/MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
 
-#include "AssimpManager.h"
-#include "GameObjectManager.h"
+#include "ResourceManager.h"
+#include "GameObject.h"
 #include "TextureManager.h"
 
 #include <vector>

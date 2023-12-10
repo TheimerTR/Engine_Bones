@@ -7,7 +7,7 @@
 #include "External/MathGeoLib/include/Geometry/Frustum.h"
 #include "ComponentCamera.h"
 #include "ComponentMesh.h"
-#include "GameObjectManager.h"
+#include "GameObject.h"
 
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
@@ -32,14 +32,14 @@ public:
 	void LookAt(const float3 &Spot);
 	void Move(const float3 &Movement);
 	//float* GetViewMatrix();
-	ComponentMesh* CheckForMesh(GameObjectManager* gameObject);
+	ComponentMesh* CheckForMesh(GameObject* gameObject);
 
 	void Focus(/*const float3 &Spot*/);
 
 	void CreateRayCast();
-	void SearchForHits(map<float, GameObjectManager*>* hits, GameObjectManager* Root, LineSegment &rayCast);
-	bool CheckTriangleIntersection(GameObjectManager* gm, LineSegment &rayCast, float actualDist, vector<float> distances, map<float, GameObjectManager*> hits);
-	float SearchForNear(map<float, GameObjectManager*> hits, vector<float>* AllDistances);
+	void SearchForHits(map<float, GameObject*>* hits, GameObject* Root, LineSegment &rayCast);
+	bool CheckTriangleIntersection(GameObject* gm, LineSegment &rayCast, float actualDist, vector<float> distances, map<float, GameObject*> hits);
+	float SearchForNear(map<float, GameObject*> hits, vector<float>* AllDistances);
 	float SearchForNearOnlyDistances(vector<float> AllDistances);
 
 private:

@@ -321,7 +321,7 @@
     <ClInclude Include="Source\External\Parson\parson.h">
       <Filter>Sources\Parson</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AssimpManager.h">
+    <ClInclude Include="Source\ResourceManager.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Source\C_Math.h">
@@ -333,7 +333,7 @@
     <ClInclude Include="Source\Timer.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameObjectManager.h">
+    <ClInclude Include="Source\GameObject.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Source\TextureManager.h">
@@ -560,7 +560,7 @@
     <ClCompile Include="Source\External\Parson\parson.c">
       <Filter>Sources\Parson</Filter>
     </ClCompile>
-    <ClCompile Include="Source\AssimpManager.cpp">
+    <ClCompile Include="Source\ResourceManager.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Source\FileSystemManager.cpp">
@@ -578,7 +578,7 @@
     <ClCompile Include="Source\ComponentTransform.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameObjectManager.cpp">
+    <ClCompile Include="Source\GameObject.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Source\ComponentMesh.cpp">

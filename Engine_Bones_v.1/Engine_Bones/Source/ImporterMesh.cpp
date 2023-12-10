@@ -55,7 +55,7 @@ void Importer::ImporterMesh::ImportMesh(ResourceMesh* M_mesh, const aiMesh* aiMe
 			}
 		}
 
-		AssimpManager::SetBuffers(M_mesh->mesh);
+		ResourceManager::SetBuffers(M_mesh->mesh);
 	}
 }
 

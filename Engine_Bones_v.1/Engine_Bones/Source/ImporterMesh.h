@@ -4,8 +4,8 @@
 #include "Globals.h"
 #include "Module.h"
 #include "Application.h"
-#include "AssimpManager.h"
-#include "GameObjectManager.h"
+#include "ResourceManager.h"
+#include "GameObject.h"
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
 

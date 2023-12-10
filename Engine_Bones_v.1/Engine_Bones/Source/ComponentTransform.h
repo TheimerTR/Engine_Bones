@@ -3,7 +3,7 @@
 
 #include "ComponentManager.h"
 
-class GameObjectManager;
+class GameObject;
 
 class ComponentTransform : public ComponentManager
 {
@@ -29,12 +29,12 @@ public:
 
 public: 
 
-	ComponentTransform(GameObjectManager* gameObject);
+	ComponentTransform(GameObject* gameObject);
 	~ComponentTransform();
 
 	void ShowInfo(); 
 
-	void SetTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation); 
+	void SetTransform(GameObject* gameObject, float3 position, float3 scale, Quat rotation);
 
 	void UpdateTransformation(); 
 

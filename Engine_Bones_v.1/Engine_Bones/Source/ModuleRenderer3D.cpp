@@ -9,11 +9,11 @@
 #include <gl/GLU.h>
 
 #include "ModuleEditor.h"
-#include "AssimpManager.h"
+#include "ResourceManager.h"
 #include "TextureManager.h"
 #include "ModuleScene.h"
 
-#include "GameObjectManager.h"
+#include "GameObject.h"
 #include "ComponentManager.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
@@ -159,7 +159,7 @@ bool ModuleRenderer3D::Init()
 	texturesManager->SetCheckerTexture();
 
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/DefinitiveStreet.fbx", nullptr);
-	AssimpManager::AssimpLoader("Assets/ModelsFbx/Street.fbx");
+	ResourceManager::ResourceLoader("Assets/ModelsFbx/Street.fbx");
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/GrassStreet.fbx");
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/FloorRoad.fbx");
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/Houses.fbx");
@@ -308,7 +308,7 @@ bool ModuleRenderer3D::CleanUp()
 	LOG(LogTypeCase::L_CASUAL, "Destroying 3D Renderer");
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	AssimpManager::CleanUp();
+	ResourceManager::CleanUp();
 
 	aiDetachAllLogStreams();
 

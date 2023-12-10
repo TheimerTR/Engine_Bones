@@ -87,7 +87,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
-    <ClInclude Include="Source\AssimpManager.h" />
+    <ClInclude Include="Source\ResourceManager.h" />
     <ClInclude Include="Source\Color.h" />
     <ClInclude Include="Source\ComponentCamera.h" />
     <ClInclude Include="Source\ComponentManager.h" />
@@ -176,7 +176,7 @@
     <ClInclude Include="Source\External\Parson\parson.h" />
     <ClInclude Include="Source\External\PhysFS\include\physfs.h" />
     <ClInclude Include="Source\FileSystemManager.h" />
-    <ClInclude Include="Source\GameObjectManager.h" />
+    <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\glmath.h" />
     <ClInclude Include="Source\Globals.h" />
     <ClInclude Include="Source\ImporterTexture.h" />
@@ -202,7 +202,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
-    <ClCompile Include="Source\AssimpManager.cpp" />
+    <ClCompile Include="Source\ResourceManager.cpp" />
     <ClCompile Include="Source\Color.cpp" />
     <ClCompile Include="Source\ComponentCamera.cpp" />
     <ClCompile Include="Source\ComponentManager.cpp" />
@@ -256,7 +256,7 @@
     <ClCompile Include="Source\External\mmgr\mmgr.cpp" />
     <ClCompile Include="Source\External\Parson\parson.c" />
     <ClCompile Include="Source\FileSystemManager.cpp" />
-    <ClCompile Include="Source\GameObjectManager.cpp" />
+    <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\glmath.cpp" />
     <ClCompile Include="Source\ImporterMesh.cpp" />
     <ClCompile Include="Source\ImporterTexture.cpp" />

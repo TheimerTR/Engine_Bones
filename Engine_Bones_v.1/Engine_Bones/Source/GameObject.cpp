@@ -1,4 +1,4 @@
-#include "GameObjectManager.h"
+#include "GameObject.h"
 
 #include "Application.h"
 #include "ComponentManager.h"
@@ -8,7 +8,7 @@
 #include "ComponentCamera.h"
 #include "ModuleScene.h"
 
-GameObjectManager::GameObjectManager(string name, GameObjectManager* parent, int id) : mParent(parent), mName(name), mTransform(nullptr), isActive(true)
+GameObject::GameObject(string name, GameObject* parent, int id) : mParent(parent), mName(name), mTransform(nullptr), isActive(true)
 {
 	if(parent != nullptr)
 	{
@@ -35,7 +35,7 @@ GameObjectManager::GameObjectManager(string name, GameObjectManager* parent, int
 	}
 };
 
-GameObjectManager::~GameObjectManager() 
+GameObject::~GameObject()
 {
 	app->scene->AllGameObjectManagers.erase(find(app->scene->AllGameObjectManagers.begin(), app->scene->AllGameObjectManagers.end(), this));
 
@@ -110,7 +110,7 @@ GameObjectManager::~GameObjectManager()
 	isSelected = false;
 };
 
-ComponentManager* GameObjectManager::AddComponent(ComponentType type)
+ComponentManager* GameObject::AddComponent(ComponentType type)
 {
 	ComponentManager* Comp = nullptr;
 
@@ -151,7 +151,7 @@ ComponentManager* GameObjectManager::AddComponent(ComponentType type)
 	return Comp;
 }
 
-vector<ComponentManager*> GameObjectManager::GetComponentsGameObject(ComponentType type)
+vector<ComponentManager*> GameObject::GetComponentsGameObject(ComponentType type)
 {
 	std::vector<ComponentManager*> VecComponentsFound;
 
@@ -166,7 +166,7 @@ vector<ComponentManager*> GameObjectManager::GetComponentsGameObject(ComponentTy
 	return VecComponentsFound;
 }
 
-ComponentManager* GameObjectManager::GetComponentGameObject(ComponentType type)
+ComponentManager* GameObject::GetComponentGameObject(ComponentType type)
 {
 	std::vector<ComponentManager*> objectMaterials;
 
@@ -225,12 +225,12 @@ ComponentManager* GameObjectManager::GetComponentGameObject(ComponentType type)
 	return nullptr;
 }
 
-bool GameObjectManager::isActiveGameObject()
+bool GameObject::isActiveGameObject()
 {
 	return isActive; 
 }
 
-void GameObjectManager::Enable()
+void GameObject::Enable()
 {
 	isActive = true; 
 
@@ -240,14 +240,14 @@ void GameObjectManager::Enable()
 	}
 }
 
-void GameObjectManager::Disable()
+void GameObject::Disable()
 {
 	isActive = false;
 }
 
-void GameObjectManager::Update() 
+void GameObject::Update()
 {
-	GameObjectManager* gameObjects = nullptr; 
+	GameObject* gameObjects = nullptr;
 
 	for (uint i = 0; i < app->scene->AllGameObjectManagers.size(); i++)
 	{
@@ -263,7 +263,7 @@ void GameObjectManager::Update()
 	}
 }
 
-void GameObjectManager::DeleteComponent(ComponentManager* ptr)
+void GameObject::DeleteComponent(ComponentManager* ptr)
 {
 	if (ptr != nullptr)
 	{
@@ -299,7 +299,7 @@ void GameObjectManager::DeleteComponent(ComponentManager* ptr)
 	}
 }
 
-void GameObjectManager::DeleteChild(GameObjectManager* gameObject)
+void GameObject::DeleteChild(GameObject* gameObject)
 {
 	if (gameObject != nullptr)
 	{
@@ -318,11 +318,11 @@ void GameObjectManager::DeleteChild(GameObjectManager* gameObject)
 	}
 }
 
-void GameObjectManager::MoveChildIntoParent(int Key)
+void GameObject::MoveChildIntoParent(int Key)
 {
 	int posInVector = 0;
 	posInVector = this->SearchChildPosInVector();
-	GameObjectManager* Temp_gameObject = nullptr;
+	GameObject* Temp_gameObject = nullptr;
 
 	if(Key == SDL_SCANCODE_UP)
 	{
@@ -345,7 +345,7 @@ void GameObjectManager::MoveChildIntoParent(int Key)
 	}
 }
 
-int GameObjectManager::SearchChildPosInVector()
+int GameObject::SearchChildPosInVector()
 {
 	int i = 0;
 
@@ -360,9 +360,9 @@ int GameObjectManager::SearchChildPosInVector()
 	return -1;
 }
 
-void GameObjectManager::CreateEmptyObject(GameObjectManager* gameObject)
+void GameObject::CreateEmptyObject(GameObject* gameObject)
 {
-	GameObjectManager* _gameObject = new GameObjectManager("Empty_Object", gameObject);
+	GameObject* _gameObject = new GameObject("Empty_Object", gameObject);
 	
 	app->scene->Selected_GameObject = app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1);
 	app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1)->isSelected = true;
@@ -394,7 +394,7 @@ void GameObjectManager::CreateEmptyObject(GameObjectManager* gameObject)
 	}
 }
 
-void GameObjectManager::ChangeParent(GameObjectManager* gameObject)
+void GameObject::ChangeParent(GameObject* gameObject)
 {
 	if (this != gameObject)
 	{

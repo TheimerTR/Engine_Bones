@@ -1,8 +1,8 @@
 #include "ComponentCamera.h"
-#include "GameObjectManager.h"
+#include "GameObject.h"
 #include "External/ImGui/imgui.h"
 
-ComponentCamera::ComponentCamera(GameObjectManager* gameObject) : ComponentManager(gameObject)
+ComponentCamera::ComponentCamera(GameObject* gameObject) : ComponentManager(gameObject)
 {
 	UUID = app->RandomGenerator.Int();
 	//Type = ComponentType::CAMERA;
@@ -240,7 +240,6 @@ void ComponentCamera::FrameBuffer(int w, int h)
 void ComponentCamera::Culling()
 {
 	bool IsInside = false; 
-
 
 	for (int i = 1; i < app->scene->AllGameObjectManagers.size(); i++)
 	{

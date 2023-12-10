@@ -14,7 +14,7 @@
 #include "External/Assimp/include/postprocess.h"
 #pragma comment (lib, "External/Assimp/libx86/assimp.lib")
 
-class GameObjectManager;
+class GameObject;
 class ResourceElement;
 class TextureManager;
 class JsonManager;
@@ -67,11 +67,11 @@ struct Mesh
 	AABB local_aabb; 
 };
 
-namespace AssimpManager
+namespace ResourceManager
 {
-	void AssimpLoader(const char* path, const char* pathTexture = nullptr);
+	void ResourceLoader(const char* path, const char* pathTexture = nullptr);
 
-	void SimpleAssimpLoader(const char* Path, GameObjectManager* gameObject, const char* texturePath = nullptr);
+	void SimpleResourceLoader(const char* Path, GameObject* gameObject, const char* texturePath = nullptr);
 
 	void MetaExistenceLoader(const char* Path);
 
@@ -82,15 +82,15 @@ namespace AssimpManager
 	template <class T>
 	void ClearAssimpVec(vector<T>& vector);
 
-	void GameObjectNodeTree(const aiScene* scene, int numMeshes, int pointer, /*aiMesh** M_Array*/ aiNode* actualObj, GameObjectManager* _Parent, string Name, const char* Path, const char* texturePath);
+	void GameObjectNodeTree(const aiScene* scene, int numMeshes, int pointer, /*aiMesh** M_Array*/ aiNode* actualObj, GameObject* _Parent, string Name, const char* Path, const char* texturePath);
 
 	void Clear_Mesh(Mesh* mesh);
 
-	void AplicateTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation); 
+	void AplicateTransform(GameObject* gameObject, float3 position, float3 scale, Quat rotation);
 
 	void SetBuffers(Mesh* M_mesh);
 
-	void MetaFileCreator(GameObjectManager* gameObject, const char* path);
+	void MetaFileCreator(GameObject* gameObject, const char* path);
 
 	bool CheckNotDuplicateFromAssets(ResourceElement* R_Element, uint32 uuid);
 	bool CheckResourceComponentsExistence(ResourceElement* R_Element);

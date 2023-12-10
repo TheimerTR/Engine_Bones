@@ -2,12 +2,12 @@
 #define COMPONENTMESH_H_
 
 #include "ComponentManager.h"
-#include "AssimpManager.h"
+#include "ResourceManager.h"
 #include "External/MathGeoLib/include/Geometry/AABB.h"
 #include "External/MathGeoLib/include/Geometry/OBB.h"
 #include "ComponentTransform.h"
 
-class GameObjectManager;
+class GameObject;
 class ComponentTransform; 
 
 class ComponentMesh : public ComponentManager
@@ -20,7 +20,7 @@ public:
 
 public:
 
-	ComponentMesh(GameObjectManager* gameObject);
+	ComponentMesh(GameObject* gameObject);
 	~ComponentMesh();
 
 	void SetMesh(Mesh* T_Mesh);

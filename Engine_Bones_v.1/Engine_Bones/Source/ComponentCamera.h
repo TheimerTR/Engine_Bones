@@ -2,19 +2,19 @@
 #define COMPONENTCAMERA_H_
 
 #include "ComponentManager.h"
-#include "AssimpManager.h"
+#include "ResourceManager.h"
 
 #include "External/MathGeoLib/include/Geometry/Frustum.h"
 
 
-class GameObjectManager;
+class GameObject;
 
 class ComponentCamera : public ComponentManager
 {
 
 public:
 
-	ComponentCamera(GameObjectManager* gameObject);
+	ComponentCamera(GameObject* gameObject);
 	~ComponentCamera();
 
 	bool Update(); 

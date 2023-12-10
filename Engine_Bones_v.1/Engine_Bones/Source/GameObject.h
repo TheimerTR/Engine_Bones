@@ -1,11 +1,11 @@
-#ifndef GAMEOBJECTMANAGER_H_
-#define GAMEOBJECTMANAGER_H_
+#ifndef GAMEOBJECT_H_
+#define GAMEOBJECT_H_
 
 #include "Globals.h"
 #include "External/MathGeoLib/include/MathGeoLib.h"
 #include <vector>
 
-#include "AssimpManager.h"
+#include "ResourceManager.h"
 #include "TextureManager.h"
 #include "ComponentManager.h"
 #include "ComponentMesh.h"
@@ -25,14 +25,14 @@ class ComponentMaterial;
 class ComponentMesh;
 class ComponentCamera; 
 
-class GameObjectManager
+class GameObject
 {
 public:
 
-	GameObjectManager(string name, GameObjectManager* parent, int id = 0);
-	~GameObjectManager();
+	GameObject(string name, GameObject* parent, int id = 0);
+	~GameObject();
 
-	GameObjectManager* mParent;
+	GameObject* mParent;
 	ComponentTransform* mTransform = nullptr;
 	vector<ComponentManager*> mComponents;
 	string mName;
@@ -41,7 +41,7 @@ public:
 
 	unsigned long UUID;
 
-	vector<GameObjectManager*> childrens;
+	vector<GameObject*> childrens;
 
 	ComponentManager* AddComponent(ComponentType type);
 	vector<ComponentManager*> GetComponentsGameObject(ComponentType type);
@@ -56,13 +56,13 @@ public:
 	/*void Destroy();*/
 
 	void DeleteComponent(ComponentManager* ptr);
-	void DeleteChild(GameObjectManager* gameObject);
+	void DeleteChild(GameObject* gameObject);
 	void MoveChildIntoParent(int Key);
 	int SearchChildPosInVector();
 
-	void CreateEmptyObject(GameObjectManager* gameObject);
+	void CreateEmptyObject(GameObject* gameObject);
 
-	void ChangeParent(GameObjectManager* gameObject);
+	void ChangeParent(GameObject* gameObject);
 };
 
-#endif // GAMEOBJECTMANAGER_H_
+#endif // GAMEOBJECT_H_

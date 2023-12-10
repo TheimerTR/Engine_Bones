@@ -1,4 +1,4 @@
-#include "AssimpManager.h"
+#include "ResourceManager.h"
 #include "ResourceMesh.h"
 
 #include<stdlib.h>
@@ -15,7 +15,7 @@
 #include "ModuleRenderer3D.h"
 #include "FileSystemManager.h"
 #include "Globals.h"
-#include "GameObjectManager.h"
+#include "GameObject.h"
 #include "TextureManager.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
@@ -44,8 +44,7 @@
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "External/Glew/libx86/glew32.lib")
 
-
-void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
+void ResourceManager::ResourceLoader(const char* path, const char* pathTexture)
 {
 	if (!app->scene->GameTime.running)
 	{
@@ -99,7 +98,7 @@ void AssimpManager::AssimpLoader(const char* path, const char* pathTexture)
 	}
 }
 
-void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* gameObject, const char* texturePath)
+void ResourceManager::SimpleResourceLoader(const char* Path, GameObject* gameObject, const char* texturePath)
 {
 	const aiScene* scene = aiImportFile(Path, aiProcessPreset_TargetRealtime_MaxQuality);
 
@@ -253,7 +252,7 @@ void AssimpManager::SimpleAssimpLoader(const char* Path, GameObjectManager* game
 		LOG(LogTypeCase::L_ERROR, "Error loading scene % s", Path);
 }
 
-void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int pointer, /*aiMesh** M_Array*/ aiNode* actualObj, GameObjectManager* _Parent, string Name, const char* Path, const char* texturePath)
+void ResourceManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int pointer, /*aiMesh** M_Array*/ aiNode* actualObj, GameObject* _Parent, string Name, const char* Path, const char* texturePath)
 {
 	int i = pointer;
 
@@ -265,14 +264,14 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	float3 scale(scaling.x, scaling.y, scaling.z);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
-	GameObjectManager* _ParentObj;
+	GameObject* _ParentObj;
 
 	std::string nameChildren = actualObj->mName.C_Str();
 	int found = nameChildren.find_first_of("$");
 
 	if (found == std::string::npos)
 	{
-		_ParentObj = new GameObjectManager(Name, _Parent);
+		_ParentObj = new GameObject(Name, _Parent);
 	}
 	else
 	{
@@ -821,7 +820,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 	}
 }
 
-void AssimpManager::ChangeDebugMode(bool type)
+void ResourceManager::ChangeDebugMode(bool type)
 {
 	if (type)
 	{
@@ -836,7 +835,7 @@ void AssimpManager::ChangeDebugMode(bool type)
 	}
 }
 
-void AssimpManager::CleanUp()
+void ResourceManager::CleanUp()
 {
 	for (int i = 0; i < AllMeshes.size(); i++)
 	{
@@ -864,7 +863,7 @@ void AssimpManager::CleanUp()
 }
 
 template <class T>
-void AssimpManager::ClearAssimpVec(std::vector<T>& vector)
+void ResourceManager::ClearAssimpVec(std::vector<T>& vector)
 {
 	if (vector.size() > 0)
 	{
@@ -877,7 +876,7 @@ void AssimpManager::ClearAssimpVec(std::vector<T>& vector)
 	vector.clear();
 }
 
-void  AssimpManager::Clear_Mesh(Mesh* mesh)
+void  ResourceManager::Clear_Mesh(Mesh* mesh)
 {
 	if (mesh->VBO != 0)
 	{
@@ -926,12 +925,12 @@ void  AssimpManager::Clear_Mesh(Mesh* mesh)
 	}
 }
 
-void AssimpManager::AplicateTransform(GameObjectManager* gameObject, float3 position, float3 scale, Quat rotation) 
+void ResourceManager::AplicateTransform(GameObject* gameObject, float3 position, float3 scale, Quat rotation)
 {
 	gameObject->mTransform->SetTransform(gameObject, position, scale, rotation); 
 }
 
-void AssimpManager::SetBuffers(Mesh* M_mesh)
+void ResourceManager::SetBuffers(Mesh* M_mesh)
 {
 	M_mesh->VBO = 0;
 	M_mesh->EBO = 0;
@@ -959,7 +958,7 @@ void AssimpManager::SetBuffers(Mesh* M_mesh)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void AssimpManager::MetaFileCreator(GameObjectManager* gameObject, const char* path)
+void ResourceManager::MetaFileCreator(GameObject* gameObject, const char* path)
 {
 	//string nameToMeta;
 	//string extensionToMeta;
@@ -1053,7 +1052,7 @@ void AssimpManager::MetaFileCreator(GameObjectManager* gameObject, const char* p
 	RELEASE_ARRAY(buffer);
 }
 
-bool AssimpManager::CheckResourceComponentsExistence(ResourceElement* R_Element)
+bool ResourceManager::CheckResourceComponentsExistence(ResourceElement* R_Element)
 {
 	bool Exist = false;
 
@@ -1074,7 +1073,7 @@ bool AssimpManager::CheckResourceComponentsExistence(ResourceElement* R_Element)
 	return Exist;
 }
 
-bool AssimpManager::CheckStringComponentsExistence(string Component)
+bool ResourceManager::CheckStringComponentsExistence(string Component)
 {
 	bool Exist = false;
 
@@ -1091,7 +1090,7 @@ bool AssimpManager::CheckStringComponentsExistence(string Component)
 	return Exist;
 }
 
-bool AssimpManager::CheckNotDuplicateFromAssets(ResourceElement* R_Element, uint32 uuid)
+bool ResourceManager::CheckNotDuplicateFromAssets(ResourceElement* R_Element, uint32 uuid)
 {
 	bool Exist = false;
 
@@ -1138,7 +1137,7 @@ bool AssimpManager::CheckNotDuplicateFromAssets(ResourceElement* R_Element, uint
 	return Exist;
 }
 
-bool AssimpManager::ImportOnlyTexture(string Path)
+bool ResourceManager::ImportOnlyTexture(string Path)
 {
 	if (!app->scene->GameTime.running)
 	{
@@ -1194,7 +1193,7 @@ bool AssimpManager::ImportOnlyTexture(string Path)
 
 		R_Texture->LibraryPath = pathToMeta;
 
-		if (!AssimpManager::CheckResourceComponentsExistence(R_Texture))
+		if (!ResourceManager::CheckResourceComponentsExistence(R_Texture))
 		{
 			if (!CheckNotDuplicateFromAssets((ResourceElement*)R_Texture, R_Texture->UUID))
 			{
@@ -1214,7 +1213,7 @@ bool AssimpManager::ImportOnlyTexture(string Path)
 	}
 }
 
-Texture* AssimpManager::ChangeTexture(string Path)
+Texture* ResourceManager::ChangeTexture(string Path)
 {
 	if (!app->scene->GameTime.running)
 	{
@@ -1273,7 +1272,7 @@ Texture* AssimpManager::ChangeTexture(string Path)
 
 		R_Texture->LibraryPath = pathToMeta;
 
-		if (!AssimpManager::CheckResourceComponentsExistence(R_Texture))
+		if (!ResourceManager::CheckResourceComponentsExistence(R_Texture))
 		{
 			if (size > 0)
 			{
@@ -1294,7 +1293,7 @@ Texture* AssimpManager::ChangeTexture(string Path)
 	}
 }
 
-void AssimpManager::MetaExistenceLoader(const char* Path)
+void ResourceManager::MetaExistenceLoader(const char* Path)
 {
 	char* buffer = nullptr;
 	uint size = app->physFSManager->Load(Path, &buffer);
@@ -1316,7 +1315,7 @@ void AssimpManager::MetaExistenceLoader(const char* Path)
 
 		FileSystem::StringDivide(pathToAssets.c_str(), &FileName, nullptr);
 
-		GameObjectManager* gm = new GameObjectManager(FileName, app->scene->Root);
+		GameObject* gm = new GameObject(FileName, app->scene->Root);
 
 		aiVector3D translation, scaling;
 		aiQuaternion rotation;

@@ -3,8 +3,8 @@
 
 #include "Module.h"
 #include "Application.h"
-#include "AssimpManager.h"
-#include "GameObjectManager.h"
+#include "ResourceManager.h"
+#include "GameObject.h"
 #include "ResourceElement.h"
 
 #include <vector>
@@ -24,15 +24,15 @@ public:
 	update_status PostUpdate(float dt) override;
 	bool CleanUp() override;
 
-	void PushGameObject(GameObjectManager* gameObject);
+	void PushGameObject(GameObject* gameObject);
 
 	void CreateGameCamera(); 
-	void AddCameraComponent(GameObjectManager* gm);
+	void AddCameraComponent(GameObject* gm);
 
 public:
-	vector<GameObjectManager*> AllGameObjectManagers;
-	GameObjectManager* Root = nullptr;
-	GameObjectManager* Selected_GameObject = nullptr;
+	vector<GameObject*> AllGameObjectManagers;
+	GameObject* Root = nullptr;
+	GameObject* Selected_GameObject = nullptr;
 
 	vector<ResourceElement*> AllResources;
 

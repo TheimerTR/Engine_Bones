@@ -7,7 +7,7 @@
 
 #include "Globals.h"
 #include "Application.h"
-#include "AssimpManager.h"
+#include "ResourceManager.h"
 #include "ModuleEditor.h"
 #include "TextureManager.h"
 #include "ComponentManager.h"
@@ -37,14 +37,14 @@ void FileSystem::ReadFyleType(const char* Path)
 			case FileType::MODEL_3D:
 				file = "Assets/ModelsFbx/" + file;
 				//pathNomralized = app->physFSManager->NormalizePath(Path);
-				AssimpManager::AssimpLoader(Path);
+				ResourceManager::ResourceLoader(Path);
 				LOG(LogTypeCase::L_CASUAL, "Model Type: MODEL 3D");
 				break;
 			case FileType::TEXTURE:
 				file = "Assets/Textures/" + file;
 				if (app->editor->actualMesh->isSelected)
 				{
-					AssimpManager::ImportOnlyTexture(Path);
+					ResourceManager::ImportOnlyTexture(Path);
 
 					/*TexturesManager* texturesManager = new TexturesManager();
 					std::vector<ComponentManager*> objectMaterials = (app->editor->actualMesh->GetComponentsGameObject(ComponentType::MATERIAL));
