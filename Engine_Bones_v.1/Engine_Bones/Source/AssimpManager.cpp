@@ -671,7 +671,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 							if (ResourceToGameobject != nullptr)
 							{
-								ResourceToGameobject->UUID = numberId;
+								//ResourceToGameobject->UUID = numberId;
 								ResourceToGameobject->name = resource->ComponentsNames[j];
 
 								if (ResourceToGameobject->type == ResourceTypes::R_MESH)
@@ -700,6 +700,7 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 								if (ResourceToGameobject->type == ResourceTypes::R_TEXTURE)
 								{
 									ResourceTexture* R_Texture = (ResourceTexture*)ResourceToGameobject;
+									R_Texture->UUID = ResourceToGameobject->UUID;
 									R_Texture->LibraryPath = resource->ComponentsInModel[j];
 
 									buffer = nullptr;
@@ -745,7 +746,6 @@ void AssimpManager::GameObjectNodeTree(const aiScene* scene, int numMeshes, int 
 
 									R_Texture->LibraryPath = resource->ComponentsInModel[j];
 									R_Texture->resourceCounter += 1;
-
 
 									app->scene->AllResources.push_back(ResourceToGameobject);
 
