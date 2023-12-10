@@ -162,13 +162,15 @@ bool ModuleEditor::DrawEditor()
 				ComponentTransform* transform = actualMesh->mTransform;
 				float4x4 globalTransposed = transform->GetGlobalMatrix().Transposed();
 
-				ImGuizmo::Manipulate(app->renderer3D->ActiveCameraEditor->GetViewMatrix(), app->renderer3D->ActiveCameraEditor->GetProjectionMatrix(), CurrentOperation, ImGuizmo::MODE::LOCAL, globalTransposed.ptr());
-				
-				if (ImGuizmo::IsUsing())
+				if (!app->scene->GameTime.running)
 				{
-					transform->UpdateGuizmoTransformation(globalTransposed.Transposed());
+					ImGuizmo::Manipulate(app->renderer3D->ActiveCameraEditor->GetViewMatrix(), app->renderer3D->ActiveCameraEditor->GetProjectionMatrix(), CurrentOperation, ImGuizmo::MODE::LOCAL, globalTransposed.ptr());
+
+					if (ImGuizmo::IsUsing())
+					{
+						transform->UpdateGuizmoTransformation(globalTransposed.Transposed());
+					}
 				}
-				
 			}
 		}
 	}
