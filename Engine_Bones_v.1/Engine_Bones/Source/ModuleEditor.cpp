@@ -62,6 +62,9 @@ bool ModuleEditor::Init()
 	RGB = true;
 	PauseAndPlayWindow = true;
 	isRunning = false;
+	aabbDraw = true;
+	obbDraw = true;
+
 	ThemeSelector = 2;
 	SelectPrimitive = 0;
 	Log_current_idx = 3;

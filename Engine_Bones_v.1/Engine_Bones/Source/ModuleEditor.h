@@ -56,7 +56,7 @@ public:
 
 	bool copy, AboutWindow, OpenPreferences, LogOutput, Vsync, Gl_Grid, Gl_DepthTest, Gl_CullFace, Gl_Ligthing, Gl_ColorMaterial, Gl_Texture2D,
 		Gl_LineSmooth, Gl_PolygonSmooth, Gl_AlphaTest, DemoWindow, OpenAbout, DR_Normals, changeDebug, Hierarchy, InfoGWindow, ResourceWindow, isMovingParent,
-		isMovingChild, numcap, RGB_Mode, RGB, AssetWindow, PauseAndPlayWindow, isRunning;
+		isMovingChild, numcap, RGB_Mode, RGB, AssetWindow, PauseAndPlayWindow, isRunning, aabbDraw, obbDraw;
 
 	int ThemeSelector;
 	int item_current_idx;
@@ -95,9 +95,6 @@ public:
 	ImVec2 scenePos;
 	ImVec2 sceneSize;
 	ImGuizmo::OPERATION CurrentOperation;
-
-	bool aabbDraw = false;
-	bool obbDraw = false;
 
 	//ImVec2 sceneSize = ImVec2(0, 0);
 	//ImVec2 scenePos  = ImVec2(0, 0);
