@@ -1152,6 +1152,10 @@ bool ModuleEditor::DrawEditor()
 						}
 					}
 
+					ImGui::Checkbox("Draw AABB", &aabbDraw);
+
+					ImGui::Checkbox("Draw OBB", &obbDraw); 
+
 					ImGui::TreePop();
 					ImGui::Separator();
 				}

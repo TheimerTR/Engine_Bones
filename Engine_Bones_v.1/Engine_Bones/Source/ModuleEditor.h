@@ -96,6 +96,9 @@ public:
 	ImVec2 sceneSize;
 	ImGuizmo::OPERATION CurrentOperation;
 
+	bool aabbDraw = false;
+	bool obbDraw = false;
+
 	//ImVec2 sceneSize = ImVec2(0, 0);
 	//ImVec2 scenePos  = ImVec2(0, 0);
 };
