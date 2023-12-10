@@ -40,3 +40,5 @@ You can add different game cameras from assets and move them using guizmos
 * P to enter in InsertParent mode.
 * C to enter in MoveIntoChildList mode.
 * LShift+P to quit a child from a parent.
+
+You can draw aabb and obb with the Preferences->General menu 
