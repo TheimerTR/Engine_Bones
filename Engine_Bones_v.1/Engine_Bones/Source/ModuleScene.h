@@ -27,6 +27,7 @@ public:
 	void PushGameObject(GameObjectManager* gameObject);
 
 	void CreateGameCamera(); 
+	void AddCameraComponent(GameObjectManager* gm);
 
 public:
 	vector<GameObjectManager*> AllGameObjectManagers;

@@ -350,9 +350,16 @@ bool ModuleEditor::DrawEditor()
 
 			if (ImGui::BeginMenu("Camera"))
 			{
-				if (ImGui::MenuItem("GameCamera"))
+				if (!App->scene->GameTime.running)
 				{
-					app->scene->CreateGameCamera();
+					if (ImGui::MenuItem("GameCamera"))
+					{
+						app->scene->CreateGameCamera();
+					}
+				}
+				else
+				{
+					LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
 				}
 
 				ImGui::EndMenu();
@@ -1388,6 +1395,23 @@ void ModuleEditor::HierarchyWindowDisplay(GameObjectManager* gameObject)
 
 					ImGui::EndMenu();
 				}
+				
+				if (ImGui::BeginMenu("Camera"))
+				{
+					if (!App->scene->GameTime.running)
+					{
+						if (ImGui::MenuItem("GameCamera"))
+						{
+							app->scene->CreateGameCamera();
+						}
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
+
+					ImGui::EndMenu();
+				}
 
 				ImGui::EndMenu();
 			}
@@ -1857,6 +1881,23 @@ void ModuleEditor::AddEntity(GameObjectManager* gm)
 
 			ImGui::EndMenu();
 		}
+
+		if (ImGui::BeginMenu("Camera"))
+		{
+			if (!App->scene->GameTime.running)
+			{
+				if (ImGui::MenuItem("GameCamera"))
+				{
+					app->scene->CreateGameCamera();
+				}
+			}
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
+
+			ImGui::EndMenu();
+		}
 	}
 	else
 	{
@@ -1931,6 +1972,11 @@ void ModuleEditor::AddComponentInInspector(GameObjectManager* gm)
 			TexturesManager* texturesManager = new TexturesManager();
 			ComponentMaterial* C_Texture = dynamic_cast<ComponentMaterial*>(gm->AddComponent(ComponentType::MATERIAL));
 			C_Texture->SetTexture(nullptr);
+		}
+
+		if (ImGui::MenuItem("GameCamera"))
+		{
+			app->scene->AddCameraComponent(gm);
 		}
 	}
 	else
@@ -2015,8 +2061,14 @@ void ModuleEditor::InfoGameObjectWindow(GameObjectManager* gameObject)
 
 		if (ImGui::BeginPopup("AddComponent"))
 		{
-
-			AddComponentInInspector(gameObject);
+			if (!app->scene->GameTime.running)
+			{
+				AddComponentInInspector(gameObject);
+			}
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+			}
 
 			ImGui::EndPopup();
 		}

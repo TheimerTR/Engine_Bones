@@ -153,3 +153,9 @@ void ModuleScene::CreateGameCamera(                                             
 	ComponentCamera* camera = dynamic_cast<ComponentCamera*>(gameObject->AddComponent(ComponentType::CAMERA));
 	App->renderer3D->SetCameraGame(camera); 
 }
+
+void ModuleScene::AddCameraComponent(GameObjectManager* gm)
+{
+	ComponentCamera* camera = dynamic_cast<ComponentCamera*>(gm->AddComponent(ComponentType::CAMERA));
+	App->renderer3D->SetCameraGame(camera);
+}
