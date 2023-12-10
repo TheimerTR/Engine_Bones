@@ -14,6 +14,7 @@ Engine Bones is an amazing 3D Engine for your amazing 3D games :D
 
 ### Camera
 
+#### Editor Camera
 * Moving -> WASD keys
 * Looking around -> Right click
 * Mouse wheel -> zoom in and out
@@ -22,6 +23,15 @@ Engine Bones is an amazing 3D Engine for your amazing 3D games :D
 * Duplicate movement -> Shift
 * Moving Down -> LCtrl
 * Moving Up -> Space bar
+
+#### Game Camera
+You can add different game cameras from assets and move them using guizmos
+
+### Guizmos
+
+* W -> moving
+* E -> rotating
+* R -> scaling 
 
 ### Hierarchy
 
