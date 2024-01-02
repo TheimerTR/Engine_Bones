@@ -402,6 +402,9 @@
     <ClInclude Include="Source\External\ImGuizmo\ImZoomSlider.h">
       <Filter>Sources\ImGuizmo</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ComponentUI.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -631,6 +634,9 @@
     </ClCompile>
     <ClCompile Include="Source\External\ImGuizmo\ImSequencer.cpp">
       <Filter>Sources\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ComponentUI.cpp">
+      <Filter>Sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

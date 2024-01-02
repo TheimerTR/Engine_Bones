@@ -94,6 +94,7 @@ public:
 
 	ImVec2 scenePos;
 	ImVec2 sceneSize;
+	ImVec2 GameWindowSize;
 	ImGuizmo::OPERATION CurrentOperation;
 
 	//ImVec2 sceneSize = ImVec2(0, 0);

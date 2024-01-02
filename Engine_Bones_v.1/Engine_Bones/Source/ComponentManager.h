@@ -19,6 +19,7 @@ enum ComponentType
 	TRANSFORM,
 	SHOWNMATERIAL,
 	CAMERA,
+	UI,
 	NONE,
 };
 

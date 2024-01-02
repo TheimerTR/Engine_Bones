@@ -11,6 +11,8 @@
 #include "GameObject.h"
 #include "TextureManager.h"
 
+#include "ComponentUI.h"
+
 #include <vector>
 #include <stdio.h>
 
@@ -42,6 +44,7 @@ public:
 	void OnResize(int width, int height);
 
 	void RenderDraw(ComponentMesh* mesh, ComponentTransform* transform, ComponentMaterial* texture = nullptr);
+	void RenderUI(GameObject* gm, ComponentUI* UI_Element, bool isGameMode, ComponentMaterial* texture = nullptr);
 
 	void SetCameraEditor(ComponentCamera* camera); 
 

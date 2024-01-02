@@ -183,10 +183,10 @@ bool ModuleEditor::DrawEditor()
 	if (ImGui::Begin(nameGame.c_str(), NULL))
 	{
 		if (App->renderer3D->cameraGame != nullptr && App->renderer3D->cameraGame->frameID != 0 && App->renderer3D->cameraGame->activeGame == true) {
-			ImVec2 size = ImGui::GetContentRegionAvail();
+			GameWindowSize = ImGui::GetContentRegionAvail();
 
 			App->renderer3D->cameraGame->SetRatio(ImGui::GetContentRegionAvail().x / ImGui::GetContentRegionAvail().y);
-			ImGui::Image((ImTextureID)App->renderer3D->cameraGame->frameTexture, size, ImVec2(0, 1), ImVec2(1, 0));
+			ImGui::Image((ImTextureID)App->renderer3D->cameraGame->frameTexture, GameWindowSize, ImVec2(0, 1), ImVec2(1, 0));
 		}
 	}
 	ImGui::End();

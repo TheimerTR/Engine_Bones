@@ -217,6 +217,12 @@ ComponentManager* GameObject::GetComponentGameObject(ComponentType type)
 			{
 				return (object); 
 			}
+		case ComponentType::UI:
+			if (object->Type == type)
+			{
+				return (object);
+			}
+			break;
 		default:
 			break;
 		}
