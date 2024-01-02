@@ -20,6 +20,7 @@ enum ComponentType
 	SHOWNMATERIAL,
 	CAMERA,
 	UI,
+	CANVAS,
 	NONE,
 };
 

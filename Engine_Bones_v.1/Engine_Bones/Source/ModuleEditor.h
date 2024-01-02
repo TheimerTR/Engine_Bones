@@ -71,6 +71,7 @@ public:
 	GameObject* actualMesh;
 	GameObject* moveEntityTo;
 	GameObject* hoveredItem;
+	GameObject* Canvas;
 	vector<GameObject*> OG_ChildList;
 
 	ResourceElement* actualResource;

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef COMPONENTUI_H_
 #define COMPONENTUI_H_
 
@@ -20,7 +21,6 @@ struct UIPlane {
 
 enum UI_Type
 {
-	CANVAS,
 	BUTTON,
 	TEXT,
 	IMAGE,
@@ -34,6 +34,10 @@ public:
 
 	UIPlane* PlaneInScene;
 	UIPlane* PlaneInGame;
+	GameObject* gmAtached;
+
+	uint widthPanel;
+	uint heigthPanel;
 
 public:
 

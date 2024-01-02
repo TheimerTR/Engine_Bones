@@ -18,6 +18,7 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentUI.h"
+#include "CanvasUI.h"
 
 #include "ImporterTexture.h"
 
@@ -223,17 +224,18 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	}
 	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 	{
-		std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
+		ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
+		ComponentUI* objectUI = (ComponentUI*)(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
+		CanvasUI* canvas_UI = (CanvasUI*)App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::CANVAS);
 
-		for (int j = 0; j < objectMeshes.size(); j++)
+		if (canvas_UI != nullptr)
 		{
-			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
-			ComponentUI* objectUI = dynamic_cast<ComponentUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
+			RenderCanvas(App->scene->AllGameObjectManagers[i], canvas_UI);
+		}
 
-			if (objectUI != nullptr)
-			{
-				RenderUI(App->scene->AllGameObjectManagers[i], objectUI, false, objectTexture);
-			}
+		if (objectUI != nullptr)
+		{
+			RenderUI(App->scene->AllGameObjectManagers[i], objectUI, false, objectTexture);
 		}
 	}
 
@@ -304,9 +306,18 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			for (int j = 0; j < objectMeshes.size(); j++)
 			{
 				ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
-				ComponentUI* objectUI = dynamic_cast<ComponentUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
+				ComponentUI* objectUI = (ComponentUI*)App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI);
+				CanvasUI* canvas_UI = (CanvasUI*)App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::CANVAS);
+				
+				if (canvas_UI != nullptr)
+				{
+					RenderCanvas(App->scene->AllGameObjectManagers[i], canvas_UI);
+				}
 
-				RenderUI(App->scene->AllGameObjectManagers[i], objectUI, true, objectTexture);
+				if (objectUI != nullptr)
+				{
+					RenderUI(App->scene->AllGameObjectManagers[i], objectUI, true, objectTexture);
+				}
 			}
 		}
 
@@ -589,6 +600,15 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 
 	if (!isGameMode)
 		glPopMatrix();
+}
+
+void ModuleRenderer3D::RenderCanvas(GameObject* gm, CanvasUI* UI_Canvas)
+{
+	if (App->editor->Canvas != nullptr)
+	{
+		CanvasUI* canvasUI = (CanvasUI*)(App->editor->Canvas->GetComponentGameObject(ComponentType::CANVAS));
+		canvasUI->Draw();
+	}
 }
 
 void ModuleRenderer3D::SetCameraEditor(ComponentCamera* camera)

@@ -7,6 +7,8 @@
 #include "ComponentMaterial.h"
 #include "ComponentCamera.h"
 #include "ModuleScene.h"
+#include "CanvasUI.h"
+#include "ComponentUI.h"
 
 GameObject::GameObject(string name, GameObject* parent, int id) : mParent(parent), mName(name), mTransform(nullptr), isActive(true)
 {
@@ -135,6 +137,14 @@ ComponentManager* GameObject::AddComponent(ComponentType type)
 		Comp = new ComponentCamera(this); 
 		Comp->Type = ComponentType::CAMERA; 
 		break; 
+	case ComponentType::UI:
+		Comp = new ComponentUI(UI_Type::BUTTON, this, 10, 10, 0, 0);
+		Comp->Type = ComponentType::UI;
+		break;
+	case ComponentType::CANVAS:
+		Comp = new CanvasUI(this, 200, 200, 0, 0);
+		Comp->Type = ComponentType::CANVAS;
+		break;
 	case ComponentType::NONE:
 		LOG(LogTypeCase::L_ERROR, "The Component Type was nullptr");
 		Comp->Type = ComponentType::NONE;
@@ -218,6 +228,12 @@ ComponentManager* GameObject::GetComponentGameObject(ComponentType type)
 				return (object); 
 			}
 		case ComponentType::UI:
+			if (object->Type == type)
+			{
+				return (object);
+			}
+			break;
+		case ComponentType::CANVAS:
 			if (object->Type == type)
 			{
 				return (object);

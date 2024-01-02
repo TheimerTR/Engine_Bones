@@ -11,8 +11,6 @@
 #include "GameObject.h"
 #include "TextureManager.h"
 
-#include "ComponentUI.h"
-
 #include <vector>
 #include <stdio.h>
 
@@ -21,6 +19,9 @@
 //todo: REMOVE this before 1st delivery!!
 
 #define MAX_LIGHTS 8
+
+class ComponentUI;
+class CanvasUI;
 
 enum class PrimitiveType
 {
@@ -45,6 +46,7 @@ public:
 
 	void RenderDraw(ComponentMesh* mesh, ComponentTransform* transform, ComponentMaterial* texture = nullptr);
 	void RenderUI(GameObject* gm, ComponentUI* UI_Element, bool isGameMode, ComponentMaterial* texture = nullptr);
+	void RenderCanvas(GameObject* gm, CanvasUI* UI_Canvas);
 
 	void SetCameraEditor(ComponentCamera* camera); 
 

@@ -87,6 +87,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\CanvasUI.h" />
     <ClInclude Include="Source\ComponentUI.h" />
     <ClInclude Include="Source\ResourceManager.h" />
     <ClInclude Include="Source\Color.h" />
@@ -203,6 +204,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\CanvasUI.cpp" />
     <ClCompile Include="Source\ComponentUI.cpp" />
     <ClCompile Include="Source\ResourceManager.cpp" />
     <ClCompile Include="Source\Color.cpp" />

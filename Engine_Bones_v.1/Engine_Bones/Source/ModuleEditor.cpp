@@ -25,6 +25,7 @@
 #include "TextureManager.h"
 #include "FileSystemManager.h"
 #include "ResourceTexture.h"
+#include "ComponentUI.h"
 
 #include"External/Assimp/include/version.h"
 
@@ -79,6 +80,7 @@ bool ModuleEditor::Init()
 	moveEntityTo = nullptr;
 	hoveredItem = nullptr;
 	hoveredResource = nullptr;
+	Canvas = nullptr;
 
 	numcap = true; 
 
@@ -447,6 +449,27 @@ bool ModuleEditor::DrawEditor()
 				else
 				{
 					LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+				}
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("UI"))
+			{
+				if (!App->scene->GameTime.running)
+				{
+					if (ImGui::MenuItem("Canvas"))
+					{
+						if (Canvas == nullptr)
+						{
+							Canvas = new GameObject("Canvas", App->scene->Root);
+							ComponentUI* comp_UI = (ComponentUI*)(Canvas->AddComponent(ComponentType::CANVAS));
+						}
+						else
+						{
+							LOG(LogTypeCase::L_WARNING, "You already have a Canvas!");
+						}
+					}
 				}
 
 				ImGui::EndMenu();

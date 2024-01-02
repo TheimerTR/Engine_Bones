@@ -16,8 +16,14 @@
 
 ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigth, uint PosX, uint PosY) : ComponentManager(gameObject)
 {
-	texture = new Texture();
+	gmAtached = gameObject;
+
+	widthPanel = width;
+	heigthPanel = heigth;
+
 	this->UUID = app->RandomIntGenerator();
+
+	texture = new Texture();
 
 	float3 transform;
 
