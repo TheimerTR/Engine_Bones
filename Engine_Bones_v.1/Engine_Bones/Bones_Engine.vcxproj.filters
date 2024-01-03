@@ -408,6 +408,9 @@
     <ClInclude Include="Source\CanvasUI.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ButtonUI.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -642,6 +645,9 @@
       <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Source\CanvasUI.cpp">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ButtonUI.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>

@@ -138,7 +138,7 @@ ComponentManager* GameObject::AddComponent(ComponentType type)
 		Comp->Type = ComponentType::CAMERA; 
 		break; 
 	case ComponentType::UI:
-		Comp = new ComponentUI(UI_Type::BUTTON, this, 10, 10, 0, 0);
+		Comp = new ComponentUI(UI_Type::BUTTON, this, 30, 30, 300, 30, nullptr);
 		Comp->Type = ComponentType::UI;
 		break;
 	case ComponentType::CANVAS:

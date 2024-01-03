@@ -5,6 +5,7 @@
 #include "ComponentManager.h"
 #include "ResourceManager.h"
 #include "TextureManager.h"
+#include "ComponentTransform.h"
 #include "Color.h"
 
 class GameObject;
@@ -14,17 +15,20 @@ class CanvasUI : public ComponentManager
 public:
 	GameObject* gmAtached;
 
-	uint widthPanel;
-	uint heigthPanel;
+	float widthPanel;
+	float heigthPanel;
+	ComponentTransform* comp_transform;
 
 public:
-	CanvasUI(GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY);
+	CanvasUI(GameObject* gameObject, float width, float heigt, uint PosX, uint PosY);
 	~CanvasUI();
 
 	void Enable() override;
 	bool Update() override;
 	void Disable() override;
 	void Draw();
+
+	void ShowInfo();
 
 private:
 

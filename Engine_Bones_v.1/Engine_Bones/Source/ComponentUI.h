@@ -30,6 +30,7 @@ enum UI_Type
 class ComponentUI : public ComponentManager
 {
 public:
+	UI_Type ui_Type;
 	Texture* texture;
 
 	UIPlane* PlaneInScene;
@@ -39,9 +40,12 @@ public:
 	uint widthPanel;
 	uint heigthPanel;
 
-public:
+	bool isDragabble;
 
-	ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY);
+	float4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+public:
+	ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
 	~ComponentUI();
 
 	void SetTexture(Texture* T_Texture = nullptr);
@@ -50,7 +54,6 @@ public:
 	void Enable() override;
 	bool Update() override;
 	void Disable() override;
-	void ShowInfo(Texture* texture, int i);
 
 private:
 

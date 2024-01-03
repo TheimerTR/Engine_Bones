@@ -14,6 +14,9 @@
 #include <stdio.h>
 #include <map>
 
+class ComponentUI;
+class CanvasUI;
+
 class ModuleEditor : public Module
 {
 public:

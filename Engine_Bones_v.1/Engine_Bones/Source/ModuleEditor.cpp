@@ -26,6 +26,8 @@
 #include "FileSystemManager.h"
 #include "ResourceTexture.h"
 #include "ComponentUI.h"
+#include "CanvasUI.h"
+#include "ButtonUI.h"
 
 #include"External/Assimp/include/version.h"
 
@@ -463,11 +465,26 @@ bool ModuleEditor::DrawEditor()
 						if (Canvas == nullptr)
 						{
 							Canvas = new GameObject("Canvas", App->scene->Root);
-							ComponentUI* comp_UI = (ComponentUI*)(Canvas->AddComponent(ComponentType::CANVAS));
+							CanvasUI* canv_UI = (CanvasUI*)(Canvas->AddComponent(ComponentType::CANVAS));
 						}
 						else
 						{
 							LOG(LogTypeCase::L_WARNING, "You already have a Canvas!");
+						}
+					}
+
+					if (ImGui::MenuItem("Button"))
+					{
+						if (Canvas != nullptr)
+						{
+							GameObject* Button = new GameObject("Button", Canvas);
+							ComponentUI* comp_UI = (ComponentUI*)(Button->AddComponent(ComponentType::UI));
+							ButtonUI* but_UI = new ButtonUI(UI_Type::BUTTON, Button, 3000, 3000, 0, 0, nullptr);
+							comp_UI = (ComponentUI*)but_UI;
+						}
+						else
+						{
+							LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
 						}
 					}
 				}
@@ -2193,6 +2210,8 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 	{
 		std::vector<ComponentManager*> objectMeshes = gameObject->GetComponentsGameObject(ComponentType::MESH);
 		std::vector<ComponentManager*> objectMaterials = gameObject->GetComponentsGameObject(ComponentType::MATERIAL);
+		ComponentUI* objectUI = (ComponentUI*)gameObject->GetComponentGameObject(ComponentType::UI);
+		CanvasUI* objectCanvasUI = (CanvasUI*)gameObject->GetComponentGameObject(ComponentType::CANVAS);
 		ComponentCamera* objectCamera = dynamic_cast<ComponentCamera*>(gameObject->GetComponentGameObject(ComponentType::CAMERA));
 
 		//ComponentMesh* objectMesh = (ComponentMesh*)gameObject->GetComponentGameObject(ComponentType::MESH);
@@ -2235,6 +2254,26 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 				}
 
 				ImGui::TreePop();
+			}
+		}
+
+		if(objectCanvasUI != nullptr)
+		{
+			objectCanvasUI->ShowInfo();
+		}
+		
+		if(objectUI != nullptr)
+		{
+			switch(objectUI->ui_Type)
+			{
+			case UI_Type::BUTTON:
+				{
+					ButtonUI* button = (ButtonUI*)objectUI;
+					button->ShowInfo();
+				}
+				break;
+			default:
+				break;
 			}
 		}
 

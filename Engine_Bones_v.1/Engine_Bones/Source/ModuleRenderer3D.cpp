@@ -301,23 +301,18 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 		for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 		{
-			std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
-
-			for (int j = 0; j < objectMeshes.size(); j++)
+			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
+			ComponentUI* objectUI = (ComponentUI*)App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI);
+			CanvasUI* canvas_UI = (CanvasUI*)App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::CANVAS);
+			
+			if (canvas_UI != nullptr)
 			{
-				ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
-				ComponentUI* objectUI = (ComponentUI*)App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI);
-				CanvasUI* canvas_UI = (CanvasUI*)App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::CANVAS);
-				
-				if (canvas_UI != nullptr)
-				{
-					RenderCanvas(App->scene->AllGameObjectManagers[i], canvas_UI);
-				}
+				RenderCanvas(App->scene->AllGameObjectManagers[i], canvas_UI);
+			}
 
-				if (objectUI != nullptr)
-				{
-					RenderUI(App->scene->AllGameObjectManagers[i], objectUI, true, objectTexture);
-				}
+			if (objectUI != nullptr)
+			{
+				RenderUI(App->scene->AllGameObjectManagers[i], objectUI, true, objectTexture);
 			}
 		}
 
@@ -551,7 +546,7 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glColor4f(UI_Element->color[0], UI_Element->color[1], UI_Element->color[2], UI_Element->color[3]);
 
 	if (texture != nullptr)
 	{
@@ -567,11 +562,14 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	if (texture->GetTexture()->ShowTextures)
+	if (texture != nullptr)
 	{
-		if (texture->CM_TextureID != 0)
+		if (texture->GetTexture()->ShowTextures)
 		{
-			glBindTexture(GL_TEXTURE_2D, texture->CM_TextureID);
+			if (texture->CM_TextureID != 0)
+			{
+				glBindTexture(GL_TEXTURE_2D, texture->CM_TextureID);
+			}
 		}
 	}
 

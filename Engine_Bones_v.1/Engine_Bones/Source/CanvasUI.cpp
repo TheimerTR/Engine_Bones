@@ -1,21 +1,9 @@
 #include "CanvasUI.h"
 #include "GameObject.h"
-#include "ComponentTransform.h"
-
-#include "External/Glew/include/glew.h"
-#include "External/ImGui/imgui.h"
-#include "External/ImGui/backends/imgui_impl_sdl2.h"
-#include "External/ImGui/backends/imgui_impl_opengl3.h"
-#include <stdio.h>
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-#include <SDL_opengles2.h>
-#else
-#include "External/SDL/include/SDL_opengl.h"
-#endif
 
 #include "FileSystemManager.h"
 
-CanvasUI::CanvasUI(GameObject* gameObject, uint width, uint heigth, uint PosX, uint PosY) : ComponentManager(gameObject)
+CanvasUI::CanvasUI(GameObject* gameObject, float width, float heigth, uint PosX, uint PosY) : ComponentManager(gameObject)
 {
 	gmAtached = gameObject;
 
@@ -23,6 +11,8 @@ CanvasUI::CanvasUI(GameObject* gameObject, uint width, uint heigth, uint PosX, u
 	heigthPanel = heigth;
 
 	this->UUID = app->RandomIntGenerator();
+
+	comp_transform = dynamic_cast<ComponentTransform*>(gmAtached->GetComponentGameObject(ComponentType::TRANSFORM));
 }
 
 
@@ -48,8 +38,6 @@ void CanvasUI::Disable()
 
 void CanvasUI::Draw()
 {
-	ComponentTransform* comp_transform = dynamic_cast<ComponentTransform*>(gmAtached->GetComponentGameObject(ComponentType::TRANSFORM));
-
 	glBegin(GL_LINE_LOOP);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -61,4 +49,22 @@ void CanvasUI::Draw()
 	glVertex3f((pos.x + widthPanel), pos.y, pos.z);
 
 	glEnd();
+}
+
+void CanvasUI::ShowInfo()
+{
+	if (ImGui::TreeNode("Canvas"))
+	{
+		if (ImGui::DragFloat("Width in Scene", &widthPanel))
+		{
+			comp_transform->UpdateTransformation();
+		}
+
+		if (ImGui::DragFloat("Heigth in Scene", &heigthPanel))
+		{
+			comp_transform->UpdateTransformation();
+		}
+
+		ImGui::TreePop();
+	}
 }
