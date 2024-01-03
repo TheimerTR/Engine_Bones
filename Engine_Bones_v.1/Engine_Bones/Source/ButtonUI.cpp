@@ -23,7 +23,7 @@ ButtonUI::~ButtonUI()
 
 }
 
-bool ButtonUI::OnPressed()
+bool ButtonUI::OnClicked()
 {
 	if(!isDragabble && !isPressed)
 	{
@@ -34,23 +34,25 @@ bool ButtonUI::OnPressed()
 	return isPressed;
 }
 
-void ButtonUI::OnHover()
+bool ButtonUI::OnHover()
 {
 	if(!isDragabble && !isPressed)
 	{
 		color = float4(0.5, 0.5, 0.5, 0.5);
 	}
+
+	return true;
 }
 
-bool ButtonUI::Click()
+bool ButtonUI::OnClick()
 {
 	switch (actualFunction)
 	{
-	case functions::PASS_SCENE:
-		PassScene();
-		break;
-	default:
-		break;
+		case functions::PASS_SCENE:
+			PassScene();
+			break;
+		default:
+			break;
 	}
 
 	return isPressed;

@@ -2,12 +2,14 @@
 #include "GameObject.h"
 #include "ImporterTexture.h"
 #include "ComponentTransform.h"
+#include "ButtonUI.h"
 
 #include "FileSystemManager.h"
 
 ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigth, uint PosX, uint PosY, const char* imagePath) : ComponentManager(gameObject)
 {
 	ui_Type = type;
+	actualMouseState = MouseState::IDLE_UI;
 
 	PlaneInScene = new UIPlane;
 	PlaneInGame = new UIPlane;
@@ -45,10 +47,13 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 	PlaneInScene->vertex[2] = float3(1, 1, 0);
 	PlaneInScene->vertex[3] = float3(1, 0, 0);*/
 
-	PlaneInGame->vertex[0] = float3(PosX, PosY + heigth, 0);
-	PlaneInGame->vertex[1] = float3(PosX + width, PosY + heigth, 0);
-	PlaneInGame->vertex[3] = float3(PosX + width, PosY, 0);
-	PlaneInGame->vertex[2] = float3(PosX, PosY, 0);
+	positionX = PosX;
+	positionY = PosY;
+
+	PlaneInGame->vertex[0] = float3(positionX, PosY + heigth, 0);
+	PlaneInGame->vertex[1] = float3(positionX + width, PosY + heigth, 0);
+	PlaneInGame->vertex[3] = float3(positionX + width, PosY, 0);
+	PlaneInGame->vertex[2] = float3(positionX, PosY, 0);
 
 	PlaneInScene->GenerateBuffers();
 	PlaneInGame->GenerateBuffers();
@@ -77,6 +82,33 @@ void ComponentUI::Enable()
 
 bool ComponentUI::Update()
 {
+	MousePicker();
+
+	switch (actualMouseState)
+	{
+	case IDLE_UI:
+		break;
+	case HOVER_UI:
+		break;
+	case CLICK_UI:
+		if (ui_Type == BUTTON)
+		{
+			ButtonUI* button = (ButtonUI*)this;
+			button->OnClick();
+		}
+		break;
+	case CLICKED_UI:
+		if (ui_Type == BUTTON)
+		{
+			ButtonUI* button = (ButtonUI*)this;
+			button->OnClicked();
+		}
+		break;
+	case CLICKED_RELEASED_UI:
+		break;
+	default:
+		break;
+	}
 
 	return true;
 }
@@ -111,4 +143,54 @@ void UIPlane::GenerateBuffers()
 	glGenBuffers(1, &(GLuint)buffer[2]);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer[2]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * 4, uv, GL_STATIC_DRAW);
+}
+
+void ComponentUI::MousePicker()
+{
+	float2 originPoint = float2(app->editor->mousePosInViewport.x, app->editor->mousePosInViewport.y);
+
+	/*originPoint.x = (originPoint.x) * 2;
+	originPoint.y = -(originPoint.y) * 2;*/
+
+	float2 mouse_pos = float2(originPoint.x, originPoint.y);
+
+	switch (actualMouseState)
+	{
+	case IDLE_UI:
+		if (MouseIsInside(mouse_pos))
+			actualMouseState = HOVER_UI;
+		break;
+	case HOVER_UI:
+		if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+			actualMouseState = CLICK_UI;
+
+		if (!MouseIsInside(mouse_pos))
+			actualMouseState = CLICKED_RELEASED_UI;
+		break;
+	case CLICK_UI:
+		if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+			actualMouseState = CLICKED_UI;
+		break;
+	case CLICKED_UI:
+		if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && !MouseIsInside(mouse_pos))
+			actualMouseState = CLICKED_RELEASED_UI;
+		else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && MouseIsInside(mouse_pos))
+			actualMouseState = HOVER_UI;
+		break;
+	case CLICKED_RELEASED_UI:
+		actualMouseState = IDLE_UI;
+		break;
+	}
+}
+
+bool ComponentUI::MouseIsInside(float2 mouse)
+{
+	bool ret = false;
+
+	if(mouse.x >= positionX && mouse.x <= positionX + widthPanel && mouse.y >= positionY && mouse.y <= positionY + heigthPanel)
+	{
+		ret = true;
+	}
+
+	return ret;
 }

@@ -1,5 +1,6 @@
 #include "CanvasUI.h"
 #include "GameObject.h"
+#include "Application.h"
 
 #include "FileSystemManager.h"
 
@@ -13,6 +14,8 @@ CanvasUI::CanvasUI(GameObject* gameObject, float width, float heigth, uint PosX,
 	this->UUID = app->RandomIntGenerator();
 
 	comp_transform = dynamic_cast<ComponentTransform*>(gmAtached->GetComponentGameObject(ComponentType::TRANSFORM));
+	comp_transform->mScale.x = widthPanel;
+	comp_transform->mScale.y = heigthPanel;
 }
 
 
@@ -28,6 +31,9 @@ void CanvasUI::Enable()
 
 bool CanvasUI::Update()
 {
+	comp_transform->mScale.x = app->editor->GameWindowSize.x;
+	comp_transform->mScale.y = app->editor->GameWindowSize.y;
+
 	return true;
 }
 
@@ -42,6 +48,10 @@ void CanvasUI::Draw()
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
 	float3 pos = comp_transform->mPosition;
+	float3 scale = comp_transform->mScale;
+
+	widthPanel = scale.x;
+	heigthPanel = scale.y;
 
 	glVertex3f(pos.x, pos.y, pos.z);
 	glVertex3f(pos.x, (pos.y + heigthPanel), pos.z);
@@ -55,12 +65,12 @@ void CanvasUI::ShowInfo()
 {
 	if (ImGui::TreeNode("Canvas"))
 	{
-		if (ImGui::DragFloat("Width in Scene", &widthPanel))
+		if (ImGui::DragFloat("Width in Scene", &comp_transform->mScale.x))
 		{
 			comp_transform->UpdateTransformation();
 		}
 
-		if (ImGui::DragFloat("Heigth in Scene", &heigthPanel))
+		if (ImGui::DragFloat("Heigth in Scene", &comp_transform->mScale.y))
 		{
 			comp_transform->UpdateTransformation();
 		}

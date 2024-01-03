@@ -75,6 +75,8 @@ bool ModuleEditor::Init()
 	Actual_ChildPos = 0;
 
 	scenePos = ImVec2(0, 0);
+	GameWindowPos = ImVec2(0, 0);
+	mousePosInViewport = ImVec2(0, 0);
 
 	actualDir = "";
 	actualFile = "";
@@ -186,8 +188,11 @@ bool ModuleEditor::DrawEditor()
 
 	if (ImGui::Begin(nameGame.c_str(), NULL))
 	{
+		GameWindowSize = ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+		GameWindowPos = ImGui::GetWindowPos();
 		if (App->renderer3D->cameraGame != nullptr && App->renderer3D->cameraGame->frameID != 0 && App->renderer3D->cameraGame->activeGame == true) {
-			GameWindowSize = ImGui::GetContentRegionAvail();
+			mousePosInViewport.x = App->input->GetMouseX() - ImGui::GetCursorScreenPos().x;
+			mousePosInViewport.y = App->input->GetMouseY() - ImGui::GetCursorScreenPos().y;
 
 			App->renderer3D->cameraGame->SetRatio(ImGui::GetContentRegionAvail().x / ImGui::GetContentRegionAvail().y);
 			ImGui::Image((ImTextureID)App->renderer3D->cameraGame->frameTexture, GameWindowSize, ImVec2(0, 1), ImVec2(1, 0));
@@ -465,7 +470,7 @@ bool ModuleEditor::DrawEditor()
 						if (Canvas == nullptr)
 						{
 							Canvas = new GameObject("Canvas", App->scene->Root);
-							CanvasUI* canv_UI = (CanvasUI*)(Canvas->AddComponent(ComponentType::CANVAS));
+							CanvasUI* canv_UI = (CanvasUI*)(Canvas->AddComponent(ComponentType::CANVAS, UI_Type::DEF, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr));
 						}
 						else
 						{
@@ -478,8 +483,8 @@ bool ModuleEditor::DrawEditor()
 						if (Canvas != nullptr)
 						{
 							GameObject* Button = new GameObject("Button", Canvas);
-							ComponentUI* comp_UI = (ComponentUI*)(Button->AddComponent(ComponentType::UI));
-							ButtonUI* but_UI = new ButtonUI(UI_Type::BUTTON, Button, 3000, 3000, 0, 0, nullptr);
+							ComponentUI* comp_UI = (ComponentUI*)(Button->AddComponent(ComponentType::UI, UI_Type::BUTTON, 10, 10, 0, 0, nullptr));
+							ButtonUI* but_UI = new ButtonUI(UI_Type::BUTTON, Button, 10, 10, 0, 0, nullptr);
 							comp_UI = (ComponentUI*)but_UI;
 						}
 						else

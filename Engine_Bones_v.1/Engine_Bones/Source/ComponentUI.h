@@ -24,7 +24,17 @@ enum UI_Type
 	BUTTON,
 	TEXT,
 	IMAGE,
-	CHECKER
+	CHECKER,
+	DEF
+};
+
+enum MouseState
+{
+	HOVER_UI,
+	CLICK_UI,
+	CLICKED_UI,
+	IDLE_UI,
+	CLICKED_RELEASED_UI
 };
 
 class ComponentUI : public ComponentManager
@@ -40,7 +50,12 @@ public:
 	uint widthPanel;
 	uint heigthPanel;
 
+	MouseState actualMouseState;
+
 	bool isDragabble;
+
+	int positionX;
+	int positionY;
 
 	float4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
@@ -49,7 +64,10 @@ public:
 	~ComponentUI();
 
 	void SetTexture(Texture* T_Texture = nullptr);
+	bool MouseIsInside(float2 mouse);
 	Texture* GetTexture();
+	
+	void MousePicker();
 
 	void Enable() override;
 	bool Update() override;

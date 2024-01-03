@@ -41,10 +41,10 @@ public:
 	ButtonUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
 	~ButtonUI();
 
-	bool Click();
+	bool OnClick();
 
-	void OnHover();
-	bool OnPressed();
+	bool OnHover();
+	bool OnClicked();
 
 	void ShowInfo();
 

@@ -15,6 +15,7 @@
 #include "C_Math.h"
 #include "Application.h"
 #include "ModuleScene.h"
+#include "ComponentUI.h"
 
 using namespace std;
 
@@ -43,7 +44,7 @@ public:
 
 	vector<GameObject*> childrens;
 
-	ComponentManager* AddComponent(ComponentType type);
+	ComponentManager* AddComponent(ComponentType type, UI_Type ui_type = UI_Type::DEF, uint width = 10, uint heigth = 10, uint posX = 10, uint posY = 10, const char* imagePath = nullptr);
 	vector<ComponentManager*> GetComponentsGameObject(ComponentType type);
 	ComponentManager* GetComponentGameObject(ComponentType type);
 

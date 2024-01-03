@@ -97,8 +97,10 @@ public:
 	bool startScene = false; 
 
 	ImVec2 scenePos;
+	ImVec2 GameWindowPos;
 	ImVec2 sceneSize;
 	ImVec2 GameWindowSize;
+	ImVec2 mousePosInViewport;
 	ImGuizmo::OPERATION CurrentOperation;
 
 	//ImVec2 sceneSize = ImVec2(0, 0);

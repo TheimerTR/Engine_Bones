@@ -8,7 +8,6 @@
 #include "ComponentCamera.h"
 #include "ModuleScene.h"
 #include "CanvasUI.h"
-#include "ComponentUI.h"
 
 GameObject::GameObject(string name, GameObject* parent, int id) : mParent(parent), mName(name), mTransform(nullptr), isActive(true)
 {
@@ -112,7 +111,7 @@ GameObject::~GameObject()
 	isSelected = false;
 };
 
-ComponentManager* GameObject::AddComponent(ComponentType type)
+ComponentManager* GameObject::AddComponent(ComponentType type, UI_Type ui_type, uint width, uint heigth, uint posX, uint posY, const char* imagePath)
 {
 	ComponentManager* Comp = nullptr;
 
@@ -138,11 +137,11 @@ ComponentManager* GameObject::AddComponent(ComponentType type)
 		Comp->Type = ComponentType::CAMERA; 
 		break; 
 	case ComponentType::UI:
-		Comp = new ComponentUI(UI_Type::BUTTON, this, 30, 30, 300, 30, nullptr);
+		Comp = new ComponentUI(ui_type, this, width, heigth, posX, posY, imagePath);
 		Comp->Type = ComponentType::UI;
 		break;
 	case ComponentType::CANVAS:
-		Comp = new CanvasUI(this, 200, 200, 0, 0);
+		Comp = new CanvasUI(this, width, heigth, posX, posY);
 		Comp->Type = ComponentType::CANVAS;
 		break;
 	case ComponentType::NONE:
