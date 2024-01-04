@@ -224,9 +224,9 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	}
 	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 	{
-		ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
-		ComponentUI* objectUI = (ComponentUI*)(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
-		CanvasUI* canvas_UI = (CanvasUI*)App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::CANVAS);
+		ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
+		ComponentUI* objectUI = dynamic_cast<ComponentUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
+		CanvasUI* canvas_UI = dynamic_cast<CanvasUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::CANVAS));
 
 		if (canvas_UI != nullptr)
 		{
@@ -301,9 +301,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 		for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 		{
-			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
-			ComponentUI* objectUI = (ComponentUI*)App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI);
-			CanvasUI* canvas_UI = (CanvasUI*)App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::CANVAS);
+			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
+			ComponentUI* objectUI = dynamic_cast<ComponentUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
+			CanvasUI* canvas_UI = dynamic_cast<CanvasUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::CANVAS));
 			
 			if (canvas_UI != nullptr)
 			{
@@ -566,7 +566,7 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 	{
 		if (texture->GetTexture()->ShowTextures)
 		{
-			if (texture->CM_TextureID != 0)
+			if (texture->texture->TextureID != 0)
 			{
 				glBindTexture(GL_TEXTURE_2D, texture->CM_TextureID);
 			}

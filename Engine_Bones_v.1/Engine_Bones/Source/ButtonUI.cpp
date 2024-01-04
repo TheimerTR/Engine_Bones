@@ -16,6 +16,7 @@
 
 ButtonUI::ButtonUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath) : ComponentUI(type, gameObject, width, heigt, PosX, PosY, imagePath)
 {
+	gmAtached = gameObject;
 }
 
 ButtonUI::~ButtonUI()

@@ -25,6 +25,7 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 
 	if (imagePath != nullptr)
 	{
+		texture = new Texture();
 		Importer::ImporterTexture::Load(texture, imagePath);
 
 		if (texture != nullptr)
@@ -54,6 +55,16 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 	PlaneInGame->vertex[1] = float3(positionX + width, PosY + heigth, 0);
 	PlaneInGame->vertex[3] = float3(positionX + width, PosY, 0);
 	PlaneInGame->vertex[2] = float3(positionX, PosY, 0);
+
+	PlaneInScene->uv[0] = float2(0, 1);
+	PlaneInScene->uv[1] = float2(1, 1);
+	PlaneInScene->uv[3] = float2(1, 0);
+	PlaneInScene->uv[2] = float2(0, 0);
+
+	PlaneInGame->uv[0] = float2(0, 1);
+	PlaneInGame->uv[1] = float2(1, 1);
+	PlaneInGame->uv[3] = float2(1, 0);
+	PlaneInGame->uv[2] = float2(0, 0);
 
 	PlaneInScene->GenerateBuffers();
 	PlaneInGame->GenerateBuffers();

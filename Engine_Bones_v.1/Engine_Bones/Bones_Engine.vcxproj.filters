@@ -61,6 +61,12 @@
     <Filter Include="Sources\ImGuizmo">
       <UniqueIdentifier>{158d6796-92c2-4af5-9bdb-c326a38af045}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\Componentes">
+      <UniqueIdentifier>{249d0b56-ac8c-4a36-bb5d-77f60becb437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\Componentes\UI">
+      <UniqueIdentifier>{41120cc8-1af6-470a-9081-db1998d74ab1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Module.h">
@@ -324,9 +330,6 @@
     <ClInclude Include="Source\ResourceManager.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Source\C_Math.h">
-      <Filter>Sources\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="Source\FileSystemManager.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
@@ -337,18 +340,6 @@
       <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Source\TextureManager.h">
-      <Filter>Sources\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ComponentTransform.h">
-      <Filter>Sources\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ComponentManager.h">
-      <Filter>Sources\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ComponentMesh.h">
-      <Filter>Sources\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ComponentMaterial.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModuleScene.h">
@@ -371,9 +362,6 @@
     </ClInclude>
     <ClInclude Include="Source\ModuleResource.h">
       <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ComponentCamera.h">
-      <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Source\ResourceMesh.h">
       <Filter>Sources\Resources</Filter>
@@ -402,14 +390,35 @@
     <ClInclude Include="Source\External\ImGuizmo\ImZoomSlider.h">
       <Filter>Sources\ImGuizmo</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ComponentCamera.h">
+      <Filter>Sources\Tools\Componentes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ComponentManager.h">
+      <Filter>Sources\Tools\Componentes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ComponentMaterial.h">
+      <Filter>Sources\Tools\Componentes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ComponentMesh.h">
+      <Filter>Sources\Tools\Componentes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ComponentTransform.h">
+      <Filter>Sources\Tools\Componentes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ButtonUI.h">
+      <Filter>Sources\Tools\Componentes\UI</Filter>
+    </ClInclude>
     <ClInclude Include="Source\ComponentUI.h">
+      <Filter>Sources\Tools\Componentes\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\C_Math.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Source\CanvasUI.h">
-      <Filter>Sources\Tools</Filter>
+      <Filter>Sources\Tools\Componentes\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ButtonUI.h">
-      <Filter>Sources\Tools</Filter>
+    <ClInclude Include="Source\ImageUI.h">
+      <Filter>Sources\Tools\Componentes\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -581,19 +590,7 @@
     <ClCompile Include="Source\Timer.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ComponentManager.cpp">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ComponentTransform.cpp">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameObject.cpp">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ComponentMesh.cpp">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ComponentMaterial.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModuleScene.cpp">
@@ -607,9 +604,6 @@
     </ClCompile>
     <ClCompile Include="Source\ModuleResource.cpp">
       <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ComponentCamera.cpp">
-      <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Source\ResourceMesh.cpp">
       <Filter>Sources\Resources</Filter>
@@ -641,14 +635,32 @@
     <ClCompile Include="Source\External\ImGuizmo\ImSequencer.cpp">
       <Filter>Sources\ImGuizmo</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ComponentUI.cpp">
-      <Filter>Sources\Tools</Filter>
+    <ClCompile Include="Source\ComponentCamera.cpp">
+      <Filter>Sources\Tools\Componentes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CanvasUI.cpp">
-      <Filter>Sources\Tools</Filter>
+    <ClCompile Include="Source\ComponentManager.cpp">
+      <Filter>Sources\Tools\Componentes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ComponentMaterial.cpp">
+      <Filter>Sources\Tools\Componentes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ComponentMesh.cpp">
+      <Filter>Sources\Tools\Componentes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ComponentTransform.cpp">
+      <Filter>Sources\Tools\Componentes</Filter>
     </ClCompile>
     <ClCompile Include="Source\ButtonUI.cpp">
-      <Filter>Sources\Tools</Filter>
+      <Filter>Sources\Tools\Componentes\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ComponentUI.cpp">
+      <Filter>Sources\Tools\Componentes\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CanvasUI.cpp">
+      <Filter>Sources\Tools\Componentes\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ImageUI.cpp">
+      <Filter>Sources\Tools\Componentes\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

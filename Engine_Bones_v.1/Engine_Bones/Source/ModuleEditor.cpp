@@ -28,6 +28,7 @@
 #include "ComponentUI.h"
 #include "CanvasUI.h"
 #include "ButtonUI.h"
+#include "ImageUI.h"
 
 #include"External/Assimp/include/version.h"
 
@@ -486,6 +487,35 @@ bool ModuleEditor::DrawEditor()
 							ComponentUI* comp_UI = (ComponentUI*)(Button->AddComponent(ComponentType::UI, UI_Type::BUTTON, 10, 10, 0, 0, nullptr));
 							ButtonUI* but_UI = new ButtonUI(UI_Type::BUTTON, Button, 10, 10, 0, 0, nullptr);
 							comp_UI = (ComponentUI*)but_UI;
+
+							ComponentMaterial* mat = (ComponentMaterial*)(Button->AddComponent(ComponentType::MATERIAL));
+							mat->colorTexture.r = 255;
+							mat->colorTexture.g = 255;
+							mat->colorTexture.b = 255;
+							mat->colorTexture.a = 255;
+							//mat->texture = but_UI->texture;
+						}
+						else
+						{
+							LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+						}
+					}
+
+					if (ImGui::MenuItem("Image"))
+					{
+						if (Canvas != nullptr)
+						{
+							GameObject* Image = new GameObject("Image", Canvas);
+							ComponentUI* comp_UI = (ComponentUI*)(Image->AddComponent(ComponentType::UI, UI_Type::IMAGE, 10, 10, 0, 0, nullptr));
+							ImageUI* img_UI = new ImageUI(UI_Type::IMAGE, Image, 10, 10, 0, 0, nullptr);
+							comp_UI = (ComponentUI*)img_UI;
+
+							ComponentMaterial* mat = (ComponentMaterial*)(Image->AddComponent(ComponentType::MATERIAL));
+							mat->colorTexture.r = 255;
+							mat->colorTexture.g = 255;
+							mat->colorTexture.b = 255;
+							mat->colorTexture.a = 255;
+							//mat->texture = but_UI->texture;
 						}
 						else
 						{
@@ -2274,7 +2304,15 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 			case UI_Type::BUTTON:
 				{
 					ButtonUI* button = (ButtonUI*)objectUI;
+					button->gmAtached = objectUI->gmAtached;
 					button->ShowInfo();
+				}
+				break;
+			case UI_Type::IMAGE:
+				{
+					ImageUI* image = (ImageUI*)objectUI;
+					image->gmAtached = objectUI->gmAtached;
+					image->ShowInfo();
 				}
 				break;
 			default:
