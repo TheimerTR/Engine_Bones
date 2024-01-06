@@ -31,6 +31,7 @@
 #include "ButtonUI.h"
 #include "ImageUI.h"
 #include "ComponentText.h"
+#include "CheckerUI.h"
 
 #include"External/Assimp/include/version.h"
 
@@ -552,6 +553,32 @@ bool ModuleEditor::DrawEditor()
 							comp_UI->positionY = text_UI.positionY;
 
 							ComponentMaterial* mat = (ComponentMaterial*)(Text->AddComponent(ComponentType::MATERIAL));
+							mat->colorTexture.r = 255;
+							mat->colorTexture.g = 255;
+							mat->colorTexture.b = 255;
+							mat->colorTexture.a = 255;
+							//mat->texture = but_UI->texture;
+						}
+						else
+						{
+							LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+						}
+					}
+
+					if (ImGui::MenuItem("Checker"))
+					{
+						if (Canvas != nullptr)
+						{
+							GameObject* Checker = new GameObject("Checker", Canvas);
+							ComponentUI* comp_UI = dynamic_cast<ComponentUI*>(Checker->AddComponent(ComponentType::UI, UI_Type::CHECKER, 80, 20, 0, 0, nullptr));
+							CheckerUI check_UI = CheckerUI(UI_Type::CHECKER, Checker, 80, 20, 0, 0, nullptr);
+							comp_UI->actualChecker = check_UI.actualFunction;
+							comp_UI->positionX = check_UI.positionX;
+							comp_UI->positionY = check_UI.positionY;
+							comp_UI->widthPanel = check_UI.widthPanel;
+							comp_UI->heigthPanel = check_UI.heigthPanel;
+
+							ComponentMaterial* mat = (ComponentMaterial*)(Checker->AddComponent(ComponentType::MATERIAL));
 							mat->colorTexture.r = 255;
 							mat->colorTexture.g = 255;
 							mat->colorTexture.b = 255;
@@ -2330,6 +2357,12 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 					((ComponentText*)objectUI)->ShowInfo(objectUI, objectUI->actualText, objectUI->newText, objectUI->gmAtached, objectUI->actualFonts, objectUI->widthPanel, objectUI->heigthPanel, objectUI->positionX, objectUI->positionY);
 					objectUI->textCH = objectUI->actualText;
 				}
+			}
+			case UI_Type::CHECKER:
+			{
+				CheckerUI* check = (CheckerUI*)objectUI;
+				check->gmAtached = objectUI->gmAtached;
+				check->ShowInfo(objectUI);
 			}
 			break;
 			default:

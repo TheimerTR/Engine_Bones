@@ -13,15 +13,16 @@
 
 class GameObject;
 
-enum functions
+enum _functions
 {
-	PASS_SCENE,
+	_VSYNC,
+	_DEF,
 	_MAX
 };
 
 struct values
 {
-	vector<string> nameOfFunctions = { "Vysnc" };
+	vector<string> nameOfFunctions = { "Vysnc" , "None" };
 };
 
 class CheckerUI : public ComponentUI
@@ -37,18 +38,18 @@ public:
 	string selectedImagePath;
 	string notSelectedImagePath;
 
-	functions actualFunction;
+	_functions actualFunction;
 
 public:
 	CheckerUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
 	~CheckerUI();
 
-	bool OnClick();
+	bool OnClick(ComponentUI* UI_Element);
 
 	bool OnHover();
 	bool OnClicked();
 
-	void ShowInfo();
+	void ShowInfo(ComponentUI* UI_Element);
 };
 
 #endif // CHECKERUI_H_

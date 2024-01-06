@@ -4,6 +4,7 @@
 #include "ImporterTexture.h"
 #include "ComponentTransform.h"
 #include "ButtonUI.h"
+#include "CheckerUI.h"
 
 #include "FileSystemManager.h"
 
@@ -104,12 +105,22 @@ bool ComponentUI::Update()
 			ButtonUI* button = (ButtonUI*)this;
 			button->OnClick();
 		}
+		if (ui_Type == CHECKER)
+		{
+			CheckerUI* checker = (CheckerUI*)this;
+			checker->OnClick(this);
+		}
 		break;
 	case CLICKED_UI:
 		if (ui_Type == BUTTON)
 		{
 			ButtonUI* button = (ButtonUI*)this;
 			button->OnClicked();
+		}
+		if (ui_Type == CHECKER)
+		{
+			CheckerUI* checker = (CheckerUI*)this;
+			checker->OnClicked();
 		}
 		break;
 	case CLICKED_RELEASED_UI:

@@ -89,6 +89,7 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\ButtonUI.h" />
     <ClInclude Include="Source\CanvasUI.h" />
+    <ClInclude Include="Source\CheckerUI.h" />
     <ClInclude Include="Source\ComponentText.h" />
     <ClInclude Include="Source\ComponentUI.h" />
     <ClInclude Include="Source\External\ImGui\misc\cpp\imgui_stdlib.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\ButtonUI.cpp" />
     <ClCompile Include="Source\CanvasUI.cpp" />
+    <ClCompile Include="Source\CheckerUI.cpp" />
     <ClCompile Include="Source\ComponentText.cpp" />
     <ClCompile Include="Source\ComponentUI.cpp" />
     <ClCompile Include="Source\External\ImGui\misc\cpp\imgui_stdlib.cpp" />

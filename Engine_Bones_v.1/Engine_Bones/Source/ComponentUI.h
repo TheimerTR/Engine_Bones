@@ -11,6 +11,7 @@
 class GameObject;
 class ComponentText;
 enum FONTS;
+enum _functions;
 
 struct UIPlane {
 	float3 vertex[4];
@@ -67,6 +68,7 @@ public:
 	string actualText;
 	string newText;
 	FONTS actualFonts;
+	_functions actualChecker;
 
 public:
 	ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
