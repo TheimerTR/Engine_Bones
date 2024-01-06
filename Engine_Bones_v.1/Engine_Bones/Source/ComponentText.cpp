@@ -47,7 +47,7 @@ ComponentText::~ComponentText()
 {
 
 }
-void ComponentText::ShowInfo(string actText, string newText, GameObject* gm, FONTS actFont, uint width, uint heigth, uint _posX, uint _posY)
+void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText, GameObject* gm, FONTS actFont, uint width, uint heigth, uint _posX, uint _posY)
 {
 	if (ImGui::TreeNode("Text"))
 	{
@@ -63,6 +63,9 @@ void ComponentText::ShowInfo(string actText, string newText, GameObject* gm, FON
 				actText = newText;
 
 				RecreateText(actText, gm, width, heigth, _posX, _posY);
+
+				compUI->actualText = actText;
+				compUI->newText = actText;
 
 				hasBeenModified = false;
 			}
@@ -166,12 +169,6 @@ void ComponentText::DoText()
 		mesh->C_Mesh->VT = buffer[2];
 	}
 }
-
-void ComponentText::ModifyText()
-{
-
-}
-
 void ComponentText::RecreateText(string new_Text, GameObject* gm, uint width, uint heigth, uint _posX, uint _posY)
 {
 	gm->DeleteComponentType(ComponentType::MESH);

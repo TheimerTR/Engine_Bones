@@ -51,7 +51,7 @@ public:
 	ComponentText(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
 	~ComponentText();
 
-	void ShowInfo(string actText, string newText, GameObject* gm, FONTS actFont, uint width, uint heigth, uint _posX, uint _posY);
+	void ShowInfo(ComponentUI* compUI, string actText, string newText, GameObject* gm, FONTS actFont, uint width, uint heigth, uint _posX, uint _posY);
 
 	void DoText();
 

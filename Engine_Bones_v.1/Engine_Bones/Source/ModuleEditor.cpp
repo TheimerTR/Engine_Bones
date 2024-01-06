@@ -548,6 +548,8 @@ bool ModuleEditor::DrawEditor()
 							comp_UI->actualText = text_UI.actualText;
 							comp_UI->newText = text_UI.newText;
 							comp_UI->actualFonts = text_UI.actualFonts;
+							comp_UI->positionX = text_UI.positionX;
+							comp_UI->positionY = text_UI.positionY;
 
 							ComponentMaterial* mat = (ComponentMaterial*)(Text->AddComponent(ComponentType::MATERIAL));
 							mat->colorTexture.r = 255;
@@ -2356,7 +2358,10 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 				break;
 			case UI_Type::TEXT:
 				{
-					((ComponentText*)objectUI)->ShowInfo(objectUI->actualText, objectUI->newText, objectUI->gmAtached, objectUI->actualFonts, objectUI->widthPanel, objectUI->heigthPanel, objectUI->positionX, objectUI->positionY);
+					{
+						((ComponentText*)objectUI)->ShowInfo(objectUI, objectUI->actualText, objectUI->newText, objectUI->gmAtached, objectUI->actualFonts, objectUI->widthPanel, objectUI->heigthPanel, objectUI->positionX, objectUI->positionY);
+						objectUI->textCH = objectUI->actualText;
+					}
 				}
 				break;
 			default:
