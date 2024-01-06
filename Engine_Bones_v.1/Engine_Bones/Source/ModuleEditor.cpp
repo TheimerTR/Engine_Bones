@@ -25,10 +25,12 @@
 #include "TextureManager.h"
 #include "FileSystemManager.h"
 #include "ResourceTexture.h"
+#include "ModuleFont.h"
 #include "ComponentUI.h"
 #include "CanvasUI.h"
 #include "ButtonUI.h"
 #include "ImageUI.h"
+#include "ComponentText.h"
 
 #include"External/Assimp/include/version.h"
 
@@ -113,6 +115,15 @@ bool ModuleEditor::Init()
 	DefaultConfig();
 
 	CurrentOperation = ImGuizmo::OPERATION::TRANSLATE;
+
+	return true;
+}
+
+bool ModuleEditor::Start()
+{
+	/*App->font->FontLoader(120, "./Assets/Fonts/Roboto.ttf");
+	App->font->FontLoader(120, "./Assets/Fonts/Elianto.otf");*/
+	App->font->actualFont = App->font->FontLoader(120, "./Assets/Fonts/Arial.ttf");
 
 	return true;
 }
@@ -511,6 +522,30 @@ bool ModuleEditor::DrawEditor()
 							comp_UI = (ComponentUI*)img_UI;
 
 							ComponentMaterial* mat = (ComponentMaterial*)(Image->AddComponent(ComponentType::MATERIAL));
+							mat->colorTexture.r = 255;
+							mat->colorTexture.g = 255;
+							mat->colorTexture.b = 255;
+							mat->colorTexture.a = 255;
+							//mat->texture = but_UI->texture;
+						}
+						else
+						{
+							LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+						}
+					}
+
+					if (ImGui::MenuItem("Text"))
+					{
+						if (Canvas != nullptr)
+						{
+							GameObject* Text = new GameObject("Text", Canvas);
+							ComponentUI* comp_UI = dynamic_cast<ComponentUI*>(Text->AddComponent(ComponentType::UI, UI_Type::TEXT, 10, 10, 0, 0, nullptr));
+							ComponentText text_UI = ComponentText(UI_Type::TEXT, Text, 80, 20, 0, 0, "MENU");
+							comp_UI->textComp = &text_UI;
+							comp_UI->textCH = text_UI.text;
+							comp_UI->font = text_UI.font;
+
+							ComponentMaterial* mat = (ComponentMaterial*)(Text->AddComponent(ComponentType::MATERIAL));
 							mat->colorTexture.r = 255;
 							mat->colorTexture.g = 255;
 							mat->colorTexture.b = 255;
@@ -2313,6 +2348,13 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 					ImageUI* image = (ImageUI*)objectUI;
 					image->gmAtached = objectUI->gmAtached;
 					image->ShowInfo();
+				}
+				break;
+			case UI_Type::TEXT:
+				{
+					ComponentText* text = (ComponentText*)objectUI;
+					text->gmAtached = objectUI->gmAtached;
+					text->ShowInfo();
 				}
 				break;
 			default:

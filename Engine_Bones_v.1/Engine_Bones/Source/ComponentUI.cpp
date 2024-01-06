@@ -1,4 +1,5 @@
 #include "ComponentUI.h"
+#include "Application.h"
 #include "GameObject.h"
 #include "ImporterTexture.h"
 #include "ComponentTransform.h"
@@ -8,6 +9,10 @@
 
 ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigth, uint PosX, uint PosY, const char* imagePath) : ComponentManager(gameObject)
 {
+	textComp = nullptr;
+	textCH = "";
+	font = app->font->actualFont;
+
 	ui_Type = type;
 	actualMouseState = MouseState::IDLE_UI;
 
@@ -38,23 +43,11 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 
 	transform = gameObject->mTransform->gPosition;
 
-	PlaneInScene->vertex[0] = float3(transform.x, transform.y + heigth, transform.z);
-	PlaneInScene->vertex[1] = float3(transform.x + width, transform.y + heigth, transform.z);
-	PlaneInScene->vertex[3] = float3(transform.x + width, transform.y, transform.z);
-	PlaneInScene->vertex[2] = float3(transform.x, transform.y, transform.z);
+	CreatePanel(PlaneInScene->vertex, transform, width, heigth);
 
-	/*PlaneInScene->vertex[0] = float3(0, 0, 0);
-	PlaneInScene->vertex[1] = float3(0, 1, 0);
-	PlaneInScene->vertex[2] = float3(1, 1, 0);
-	PlaneInScene->vertex[3] = float3(1, 0, 0);*/
+	transform = { (float)PosX, (float)PosY, 0 };
 
-	positionX = PosX;
-	positionY = PosY;
-
-	PlaneInGame->vertex[0] = float3(positionX, PosY + heigth, 0);
-	PlaneInGame->vertex[1] = float3(positionX + width, PosY + heigth, 0);
-	PlaneInGame->vertex[3] = float3(positionX + width, PosY, 0);
-	PlaneInGame->vertex[2] = float3(positionX, PosY, 0);
+	CreatePanel(PlaneInGame->vertex, transform, width, heigth);
 
 	PlaneInScene->uv[0] = float2(0, 1);
 	PlaneInScene->uv[1] = float2(1, 1);
@@ -66,8 +59,8 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 	PlaneInGame->uv[3] = float2(1, 0);
 	PlaneInGame->uv[2] = float2(0, 0);
 
-	PlaneInScene->GenerateBuffers();
-	PlaneInGame->GenerateBuffers();
+	GenerateBuffers(PlaneInScene->buffer, PlaneInScene->vertex, PlaneInScene->uv);
+	GenerateBuffers(PlaneInGame->buffer, PlaneInGame->vertex, PlaneInGame->uv);
 }
 
 
@@ -129,7 +122,7 @@ void ComponentUI::Disable()
 	
 }
 
-void UIPlane::GenerateBuffers()
+void ComponentUI::GenerateBuffers(uint buffer[], float3 vertex[], float2 uv[])
 {
 	uint* index = new uint[6];
 
@@ -204,4 +197,12 @@ bool ComponentUI::MouseIsInside(float2 mouse)
 	}
 
 	return ret;
+}
+
+void ComponentUI::CreatePanel(float3 vertex[], float3 transform, uint width, uint heigth)
+{
+	vertex[0] = float3(transform.x, transform.y + heigth, transform.z);
+	vertex[1] = float3(transform.x + width, transform.y + heigth, transform.z);
+	vertex[3] = float3(transform.x + width, transform.y, transform.z);
+	vertex[2] = float3(transform.x, transform.y, transform.z);
 }

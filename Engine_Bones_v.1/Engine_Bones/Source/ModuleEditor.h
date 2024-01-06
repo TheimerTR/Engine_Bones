@@ -16,6 +16,9 @@
 
 class ComponentUI;
 class CanvasUI;
+class ButtonUI;
+class ImageUI;
+class ComponentText;
 
 class ModuleEditor : public Module
 {
@@ -25,6 +28,7 @@ public:
 	~ModuleEditor();
 
 	bool Init() override;
+	bool Start() override;
 	bool DrawEditor();
 	bool CleanUp() override;
 

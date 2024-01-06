@@ -89,8 +89,10 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\ButtonUI.h" />
     <ClInclude Include="Source\CanvasUI.h" />
+    <ClInclude Include="Source\ComponentText.h" />
     <ClInclude Include="Source\ComponentUI.h" />
     <ClInclude Include="Source\ImageUI.h" />
+    <ClInclude Include="Source\ModuleFont.h" />
     <ClInclude Include="Source\ResourceManager.h" />
     <ClInclude Include="Source\Color.h" />
     <ClInclude Include="Source\ComponentCamera.h" />
@@ -208,8 +210,10 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\ButtonUI.cpp" />
     <ClCompile Include="Source\CanvasUI.cpp" />
+    <ClCompile Include="Source\ComponentText.cpp" />
     <ClCompile Include="Source\ComponentUI.cpp" />
     <ClCompile Include="Source\ImageUI.cpp" />
+    <ClCompile Include="Source\ModuleFont.cpp" />
     <ClCompile Include="Source\ResourceManager.cpp" />
     <ClCompile Include="Source\Color.cpp" />
     <ClCompile Include="Source\ComponentCamera.cpp" />

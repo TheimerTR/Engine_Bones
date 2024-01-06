@@ -39,6 +39,7 @@ public:
 	string mName;
 	bool isActive;
 	bool isSelected;
+	bool isText;
 
 	unsigned long UUID;
 

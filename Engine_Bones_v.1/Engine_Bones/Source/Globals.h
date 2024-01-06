@@ -94,5 +94,15 @@ enum update_status
        {\
            delete[] x;\
 	       x = nullptr;\
-		 }\
-	 }
+	   }\
+	}
+
+#define RELEASE_ARRAY_LIST( x )\
+	{\
+		for (auto it_list = x.begin(); it_list != x.end();)\
+		{\
+			RELEASE(*it_list);\
+			it_list = x.erase(it_list);\
+		}\
+		x.clear();\
+	}

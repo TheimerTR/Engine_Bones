@@ -420,6 +420,12 @@
     <ClInclude Include="Source\ImageUI.h">
       <Filter>Sources\Tools\Componentes\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ModuleFont.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ComponentText.h">
+      <Filter>Sources\Tools\Componentes\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -660,6 +666,12 @@
       <Filter>Sources\Tools\Componentes\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImageUI.cpp">
+      <Filter>Sources\Tools\Componentes\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModuleFont.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ComponentText.cpp">
       <Filter>Sources\Tools\Componentes\UI</Filter>
     </ClCompile>
   </ItemGroup>

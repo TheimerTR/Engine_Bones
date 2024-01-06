@@ -6,8 +6,10 @@
 #include "ResourceManager.h"
 #include "TextureManager.h"
 #include "Color.h"
+#include "ModuleFont.h"
 
 class GameObject;
+class ComponentText;
 
 struct UIPlane {
 	float3 vertex[4];
@@ -15,8 +17,6 @@ struct UIPlane {
 	uint buffer[3];
 
 	uint textureID;
-
-	void GenerateBuffers();
 };	
 
 enum UI_Type
@@ -59,6 +59,10 @@ public:
 
 	float4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
+	ComponentText* textComp;
+	string textCH;
+	Font* font;
+
 public:
 	ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
 	~ComponentUI();
@@ -68,6 +72,9 @@ public:
 	Texture* GetTexture();
 	
 	void MousePicker();
+
+	void CreatePanel(float3 vertex[], float3 transform, uint width, uint heigth);
+	void GenerateBuffers(uint buffer[], float3 vertex[], float2 uv[]);
 
 	void Enable() override;
 	bool Update() override;

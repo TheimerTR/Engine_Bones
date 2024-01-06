@@ -23,6 +23,7 @@ GameObject::GameObject(string name, GameObject* parent, int id) : mParent(parent
 		app->scene->AllGameObjectManagers.push_back(this);
 		app->scene->Selected_GameObject = this;
 		app->editor->actualMesh = this;
+		this->isText = false;
 
 		this->UUID = app->RandomIntGenerator();
 

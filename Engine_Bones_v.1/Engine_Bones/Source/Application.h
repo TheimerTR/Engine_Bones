@@ -12,6 +12,7 @@
 #include "ModuleScene.h"
 #include "PhysFSManager.h"
 #include "ModuleResource.h"
+#include "ModuleFont.h"
 #include "External/MathGeoLib/include/Algorithm/Random/LCG.h"
 
 #include<vector>
@@ -27,6 +28,7 @@ public:
 	class ModuleScene* scene;
 	class PhysFSManager* physFSManager;
 	class ModuleResource* resource;
+	class ModuleFont* font;
 
 private:
 

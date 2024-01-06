@@ -19,6 +19,7 @@
 #include "ComponentMaterial.h"
 #include "ComponentUI.h"
 #include "CanvasUI.h"
+#include "ComponentText.h"
 
 #include "ImporterTexture.h"
 
@@ -204,24 +205,28 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 	{
-		std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
-
-		for (int j = 0; j < objectMeshes.size(); j++)
+		if (!App->scene->AllGameObjectManagers[i]->isText)
 		{
-			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
-			ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
-			ComponentTransform* objectTransform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
+			std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
 
-			if (objectTexture != nullptr)
+			for (int j = 0; j < objectMeshes.size(); j++)
 			{
-				RenderDraw(objectMesh, objectTransform, objectTexture);
-			}
-			else
-			{
-				RenderDraw(objectMesh, objectTransform);
+				ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
+				ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
+				ComponentTransform* objectTransform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
+
+				if (objectTexture != nullptr)
+				{
+					RenderDraw(objectMesh, objectTransform, objectTexture);
+				}
+				else
+				{
+					RenderDraw(objectMesh, objectTransform);
+				}
 			}
 		}
 	}
+
 	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 	{
 		ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
@@ -280,21 +285,24 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 		for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 		{
-			std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
-
-			for (int j = 0; j < objectMeshes.size(); j++)
+			if (!App->scene->AllGameObjectManagers[i]->isText)
 			{
-				ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
-				ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
-				ComponentTransform* objectTransform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
+				std::vector<ComponentManager*> objectMeshes = App->scene->AllGameObjectManagers[i]->GetComponentsGameObject(ComponentType::MESH);
 
-				if (objectTexture != nullptr)
+				for (int j = 0; j < objectMeshes.size(); j++)
 				{
-					RenderDraw(objectMesh, objectTransform, objectTexture);
-				}
-				else
-				{
-					RenderDraw(objectMesh, objectTransform);
+					ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::SHOWNMATERIAL));
+					ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(j));
+					ComponentTransform* objectTransform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
+
+					if (objectTexture != nullptr)
+					{
+						RenderDraw(objectMesh, objectTransform, objectTexture);
+					}
+					else
+					{
+						RenderDraw(objectMesh, objectTransform);
+					}
 				}
 			}
 		}
@@ -562,28 +570,69 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	if (texture != nullptr)
+	if (UI_Element->ui_Type != UI_Type::TEXT)
 	{
-		if (texture->GetTexture()->ShowTextures)
+		if (texture != nullptr)
 		{
-			if (texture->texture->TextureID != 0)
+			if (texture->GetTexture()->ShowTextures)
 			{
-				glBindTexture(GL_TEXTURE_2D, texture->CM_TextureID);
+				if (texture->texture->TextureID != 0)
+				{
+					glBindTexture(GL_TEXTURE_2D, texture->CM_TextureID);
+				}
+			}
+		}
+
+		glBindBuffer(GL_ARRAY_BUFFER, ui_Plane->buffer[0]);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, ui_Plane->buffer[2]);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ui_Plane->buffer[1]);
+
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+	}
+	else
+	{
+		ComponentText* text = UI_Element->textComp;
+		const char* letters = UI_Element->textCH.c_str();
+
+		std::vector<ComponentManager*> objectPanels = gm->GetComponentsGameObject(ComponentType::MESH);
+
+		for (int j = 0; j < objectPanels.size(); j++)
+		{
+			if (UI_Element->font->AllCharacters.at(letters[j]).textID != 0)
+			{
+				glBindTexture(GL_TEXTURE_2D, UI_Element->font->AllCharacters.at(letters[j]).textID);
+			}
+
+			ComponentMesh* panel = dynamic_cast<ComponentMesh*>(objectPanels.at(j));
+
+			if (panel != nullptr)
+			{
+				if (panel->isActive)
+				{
+					if (panel->GetMesh() != nullptr)
+					{
+						glBindBuffer(GL_ARRAY_BUFFER, panel->GetMesh()->VBO);
+						glVertexPointer(3, GL_FLOAT, 0, NULL);
+						glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+						glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+						glBindBuffer(GL_ARRAY_BUFFER, panel->GetMesh()->VT);
+						glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, panel->GetMesh()->EBO);
+
+						glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+					}
+				}
 			}
 		}
 	}
-
-	glBindBuffer(GL_ARRAY_BUFFER, ui_Plane->buffer[0]);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, ui_Plane->buffer[2]);
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ui_Plane->buffer[1]);
-
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

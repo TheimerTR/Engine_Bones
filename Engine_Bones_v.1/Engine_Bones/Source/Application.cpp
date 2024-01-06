@@ -19,6 +19,7 @@ Application::Application()
 	scene = new ModuleScene(this);
 	physFSManager = new PhysFSManager(this);
 	resource = new ModuleResource(this);
+	font = new ModuleFont(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -30,6 +31,7 @@ Application::Application()
 	AddModule(input);
 	AddModule(physFSManager);
 	AddModule(resource);
+	AddModule(font);
 
 	// Renderer last!
 	AddModule(scene);
