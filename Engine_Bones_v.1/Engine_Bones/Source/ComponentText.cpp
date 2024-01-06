@@ -87,16 +87,16 @@ void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText
 		switch (actFont)
 		{
 		case FONTS::ARIAL:
-			ImGui::Text("Actual action: Arial");
+			ImGui::Text("Actual font: Arial");
 			break;
 		case FONTS::ROBOTO:
-			ImGui::Text("Actual action: Roboto");
+			ImGui::Text("Actual font: Roboto");
 			break;
 		case FONTS::ELIANTO:
-			ImGui::Text("Actual action: Elianto");
+			ImGui::Text("Actual font: Elianto");
 			break;
 		default:
-			ImGui::Text("Actual action: None");
+			ImGui::Text("Actual font: None");
 			break;
 		}
 

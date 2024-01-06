@@ -2296,6 +2296,52 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 		//ComponentMesh* objectMesh = dynamic_cast<ComponentMesh*>(objectMeshes.at(i));
 		//ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
 
+		ComponentTransform* transform;
+		transform = gameObject->mTransform;
+
+		transform->ShowInfo();
+
+		if (objectCanvasUI != nullptr)
+		{
+			objectCanvasUI->ShowInfo();
+		}
+
+		if (objectUI != nullptr)
+		{
+			switch (objectUI->ui_Type)
+			{
+			case UI_Type::BUTTON:
+			{
+				ButtonUI* button = (ButtonUI*)objectUI;
+				button->gmAtached = objectUI->gmAtached;
+				button->ShowInfo();
+			}
+			break;
+			case UI_Type::IMAGE:
+			{
+				ImageUI* image = (ImageUI*)objectUI;
+				image->gmAtached = objectUI->gmAtached;
+				image->ShowInfo();
+			}
+			break;
+			case UI_Type::TEXT:
+			{
+				{
+					((ComponentText*)objectUI)->ShowInfo(objectUI, objectUI->actualText, objectUI->newText, objectUI->gmAtached, objectUI->actualFonts, objectUI->widthPanel, objectUI->heigthPanel, objectUI->positionX, objectUI->positionY);
+					objectUI->textCH = objectUI->actualText;
+				}
+			}
+			break;
+			default:
+				break;
+			}
+		}
+
+		if (objectCamera != nullptr)
+		{
+			objectCamera->ShowCameraInfo();
+		}
+
 		for (int i = 0; i < objectMeshes.size(); i++)
 		{
 			ComponentMesh* objectMesh = (ComponentMesh*)objectMeshes.at(i);
@@ -2331,52 +2377,6 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 
 				ImGui::TreePop();
 			}
-		}
-
-		if(objectCanvasUI != nullptr)
-		{
-			objectCanvasUI->ShowInfo();
-		}
-		
-		if(objectUI != nullptr)
-		{
-			switch(objectUI->ui_Type)
-			{
-			case UI_Type::BUTTON:
-				{
-					ButtonUI* button = (ButtonUI*)objectUI;
-					button->gmAtached = objectUI->gmAtached;
-					button->ShowInfo();
-				}
-				break;
-			case UI_Type::IMAGE:
-				{
-					ImageUI* image = (ImageUI*)objectUI;
-					image->gmAtached = objectUI->gmAtached;
-					image->ShowInfo();
-				}
-				break;
-			case UI_Type::TEXT:
-				{
-					{
-						((ComponentText*)objectUI)->ShowInfo(objectUI, objectUI->actualText, objectUI->newText, objectUI->gmAtached, objectUI->actualFonts, objectUI->widthPanel, objectUI->heigthPanel, objectUI->positionX, objectUI->positionY);
-						objectUI->textCH = objectUI->actualText;
-					}
-				}
-				break;
-			default:
-				break;
-			}
-		}
-
-		ComponentTransform* transform;
-		transform = gameObject->mTransform; 
-
-		transform->ShowInfo();
-
-		if (objectCamera != nullptr)
-		{
-			objectCamera->ShowCameraInfo();
 		}
 
 		if (ImGui::Button("Add Component"))
