@@ -7,6 +7,7 @@
 #include "ComponentUI.h"
 #include "ModuleFont.h"
 
+#include "External/ImGui/misc/cpp/imgui_stdlib.h"
 #include "External/Glew/include/glew.h"
 #include "External/ImGui/imgui.h"
 #include "External/ImGui/backends/imgui_impl_sdl2.h"
@@ -36,6 +37,9 @@ ComponentText::ComponentText(UI_Type type, GameObject* gameObject, uint width, u
 	positionX = PosX;
 	positionY = PosY;
 
+	actualText = Text;
+	newText = Text;
+
 	DoText();
 }
 
@@ -43,30 +47,50 @@ ComponentText::~ComponentText()
 {
 
 }
-void ComponentText::ShowInfo()
+void ComponentText::ShowInfo(string actText, string newText, GameObject* gm, FONTS actFont, uint width, uint heigth, uint _posX, uint _posY)
 {
 	if (ImGui::TreeNode("Text"))
 	{
+		if (ImGui::InputText("Text", &newText, ImGuiInputTextFlags_None))
+		{
+			hasBeenModified = true;
+		}
+
+		if (hasBeenModified)
+		{
+			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+			{
+				actText = newText;
+
+				RecreateText(actText, gm, width, heigth, _posX, _posY);
+
+				hasBeenModified = false;
+			}
+
+			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+			{
+				newText = actText;
+				hasBeenModified = false;
+			}
+		}
+
 		if (ImGui::Button("Font"))
 		{
 			ImGui::OpenPopup("Font");
 		}
 
-		ComponentUI* ui = dynamic_cast<ComponentUI*>(gmAtached->GetComponentGameObject(ComponentType::UI));
+		ComponentUI* ui = dynamic_cast<ComponentUI*>(gm->GetComponentGameObject(ComponentType::UI));
 
-		switch (actualFonts)
+		switch (actFont)
 		{
 		case FONTS::ARIAL:
 			ImGui::Text("Actual action: Arial");
-			ui->font = app->font->FontLoader(120, "./Assets/Fonts/Arial.ttf");
 			break;
 		case FONTS::ROBOTO:
 			ImGui::Text("Actual action: Roboto");
-			ui->font = app->font->FontLoader(120, "./Assets/Fonts/Roboto.ttf");
 			break;
 		case FONTS::ELIANTO:
 			ImGui::Text("Actual action: Elianto");
-			ui->font = app->font->FontLoader(120, "./Assets/Fonts/Elianto.otf");
 			break;
 		default:
 			ImGui::Text("Actual action: None");
@@ -84,13 +108,16 @@ void ComponentText::ShowInfo()
 					switch (j)
 					{
 					case (int)FONTS::ARIAL:
-						actualFonts = ARIAL;
+						actFont = ARIAL;
+						ui->font = app->font->FontLoader(120, "./Assets/Fonts/Arial.ttf");
 						break;
 					case (int)FONTS::ROBOTO:
-						actualFonts = ROBOTO;
+						actFont = ROBOTO;
+						ui->font = app->font->FontLoader(120, "./Assets/Fonts/Roboto.ttf");
 						break;
 					case (int)FONTS::ELIANTO:
-						actualFonts = ELIANTO;
+						actFont = ELIANTO;
+						ui->font = app->font->FontLoader(120, "./Assets/Fonts/Elianto.otf");
 						break;
 					default:
 						break;
@@ -143,4 +170,41 @@ void ComponentText::DoText()
 void ComponentText::ModifyText()
 {
 
+}
+
+void ComponentText::RecreateText(string new_Text, GameObject* gm, uint width, uint heigth, uint _posX, uint _posY)
+{
+	gm->DeleteComponentType(ComponentType::MESH);
+
+	uint size_of_character = width / new_Text.length();
+
+	for (int i = 0; i < new_Text.length(); i++)
+	{
+		uint position_of_character = _posX + size_of_character * i;
+
+		ComponentMesh* mesh = dynamic_cast<ComponentMesh*>(gm->AddComponent(ComponentType::MESH));
+
+		float3 vertex[4];
+		float2 uv[4];
+		uint buffer[3];
+		float3 transform = { (float)position_of_character, (float)_posY, 0 };
+
+		CreatePanel(vertex, transform, size_of_character, heigth);
+
+		mesh->Name = "Letter";
+		mesh->C_Mesh->num_vertex = 4;
+		mesh->C_Mesh->num_index = 6;
+		mesh->C_Mesh->num_Tex = 2;
+
+		uv[0] = float2(0, 1);
+		uv[1] = float2(1, 1);
+		uv[3] = float2(1, 0);
+		uv[2] = float2(0, 0);
+
+		GenerateBuffers(buffer, vertex, uv);
+
+		mesh->C_Mesh->VBO = buffer[0];
+		mesh->C_Mesh->EBO = buffer[1];
+		mesh->C_Mesh->VT = buffer[2];
+	}
 }

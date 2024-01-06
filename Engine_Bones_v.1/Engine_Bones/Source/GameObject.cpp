@@ -444,3 +444,46 @@ void GameObject::ChangeParent(GameObject* gameObject)
 		}
 	}
 }
+
+void GameObject::DeleteComponentType(ComponentType type)
+{
+	std::vector<ComponentManager*> objectPanels = this->GetComponentsGameObject(type);
+
+	for(int i = 0; i < objectPanels.size(); i++)
+	{
+		if (type == ComponentType::MATERIAL)
+		{
+			ComponentMaterial* Mat = dynamic_cast<ComponentMaterial*>(objectPanels[i]);
+			mComponents.erase(find(mComponents.begin(), mComponents.end(), objectPanels[i]));
+			RELEASE(Mat);
+		}
+		
+		if (type == ComponentType::MESH)
+		{
+			ComponentMesh* Mesh = dynamic_cast<ComponentMesh*>(objectPanels[i]);
+			mComponents.erase(find(mComponents.begin(), mComponents.end(), objectPanels[i]));
+			RELEASE(Mesh);
+		}
+
+		if (type == ComponentType::CAMERA)
+		{
+			ComponentCamera* Cam = dynamic_cast<ComponentCamera*>(objectPanels[i]);
+			mComponents.erase(find(mComponents.begin(), mComponents.end(), objectPanels[i]));
+			RELEASE(Cam);
+		}
+		
+		if (type == ComponentType::UI)
+		{
+			ComponentUI* ui = dynamic_cast<ComponentUI*>(objectPanels[i]);
+			mComponents.erase(find(mComponents.begin(), mComponents.end(), objectPanels[i]));
+			RELEASE(ui);
+		}
+		
+		if (type == ComponentType::CANVAS)
+		{
+			CanvasUI* canv = dynamic_cast<CanvasUI*>(objectPanels[i]);
+			mComponents.erase(find(mComponents.begin(), mComponents.end(), objectPanels[i]));
+			RELEASE(canv);
+		}
+	}
+}

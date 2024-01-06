@@ -539,11 +539,15 @@ bool ModuleEditor::DrawEditor()
 						if (Canvas != nullptr)
 						{
 							GameObject* Text = new GameObject("Text", Canvas);
-							ComponentUI* comp_UI = dynamic_cast<ComponentUI*>(Text->AddComponent(ComponentType::UI, UI_Type::TEXT, 10, 10, 0, 0, nullptr));
+							ComponentUI* comp_UI = dynamic_cast<ComponentUI*>(Text->AddComponent(ComponentType::UI, UI_Type::TEXT, 80, 20, 0, 0, nullptr));
 							ComponentText text_UI = ComponentText(UI_Type::TEXT, Text, 80, 20, 0, 0, "MENU");
 							comp_UI->textComp = &text_UI;
+							comp_UI->gmAtached = Text;
 							comp_UI->textCH = text_UI.text;
 							comp_UI->font = text_UI.font;
+							comp_UI->actualText = text_UI.actualText;
+							comp_UI->newText = text_UI.newText;
+							comp_UI->actualFonts = text_UI.actualFonts;
 
 							ComponentMaterial* mat = (ComponentMaterial*)(Text->AddComponent(ComponentType::MATERIAL));
 							mat->colorTexture.r = 255;
@@ -2352,9 +2356,7 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 				break;
 			case UI_Type::TEXT:
 				{
-					ComponentText* text = (ComponentText*)objectUI;
-					text->gmAtached = objectUI->gmAtached;
-					text->ShowInfo();
+					((ComponentText*)objectUI)->ShowInfo(objectUI->actualText, objectUI->newText, objectUI->gmAtached, objectUI->actualFonts, objectUI->widthPanel, objectUI->heigthPanel, objectUI->positionX, objectUI->positionY);
 				}
 				break;
 			default:

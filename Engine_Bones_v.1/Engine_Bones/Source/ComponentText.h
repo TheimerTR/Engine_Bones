@@ -38,6 +38,8 @@ public:
 	uint heigthPanel;
 
 	string text;
+	string actualText;
+	string newText;
 
 	Font* font;
 
@@ -49,11 +51,13 @@ public:
 	ComponentText(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
 	~ComponentText();
 
-	void ShowInfo();
+	void ShowInfo(string actText, string newText, GameObject* gm, FONTS actFont, uint width, uint heigth, uint _posX, uint _posY);
 
 	void DoText();
 
 	void ModifyText();
+
+	void RecreateText(string new_Text, GameObject* gm, uint width, uint heigth, uint _posX, uint _posY);
 };
 
 #endif // COMPONENT_TEXT_H_

@@ -10,6 +10,7 @@
 
 class GameObject;
 class ComponentText;
+enum FONTS;
 
 struct UIPlane {
 	float3 vertex[4];
@@ -59,9 +60,13 @@ public:
 
 	float4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
+	//Text Component
 	ComponentText* textComp;
 	string textCH;
 	Font* font;
+	string actualText;
+	string newText;
+	FONTS actualFonts;
 
 public:
 	ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);

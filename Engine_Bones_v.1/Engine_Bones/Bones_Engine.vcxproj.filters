@@ -67,6 +67,12 @@
     <Filter Include="Sources\Tools\Componentes\UI">
       <UniqueIdentifier>{41120cc8-1af6-470a-9081-db1998d74ab1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\ImGui\misc">
+      <UniqueIdentifier>{9a880af4-3fb7-4034-ab14-7442963e2234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\ImGui\misc\cpp">
+      <UniqueIdentifier>{2b89adaa-91a8-42ff-9695-bfebe06d0511}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Module.h">
@@ -426,6 +432,9 @@
     <ClInclude Include="Source\ComponentText.h">
       <Filter>Sources\Tools\Componentes\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\External\ImGui\misc\cpp\imgui_stdlib.h">
+      <Filter>Sources\ImGui\misc\cpp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -673,6 +682,9 @@
     </ClCompile>
     <ClCompile Include="Source\ComponentText.cpp">
       <Filter>Sources\Tools\Componentes\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGui\misc\cpp\imgui_stdlib.cpp">
+      <Filter>Sources\ImGui\misc\cpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

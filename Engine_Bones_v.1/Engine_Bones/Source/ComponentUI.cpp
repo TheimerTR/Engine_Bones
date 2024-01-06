@@ -9,9 +9,13 @@
 
 ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigth, uint PosX, uint PosY, const char* imagePath) : ComponentManager(gameObject)
 {
+	//Text Component
 	textComp = nullptr;
 	textCH = "";
 	font = app->font->actualFont;
+
+	actualText = "";
+	newText = "";
 
 	ui_Type = type;
 	actualMouseState = MouseState::IDLE_UI;

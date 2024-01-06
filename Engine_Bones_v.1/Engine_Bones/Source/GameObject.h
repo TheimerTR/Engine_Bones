@@ -65,6 +65,8 @@ public:
 	void CreateEmptyObject(GameObject* gameObject);
 
 	void ChangeParent(GameObject* gameObject);
+
+	void DeleteComponentType(ComponentType type);
 };
 
 #endif // GAMEOBJECT_H_
