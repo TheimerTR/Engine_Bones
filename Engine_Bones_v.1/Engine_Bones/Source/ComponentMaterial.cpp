@@ -91,6 +91,11 @@ void ComponentMaterial::ShowInfo(Texture* texture, int i)
 				FileSystem::StringDivide(texture->path, &texture->Name, nullptr);
 			}
 
+			if(texture->TextureID == 0)
+			{
+				texture->Name = "Texture";
+			}
+
 			if (ImGui::TreeNode("%s##2", texture->Name.c_str()))
 			{
 				ImGui::Image((void*)texture->TextureID, ImVec2(texture->imageWidth, texture->imageHeight));

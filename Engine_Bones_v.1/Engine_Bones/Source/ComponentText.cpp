@@ -49,6 +49,15 @@ ComponentText::~ComponentText()
 }
 void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText, GameObject* gm, FONTS actFont, uint width, uint heigth, uint _posX, uint _posY)
 {
+	if(actText != "")
+	{
+		color[3] = 0;
+	}
+	else
+	{
+		color[3] = 255;
+	}
+
 	if (ImGui::TreeNode("Text"))
 	{
 		if (ImGui::InputText("Text", &newText, ImGuiInputTextFlags_None))

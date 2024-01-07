@@ -92,4 +92,4 @@ private:
 };
 
 
-#endif // COMPONENTMATERIAL_H_
+#endif // COMPONENTUI_H_

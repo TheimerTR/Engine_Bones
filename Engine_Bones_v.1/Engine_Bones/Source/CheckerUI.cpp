@@ -79,6 +79,12 @@ void CheckerUI::ShowInfo(ComponentUI* UI_Element)
 			ImGui::Text("Texture ID: %d", texture->TextureID);
 			ImGui::Text("Texture Size: Width:%d x Height:%d", texture->imageWidth, texture->imageHeight);
 			ImGui::Checkbox("Show Texture", &texture->ShowTextures);
+
+			color[3] = 0;
+		}
+		else
+		{
+			color[3] = 255;
 		}
 
 		float col[4] = { color[0], color[1], color[2], color[3] };

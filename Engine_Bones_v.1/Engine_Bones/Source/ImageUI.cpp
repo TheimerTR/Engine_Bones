@@ -38,6 +38,12 @@ void ImageUI::ShowInfo()
 		{
 			image_Path = mat->texture;
 		}
+
+		color[3] = 0;
+	}
+	else
+	{
+		color[3] = 255;
 	}
 
 	if(scaleToCanvas)

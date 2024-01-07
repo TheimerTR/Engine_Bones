@@ -251,8 +251,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	App->scene->Root->Update();
 
-
-
 	return UPDATE_CONTINUE;
 }
 
