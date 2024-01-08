@@ -17,6 +17,10 @@ public:
 
 	float widthPanel;
 	float heigthPanel;
+
+	uint posX;
+	uint posY;
+
 	ComponentTransform* comp_transform;
 
 public:

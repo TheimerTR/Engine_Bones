@@ -46,7 +46,7 @@ public:
 	bool OnHover();
 	bool OnClicked();
 
-	void ShowInfo();
+	void ShowInfo(int* action);
 
 	void PassScene();
 };

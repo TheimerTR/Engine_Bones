@@ -47,7 +47,7 @@ ComponentText::~ComponentText()
 {
 
 }
-void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText, GameObject* gm, FONTS actFont, uint width, uint heigth, uint _posX, uint _posY)
+void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText, GameObject* gm, FONTS* actFont, uint width, uint heigth, uint _posX, uint _posY)
 {
 	if(actText != "")
 	{
@@ -96,7 +96,7 @@ void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText
 
 		ComponentUI* ui = dynamic_cast<ComponentUI*>(gm->GetComponentGameObject(ComponentType::UI));
 
-		switch (actFont)
+		switch (*actFont)
 		{
 		case FONTS::ARIAL:
 			ImGui::Text("Actual font: Arial");
@@ -123,15 +123,15 @@ void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText
 					switch (j)
 					{
 					case (int)FONTS::ARIAL:
-						actFont = ARIAL;
+						*actFont = ARIAL;
 						ui->font = app->font->FontLoader(120, "./Assets/Fonts/Arial.ttf");
 						break;
 					case (int)FONTS::ROBOTO:
-						actFont = ROBOTO;
+						*actFont = ROBOTO;
 						ui->font = app->font->FontLoader(120, "./Assets/Fonts/Roboto.ttf");
 						break;
 					case (int)FONTS::ELIANTO:
-						actFont = ELIANTO;
+						*actFont = ELIANTO;
 						ui->font = app->font->FontLoader(120, "./Assets/Fonts/Elianto.otf");
 						break;
 					default:

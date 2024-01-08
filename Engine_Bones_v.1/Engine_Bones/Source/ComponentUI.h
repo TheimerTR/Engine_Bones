@@ -27,6 +27,7 @@ enum UI_Type
 	TEXT,
 	IMAGE,
 	CHECKER,
+	CANV,
 	DEF
 };
 
@@ -70,6 +71,8 @@ public:
 	FONTS actualFonts;
 	_functions actualChecker;
 
+	int actualButtonAction;
+
 public:
 	ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
 	~ComponentUI();
@@ -86,6 +89,8 @@ public:
 	void Enable() override;
 	bool Update() override;
 	void Disable() override;
+
+	ComponentUI* CreateGameObjectUI(UI_Type type, uint width = 20, uint heigth = 20, uint posX = 0, uint posY = 0, const char* imagePath = nullptr, const char* text = "Text", int buttonFuntion = 1);
 
 private:
 

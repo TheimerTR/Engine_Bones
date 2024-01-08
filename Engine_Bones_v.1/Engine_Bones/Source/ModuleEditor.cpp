@@ -95,7 +95,8 @@ bool ModuleEditor::Init()
 	name = "scene";
 	nameGame = "game"; 
 
-	actualResource = App->resource->AllResourcesMap.begin()->second;
+	actualResource = nullptr;
+	actualMesh = nullptr;
 
 	// Cheking Version of ImGuI and Init the Context
 	IMGUI_CHECKVERSION();
@@ -122,10 +123,6 @@ bool ModuleEditor::Init()
 
 bool ModuleEditor::Start()
 {
-	/*App->font->FontLoader(120, "./Assets/Fonts/Roboto.ttf");
-	App->font->FontLoader(120, "./Assets/Fonts/Elianto.otf");*/
-	App->font->actualFont = App->font->FontLoader(120, "./Assets/Fonts/Arial.ttf");
-
 	return true;
 }
 
@@ -478,12 +475,13 @@ bool ModuleEditor::DrawEditor()
 			{
 				if (!App->scene->GameTime.running)
 				{
+					ComponentUI* comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, 0, 0, 0, 0, nullptr);
+
 					if (ImGui::MenuItem("Canvas"))
 					{
 						if (Canvas == nullptr)
 						{
-							Canvas = new GameObject("Canvas", App->scene->Root);
-							CanvasUI* canv_UI = (CanvasUI*)(Canvas->AddComponent(ComponentType::CANVAS, UI_Type::DEF, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr));
+							comp_UI = comp_UI->CreateGameObjectUI(UI_Type::CANV);
 						}
 						else
 						{
@@ -495,18 +493,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							GameObject* Button = new GameObject("Button", Canvas);
-							ComponentUI* comp_UI = (ComponentUI*)(Button->AddComponent(ComponentType::UI, UI_Type::BUTTON, 10, 10, 0, 0, nullptr));
-							ButtonUI but_UI = ButtonUI(UI_Type::BUTTON, Button, 10, 10, 0, 0, nullptr);
-							comp_UI->positionX = but_UI.positionX;
-							comp_UI->positionY = but_UI.positionY;
-
-							ComponentMaterial* mat = (ComponentMaterial*)(Button->AddComponent(ComponentType::MATERIAL));
-							mat->colorTexture.r = 255;
-							mat->colorTexture.g = 255;
-							mat->colorTexture.b = 255;
-							mat->colorTexture.a = 255;
-							//mat->texture = but_UI->texture;
+							comp_UI = comp_UI->CreateGameObjectUI(UI_Type::BUTTON);
 						}
 						else
 						{
@@ -518,17 +505,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							GameObject* Image = new GameObject("Image", Canvas);
-							ComponentUI* comp_UI = (ComponentUI*)(Image->AddComponent(ComponentType::UI, UI_Type::IMAGE, 10, 10, 0, 0, nullptr));
-							ImageUI* img_UI = new ImageUI(UI_Type::IMAGE, Image, 10, 10, 0, 0, nullptr);
-							comp_UI = (ComponentUI*)img_UI;
-
-							ComponentMaterial* mat = (ComponentMaterial*)(Image->AddComponent(ComponentType::MATERIAL));
-							mat->colorTexture.r = 255;
-							mat->colorTexture.g = 255;
-							mat->colorTexture.b = 255;
-							mat->colorTexture.a = 255;
-							//mat->texture = but_UI->texture;
+							comp_UI = comp_UI->CreateGameObjectUI(UI_Type::IMAGE);
 						}
 						else
 						{
@@ -540,25 +517,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							GameObject* Text = new GameObject("Text", Canvas);
-							ComponentUI* comp_UI = dynamic_cast<ComponentUI*>(Text->AddComponent(ComponentType::UI, UI_Type::TEXT, 80, 20, 0, 0, nullptr));
-							ComponentText text_UI = ComponentText(UI_Type::TEXT, Text, 80, 20, 0, 0, "MENU");
-							comp_UI->textComp = &text_UI;
-							comp_UI->gmAtached = Text;
-							comp_UI->textCH = text_UI.text;
-							comp_UI->font = text_UI.font;
-							comp_UI->actualText = text_UI.actualText;
-							comp_UI->newText = text_UI.newText;
-							comp_UI->actualFonts = text_UI.actualFonts;
-							comp_UI->positionX = text_UI.positionX;
-							comp_UI->positionY = text_UI.positionY;
-
-							ComponentMaterial* mat = (ComponentMaterial*)(Text->AddComponent(ComponentType::MATERIAL));
-							mat->colorTexture.r = 255;
-							mat->colorTexture.g = 255;
-							mat->colorTexture.b = 255;
-							mat->colorTexture.a = 255;
-							//mat->texture = but_UI->texture;
+							comp_UI = comp_UI->CreateGameObjectUI(UI_Type::TEXT);
 						}
 						else
 						{
@@ -570,21 +529,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							GameObject* Checker = new GameObject("Checker", Canvas);
-							ComponentUI* comp_UI = dynamic_cast<ComponentUI*>(Checker->AddComponent(ComponentType::UI, UI_Type::CHECKER, 80, 20, 0, 0, nullptr));
-							CheckerUI check_UI = CheckerUI(UI_Type::CHECKER, Checker, 80, 20, 0, 0, nullptr);
-							comp_UI->actualChecker = check_UI.actualFunction;
-							comp_UI->positionX = check_UI.positionX;
-							comp_UI->positionY = check_UI.positionY;
-							comp_UI->widthPanel = check_UI.widthPanel;
-							comp_UI->heigthPanel = check_UI.heigthPanel;
-
-							ComponentMaterial* mat = (ComponentMaterial*)(Checker->AddComponent(ComponentType::MATERIAL));
-							mat->colorTexture.r = 255;
-							mat->colorTexture.g = 255;
-							mat->colorTexture.b = 255;
-							mat->colorTexture.a = 255;
-							//mat->texture = but_UI->texture;
+							comp_UI = comp_UI->CreateGameObjectUI(UI_Type::CHECKER);
 						}
 						else
 						{
@@ -1423,8 +1368,6 @@ bool ModuleEditor::DrawEditor()
 
 	RGB = RGB_Mode;
 
-
-
 	// Rendering
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -1639,6 +1582,76 @@ void ModuleEditor::HierarchyWindowDisplay(GameObject* gameObject)
 					else
 					{
 						LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
+					}
+
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("UI"))
+				{
+					if (!App->scene->GameTime.running)
+					{
+						ComponentUI* comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, 0, 0, 0, 0, nullptr);
+
+						if (ImGui::MenuItem("Canvas"))
+						{
+							if (Canvas == nullptr)
+							{
+								comp_UI = comp_UI->CreateGameObjectUI(UI_Type::CANV);
+							}
+							else
+							{
+								LOG(LogTypeCase::L_WARNING, "You already have a Canvas!");
+							}
+						}
+
+						if (ImGui::MenuItem("Button"))
+						{
+							if (Canvas != nullptr)
+							{
+								comp_UI = comp_UI->CreateGameObjectUI(UI_Type::BUTTON);
+							}
+							else
+							{
+								LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+							}
+						}
+
+						if (ImGui::MenuItem("Image"))
+						{
+							if (Canvas != nullptr)
+							{
+								comp_UI = comp_UI->CreateGameObjectUI(UI_Type::IMAGE);
+							}
+							else
+							{
+								LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+							}
+						}
+
+						if (ImGui::MenuItem("Text"))
+						{
+							if (Canvas != nullptr)
+							{
+								comp_UI = comp_UI->CreateGameObjectUI(UI_Type::TEXT);
+							}
+							else
+							{
+								LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+							}
+						}
+
+						if (ImGui::MenuItem("Checker"))
+						{
+							if (Canvas != nullptr)
+							{
+								comp_UI = comp_UI->CreateGameObjectUI(UI_Type::CHECKER);
+							}
+							else
+							{
+								LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+							}
+						}
 					}
 
 					ImGui::EndMenu();
@@ -2218,6 +2231,76 @@ void ModuleEditor::AddEntity(GameObject* gm)
 
 		ImGui::EndMenu();
 	}
+
+	if (ImGui::BeginMenu("UI"))
+	{
+		if (!App->scene->GameTime.running)
+		{
+			ComponentUI* comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, 0, 0, 0, 0, nullptr);
+
+			if (ImGui::MenuItem("Canvas"))
+			{
+				if (Canvas == nullptr)
+				{
+					comp_UI = comp_UI->CreateGameObjectUI(UI_Type::CANV);
+				}
+				else
+				{
+					LOG(LogTypeCase::L_WARNING, "You already have a Canvas!");
+				}
+			}
+			
+			if (ImGui::MenuItem("Button"))
+			{
+				if (Canvas != nullptr)
+				{
+					comp_UI = comp_UI->CreateGameObjectUI(UI_Type::BUTTON);
+				}
+				else
+				{
+					LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+				}
+			}
+
+			if (ImGui::MenuItem("Image"))
+			{
+				if (Canvas != nullptr)
+				{
+					comp_UI = comp_UI->CreateGameObjectUI(UI_Type::IMAGE);
+				}
+				else
+				{
+					LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+				}
+			}
+
+			if (ImGui::MenuItem("Text"))
+			{
+				if (Canvas != nullptr)
+				{
+					comp_UI = comp_UI->CreateGameObjectUI(UI_Type::TEXT);
+				}
+				else
+				{
+					LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+				}
+			}
+
+			if (ImGui::MenuItem("Checker"))
+			{
+				if (Canvas != nullptr)
+				{
+					comp_UI = comp_UI->CreateGameObjectUI(UI_Type::CHECKER);
+				}
+				else
+				{
+					LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+				}
+			}
+		}
+
+		ImGui::EndMenu();
+	}
 }
 
 void ModuleEditor::AddChildren(GameObject* gm)
@@ -2293,6 +2376,88 @@ void ModuleEditor::AddComponentInInspector(GameObject* gm)
 		{
 			app->scene->AddCameraComponent(gm);
 		}
+
+		if (ImGui::MenuItem("Canvas"))
+		{
+			if (Canvas == nullptr)
+			{
+				CanvasUI* canv_UI = (CanvasUI*)(gm->AddComponent(ComponentType::CANVAS, UI_Type::DEF, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr));
+				Canvas = gm;
+			}
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You already have a Canvas!");
+			}
+		}
+
+		if (ImGui::MenuItem("Button"))
+		{
+			if (Canvas != nullptr)
+			{
+				ComponentUI* comp_UI = (ComponentUI*)(gm->AddComponent(ComponentType::UI, UI_Type::BUTTON, 10, 10, 0, 0, nullptr));
+				ButtonUI but_UI = ButtonUI(UI_Type::BUTTON, gm, 10, 10, 0, 0, nullptr);
+				comp_UI->positionX = but_UI.positionX;
+				comp_UI->positionY = but_UI.positionY;
+			}
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+			}
+		}
+
+		if (ImGui::MenuItem("Image"))
+		{
+			if (Canvas != nullptr)
+			{
+				ComponentUI* comp_UI = (ComponentUI*)(gm->AddComponent(ComponentType::UI, UI_Type::IMAGE, 10, 10, 0, 0, nullptr));
+				ImageUI* img_UI = new ImageUI(UI_Type::IMAGE, gm, 10, 10, 0, 0, nullptr);
+				comp_UI = (ComponentUI*)img_UI;
+			}
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+			}
+		}
+
+		if (ImGui::MenuItem("Text"))
+		{
+			if (Canvas != nullptr)
+			{
+				ComponentUI* comp_UI = dynamic_cast<ComponentUI*>(gm->AddComponent(ComponentType::UI, UI_Type::TEXT, 80, 20, 0, 0, nullptr));
+				ComponentText text_UI = ComponentText(UI_Type::TEXT, gm, 80, 20, 0, 0, "MENU");
+				comp_UI->textComp = &text_UI;
+				comp_UI->gmAtached = gm;
+				comp_UI->textCH = text_UI.text;
+				comp_UI->font = text_UI.font;
+				comp_UI->actualText = text_UI.actualText;
+				comp_UI->newText = text_UI.newText;
+				comp_UI->actualFonts = text_UI.actualFonts;
+				comp_UI->positionX = text_UI.positionX;
+				comp_UI->positionY = text_UI.positionY;
+			}
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+			}
+		}
+
+		if (ImGui::MenuItem("Checker"))
+		{
+			if (Canvas != nullptr)
+			{
+				ComponentUI* comp_UI = dynamic_cast<ComponentUI*>(gm->AddComponent(ComponentType::UI, UI_Type::CHECKER, 80, 20, 0, 0, nullptr));
+				CheckerUI check_UI = CheckerUI(UI_Type::CHECKER, gm, 80, 20, 0, 0, nullptr);
+				comp_UI->actualChecker = check_UI.actualFunction;
+				comp_UI->positionX = check_UI.positionX;
+				comp_UI->positionY = check_UI.positionY;
+				comp_UI->widthPanel = check_UI.widthPanel;
+				comp_UI->heigthPanel = check_UI.heigthPanel;
+			}
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+			}
+		}
 	}
 	else
 	{
@@ -2342,7 +2507,7 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 			{
 				ButtonUI* button = (ButtonUI*)objectUI;
 				button->gmAtached = objectUI->gmAtached;
-				button->ShowInfo();
+				button->ShowInfo(&objectUI->actualButtonAction);
 			}
 			break;
 			case UI_Type::IMAGE:
@@ -2355,7 +2520,7 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 			case UI_Type::TEXT:
 			{
 				{
-					((ComponentText*)objectUI)->ShowInfo(objectUI, objectUI->actualText, objectUI->newText, objectUI->gmAtached, objectUI->actualFonts, objectUI->widthPanel, objectUI->heigthPanel, objectUI->positionX, objectUI->positionY);
+					((ComponentText*)objectUI)->ShowInfo(objectUI, objectUI->actualText, objectUI->newText, objectUI->gmAtached, &objectUI->actualFonts, objectUI->widthPanel, objectUI->heigthPanel, objectUI->positionX, objectUI->positionY);
 					objectUI->textCH = objectUI->actualText;
 				}
 			}

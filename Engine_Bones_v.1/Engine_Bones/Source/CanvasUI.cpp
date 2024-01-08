@@ -11,6 +11,9 @@ CanvasUI::CanvasUI(GameObject* gameObject, float width, float heigth, uint PosX,
 	widthPanel = width;
 	heigthPanel = heigth;
 
+	posX = PosX;
+	posY = PosY;
+
 	this->UUID = app->RandomIntGenerator();
 
 	comp_transform = dynamic_cast<ComponentTransform*>(gmAtached->GetComponentGameObject(ComponentType::TRANSFORM));

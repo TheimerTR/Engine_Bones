@@ -20,6 +20,7 @@ public:
 	~ModuleScene();
 
 	bool Init() override;
+	bool Start() override;
 	update_status Update(float dt) override;
 	update_status PostUpdate(float dt) override;
 	bool CleanUp() override;
@@ -28,6 +29,8 @@ public:
 
 	void CreateGameCamera(); 
 	void AddCameraComponent(GameObject* gm);
+
+	void DemoScene();
 
 public:
 	vector<GameObject*> AllGameObjectManagers;
@@ -39,6 +42,7 @@ public:
 	Timer GameTime;
 
 	bool isTyping;
+	bool Demo;
 };
 
 #endif

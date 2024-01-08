@@ -62,7 +62,7 @@ bool ButtonUI::OnClick()
 	return isPressed;
 }
 
-void ButtonUI::ShowInfo()
+void ButtonUI::ShowInfo(int* action)
 {
 	if (ImGui::TreeNode("Button"))
 	{
@@ -95,7 +95,7 @@ void ButtonUI::ShowInfo()
 			ImGui::OpenPopup("Action");
 		}
 
-		switch (actualFunction)
+		switch ((functions)*action)
 		{
 		case functions::PASS_SCENE:
 			ImGui::Text("Actual action: Pass Scene");
@@ -120,9 +120,11 @@ void ButtonUI::ShowInfo()
 					{
 					case (int)functions::PASS_SCENE:
 						actualFunction = PASS_SCENE;
+						*action = 0;
 						break;
 					case (int)functions::DEFAULT:
 						actualFunction = DEFAULT;
+						*action = 1;
 						break;
 					default:
 						break;
@@ -140,4 +142,11 @@ void ButtonUI::ShowInfo()
 void ButtonUI::PassScene()
 {
 	LOG(LogTypeCase::L_CASUAL, "Pass Scene!");
+
+	ResourceManager::ResourceLoader("Assets/ModelsFbx/Street.fbx");
+	app->scene->Selected_GameObject = app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1);
+	app->editor->actualMesh = app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1);
+	app->editor->actualMesh->isSelected = true;
+
+	app->editor->actualResource = app->resource->AllResourcesMap.begin()->second;
 }

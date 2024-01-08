@@ -162,14 +162,10 @@ bool ModuleRenderer3D::Init()
 	texturesManager->SetCheckerTexture();
 
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/DefinitiveStreet.fbx", nullptr);
-	ResourceManager::ResourceLoader("Assets/ModelsFbx/Street.fbx");
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/GrassStreet.fbx");
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/FloorRoad.fbx");
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/Houses.fbx");
 	//AssimpManager::AssimpLoader("Assets/ModelsFbx/CrossRoad.fbx", nullptr);
-	App->scene->Selected_GameObject = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-	App->editor->actualMesh = App->scene->AllGameObjectManagers.at(App->scene->AllGameObjectManagers.size() - 1);
-	App->editor->actualMesh->isSelected = true;
 
 	Grid.axis = true;
 
@@ -576,7 +572,17 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 			{
 				if (texture->texture->TextureID != 0)
 				{
-					glBindTexture(GL_TEXTURE_2D, texture->CM_TextureID);
+					if (texture->CM_TextureID != 0)
+					{
+						glBindTexture(GL_TEXTURE_2D, texture->CM_TextureID);
+					}
+					else if(UI_Element->texture != nullptr)
+					{
+						if(UI_Element->texture->TextureID != 0)
+						{
+							glBindTexture(GL_TEXTURE_2D, UI_Element->texture->TextureID);
+						}
+					}
 				}
 			}
 		}

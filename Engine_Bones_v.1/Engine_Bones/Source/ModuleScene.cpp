@@ -9,6 +9,7 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 	Selected_GameObject = Root;
 
 	isTyping = false;
+	Demo = true;
 
 	GameTime.Restart();
 	GameTime.Stop();
@@ -23,8 +24,26 @@ bool ModuleScene::Init()
 	return false;
 }
 
+bool ModuleScene::Start()
+{
+	/*App->font->FontLoader(120, "./Assets/Fonts/Roboto.ttf");
+	App->font->FontLoader(120, "./Assets/Fonts/Elianto.otf");*/
+	App->font->actualFont = App->font->FontLoader(120, "./Assets/Fonts/Arial.ttf");
+
+	return true;
+}
+
 update_status ModuleScene::Update(float dt)
 {
+	if (Demo)
+	{
+		if (app->editor->GameWindowSize.x > 50 && app->editor->GameWindowSize.y > 50)
+		{
+			DemoScene();
+			Demo = false;
+		}
+	}
+
 	if (app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
 	{
 		if (!app->scene->GameTime.running && !isTyping)
@@ -161,4 +180,25 @@ void ModuleScene::AddCameraComponent(GameObject* gm)
 {
 	ComponentCamera* camera = dynamic_cast<ComponentCamera*>(gm->AddComponent(ComponentType::CAMERA));
 	App->renderer3D->SetCameraGame(camera);
+}
+
+void ModuleScene::DemoScene()
+{
+	CanvasUI* canv_UI = new CanvasUI(Root, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0);
+
+	ComponentUI* canv_Comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr);
+
+	canv_Comp_UI = canv_Comp_UI->CreateGameObjectUI(UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
+	
+	ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->scene->Root, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 7.5), ((uint)app->editor->GameWindowSize.y / 1.5), nullptr);
+	
+	start_Text = start_Text->CreateGameObjectUI(UI_Type::TEXT, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.68), nullptr, "START");
+	
+	ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->scene->Root, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button2.png");
+
+	start_Button = start_Button->CreateGameObjectUI(UI_Type::BUTTON, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button2.png", nullptr, 0);
+
+	ComponentUI* background_Img = new ComponentUI(UI_Type::DEF, App->scene->Root, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png");
+
+	background_Img = background_Img->CreateGameObjectUI(UI_Type::IMAGE, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png", nullptr);
 }
