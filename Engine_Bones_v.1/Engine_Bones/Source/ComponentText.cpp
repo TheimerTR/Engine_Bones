@@ -67,6 +67,8 @@ void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText
 
 		if (hasBeenModified)
 		{
+			app->scene->isTyping = true;
+
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
 				actText = newText;
@@ -76,6 +78,7 @@ void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText
 				compUI->actualText = actText;
 				compUI->newText = actText;
 
+				app->scene->isTyping = false;
 				hasBeenModified = false;
 			}
 

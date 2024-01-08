@@ -37,6 +37,8 @@ public:
 	vector<ResourceElement*> AllResources;
 
 	Timer GameTime;
+
+	bool isTyping;
 };
 
 #endif

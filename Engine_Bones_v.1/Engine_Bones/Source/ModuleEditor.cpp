@@ -2359,6 +2359,7 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 					objectUI->textCH = objectUI->actualText;
 				}
 			}
+			break;
 			case UI_Type::CHECKER:
 			{
 				CheckerUI* check = (CheckerUI*)objectUI;

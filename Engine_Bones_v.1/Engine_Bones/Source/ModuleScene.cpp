@@ -8,6 +8,8 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 	AllGameObjectManagers.push_back(Root);
 	Selected_GameObject = Root;
 
+	isTyping = false;
+
 	GameTime.Restart();
 	GameTime.Stop();
 }
@@ -25,7 +27,7 @@ update_status ModuleScene::Update(float dt)
 {
 	if (app->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
 	{
-		if (!app->scene->GameTime.running)
+		if (!app->scene->GameTime.running && !isTyping)
 		{
 			if ((App->editor->actualMesh != nullptr) && (App->scene->AllGameObjectManagers.size() > 0))
 			{
@@ -75,7 +77,7 @@ update_status ModuleScene::Update(float dt)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
 		{
-			if (!app->scene->GameTime.running)
+			if (!app->scene->GameTime.running && !isTyping)
 			{
 				if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 				{
@@ -101,7 +103,7 @@ update_status ModuleScene::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
 		{
-			if (!app->scene->GameTime.running)
+			if (!app->scene->GameTime.running && !isTyping)
 			{
 				if (App->editor->actualMesh != nullptr)
 				{

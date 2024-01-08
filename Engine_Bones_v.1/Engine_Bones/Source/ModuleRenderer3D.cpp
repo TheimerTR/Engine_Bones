@@ -604,7 +604,8 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 		{
 			if (UI_Element->font->AllCharacters.at(letters[j]).textID != 0)
 			{
-				glBindTexture(GL_TEXTURE_2D, UI_Element->font->AllCharacters.at(letters[j]).textID);
+				auto test = UI_Element->font->AllCharacters.at(letters[j]);
+				glBindTexture(GL_TEXTURE_2D, test.textID);
 			}
 
 			ComponentMesh* panel = dynamic_cast<ComponentMesh*>(objectPanels.at(j));
