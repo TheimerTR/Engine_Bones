@@ -22,7 +22,7 @@ enum functions
 
 struct actions
 {
-	vector<string> nameOfFunctions = { "Pass scene" };
+	vector<string> nameOfFunctions = { "Pass scene", "None"};
 };
 
 class ButtonUI : public ComponentUI

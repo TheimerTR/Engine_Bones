@@ -17,6 +17,9 @@
 ButtonUI::ButtonUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath) : ComponentUI(type, gameObject, width, heigt, PosX, PosY, imagePath)
 {
 	gmAtached = gameObject;
+
+	positionX = PosX;
+	positionY = PosY;
 }
 
 ButtonUI::~ButtonUI()
@@ -109,7 +112,7 @@ void ButtonUI::ShowInfo()
 
 		if (ImGui::BeginPopup("Action"))
 		{
-			for (int j = 0; j < (functions::MAX - 1); j++)
+			for (int j = 0; j < (functions::MAX); j++)
 			{
 				if (ImGui::MenuItem((namesOfActions->nameOfFunctions[j] + std::string("##%s") + to_string(j).c_str()).c_str()))
 				{
@@ -117,6 +120,9 @@ void ButtonUI::ShowInfo()
 					{
 					case (int)functions::PASS_SCENE:
 						actualFunction = PASS_SCENE;
+						break;
+					case (int)functions::DEFAULT:
+						actualFunction = DEFAULT;
 						break;
 					default:
 						break;

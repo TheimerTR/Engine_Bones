@@ -497,8 +497,9 @@ bool ModuleEditor::DrawEditor()
 						{
 							GameObject* Button = new GameObject("Button", Canvas);
 							ComponentUI* comp_UI = (ComponentUI*)(Button->AddComponent(ComponentType::UI, UI_Type::BUTTON, 10, 10, 0, 0, nullptr));
-							ButtonUI* but_UI = new ButtonUI(UI_Type::BUTTON, Button, 10, 10, 0, 0, nullptr);
-							comp_UI = (ComponentUI*)but_UI;
+							ButtonUI but_UI = ButtonUI(UI_Type::BUTTON, Button, 10, 10, 0, 0, nullptr);
+							comp_UI->positionX = but_UI.positionX;
+							comp_UI->positionY = but_UI.positionY;
 
 							ComponentMaterial* mat = (ComponentMaterial*)(Button->AddComponent(ComponentType::MATERIAL));
 							mat->colorTexture.r = 255;

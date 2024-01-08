@@ -206,9 +206,15 @@ bool ComponentUI::MouseIsInside(float2 mouse)
 {
 	bool ret = false;
 
-	if(mouse.x >= positionX && mouse.x <= positionX + widthPanel && mouse.y >= positionY && mouse.y <= positionY + heigthPanel)
+	if (app->renderer3D->cameraGame != nullptr)
 	{
-		ret = true;
+		if (positionX >= 0 && positionY >= 0 && mouse.x >= 0 && mouse.y >= 0)
+		{
+			if (mouse.x >= positionX && mouse.x <= positionX + widthPanel && mouse.y >= positionY && mouse.y <= positionY + heigthPanel)
+			{
+				ret = true;
+			}
+		}
 	}
 
 	return ret;
