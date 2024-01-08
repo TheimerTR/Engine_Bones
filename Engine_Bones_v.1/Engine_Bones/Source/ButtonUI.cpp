@@ -48,9 +48,9 @@ bool ButtonUI::OnHover()
 	return true;
 }
 
-bool ButtonUI::OnClick()
+bool ButtonUI::OnClick(int* action)
 {
-	switch (actualFunction)
+	switch ((functions)*action)
 	{
 		case functions::PASS_SCENE:
 			PassScene();
@@ -149,4 +149,33 @@ void ButtonUI::PassScene()
 	app->editor->actualMesh->isSelected = true;
 
 	app->editor->actualResource = app->resource->AllResourcesMap.begin()->second;
+
+	//Active no active para render!!!!
+	//Si acitve es false, entonces no renderizar y el mouse no puede interactuar!
+	vector<ComponentUI*> objectsUI;
+
+	for (int i = 0; i < app->scene->AllGameObjectManagers.size(); i++)
+	{
+		ComponentUI* objectUI = dynamic_cast<ComponentUI*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
+
+		if (objectUI != nullptr && objectUI->ui_Type != CANV)
+		{
+			app->scene->AllGameObjectManagers[i]->isActive = false;
+			//objectsUI.push_back(objectUI);
+		}
+	}
+
+	/*for (int i = 0; i < objectsUI.size(); i++)
+	{
+		objectsUI[i]->Owner->mParent->DeleteChild(objectsUI[i]->Owner);
+	}*/
+
+	ComponentUI* crosshair = new ComponentUI(UI_Type::IMAGE, app->scene->Root, 40, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 16), ((uint)app->editor->GameWindowSize.y / 2), "Assets/Textures/Crosshair.png");
+
+	crosshair = crosshair->CreateGameObjectUI(UI_Type::IMAGE, 40, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 16), ((uint)app->editor->GameWindowSize.y / 2), "Assets/Textures/Crosshair.png");
+	app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->mName = "Crosshair";
+	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
+	mat->colorTexture.r = 255;
+	mat->colorTexture.g = 0;
+	mat->colorTexture.b = 0;
 }

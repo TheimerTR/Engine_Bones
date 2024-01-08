@@ -98,40 +98,43 @@ bool ComponentUI::Update()
 {
 	MousePicker();
 
-	switch (actualMouseState)
+	if (app->editor->isRunning)
 	{
-	case IDLE_UI:
-		break;
-	case HOVER_UI:
-		break;
-	case CLICK_UI:
-		if (ui_Type == BUTTON)
+		switch (actualMouseState)
 		{
-			ButtonUI* button = (ButtonUI*)this;
-			button->OnClick();
+		case IDLE_UI:
+			break;
+		case HOVER_UI:
+			break;
+		case CLICK_UI:
+			if (ui_Type == BUTTON)
+			{
+				ButtonUI* button = (ButtonUI*)this;
+				button->OnClick(&actualButtonAction);
+			}
+			if (ui_Type == CHECKER)
+			{
+				CheckerUI* checker = (CheckerUI*)this;
+				checker->OnClick(this);
+			}
+			break;
+		case CLICKED_UI:
+			if (ui_Type == BUTTON)
+			{
+				ButtonUI* button = (ButtonUI*)this;
+				button->OnClicked();
+			}
+			if (ui_Type == CHECKER)
+			{
+				CheckerUI* checker = (CheckerUI*)this;
+				checker->OnClicked();
+			}
+			break;
+		case CLICKED_RELEASED_UI:
+			break;
+		default:
+			break;
 		}
-		if (ui_Type == CHECKER)
-		{
-			CheckerUI* checker = (CheckerUI*)this;
-			checker->OnClick(this);
-		}
-		break;
-	case CLICKED_UI:
-		if (ui_Type == BUTTON)
-		{
-			ButtonUI* button = (ButtonUI*)this;
-			button->OnClicked();
-		}
-		if (ui_Type == CHECKER)
-		{
-			CheckerUI* checker = (CheckerUI*)this;
-			checker->OnClicked();
-		}
-		break;
-	case CLICKED_RELEASED_UI:
-		break;
-	default:
-		break;
 	}
 
 	return true;
@@ -323,7 +326,7 @@ bool ComponentUI::MouseIsInside(float2 mouse)
 {
 	bool ret = false;
 
-	if (app->renderer3D->cameraGame != nullptr)
+	if (app->renderer3D->cameraGame != nullptr && gmAtached->isActive)
 	{
 		if (positionX >= 0 && positionY >= 0 && mouse.x >= 0 && mouse.y >= 0)
 		{

@@ -303,18 +303,21 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 		for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 		{
-			ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
-			ComponentUI* objectUI = dynamic_cast<ComponentUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
-			CanvasUI* canvas_UI = dynamic_cast<CanvasUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::CANVAS));
-			
-			if (canvas_UI != nullptr)
+			if (App->scene->AllGameObjectManagers[i]->isActive)
 			{
-				RenderCanvas(App->scene->AllGameObjectManagers[i], canvas_UI);
-			}
+				ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
+				ComponentUI* objectUI = dynamic_cast<ComponentUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
+				CanvasUI* canvas_UI = dynamic_cast<CanvasUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::CANVAS));
 
-			if (objectUI != nullptr)
-			{
-				RenderUI(App->scene->AllGameObjectManagers[i], objectUI, true, objectTexture);
+				if (canvas_UI != nullptr)
+				{
+					RenderCanvas(App->scene->AllGameObjectManagers[i], canvas_UI);
+				}
+
+				if (objectUI != nullptr)
+				{
+					RenderUI(App->scene->AllGameObjectManagers[i], objectUI, true, objectTexture);
+				}
 			}
 		}
 

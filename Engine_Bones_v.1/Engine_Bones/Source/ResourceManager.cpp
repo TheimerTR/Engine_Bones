@@ -46,8 +46,8 @@
 
 void ResourceManager::ResourceLoader(const char* path, const char* pathTexture)
 {
-	if (!app->scene->GameTime.running)
-	{
+	/*if (!app->scene->GameTime.running)
+	{*/
 		const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 		if (scene != nullptr && scene->HasMeshes())
@@ -91,11 +91,11 @@ void ResourceManager::ResourceLoader(const char* path, const char* pathTexture)
 		}
 		else
 			LOG(LogTypeCase::L_ERROR, "Error loading scene % s", path);
-	}
+	/*}
 	else
 	{
 		LOG(LogTypeCase::L_WARNING, "You are in PLAY mode!");
-	}
+	}*/
 }
 
 void ResourceManager::SimpleResourceLoader(const char* Path, GameObject* gameObject, const char* texturePath)

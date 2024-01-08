@@ -190,7 +190,7 @@ void ModuleScene::DemoScene()
 
 	canv_Comp_UI = canv_Comp_UI->CreateGameObjectUI(UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
 	
-	ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->scene->Root, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 7.5), ((uint)app->editor->GameWindowSize.y / 1.5), nullptr);
+	ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->scene->Root, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.68), nullptr);
 	
 	start_Text = start_Text->CreateGameObjectUI(UI_Type::TEXT, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.68), nullptr, "START");
 	

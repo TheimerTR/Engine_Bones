@@ -32,8 +32,8 @@ ComponentMaterial::~ComponentMaterial()
 	texture->imageHeight = 0;
 	texture->imageType = 0;
 	texture->imageWidth = 0;
-	texture->Name = "";
-	texture->path = "";
+	//texture->Name = "";
+	//texture->path = "";
 	texture->ShowTextures = false;
 	texture->TextureID = 0;
 
