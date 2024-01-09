@@ -178,4 +178,13 @@ void ButtonUI::PassScene()
 	mat->colorTexture.r = 255;
 	mat->colorTexture.g = 0;
 	mat->colorTexture.b = 0;
+
+	app->scene->isOnScene = true;
+
+	CreatePauseMenu();
+}
+
+void ButtonUI::CreatePauseMenu()
+{
+	CreateGameObjectUI(IMAGE, app->editor->GameWindowSize.x - (app->editor->GameWindowSize.x / 2), app->editor->GameWindowSize.y - (app->editor->GameWindowSize.y / 20), (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4), (app->editor->GameWindowSize.y / 20), nullptr);
 }

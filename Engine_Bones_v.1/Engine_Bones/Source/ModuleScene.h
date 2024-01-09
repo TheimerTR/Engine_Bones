@@ -43,6 +43,8 @@ public:
 
 	bool isTyping;
 	bool Demo;
+	bool isOnScene;
+	bool openPauseMenu;
 };
 
 #endif

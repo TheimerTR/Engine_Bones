@@ -10,6 +10,8 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 
 	isTyping = false;
 	Demo = true;
+	isOnScene = false;
+	openPauseMenu = false;
 
 	GameTime.Restart();
 	GameTime.Stop();
@@ -59,9 +61,19 @@ update_status ModuleScene::Update(float dt)
 		}
 	}
 	
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && app->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_DOWN)
 	{
 		App->scene->GameTime.running = false;
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	{
+		openPauseMenu = !openPauseMenu;
+
+		if(App->scene->GameTime.running && openPauseMenu && isOnScene && !app->editor->isMovingChild && !App->editor->isMovingParent)
+		{
+			//OpenPauseMenu();
+		}
 
 		if (App->editor->isMovingParent && !app->editor->isMovingChild)
 		{
