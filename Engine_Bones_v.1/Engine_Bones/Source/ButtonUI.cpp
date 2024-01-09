@@ -170,9 +170,11 @@ void ButtonUI::PassScene()
 		objectsUI[i]->Owner->mParent->DeleteChild(objectsUI[i]->Owner);
 	}*/
 
-	ComponentUI* crosshair = new ComponentUI(UI_Type::IMAGE, app->scene->Root, 40, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 16), ((uint)app->editor->GameWindowSize.y / 2), "Assets/Textures/Crosshair.png");
+	CreatePauseMenu();
 
-	crosshair = crosshair->CreateGameObjectUI(UI_Type::IMAGE, 40, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 16), ((uint)app->editor->GameWindowSize.y / 2), "Assets/Textures/Crosshair.png");
+	ComponentUI* crosshair = new ComponentUI(UI_Type::IMAGE, app->editor->Canvas, 40, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 16), ((uint)app->editor->GameWindowSize.y / 2), "Assets/Textures/Crosshair.png");
+
+	crosshair = crosshair->CreateGameObjectUI(app->editor->Canvas, UI_Type::IMAGE, 40, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 16), ((uint)app->editor->GameWindowSize.y / 2), "Assets/Textures/Crosshair.png");
 	app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->mName = "Crosshair";
 	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
 	mat->colorTexture.r = 255;
@@ -180,11 +182,20 @@ void ButtonUI::PassScene()
 	mat->colorTexture.b = 0;
 
 	app->scene->isOnScene = true;
-
-	CreatePauseMenu();
 }
 
 void ButtonUI::CreatePauseMenu()
 {
-	CreateGameObjectUI(IMAGE, app->editor->GameWindowSize.x - (app->editor->GameWindowSize.x / 2), app->editor->GameWindowSize.y - (app->editor->GameWindowSize.y / 20), (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4), (app->editor->GameWindowSize.y / 20), nullptr);
+	CreateGameObjectUI(app->scene->pause, IMAGE, app->editor->GameWindowSize.x - (app->editor->GameWindowSize.x / 2), app->editor->GameWindowSize.y - (app->editor->GameWindowSize.y / 20), (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4), (app->editor->GameWindowSize.y / 20), "Assets/Textures/BackgroundPause.jpg");
+	
+	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
+
+	mat->colorTexture.a = 100;
+
+	app->scene->pause->isActive = false;
+
+	for(int i = 0; i < app->scene->pause->childrens.size(); i++)
+	{
+		app->scene->pause->childrens[i]->isActive = false;
+	}
 }

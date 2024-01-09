@@ -31,6 +31,7 @@ public:
 	void AddCameraComponent(GameObject* gm);
 
 	void DemoScene();
+	void OpenPauseMenu();
 
 public:
 	vector<GameObject*> AllGameObjectManagers;
@@ -45,6 +46,8 @@ public:
 	bool Demo;
 	bool isOnScene;
 	bool openPauseMenu;
+
+	GameObject* pause;
 };
 
 #endif

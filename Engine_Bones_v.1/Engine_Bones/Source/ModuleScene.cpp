@@ -42,6 +42,7 @@ update_status ModuleScene::Update(float dt)
 		if (app->editor->GameWindowSize.x > 50 && app->editor->GameWindowSize.y > 50)
 		{
 			DemoScene();
+			pause = new GameObject("Pause", App->editor->Canvas);
 			Demo = false;
 		}
 	}
@@ -70,9 +71,9 @@ update_status ModuleScene::Update(float dt)
 	{
 		openPauseMenu = !openPauseMenu;
 
-		if(App->scene->GameTime.running && openPauseMenu && isOnScene && !app->editor->isMovingChild && !App->editor->isMovingParent)
+		if(App->scene->GameTime.running && isOnScene && !app->editor->isMovingChild && !App->editor->isMovingParent)
 		{
-			//OpenPauseMenu();
+			OpenPauseMenu();
 		}
 
 		if (App->editor->isMovingParent && !app->editor->isMovingChild)
@@ -200,17 +201,32 @@ void ModuleScene::DemoScene()
 
 	ComponentUI* canv_Comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr);
 
-	canv_Comp_UI = canv_Comp_UI->CreateGameObjectUI(UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
+	canv_Comp_UI = canv_Comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
 	
-	ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->scene->Root, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.68), nullptr);
+	ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->editor->Canvas, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.68), nullptr);
 	
-	start_Text = start_Text->CreateGameObjectUI(UI_Type::TEXT, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.68), nullptr, "START");
+	start_Text = start_Text->CreateGameObjectUI(App->editor->Canvas, UI_Type::TEXT, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.68), nullptr, "START");
 	
-	ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->scene->Root, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button2.png");
+	ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->editor->Canvas, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button2.png");
 
-	start_Button = start_Button->CreateGameObjectUI(UI_Type::BUTTON, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button2.png", nullptr, 0);
+	start_Button = start_Button->CreateGameObjectUI(App->editor->Canvas, UI_Type::BUTTON, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button2.png", nullptr, 0);
 
-	ComponentUI* background_Img = new ComponentUI(UI_Type::DEF, App->scene->Root, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png");
+	ComponentUI* background_Img = new ComponentUI(UI_Type::DEF, App->editor->Canvas, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png");
 
-	background_Img = background_Img->CreateGameObjectUI(UI_Type::IMAGE, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png", nullptr);
+	background_Img = background_Img->CreateGameObjectUI(App->editor->Canvas, UI_Type::IMAGE, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png", nullptr);
+}
+
+void ModuleScene::OpenPauseMenu()
+{
+	pause->isActive = openPauseMenu;
+
+
+	for (int i = 0; i < pause->childrens.size(); i++)
+	{
+		pause->childrens[i]->isActive = openPauseMenu;
+
+		ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(pause->childrens[i]->GetComponentGameObject(ComponentType::MATERIAL));
+
+		mat->colorTexture.a = 100;
+	}
 }

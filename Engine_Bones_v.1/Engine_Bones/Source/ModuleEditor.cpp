@@ -481,7 +481,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas == nullptr)
 						{
-							comp_UI = comp_UI->CreateGameObjectUI(UI_Type::CANV);
+							comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV);
 						}
 						else
 						{
@@ -493,7 +493,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							comp_UI = comp_UI->CreateGameObjectUI(UI_Type::BUTTON);
+							comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::BUTTON);
 						}
 						else
 						{
@@ -505,7 +505,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							comp_UI = comp_UI->CreateGameObjectUI(UI_Type::IMAGE);
+							comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::IMAGE);
 						}
 						else
 						{
@@ -517,7 +517,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							comp_UI = comp_UI->CreateGameObjectUI(UI_Type::TEXT);
+							comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::TEXT);
 						}
 						else
 						{
@@ -529,7 +529,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							comp_UI = comp_UI->CreateGameObjectUI(UI_Type::CHECKER);
+							comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::CHECKER);
 						}
 						else
 						{
@@ -1597,7 +1597,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObject* gameObject)
 						{
 							if (Canvas == nullptr)
 							{
-								comp_UI = comp_UI->CreateGameObjectUI(UI_Type::CANV);
+								comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV);
 							}
 							else
 							{
@@ -1609,7 +1609,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObject* gameObject)
 						{
 							if (Canvas != nullptr)
 							{
-								comp_UI = comp_UI->CreateGameObjectUI(UI_Type::BUTTON);
+								comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::BUTTON);
 							}
 							else
 							{
@@ -1621,7 +1621,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObject* gameObject)
 						{
 							if (Canvas != nullptr)
 							{
-								comp_UI = comp_UI->CreateGameObjectUI(UI_Type::IMAGE);
+								comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::IMAGE);
 							}
 							else
 							{
@@ -1633,7 +1633,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObject* gameObject)
 						{
 							if (Canvas != nullptr)
 							{
-								comp_UI = comp_UI->CreateGameObjectUI(UI_Type::TEXT);
+								comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::TEXT);
 							}
 							else
 							{
@@ -1645,7 +1645,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObject* gameObject)
 						{
 							if (Canvas != nullptr)
 							{
-								comp_UI = comp_UI->CreateGameObjectUI(UI_Type::CHECKER);
+								comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::CHECKER);
 							}
 							else
 							{
@@ -2242,7 +2242,7 @@ void ModuleEditor::AddEntity(GameObject* gm)
 			{
 				if (Canvas == nullptr)
 				{
-					comp_UI = comp_UI->CreateGameObjectUI(UI_Type::CANV);
+					comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV);
 				}
 				else
 				{
@@ -2254,7 +2254,7 @@ void ModuleEditor::AddEntity(GameObject* gm)
 			{
 				if (Canvas != nullptr)
 				{
-					comp_UI = comp_UI->CreateGameObjectUI(UI_Type::BUTTON);
+					comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::BUTTON);
 				}
 				else
 				{
@@ -2266,7 +2266,7 @@ void ModuleEditor::AddEntity(GameObject* gm)
 			{
 				if (Canvas != nullptr)
 				{
-					comp_UI = comp_UI->CreateGameObjectUI(UI_Type::IMAGE);
+					comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::IMAGE);
 				}
 				else
 				{
@@ -2278,7 +2278,7 @@ void ModuleEditor::AddEntity(GameObject* gm)
 			{
 				if (Canvas != nullptr)
 				{
-					comp_UI = comp_UI->CreateGameObjectUI(UI_Type::TEXT);
+					comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::TEXT);
 				}
 				else
 				{
@@ -2290,7 +2290,7 @@ void ModuleEditor::AddEntity(GameObject* gm)
 			{
 				if (Canvas != nullptr)
 				{
-					comp_UI = comp_UI->CreateGameObjectUI(UI_Type::CHECKER);
+					comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::CHECKER);
 				}
 				else
 				{

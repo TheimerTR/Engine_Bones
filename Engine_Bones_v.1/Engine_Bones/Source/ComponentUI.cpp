@@ -145,7 +145,7 @@ void ComponentUI::Disable()
 	
 }
 
-ComponentUI* ComponentUI::CreateGameObjectUI(UI_Type type, uint width, uint heigth, uint posX, uint posY, const char* imagePath, const char* text, int buttonFuntion)
+ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint width, uint heigth, uint posX, uint posY, const char* imagePath, const char* text, int buttonFuntion)
 {
 	ComponentUI* comp_UI = nullptr;
 
@@ -153,7 +153,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(UI_Type type, uint width, uint heig
 	{
 	case UI_Type::BUTTON:
 		{
-			GameObject* Button = new GameObject("Button", app->editor->Canvas);
+			GameObject* Button = new GameObject("Button", gm);
 			comp_UI = (ComponentUI*)(Button->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			ButtonUI but_UI = ButtonUI(type, Button, width, heigth, posX, posY, imagePath);
 			but_UI.actualFunction = (functions)buttonFuntion;
@@ -177,7 +177,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(UI_Type type, uint width, uint heig
 		break;
 	case UI_Type::TEXT:
 		{
-			GameObject* Text = new GameObject("Text", app->editor->Canvas);
+			GameObject* Text = new GameObject("Text", gm);
 			comp_UI = dynamic_cast<ComponentUI*>(Text->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			ComponentText text_UI = ComponentText(type, Text, width, heigth, posX, posY, text);
 			comp_UI->textComp = &text_UI;
@@ -204,7 +204,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(UI_Type type, uint width, uint heig
 		break;
 	case UI_Type::IMAGE:
 		{
-			GameObject* Image = new GameObject("Image", app->editor->Canvas);
+			GameObject* Image = new GameObject("Image", gm);
 			comp_UI = (ComponentUI*)(Image->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			ImageUI* img_UI = new ImageUI(type, Image, width, heigth, posX, posY, imagePath);
 			comp_UI = (ComponentUI*)img_UI;
@@ -223,7 +223,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(UI_Type type, uint width, uint heig
 		break;
 	case UI_Type::CHECKER:
 		{
-			GameObject* Checker = new GameObject("Checker", app->editor->Canvas);
+			GameObject* Checker = new GameObject("Checker", gm);
 			comp_UI = dynamic_cast<ComponentUI*>(Checker->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			CheckerUI check_UI = CheckerUI(type, Checker, width, heigth, posX, posY, imagePath);
 			comp_UI->actualChecker = check_UI.actualFunction;
@@ -246,7 +246,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(UI_Type type, uint width, uint heig
 		break;
 	case UI_Type::CANV:
 		{
-			app->editor->Canvas = new GameObject("Canvas", app->scene->Root);
+			app->editor->Canvas = new GameObject("Canvas", gm);
 			CanvasUI* canv_UI = (CanvasUI*)(app->editor->Canvas->AddComponent(ComponentType::CANVAS, type, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr));
 		}
 		break;
