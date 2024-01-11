@@ -14,7 +14,7 @@
 #include "External/SDL/include/SDL_opengl.h"
 #endif
 
-CheckerUI::CheckerUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath) : ComponentUI(type, gameObject, width, heigt, PosX, PosY, imagePath)
+CheckerUI::CheckerUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePathActive, const char* imagePathDisabled) : ComponentUI(type, gameObject, width, heigt, PosX, PosY, imagePathActive)
 {
 	gmAtached = gameObject;
 	actualFunction = _functions::_DEF;
@@ -22,6 +22,17 @@ CheckerUI::CheckerUI(UI_Type type, GameObject* gameObject, uint width, uint heig
 	positionY = PosY;
 	widthPanel = width;
 	heigthPanel = heigt;
+
+	if (textureActive != nullptr)
+	{
+		textureActive = new Texture();
+		Importer::ImporterTexture::Load(textureActive, imagePathActive);
+	}
+	if (textureDisabled != nullptr)
+	{
+		textureDisabled = new Texture();
+		Importer::ImporterTexture::Load(textureDisabled, imagePathDisabled);
+	}
 }
 
 CheckerUI::~CheckerUI()
@@ -60,8 +71,29 @@ bool CheckerUI::OnClick(ComponentUI* UI_Element)
 			isSelected = !isSelected;
 			app->editor->Vsync = isSelected;
 			break;
+		case _functions::_DRAG:
+			isSelected = !isSelected;
+			app->scene->draggable = isSelected;
+			break;
 		default:
 			break;
+		}
+	}
+
+	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+
+	if(isSelected)
+	{
+		if (UI_Element->active != nullptr)
+		{
+			mat->SetTexture(UI_Element->active);
+		}
+	}
+	else
+	{
+		if (UI_Element->disabled != nullptr)
+		{
+			mat->SetTexture(UI_Element->disabled);
 		}
 	}
 
@@ -106,6 +138,9 @@ void CheckerUI::ShowInfo(ComponentUI* UI_Element)
 		case _functions::_VSYNC:
 			ImGui::Text("Actual action: Vsync");
 			break;
+		case _functions::_DRAG:
+			ImGui::Text("Actual action: Drag");
+			break;
 		case _functions::_DEF:
 			ImGui::Text("Actual action: None");
 			break;
@@ -126,6 +161,9 @@ void CheckerUI::ShowInfo(ComponentUI* UI_Element)
 					{
 					case (int)_functions::_VSYNC:
 						UI_Element->actualChecker = _VSYNC;
+						break;
+					case (int)_functions::_DRAG:
+						UI_Element->actualChecker = _DRAG;
 						break;
 					case (int)_functions::_DEF:
 						UI_Element->actualChecker = _DEF;

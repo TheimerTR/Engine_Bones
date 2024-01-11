@@ -21,6 +21,7 @@ public:
 	float ReadDt();
 
 	bool running;
+	bool paused;
 
 private:
 

@@ -71,7 +71,12 @@ public:
 	FONTS actualFonts;
 	_functions actualChecker;
 
+	//Button
 	int actualButtonAction;
+
+	//Checker
+	Texture* active;
+	Texture* disabled;
 
 public:
 	ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
@@ -90,7 +95,7 @@ public:
 	bool Update() override;
 	void Disable() override;
 
-	ComponentUI* CreateGameObjectUI(GameObject* gm, UI_Type type, uint width = 20, uint heigth = 20, uint posX = 0, uint posY = 0, const char* imagePath = nullptr, const char* text = "Text", int buttonFuntion = 1);
+	ComponentUI* CreateGameObjectUI(GameObject* gm, UI_Type type, uint width = 20, uint heigth = 20, uint posX = 0, uint posY = 0, const char* imagePath = nullptr, const char* text = "Text", int buttonFuntion = 1, const char* imagePathDisabled = nullptr);
 
 private:
 

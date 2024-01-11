@@ -22,9 +22,6 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	Position = float3(0.0f, 10.0f, 5.0f);
 	Reference = float3(0.0f, 0.0f, 0.0f);
 
-	
-	
-
 	//CalculateViewMatrix();
 }
 
@@ -77,7 +74,6 @@ update_status ModuleCamera3D::PreUpdate(float dt)
 //	glMatrixMode(GL_MODELVIEW);
 //	glLoadMatrixf((GLfloat*)ViewMatrixOpenGL().v);
 //
-
 
 	return UPDATE_CONTINUE;
 }
@@ -180,74 +176,75 @@ update_status ModuleCamera3D::Update(float dt)
 
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 		{
-			int dx = -App->input->GetMouseXMotion();
-			int dy = -App->input->GetMouseYMotion();
-
-			float Sensitivity = 0.35f * dt;
-
-			float DeltaY = (float)dy * Sensitivity;
-			float DeltaX = (float)dx * Sensitivity;
-
-			Quat rotation;
-			AABB* box;
-			float3 centerObject;
-			float3 scale;
-			ComponentMesh* mesh = dynamic_cast<ComponentMesh*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::MESH));
-
-			float distance = 0;
-
-			if (mesh != nullptr)
+			if (App->editor->actualMesh != nullptr)
 			{
-				box = &mesh->global_aabb;
-				centerObject = box->Centroid();
-				scale = box->Size();
+				int dx = -App->input->GetMouseXMotion();
+				int dy = -App->input->GetMouseYMotion();
 
-				distance = cameraEditor->frustum.pos.Distance(centerObject);
-			}
-			else
-			{
-				ComponentTransform* transform = dynamic_cast<ComponentTransform*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::TRANSFORM));
-				centerObject.x = transform->mPosition.x;
-				centerObject.y = transform->mPosition.y;
-				centerObject.z = transform->mPosition.z;
-				distance = cameraEditor->frustum.pos.Distance(centerObject);
-			}
+				float Sensitivity = 0.35f * dt;
 
-			if (dx != 0)
-			{
+				float DeltaY = (float)dy * Sensitivity;
 				float DeltaX = (float)dx * Sensitivity;
 
-				Quat rotationQuat = Quat::identity;
+				Quat rotation;
+				AABB* box;
+				float3 centerObject;
+				float3 scale;
+				ComponentMesh* mesh = dynamic_cast<ComponentMesh*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::MESH));
 
-				rotation = Quat::RotateY(DeltaX);
+				float distance = 0;
 
-				rotationQuat = rotationQuat * rotation;
+				if (mesh != nullptr)
+				{
+					box = &mesh->global_aabb;
+					centerObject = box->Centroid();
+					scale = box->Size();
 
-				cameraEditor->frustum.front = rotation.Mul(cameraEditor->frustum.front).Normalized();
-				cameraEditor->frustum.up = rotation.Mul(cameraEditor->frustum.up).Normalized();
+					distance = cameraEditor->frustum.pos.Distance(centerObject);
+				}
+				else
+				{
+					ComponentTransform* transform = dynamic_cast<ComponentTransform*>(app->editor->actualMesh->GetComponentGameObject(ComponentType::TRANSFORM));
+					centerObject.x = transform->mPosition.x;
+					centerObject.y = transform->mPosition.y;
+					centerObject.z = transform->mPosition.z;
+					distance = cameraEditor->frustum.pos.Distance(centerObject);
+				}
+
+				if (dx != 0)
+				{
+					float DeltaX = (float)dx * Sensitivity;
+
+					Quat rotationQuat = Quat::identity;
+
+					rotation = Quat::RotateY(DeltaX);
+
+					rotationQuat = rotationQuat * rotation;
+
+					cameraEditor->frustum.front = rotation.Mul(cameraEditor->frustum.front).Normalized();
+					cameraEditor->frustum.up = rotation.Mul(cameraEditor->frustum.up).Normalized();
+				}
+
+				if (dy != 0)
+				{
+					float DeltaY = (float)dy * Sensitivity;
+
+					Quat rotationQuat = Quat::identity;
+
+					rotation = Quat::RotateAxisAngle(cameraEditor->frustum.WorldRight(), DeltaY);
+
+					rotationQuat = rotationQuat * rotation;
+
+					float3 up = rotation.Mul(cameraEditor->frustum.up).Normalized();
+
+					cameraEditor->frustum.front = rotation.Mul(cameraEditor->frustum.front).Normalized();
+					cameraEditor->frustum.up = up;
+				}
+
+				cameraEditor->frustum.pos = centerObject + (cameraEditor->frustum.front * -distance);
+				LookAt(centerObject);
 			}
-
-			if (dy != 0)
-			{
-				float DeltaY = (float)dy * Sensitivity;
-
-				Quat rotationQuat = Quat::identity;
-
-				rotation = Quat::RotateAxisAngle(cameraEditor->frustum.WorldRight(), DeltaY);
-
-				rotationQuat = rotationQuat * rotation;
-
-				float3 up = rotation.Mul(cameraEditor->frustum.up).Normalized();
-
-				cameraEditor->frustum.front = rotation.Mul(cameraEditor->frustum.front).Normalized();
-				cameraEditor->frustum.up = up;
-
-			}
-
-			cameraEditor->frustum.pos = centerObject + (cameraEditor->frustum.front * -distance);
-			LookAt(centerObject);
 		}
-
 	}
 	//LookAt(Reference);
 

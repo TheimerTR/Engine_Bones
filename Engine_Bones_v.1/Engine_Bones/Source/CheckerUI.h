@@ -23,7 +23,7 @@ enum _functions
 
 struct values
 {
-	vector<string> nameOfFunctions = { "Vysnc" , "None" };
+	vector<string> nameOfFunctions = { "Vysnc" , "Drag", "None" };
 };
 
 class CheckerUI : public ComponentUI
@@ -41,8 +41,11 @@ public:
 
 	_functions actualFunction;
 
+	Texture* textureActive;
+	Texture* textureDisabled;
+
 public:
-	CheckerUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
+	CheckerUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePathActive, const char* imagePathDisabled);
 	~CheckerUI();
 
 	bool OnClick(ComponentUI* UI_Element);

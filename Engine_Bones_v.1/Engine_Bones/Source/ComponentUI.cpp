@@ -49,15 +49,11 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 		}
 	}
 
-	float3 transform;
+	CreatePanel(PlaneInScene->vertex, gameObject->mTransform->mPosition, width, heigth);
 
-	transform = gameObject->mTransform->gPosition;
+	//transform = { (float)PosX, (float)PosY, 0 };
 
-	CreatePanel(PlaneInScene->vertex, transform, width, heigth);
-
-	transform = { (float)PosX, (float)PosY, 0 };
-
-	CreatePanel(PlaneInGame->vertex, transform, width, heigth);
+	CreatePanel(PlaneInGame->vertex, gameObject->mTransform->mPosition, width, heigth);
 
 	PlaneInScene->uv[0] = float2(0, 1);
 	PlaneInScene->uv[1] = float2(1, 1);
@@ -145,7 +141,7 @@ void ComponentUI::Disable()
 	
 }
 
-ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint width, uint heigth, uint posX, uint posY, const char* imagePath, const char* text, int buttonFuntion)
+ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint width, uint heigth, uint posX, uint posY, const char* imagePath, const char* text, int buttonFuntion, const char* imagePathDisabled)
 {
 	ComponentUI* comp_UI = nullptr;
 
@@ -225,12 +221,14 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint 
 		{
 			GameObject* Checker = new GameObject("Checker", gm);
 			comp_UI = dynamic_cast<ComponentUI*>(Checker->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
-			CheckerUI check_UI = CheckerUI(type, Checker, width, heigth, posX, posY, imagePath);
+			CheckerUI check_UI = CheckerUI(type, Checker, width, heigth, posX, posY, imagePath, imagePathDisabled);
 			comp_UI->actualChecker = (_functions)buttonFuntion;
 			comp_UI->positionX = check_UI.positionX;
 			comp_UI->positionY = check_UI.positionY;
 			comp_UI->widthPanel = check_UI.widthPanel;
 			comp_UI->heigthPanel = check_UI.heigthPanel;
+			comp_UI->active = check_UI.textureActive;
+			comp_UI->disabled = check_UI.textureDisabled;
 
 			ComponentMaterial* mat = (ComponentMaterial*)(Checker->AddComponent(ComponentType::MATERIAL));
 			mat->colorTexture.r = 255;

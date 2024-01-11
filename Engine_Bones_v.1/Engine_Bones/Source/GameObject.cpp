@@ -54,10 +54,11 @@ GameObject::~GameObject()
 		}
 	}
 
-	for (uint i = 0; i < childrens.size(); i++)
+	while (childrens.size() > 0)
 	{
-		RELEASE(childrens[i]);
-		childrens[i] = nullptr;
+		childrens[0]->mParent->DeleteChild(childrens[0]);
+		//RELEASE(childrens[i]);
+		//childrens[i] = nullptr;
 	}
 
 	childrens.clear();
@@ -325,6 +326,11 @@ void GameObject::DeleteChild(GameObject* gameObject)
 {
 	if (gameObject != nullptr)
 	{
+		if(gameObject == app->scene->pause)
+		{
+			app->scene->pause = nullptr;
+		}
+
 		gameObject->mParent->childrens.erase(find(childrens.begin(), childrens.end(), gameObject));
 		delete gameObject;
 		gameObject = nullptr;

@@ -12,6 +12,8 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 	Demo = true;
 	isOnScene = false;
 	openPauseMenu = false;
+	draggable = false;
+	restartScene = false;
 
 	GameTime.Restart();
 	GameTime.Stop();
@@ -169,6 +171,13 @@ update_status ModuleScene::Update(float dt)
 
 update_status ModuleScene::PostUpdate(float dt)
 {
+	if(restartScene)
+	{
+		RestartScene();
+
+		restartScene = false;
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -182,7 +191,7 @@ void ModuleScene::PushGameObject(GameObject* gameObject)
 	AllGameObjectManagers.push_back(gameObject);
 }
 
-void ModuleScene::CreateGameCamera(                                                                                                                                                                                   )
+void ModuleScene::CreateGameCamera()
 {
 	GameObject* gameObject = new GameObject("camera", Root);
 	ComponentCamera* camera = dynamic_cast<ComponentCamera*>(gameObject->AddComponent(ComponentType::CAMERA));
@@ -197,15 +206,17 @@ void ModuleScene::AddCameraComponent(GameObject* gm)
 
 void ModuleScene::DemoScene()
 {
+	CreateGameCamera();
+
 	CanvasUI* canv_UI = new CanvasUI(Root, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0);
 
 	ComponentUI* canv_Comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr);
 
 	canv_Comp_UI = canv_Comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
 	
-	ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->editor->Canvas, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.68), nullptr);
+	ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->editor->Canvas, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.7), nullptr);
 	
-	start_Text = start_Text->CreateGameObjectUI(App->editor->Canvas, UI_Type::TEXT, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.68), nullptr, "START");
+	start_Text = start_Text->CreateGameObjectUI(App->editor->Canvas, UI_Type::TEXT, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.7), nullptr, "START");
 	
 	ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->editor->Canvas, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button2.png");
 
@@ -229,4 +240,24 @@ void ModuleScene::OpenPauseMenu()
 
 		mat->colorTexture.a = 100;
 	}
+}
+
+void ModuleScene::RestartScene()
+{
+	for(int i = 1; i < AllGameObjectManagers.size(); i++)
+	{
+		if (AllGameObjectManagers.size() > 1)
+		{
+			AllGameObjectManagers[1]->mParent->DeleteChild(AllGameObjectManagers[1]);
+		}
+		else
+		{
+			continue;
+		}
+	}
+
+	App->editor->actualMesh = nullptr;
+
+	DemoScene();
+	pause = new GameObject("Pause", App->editor->Canvas);
 }

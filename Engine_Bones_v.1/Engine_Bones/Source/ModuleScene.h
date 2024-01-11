@@ -32,6 +32,7 @@ public:
 
 	void DemoScene();
 	void OpenPauseMenu();
+	void RestartScene();
 
 public:
 	vector<GameObject*> AllGameObjectManagers;
@@ -46,6 +47,8 @@ public:
 	bool Demo;
 	bool isOnScene;
 	bool openPauseMenu;
+	bool draggable;
+	bool restartScene;
 
 	GameObject* pause;
 };

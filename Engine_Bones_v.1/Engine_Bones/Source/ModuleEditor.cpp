@@ -651,6 +651,11 @@ bool ModuleEditor::DrawEditor()
 
 		if (ImGui::Button("Stop"))
 		{
+			if(App->scene->GameTime.running || App->scene->GameTime.paused)
+			{
+				App->scene->restartScene = true;
+			}
+
 			App->scene->GameTime.Restart();
 		}
 		
@@ -2446,7 +2451,7 @@ void ModuleEditor::AddComponentInInspector(GameObject* gm)
 			if (Canvas != nullptr)
 			{
 				ComponentUI* comp_UI = dynamic_cast<ComponentUI*>(gm->AddComponent(ComponentType::UI, UI_Type::CHECKER, 80, 20, 0, 0, nullptr));
-				CheckerUI check_UI = CheckerUI(UI_Type::CHECKER, gm, 80, 20, 0, 0, nullptr);
+				CheckerUI check_UI = CheckerUI(UI_Type::CHECKER, gm, 80, 20, 0, 0, "Assets/Textures/Ckeck-checkedbox.png", "Assets/Textures/Unchecked-checkbox.jpg");
 				comp_UI->actualChecker = check_UI.actualFunction;
 				comp_UI->positionX = check_UI.positionX;
 				comp_UI->positionY = check_UI.positionY;

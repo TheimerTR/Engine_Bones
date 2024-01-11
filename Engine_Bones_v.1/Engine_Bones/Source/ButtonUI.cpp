@@ -150,8 +150,6 @@ void ButtonUI::PassScene()
 
 	app->editor->actualResource = app->resource->AllResourcesMap.begin()->second;
 
-	//Active no active para render!!!!
-	//Si acitve es false, entonces no renderizar y el mouse no puede interactuar!
 	vector<ComponentUI*> objectsUI;
 
 	for (int i = 0; i < app->scene->AllGameObjectManagers.size(); i++)
@@ -188,12 +186,11 @@ void ButtonUI::CreatePauseMenu()
 {
 	CreateGameObjectUI(app->scene->pause, TEXT, app->editor->GameWindowSize.x / 5, app->editor->GameWindowSize.y / 10, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 10), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 2.5), nullptr, "PAUSE", 0);
 
-	CreateGameObjectUI(app->scene->pause, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 5), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5), nullptr, nullptr, 0);
-	CreateGameObjectUI(app->scene->pause, TEXT, app->editor->GameWindowSize.x / 5, app->editor->GameWindowSize.y / 10, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 15), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5), nullptr, "VSYNC", 0);
+	CreateGameObjectUI(app->scene->pause, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 5), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5), "Assets/Textures/Ckeck-checkedbox.png", nullptr, 0, "Assets/Textures/Unchecked-checkbox.png");
+	CreateGameObjectUI(app->scene->pause, TEXT, app->editor->GameWindowSize.x / 5, app->editor->GameWindowSize.y / 10, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 15), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5), nullptr, "VSYNC", 0, nullptr);
 
-	CreateGameObjectUI(app->scene->pause, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 5), (app->editor->GameWindowSize.y / 2), nullptr, nullptr, 0);
-	CreateGameObjectUI(app->scene->pause, TEXT, app->editor->GameWindowSize.x / 4, app->editor->GameWindowSize.y / 10, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 15), (app->editor->GameWindowSize.y / 2), nullptr, "DRAGABLE", 1);
-
+	CreateGameObjectUI(app->scene->pause, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 5), (app->editor->GameWindowSize.y / 2), "Assets/Textures/Ckeck-checkedbox.png", nullptr, 0, "Assets/Textures/Unchecked-checkbox.png");
+	CreateGameObjectUI(app->scene->pause, TEXT, app->editor->GameWindowSize.x / 4, app->editor->GameWindowSize.y / 10, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 15), (app->editor->GameWindowSize.y / 2), nullptr, "DRAGABLE", 1, nullptr);
 
 	CreateGameObjectUI(app->scene->pause, IMAGE, app->editor->GameWindowSize.x - (app->editor->GameWindowSize.x / 2), app->editor->GameWindowSize.y - (app->editor->GameWindowSize.y / 20), (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4), (app->editor->GameWindowSize.y / 20), "Assets/Textures/BackgroundPause.jpg");
 	

@@ -301,7 +301,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			}
 		}
 
-		for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
+		for (int i = 1; i < App->scene->AllGameObjectManagers.size(); i++)
 		{
 			if (App->scene->AllGameObjectManagers[i]->isActive)
 			{
@@ -309,15 +309,21 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 				ComponentUI* objectUI = dynamic_cast<ComponentUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
 				CanvasUI* canvas_UI = dynamic_cast<CanvasUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::CANVAS));
 				
+				if (app->scene->pause != nullptr)
+				{
 					for (int j = 0; j < app->scene->pause->childrens.size(); j++)
 					{
 						if (App->scene->AllGameObjectManagers[i] == app->scene->pause->childrens[j])
 						{
 							app->scene->pause->childrens[j]->isActive = app->scene->openPauseMenu;
 
-							objectTexture->colorTexture.a = 0.5;
+							if (objectTexture != nullptr)
+							{
+								objectTexture->colorTexture.a = 0.5;
+							}
 						}
 					}
+				}
 
 				if (canvas_UI != nullptr)
 				{
