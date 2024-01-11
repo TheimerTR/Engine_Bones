@@ -1,5 +1,7 @@
 #include "ModuleScene.h"
 #include "CanvasUI.h"
+#include "ButtonUI.h"
+#include "CheckerUI.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -14,6 +16,8 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 	openPauseMenu = false;
 	draggable = false;
 	restartScene = false;
+
+	actual_UI_Object = 0;
 
 	GameTime.Restart();
 	GameTime.Stop();
@@ -46,6 +50,72 @@ update_status ModuleScene::Update(float dt)
 			DemoScene();
 			pause = new GameObject("Pause", App->editor->Canvas);
 			Demo = false;
+		}
+	}
+
+	ComponentUI* objectUI = nullptr;
+
+	for (int i = 1; i < App->scene->AllGameObjectManagers.size(); i++)
+	{
+		if (App->scene->AllGameObjectManagers[i]->isActive)
+		{
+			objectUI = dynamic_cast<ComponentUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
+
+			if (objectUI != nullptr)
+			{
+				bool isComponent = false;
+
+				for (int j = 0; j < All_UI.size(); j++)
+				{
+					if (All_UI[j] == objectUI)
+					{
+						isComponent = true;
+					}
+				}
+
+				if (!isComponent)
+				{
+					All_UI.push_back(objectUI);
+
+					if(objectUI->ui_Type == CHECKER || objectUI->ui_Type == BUTTON)
+					{
+						AllInteractuableUI.push_back(objectUI);
+					}
+				}
+			}
+		}
+	}
+
+	if(app->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
+	{
+		if (AllInteractuableUI.size() > 0 && GameTime.running && !GameTime.paused)
+		{
+			for (int j = 0; j < AllInteractuableUI.size(); j++)
+			{
+				ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(AllInteractuableUI[j]->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+				mat->colorTexture.r = 1;
+				mat->colorTexture.g = 1;
+				mat->colorTexture.b = 1;
+				mat->colorTexture.a = 1;
+			}
+
+			if (GameTime.running && !GameTime.paused)
+			{
+				if (actual_UI_Object < AllInteractuableUI.size() - 1)
+				{
+					actual_UI_Object++;
+				}
+				else
+				{
+					actual_UI_Object = 0;
+				}
+
+				ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(AllInteractuableUI[actual_UI_Object]->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+				mat->colorTexture.r = 1;
+				mat->colorTexture.g = 0.7;
+				mat->colorTexture.b = 0;
+				mat->colorTexture.a = 1;
+			}
 		}
 	}
 
@@ -104,6 +174,27 @@ update_status ModuleScene::Update(float dt)
 		if (app->editor->isMovingChild && !App->editor->isMovingParent)
 		{
 			app->editor->isMovingChild = false;
+		}
+
+		if(AllInteractuableUI.size() > 0)
+		{
+			switch (AllInteractuableUI[actual_UI_Object]->ui_Type)
+			{
+				case BUTTON:
+					{
+						ButtonUI* button = (ButtonUI*)AllInteractuableUI[actual_UI_Object];
+						button->OnClick(&AllInteractuableUI[actual_UI_Object]->actualButtonAction);
+					}
+					break;
+				case CHECKER:
+					{
+						CheckerUI* checker = (CheckerUI*)this;
+						checker->OnClick(AllInteractuableUI[actual_UI_Object]);
+					}
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
@@ -218,9 +309,9 @@ void ModuleScene::DemoScene()
 	
 	start_Text = start_Text->CreateGameObjectUI(App->editor->Canvas, UI_Type::TEXT, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.7), nullptr, "START");
 	
-	ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->editor->Canvas, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button2.png");
+	ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->editor->Canvas, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button3.png");
 
-	start_Button = start_Button->CreateGameObjectUI(App->editor->Canvas, UI_Type::BUTTON, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button2.png", nullptr, 0);
+	start_Button = start_Button->CreateGameObjectUI(App->editor->Canvas, UI_Type::BUTTON, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button3.png", nullptr, 0);
 
 	ComponentUI* background_Img = new ComponentUI(UI_Type::DEF, App->editor->Canvas, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png");
 

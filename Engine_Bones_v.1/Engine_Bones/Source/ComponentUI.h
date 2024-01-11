@@ -77,6 +77,7 @@ public:
 	//Checker
 	Texture* active;
 	Texture* disabled;
+	bool CheckSelected;
 
 public:
 	ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
