@@ -556,7 +556,7 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 		ui_Plane = UI_Element->PlaneInScene;
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0.0, App->editor->GameWindowSize.x, App->editor->GameWindowSize.y, 0.0, 10.0, -3.0);
+		glOrtho(0.0, App->editor->GameWindowSize.x, App->editor->GameWindowSize.y, 0.0, 1.0, -1.0);
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
