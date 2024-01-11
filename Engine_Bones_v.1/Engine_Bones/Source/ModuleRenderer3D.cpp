@@ -553,13 +553,16 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 
 	if (isGameMode)
 	{
-		ui_Plane = UI_Element->PlaneInGame;
+		ui_Plane = UI_Element->PlaneInScene;
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0.0, App->editor->GameWindowSize.x, App->editor->GameWindowSize.y, 0.0, 1.0, -1.0);
+		glOrtho(0.0, App->editor->GameWindowSize.x, App->editor->GameWindowSize.y, 0.0, 10.0, -3.0);
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+
+		glPushMatrix();
+		glMultMatrixf((float*)gm->mTransform->GetGlobalTransposed());
 	}
 
 	glEnable(GL_BLEND);
@@ -669,7 +672,7 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-	if (!isGameMode)
+	//if (!isGameMode)
 		glPopMatrix();
 }
 
