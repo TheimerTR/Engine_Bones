@@ -16,6 +16,7 @@ class GameObject;
 enum _functions
 {
 	_VSYNC,
+	_DRAG,
 	_DEF,
 	_MAX
 };

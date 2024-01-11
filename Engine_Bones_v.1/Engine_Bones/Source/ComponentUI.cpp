@@ -226,7 +226,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint 
 			GameObject* Checker = new GameObject("Checker", gm);
 			comp_UI = dynamic_cast<ComponentUI*>(Checker->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			CheckerUI check_UI = CheckerUI(type, Checker, width, heigth, posX, posY, imagePath);
-			comp_UI->actualChecker = check_UI.actualFunction;
+			comp_UI->actualChecker = (_functions)buttonFuntion;
 			comp_UI->positionX = check_UI.positionX;
 			comp_UI->positionY = check_UI.positionY;
 			comp_UI->widthPanel = check_UI.widthPanel;

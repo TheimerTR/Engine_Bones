@@ -186,11 +186,20 @@ void ButtonUI::PassScene()
 
 void ButtonUI::CreatePauseMenu()
 {
+	CreateGameObjectUI(app->scene->pause, TEXT, app->editor->GameWindowSize.x / 5, app->editor->GameWindowSize.y / 10, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 10), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 2.5), nullptr, "PAUSE", 0);
+
+	CreateGameObjectUI(app->scene->pause, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 5), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5), nullptr, nullptr, 0);
+	CreateGameObjectUI(app->scene->pause, TEXT, app->editor->GameWindowSize.x / 5, app->editor->GameWindowSize.y / 10, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 15), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5), nullptr, "VSYNC", 0);
+
+	CreateGameObjectUI(app->scene->pause, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 5), (app->editor->GameWindowSize.y / 2), nullptr, nullptr, 0);
+	CreateGameObjectUI(app->scene->pause, TEXT, app->editor->GameWindowSize.x / 4, app->editor->GameWindowSize.y / 10, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 15), (app->editor->GameWindowSize.y / 2), nullptr, "DRAGABLE", 1);
+
+
 	CreateGameObjectUI(app->scene->pause, IMAGE, app->editor->GameWindowSize.x - (app->editor->GameWindowSize.x / 2), app->editor->GameWindowSize.y - (app->editor->GameWindowSize.y / 20), (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4), (app->editor->GameWindowSize.y / 20), "Assets/Textures/BackgroundPause.jpg");
 	
 	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
 
-	mat->colorTexture.a = 100;
+	mat->colorTexture.a = 0.5;
 
 	app->scene->pause->isActive = false;
 
