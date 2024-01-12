@@ -6,9 +6,11 @@
 #include "ResourceManager.h"
 #include "GameObject.h"
 #include "ResourceElement.h"
+#include "ComponentUI.h"
 
 #include <vector>
 #include <stdio.h>
+#include <map>
 
 using namespace std;
 
@@ -40,6 +42,8 @@ public:
 	GameObject* Selected_GameObject = nullptr;
 
 	vector<ResourceElement*> AllResources;
+	vector<ComponentUI*> All_UI;
+	vector<ComponentUI*> AllInteractuableUI;
 
 	Timer GameTime;
 
@@ -49,6 +53,8 @@ public:
 	bool openPauseMenu;
 	bool draggable;
 	bool restartScene;
+
+	int actual_UI_Object;
 
 	GameObject* pause;
 };

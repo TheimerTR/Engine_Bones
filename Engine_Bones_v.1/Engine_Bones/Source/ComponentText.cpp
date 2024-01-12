@@ -47,6 +47,7 @@ ComponentText::~ComponentText()
 {
 
 }
+
 void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText, GameObject* gm, FONTS* actFont, uint width, uint heigth, uint _posX, uint _posY)
 {
 	if(actText != "")
@@ -60,6 +61,8 @@ void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText
 
 	if (ImGui::TreeNode("Text"))
 	{
+		ImGui::Checkbox("Active", &compUI->gmAtached->isActive);
+
 		if (ImGui::InputText("Text", &newText, ImGuiInputTextFlags_None))
 		{
 			hasBeenModified = true;

@@ -66,6 +66,8 @@ void ButtonUI::ShowInfo(int* action)
 {
 	if (ImGui::TreeNode("Button"))
 	{
+		ImGui::Checkbox("Active", &gmAtached->isActive);
+
 		if (texture != nullptr)
 		{
 			ImGui::Image((void*)texture->TextureID, ImVec2(texture->imageWidth, texture->imageHeight));
@@ -163,6 +165,8 @@ void ButtonUI::PassScene()
 		}
 	}
 
+	app->scene->AllInteractuableUI.clear();
+
 	/*for (int i = 0; i < objectsUI.size(); i++)
 	{
 		objectsUI[i]->Owner->mParent->DeleteChild(objectsUI[i]->Owner);
@@ -189,7 +193,7 @@ void ButtonUI::CreatePauseMenu()
 	CreateGameObjectUI(app->scene->pause, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 5), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5), "Assets/Textures/Ckeck-checkedbox.png", nullptr, 0, "Assets/Textures/Unchecked-checkbox.png");
 	CreateGameObjectUI(app->scene->pause, TEXT, app->editor->GameWindowSize.x / 5, app->editor->GameWindowSize.y / 10, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 15), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5), nullptr, "VSYNC", 0, nullptr);
 
-	CreateGameObjectUI(app->scene->pause, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 5), (app->editor->GameWindowSize.y / 2), "Assets/Textures/Ckeck-checkedbox.png", nullptr, 0, "Assets/Textures/Unchecked-checkbox.png");
+	CreateGameObjectUI(app->scene->pause, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 5), (app->editor->GameWindowSize.y / 2), "Assets/Textures/Ckeck-checkedbox.png", nullptr, 1, "Assets/Textures/Unchecked-checkbox.png");
 	CreateGameObjectUI(app->scene->pause, TEXT, app->editor->GameWindowSize.x / 4, app->editor->GameWindowSize.y / 10, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 15), (app->editor->GameWindowSize.y / 2), nullptr, "DRAGABLE", 1, nullptr);
 
 	CreateGameObjectUI(app->scene->pause, IMAGE, app->editor->GameWindowSize.x - (app->editor->GameWindowSize.x / 2), app->editor->GameWindowSize.y - (app->editor->GameWindowSize.y / 20), (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4), (app->editor->GameWindowSize.y / 20), "Assets/Textures/BackgroundPause.jpg");

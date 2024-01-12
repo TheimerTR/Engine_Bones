@@ -68,12 +68,12 @@ bool CheckerUI::OnClick(ComponentUI* UI_Element)
 		switch (UI_Element->actualChecker)
 		{
 		case _functions::_VSYNC:
-			isSelected = !isSelected;
-			app->editor->Vsync = isSelected;
+			UI_Element->CheckSelected = !UI_Element->CheckSelected;
+			app->editor->Vsync = UI_Element->CheckSelected;
 			break;
 		case _functions::_DRAG:
-			isSelected = !isSelected;
-			app->scene->draggable = isSelected;
+			UI_Element->CheckSelected = !UI_Element->CheckSelected;
+			app->scene->draggable = UI_Element->CheckSelected;
 			break;
 		default:
 			break;
@@ -82,7 +82,7 @@ bool CheckerUI::OnClick(ComponentUI* UI_Element)
 
 	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
 
-	if(isSelected)
+	if(UI_Element->CheckSelected)
 	{
 		if (UI_Element->active != nullptr)
 		{
@@ -97,13 +97,17 @@ bool CheckerUI::OnClick(ComponentUI* UI_Element)
 		}
 	}
 
-	return isSelected;
+	return UI_Element->CheckSelected;
 }
 
 void CheckerUI::ShowInfo(ComponentUI* UI_Element)
 {
 	if (ImGui::TreeNode("Checker"))
 	{
+		ImGui::Checkbox("Active", &UI_Element->gmAtached->isActive);
+
+		ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+
 		if (texture != nullptr)
 		{
 			ImGui::Image((void*)texture->TextureID, ImVec2(texture->imageWidth, texture->imageHeight));
@@ -112,21 +116,21 @@ void CheckerUI::ShowInfo(ComponentUI* UI_Element)
 			ImGui::Text("Texture Size: Width:%d x Height:%d", texture->imageWidth, texture->imageHeight);
 			ImGui::Checkbox("Show Texture", &texture->ShowTextures);
 
-			color[3] = 0;
+			mat->colorTexture.a = 0;
 		}
 		else
 		{
-			color[3] = 255;
+			mat->colorTexture.a = 255;
 		}
 
-		float col[4] = { color[0], color[1], color[2], color[3] };
+		float col[4] = { mat->colorTexture.r, mat->colorTexture.g, mat->colorTexture.b, mat->colorTexture.a };
 
 		ImGui::ColorEdit4("Material Color", col);
 
-		color[0] = col[0];
-		color[1] = col[1];
-		color[2] = col[2];
-		color[3] = col[3];
+		mat->colorTexture.r = col[0];
+		mat->colorTexture.g = col[1];
+		mat->colorTexture.b = col[2];
+		mat->colorTexture.a = col[3];
 
 		if (ImGui::Button("Action"))
 		{
@@ -177,7 +181,7 @@ void CheckerUI::ShowInfo(ComponentUI* UI_Element)
 			ImGui::EndPopup();
 		}
 
-		ImGui::Checkbox("State", &isSelected);
+		ImGui::Checkbox("State", &UI_Element->CheckSelected);
 
 		ImGui::TreePop();
 	}

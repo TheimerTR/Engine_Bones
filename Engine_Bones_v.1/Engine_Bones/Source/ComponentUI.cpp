@@ -23,6 +23,9 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 	//Button
 	actualButtonAction = 1;
 
+	//Checker
+	CheckSelected = true;
+
 	ui_Type = type;
 	actualMouseState = MouseState::IDLE_UI;
 
@@ -163,11 +166,9 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint 
 			mat->colorTexture.b = 255;
 			mat->colorTexture.a = 255;
 
-			Texture tex = *comp_UI->texture;
-
 			if(comp_UI->texture != nullptr)
 			{
-				mat->texture = &tex;
+				mat->texture = comp_UI->texture;
 			}
 		}
 		break;

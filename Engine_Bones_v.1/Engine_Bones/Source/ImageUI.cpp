@@ -55,6 +55,8 @@ void ImageUI::ShowInfo()
 
 	if (ImGui::TreeNode("Image"))
 	{
+		ImGui::Checkbox("Active", &gmAtached->isActive);
+
 		ImGui::Text("Actual Image:");
 
 		if (mat->texture != nullptr)
