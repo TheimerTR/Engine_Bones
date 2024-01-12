@@ -127,7 +127,40 @@ void ComponentTransform::UpdateTransformation()
 
 		ComponentTransform* parent = objectsToTransform->Owner->mParent->mTransform; 
 
-		objectsToTransform->mGlobalMatrix = parent->mGlobalMatrix * objectsToTransform->mLocalMatrix; 
+	
+
+		if (Owner->GetComponentGameObject(ComponentType::UI) != nullptr){
+
+			float3 glPosition, glScale, mlPosition, mlScale; 
+			Quat glRotation, mlRotation; 
+		
+
+			parent->mGlobalMatrix.Decompose(glPosition, glRotation, glScale); 
+			objectsToTransform->mLocalMatrix.Decompose(mlPosition, mlRotation, mlScale); 
+
+			glPosition.z = 0;
+			glRotation.z = 0;
+			glPosition.z = 0; 
+			mlPosition.z = 0;
+			mlRotation.z = 0;
+
+			objectsToTransform->gPosition.x = glPosition.x * mlPosition.x; 
+			objectsToTransform->gPosition.y = glPosition.y * mlPosition.y; 
+			objectsToTransform->gPosition.z = 0;
+			objectsToTransform->gRotation.x = glRotation.x * mlRotation.x; 
+			objectsToTransform->gRotation.y = glRotation.y * mlRotation.y; 
+			objectsToTransform->gRotation.z = 0; 
+			objectsToTransform->gScale.x = glScale.x * mlScale.x;
+			objectsToTransform->gScale.y = glScale.y * mlScale.y;
+			objectsToTransform->gScale.z = glScale.z * mlScale.z;
+	
+			objectsToTransform->mGlobalMatrix.FromTRS(objectsToTransform->gPosition, objectsToTransform->gRotation, objectsToTransform->gScale);
+		}
+
+		else {
+
+			objectsToTransform->mGlobalMatrix = parent->mGlobalMatrix * objectsToTransform->mLocalMatrix;
+		}
 
 		objectsToTransform->UpdateBox(); 
 
@@ -140,11 +173,44 @@ void ComponentTransform::UpdateGuizmoTransformation(float4x4 &globalTransformati
 
 	ComponentTransform* parent = Owner->mParent->mTransform;
 
-	mLocalMatrix = parent->mGlobalMatrix.Inverted() * mGlobalMatrix; 
+	if (Owner->GetComponentGameObject(ComponentType::UI) != nullptr) {
 
-	mLocalMatrix.Decompose(mPosition, mRotation, mScale); 
+		float3 posGlobal, scaleGlobal; 
+		Quat rotGlobal;
+		float3 posLocal, scaleLocal;
+		Quat rotLocal;
+		float3 posTransformation, scaleTransformation;
+		Quat rotTransformation;
 
-	mRotationEuler = mRotation.ToEulerXYZ() * RADTODEG; 
+		globalTransformation.Decompose(posTransformation, rotTransformation, scaleTransformation);
+
+		posGlobal.z = 0; 
+		rotGlobal.z = 0; 
+		posLocal.z = 0; 
+		rotLocal.z = 0; 
+		posTransformation.z = 0; 
+		rotTransformation.z = 0; 
+
+		posGlobal = posTransformation; 
+		rotGlobal = rotTransformation; 
+		scaleGlobal = scaleTransformation; 
+
+		mGlobalMatrix.FromTRS(posGlobal, rotGlobal, scaleGlobal);
+
+		mLocalMatrix = parent->mGlobalMatrix.Inverted() * mGlobalMatrix;
+
+		mLocalMatrix.Decompose(mPosition, mRotation, mScale);
+
+		mRotationEuler = mRotation.ToEulerXYZ() * RADTODEG;
+	}
+
+	else {
+		mLocalMatrix = parent->mGlobalMatrix.Inverted() * mGlobalMatrix;
+
+		mLocalMatrix.Decompose(mPosition, mRotation, mScale);
+
+		mRotationEuler = mRotation.ToEulerXYZ() * RADTODEG;
+	}
 
 	UpdateTransformation(); 
 }
