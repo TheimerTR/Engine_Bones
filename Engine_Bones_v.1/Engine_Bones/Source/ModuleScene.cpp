@@ -139,15 +139,18 @@ update_status ModuleScene::Update(float dt)
 		App->scene->GameTime.running = false;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
 		openPauseMenu = !openPauseMenu;
 
-		if(App->scene->GameTime.running && isOnScene && !app->editor->isMovingChild && !App->editor->isMovingParent)
+		if (App->scene->GameTime.running && isOnScene && !app->editor->isMovingChild && !App->editor->isMovingParent)
 		{
 			OpenPauseMenu();
 		}
+	}
 
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	{
 		if (App->editor->isMovingParent && !app->editor->isMovingChild)
 		{
 			App->editor->moveEntityTo = nullptr;
@@ -176,24 +179,27 @@ update_status ModuleScene::Update(float dt)
 			app->editor->isMovingChild = false;
 		}
 
-		if(AllInteractuableUI.size() > 0)
+		if (GameTime.running && !GameTime.paused)
 		{
-			switch (AllInteractuableUI[actual_UI_Object]->ui_Type)
+			if (AllInteractuableUI.size() > 0)
 			{
+				switch (AllInteractuableUI[actual_UI_Object]->ui_Type)
+				{
 				case BUTTON:
-					{
-						ButtonUI* button = (ButtonUI*)AllInteractuableUI[actual_UI_Object];
-						button->OnClick(&AllInteractuableUI[actual_UI_Object]->actualButtonAction);
-					}
-					break;
+				{
+					ButtonUI* button = (ButtonUI*)AllInteractuableUI[actual_UI_Object];
+					button->OnClick(&AllInteractuableUI[actual_UI_Object]->actualButtonAction);
+				}
+				break;
 				case CHECKER:
-					{
-						CheckerUI* checker = (CheckerUI*)this;
-						checker->OnClick(AllInteractuableUI[actual_UI_Object]);
-					}
-					break;
+				{
+					CheckerUI* checker = (CheckerUI*)this;
+					checker->OnClick(AllInteractuableUI[actual_UI_Object]);
+				}
+				break;
 				default:
 					break;
+				}
 			}
 		}
 	}
@@ -305,13 +311,13 @@ void ModuleScene::DemoScene()
 
 	canv_Comp_UI = canv_Comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
 	
-	ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->editor->Canvas, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.7), nullptr);
+	ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->editor->Canvas, 80, 40, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 12), nullptr);
 	
-	start_Text = start_Text->CreateGameObjectUI(App->editor->Canvas, UI_Type::TEXT, 80, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 12), ((uint)app->editor->GameWindowSize.y / 1.7), nullptr, "START");
+	start_Text = start_Text->CreateGameObjectUI(App->editor->Canvas, UI_Type::TEXT, 80, 40, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 12), nullptr, "START");
 	
-	ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->editor->Canvas, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button3.png");
+	ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->editor->Canvas, 140, 70, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), "Assets/Textures/Button3.png");
 
-	start_Button = start_Button->CreateGameObjectUI(App->editor->Canvas, UI_Type::BUTTON, 140, 70, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 6.5), ((uint)app->editor->GameWindowSize.y / 1.8), "Assets/Textures/Button3.png", nullptr, 0);
+	start_Button = start_Button->CreateGameObjectUI(App->editor->Canvas, UI_Type::BUTTON, 140, 70, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), "Assets/Textures/Button3.png", nullptr, 0);
 
 	ComponentUI* background_Img = new ComponentUI(UI_Type::DEF, App->editor->Canvas, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png");
 

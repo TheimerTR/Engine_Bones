@@ -153,6 +153,8 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint 
 	case UI_Type::BUTTON:
 		{
 			GameObject* Button = new GameObject("Button", gm);
+			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Button->GetComponentGameObject(ComponentType::TRANSFORM));
+			transform->mPosition = { (float)posX, (float)posY, 0};
 			comp_UI = (ComponentUI*)(Button->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			ButtonUI but_UI = ButtonUI(type, Button, width, heigth, posX, posY, imagePath);
 			but_UI.actualFunction = (functions)buttonFuntion;
@@ -175,6 +177,8 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint 
 	case UI_Type::TEXT:
 		{
 			GameObject* Text = new GameObject("Text", gm);
+			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Text->GetComponentGameObject(ComponentType::TRANSFORM));
+			transform->mPosition = { (float)posX, (float)posY, 0 };
 			comp_UI = dynamic_cast<ComponentUI*>(Text->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			ComponentText text_UI = ComponentText(type, Text, width, heigth, posX, posY, text);
 			comp_UI->textComp = &text_UI;
@@ -202,6 +206,8 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint 
 	case UI_Type::IMAGE:
 		{
 			GameObject* Image = new GameObject("Image", gm);
+			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Image->GetComponentGameObject(ComponentType::TRANSFORM));
+			transform->mPosition = { (float)posX, (float)posY, 0 };
 			comp_UI = (ComponentUI*)(Image->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			ImageUI* img_UI = new ImageUI(type, Image, width, heigth, posX, posY, imagePath);
 			comp_UI = (ComponentUI*)img_UI;
@@ -221,6 +227,8 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint 
 	case UI_Type::CHECKER:
 		{
 			GameObject* Checker = new GameObject("Checker", gm);
+			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Checker->GetComponentGameObject(ComponentType::TRANSFORM));
+			transform->mPosition = { (float)posX, (float)posY, 0 };
 			comp_UI = dynamic_cast<ComponentUI*>(Checker->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			CheckerUI check_UI = CheckerUI(type, Checker, width, heigth, posX, posY, imagePath, imagePathDisabled);
 			comp_UI->actualChecker = (_functions)buttonFuntion;

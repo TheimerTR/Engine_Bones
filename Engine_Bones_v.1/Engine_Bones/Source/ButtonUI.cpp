@@ -174,9 +174,11 @@ void ButtonUI::PassScene()
 
 	CreatePauseMenu();
 
-	ComponentUI* crosshair = new ComponentUI(UI_Type::IMAGE, app->editor->Canvas, 40, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 16), ((uint)app->editor->GameWindowSize.y / 2), "Assets/Textures/Crosshair.png");
+	ComponentTransform* transform = dynamic_cast<ComponentTransform*>(app->editor->Canvas->GetComponentGameObject(ComponentType::TRANSFORM));
+	
+	ComponentUI* crosshair = new ComponentUI(UI_Type::IMAGE, app->editor->Canvas, 40, 40, (transform->mScale.x / 2) - 30, (transform->mScale.y / 2) - 20, "Assets/Textures/Crosshair.png");
 
-	crosshair = crosshair->CreateGameObjectUI(app->editor->Canvas, UI_Type::IMAGE, 40, 40, (uint)app->editor->GameWindowSize.x / 2 - ((uint)app->editor->GameWindowSize.x / 16), ((uint)app->editor->GameWindowSize.y / 2), "Assets/Textures/Crosshair.png");
+	crosshair = crosshair->CreateGameObjectUI(app->editor->Canvas, UI_Type::IMAGE, 40, 40, (transform->mScale.x / 2) - 30, (transform->mScale.y / 2) - 20, "Assets/Textures/Crosshair.png");
 	app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->mName = "Crosshair";
 	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
 	mat->colorTexture.r = 255;
