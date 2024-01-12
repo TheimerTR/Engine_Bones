@@ -94,6 +94,7 @@
     <ClInclude Include="Source\ComponentUI.h" />
     <ClInclude Include="Source\External\ImGui\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="Source\ImageUI.h" />
+    <ClInclude Include="Source\InputText.h" />
     <ClInclude Include="Source\ModuleFont.h" />
     <ClInclude Include="Source\ResourceManager.h" />
     <ClInclude Include="Source\Color.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="Source\ComponentUI.cpp" />
     <ClCompile Include="Source\External\ImGui\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="Source\ImageUI.cpp" />
+    <ClCompile Include="Source\InputText.cpp" />
     <ClCompile Include="Source\ModuleFont.cpp" />
     <ClCompile Include="Source\ResourceManager.cpp" />
     <ClCompile Include="Source\Color.cpp" />

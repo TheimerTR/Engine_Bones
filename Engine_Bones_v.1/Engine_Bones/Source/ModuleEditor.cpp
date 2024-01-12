@@ -31,6 +31,8 @@
 #include "ButtonUI.h"
 #include "ImageUI.h"
 #include "ComponentText.h"
+#include "InputText.h"
+
 #include "CheckerUI.h"
 
 #include"External/Assimp/include/version.h"
@@ -518,6 +520,18 @@ bool ModuleEditor::DrawEditor()
 						if (Canvas != nullptr)
 						{
 							comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::TEXT);
+						}
+						else
+						{
+							LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+						}
+					}
+					
+					if (ImGui::MenuItem("Input Text"))
+					{
+						if (Canvas != nullptr)
+						{
+							comp_UI = comp_UI->CreateGameObjectUI(Canvas, UI_Type::INPUT_TEXT);
 						}
 						else
 						{
@@ -2429,8 +2443,30 @@ void ModuleEditor::AddComponentInInspector(GameObject* gm)
 			if (Canvas != nullptr)
 			{
 				ComponentUI* comp_UI = dynamic_cast<ComponentUI*>(gm->AddComponent(ComponentType::UI, UI_Type::TEXT, 80, 20, 0, 0, nullptr));
-				ComponentText text_UI = ComponentText(UI_Type::TEXT, gm, 80, 20, 0, 0, "MENU");
+				ComponentText text_UI = ComponentText(UI_Type::TEXT, gm, 80, 20, 0, 0, "");
 				comp_UI->textComp = &text_UI;
+				comp_UI->gmAtached = gm;
+				comp_UI->textCH = text_UI.text;
+				comp_UI->font = text_UI.font;
+				comp_UI->actualText = text_UI.actualText;
+				comp_UI->newText = text_UI.newText;
+				comp_UI->actualFonts = text_UI.actualFonts;
+				comp_UI->positionX = text_UI.positionX;
+				comp_UI->positionY = text_UI.positionY;
+			}
+			else
+			{
+				LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+			}
+		}
+
+		if (ImGui::MenuItem("Input Text"))
+		{
+			if (Canvas != nullptr)
+			{
+				ComponentUI* comp_UI = dynamic_cast<ComponentUI*>(gm->AddComponent(ComponentType::UI, UI_Type::TEXT, 80, 20, 0, 0, nullptr));
+				InputText text_UI = InputText(UI_Type::TEXT, gm, 80, 20, 0, 0, "");
+				comp_UI->InputTextComp = &text_UI;
 				comp_UI->gmAtached = gm;
 				comp_UI->textCH = text_UI.text;
 				comp_UI->font = text_UI.font;
@@ -2526,6 +2562,14 @@ void ModuleEditor::InfoGameObjectWindow(GameObject* gameObject)
 			{
 				{
 					((ComponentText*)objectUI)->ShowInfo(objectUI, objectUI->actualText, objectUI->newText, objectUI->gmAtached, &objectUI->actualFonts, objectUI->widthPanel, objectUI->heigthPanel, objectUI->positionX, objectUI->positionY);
+					objectUI->textCH = objectUI->actualText;
+				}
+			}
+			break;
+			case UI_Type::INPUT_TEXT:
+			{
+				{
+					((InputText*)objectUI)->ShowInfo(objectUI, objectUI->actualText, objectUI->newText, objectUI->gmAtached, &objectUI->actualFonts, objectUI->widthPanel, objectUI->heigthPanel, objectUI->positionX, objectUI->positionY);
 					objectUI->textCH = objectUI->actualText;
 				}
 			}

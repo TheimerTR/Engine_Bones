@@ -10,6 +10,7 @@
 
 class GameObject;
 class ComponentText;
+class InputText;
 enum FONTS;
 enum _functions;
 
@@ -28,6 +29,7 @@ enum UI_Type
 	IMAGE,
 	CHECKER,
 	CANV,
+	INPUT_TEXT,
 	DEF
 };
 
@@ -64,6 +66,7 @@ public:
 
 	//Text Component
 	ComponentText* textComp;
+	InputText* InputTextComp;
 	string textCH;
 	Font* font;
 	string actualText;
@@ -78,6 +81,9 @@ public:
 	Texture* active;
 	Texture* disabled;
 	bool CheckSelected;
+
+	//Input Text
+	bool IsTextEditing;
 
 public:
 	ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);

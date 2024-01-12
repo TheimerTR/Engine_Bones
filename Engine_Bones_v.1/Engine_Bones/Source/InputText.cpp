@@ -1,4 +1,4 @@
-#include "ComponentText.h"
+#include "InputText.h"
 #include "Application.h"
 #include "ImporterTexture.h"
 #include "TextureManager.h"
@@ -6,6 +6,7 @@
 #include "Application.h"
 #include "ComponentUI.h"
 #include "ModuleFont.h"
+#include "ComponentText.h"
 
 #include "External/ImGui/misc/cpp/imgui_stdlib.h"
 #include "External/Glew/include/glew.h"
@@ -19,7 +20,7 @@
 #include "External/SDL/include/SDL_opengl.h"
 #endif
 
-ComponentText::ComponentText(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* Text) : ComponentUI(type, gameObject, width, heigt, PosX, PosY, Text)
+InputText::InputText(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* Text) : ComponentUI(type, gameObject, width, heigt, PosX, PosY, Text)
 {
 	gmAtached = gameObject;
 	gmAtached->isText = true;
@@ -43,14 +44,19 @@ ComponentText::ComponentText(UI_Type type, GameObject* gameObject, uint width, u
 	DoText();
 }
 
-ComponentText::~ComponentText()
+InputText::~InputText()
 {
 
 }
 
-void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText, GameObject* gm, FONTS* actFont, uint width, uint heigth, uint _posX, uint _posY)
+void InputText::OnClick(ComponentUI* UI_Element)
 {
-	if(actText != "")
+	UI_Element->IsTextEditing = true;
+}
+
+void InputText::ShowInfo(ComponentUI* compUI, string actText, string newText, GameObject* gm, FONTS* actFont, uint width, uint heigth, uint _posX, uint _posY)
+{
+	if (actText != "")
 	{
 		color[3] = 0;
 	}
@@ -65,31 +71,35 @@ void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText
 
 		if (ImGui::InputText("Text", &newText, ImGuiInputTextFlags_None))
 		{
-			hasBeenModified = true;
+			compUI->IsTextEditing = true;
 		}
 
-		if (hasBeenModified)
+		if (compUI->IsTextEditing)
 		{
 			app->scene->isTyping = true;
 
+			/*if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+			{*/
+			actText = newText;
+
+			RecreateText(actText, gm, width, heigth, _posX, _posY);
+
+			compUI->actualText = actText;
+			compUI->newText = actText;
+
+			/*app->scene->isTyping = false;
+			compUI->IsTextEditing = false;*/
+			//}
+
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
-				actText = newText;
-
-				RecreateText(actText, gm, width, heigth, _posX, _posY);
-
-				compUI->actualText = actText;
-				compUI->newText = actText;
-
-				app->scene->isTyping = false;
-				hasBeenModified = false;
-			}
-
-			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-			{
 				newText = actText;
-				hasBeenModified = false;
+				compUI->IsTextEditing = false;
 			}
+			/*if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+			{
+
+			}*/
 		}
 
 		if (ImGui::Button("Font"))
@@ -150,7 +160,7 @@ void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText
 	}
 }
 
-void ComponentText::DoText()
+void InputText::DoText()
 {
 	if (text != "")
 	{
@@ -187,7 +197,7 @@ void ComponentText::DoText()
 		}
 	}
 }
-void ComponentText::RecreateText(string new_Text, GameObject* gm, uint width, uint heigth, uint _posX, uint _posY)
+void InputText::RecreateText(string new_Text, GameObject* gm, uint width, uint heigth, uint _posX, uint _posY)
 {
 	gm->DeleteComponentType(ComponentType::MESH);
 

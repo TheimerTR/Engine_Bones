@@ -438,6 +438,9 @@
     <ClInclude Include="Source\CheckerUI.h">
       <Filter>Sources\Tools\Componentes\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\InputText.h">
+      <Filter>Sources\Tools\Componentes\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -690,6 +693,9 @@
       <Filter>Sources\ImGui\misc\cpp</Filter>
     </ClCompile>
     <ClCompile Include="Source\CheckerUI.cpp">
+      <Filter>Sources\Tools\Componentes\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\InputText.cpp">
       <Filter>Sources\Tools\Componentes\UI</Filter>
     </ClCompile>
   </ItemGroup>

@@ -7,6 +7,7 @@
 #include "CheckerUI.h"
 #include "ImageUI.h"
 #include "ComponentText.h"
+#include "InputText.h"
 
 #include "FileSystemManager.h"
 
@@ -14,6 +15,7 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 {
 	//Text Component
 	textComp = nullptr;
+	InputTextComp = nullptr;
 	textCH = "";
 	font = app->font->actualFont;
 
@@ -25,6 +27,9 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 
 	//Checker
 	CheckSelected = true;
+
+	//Input Text
+	IsTextEditing = true;
 
 	ui_Type = type;
 	actualMouseState = MouseState::IDLE_UI;
@@ -116,6 +121,11 @@ bool ComponentUI::Update()
 				CheckerUI* checker = (CheckerUI*)this;
 				checker->OnClick(this);
 			}
+			if (ui_Type == INPUT_TEXT)
+			{
+				InputText* inputText = (InputText*)this;
+				inputText->OnClick(this);
+			}
 			break;
 		case CLICKED_UI:
 			if (ui_Type == BUTTON)
@@ -127,6 +137,11 @@ bool ComponentUI::Update()
 			{
 				CheckerUI* checker = (CheckerUI*)this;
 				checker->OnClicked();
+			}
+			if (ui_Type == INPUT_TEXT)
+			{
+				InputText* inputText = (InputText*)this;
+				//inputText->OnClicked(this);
 			}
 			break;
 		case CLICKED_RELEASED_UI:
@@ -203,6 +218,35 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint 
 			}
 		}
 		break;
+	case UI_Type::INPUT_TEXT:
+	{
+		GameObject* Text = new GameObject("Input Text", gm);
+		ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Text->GetComponentGameObject(ComponentType::TRANSFORM));
+		transform->mPosition = { (float)posX, (float)posY, 0 };
+		comp_UI = dynamic_cast<ComponentUI*>(Text->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
+		InputText text_UI = InputText(type, Text, width, heigth, posX, posY, "");
+		comp_UI->InputTextComp = &text_UI;
+		comp_UI->gmAtached = Text;
+		comp_UI->textCH = text_UI.text;
+		comp_UI->font = text_UI.font;
+		comp_UI->actualText = text_UI.actualText;
+		comp_UI->newText = text_UI.newText;
+		comp_UI->actualFonts = text_UI.actualFonts;
+		comp_UI->positionX = text_UI.positionX;
+		comp_UI->positionY = text_UI.positionY;
+
+		ComponentMaterial* mat = (ComponentMaterial*)(Text->AddComponent(ComponentType::MATERIAL));
+		mat->colorTexture.r = 255;
+		mat->colorTexture.g = 255;
+		mat->colorTexture.b = 255;
+		mat->colorTexture.a = 255;
+
+		if (comp_UI->texture != nullptr)
+		{
+			mat->texture = comp_UI->texture;
+		}
+	}
+	break;
 	case UI_Type::IMAGE:
 		{
 			GameObject* Image = new GameObject("Image", gm);
