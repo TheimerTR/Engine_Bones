@@ -40,7 +40,7 @@ update_status ModuleInput::PreUpdate(float dt)
 {
 	SDL_PumpEvents();
 
-	const Uint8* keys = SDL_GetKeyboardState(NULL);
+	keys = SDL_GetKeyboardState(NULL);
 	
 	for(int i = 0; i < MAX_KEYS; ++i)
 	{
@@ -146,4 +146,322 @@ bool ModuleInput::CleanUp()
 float3 ModuleInput::GetMousePosition()
 {
 	return float3(mouse_x, mouse_y, mouse_z);
+}
+
+void ModuleInput::ReadInput(string& word)
+{
+	if(GetKey(SDL_SCANCODE_0) == KEY_DOWN)
+	{
+		word.append("0");
+	}
+	
+	if(GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	{
+		word.append("1");
+	}
+	
+	if(GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+	{
+		word.append("2");
+	}
+	
+	if(GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+	{
+		word.append("3");
+	}
+	
+	if(GetKey(SDL_SCANCODE_4) == KEY_DOWN)
+	{
+		word.append("4");
+	}
+	
+	if(GetKey(SDL_SCANCODE_5) == KEY_DOWN)
+	{
+		word.append("5");
+	}
+	
+	if(GetKey(SDL_SCANCODE_6) == KEY_DOWN)
+	{
+		word.append("6");
+	}
+	
+	if(GetKey(SDL_SCANCODE_7) == KEY_DOWN)
+	{
+		word.append("7");
+	}
+	
+	if(GetKey(SDL_SCANCODE_8) == KEY_DOWN)
+	{
+		word.append("8");
+	}
+	
+	if(GetKey(SDL_SCANCODE_9) == KEY_DOWN)
+	{
+		word.append("9");
+	}
+
+	if (GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
+	{
+		word.append("Q");
+	}
+	
+	if (GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+	{
+		word.append("W");
+	}
+
+	if (GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		word.append("E");
+	}
+
+	if (GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		word.append("R");
+	}
+
+	if (GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+	{
+		word.append("T");
+	}
+
+	if (GetKey(SDL_SCANCODE_Y) == KEY_DOWN)
+	{
+		word.append("Y");
+	}
+
+	if (GetKey(SDL_SCANCODE_U) == KEY_DOWN)
+	{
+		word.append("U");
+	}
+
+	if (GetKey(SDL_SCANCODE_I) == KEY_DOWN)
+	{
+		word.append("I");
+	}
+
+	if (GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+	{
+		word.append("O");
+	}
+
+	if (GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	{
+		word.append("P");
+	}
+
+	if (GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+	{
+		word.append("W");
+	}
+
+	if (GetKey(SDL_SCANCODE_A) == KEY_DOWN)
+	{
+		word.append("A");
+	}
+	
+	if (GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+	{
+		word.append("S");
+	}
+	
+	if (GetKey(SDL_SCANCODE_D) == KEY_DOWN)
+	{
+		word.append("D");
+	}
+	
+	if (GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+	{
+		word.append("F");
+	}
+	
+	if (GetKey(SDL_SCANCODE_G) == KEY_DOWN)
+	{
+		word.append("G");
+	}
+	
+	if (GetKey(SDL_SCANCODE_H) == KEY_DOWN)
+	{
+		word.append("H");
+	}
+	
+	if (GetKey(SDL_SCANCODE_J) == KEY_DOWN)
+	{
+		word.append("J");
+	}
+	
+	if (GetKey(SDL_SCANCODE_K) == KEY_DOWN)
+	{
+		word.append("K");
+	}
+	
+	if (GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+	{
+		word.append("L");
+	}
+	
+	if (GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
+	{
+		word.append("Z");
+	}
+	
+	if (GetKey(SDL_SCANCODE_X) == KEY_DOWN)
+	{
+		word.append("X");
+	}
+	
+	if (GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+	{
+		word.append("C");
+	}
+	
+	if (GetKey(SDL_SCANCODE_V) == KEY_DOWN)
+	{
+		word.append("V");
+	}
+	
+	if (GetKey(SDL_SCANCODE_B) == KEY_DOWN)
+	{
+		word.append("B");
+	}
+	
+	if (GetKey(SDL_SCANCODE_N) == KEY_DOWN)
+	{
+		word.append("N");
+	}
+	
+	if (GetKey(SDL_SCANCODE_M) == KEY_DOWN)
+	{
+		word.append("M");
+	}
+	
+	if (GetKey(SDL_SCANCODE_COMMA) == KEY_DOWN)
+	{
+		word.append(",");
+	}
+	
+	if (GetKey(SDLK_SEMICOLON) == KEY_DOWN)
+	{
+		word.append(";");
+	}
+	
+	if (GetKey(SDLK_SLASH) == KEY_DOWN)
+	{
+		word.append("/");
+	}
+	
+	if (GetKey(SDLK_PERIOD) == KEY_DOWN)
+	{
+		word.append(".");
+	}
+	
+	if (GetKey(SDLK_COLON) == KEY_DOWN)
+	{
+		word.append(":");
+	}
+	
+	if (GetKey(SDLK_UNDERSCORE) == KEY_DOWN)
+	{
+		word.append("_");
+	}
+	
+	if (GetKey(SDLK_MINUS) == KEY_DOWN)
+	{
+		word.append("-");
+	}
+	
+	if (GetKey(SDLK_LEFTBRACKET) == KEY_DOWN)
+	{
+		word.append("[");
+	}
+	
+	if (GetKey(SDLK_RIGHTBRACKET) == KEY_DOWN)
+	{
+		word.append("]");
+	}
+	
+	if (GetKey(SDLK_AMPERSAND) == KEY_DOWN)
+	{
+		word.append("&");
+	}
+	
+	if (GetKey(SDLK_AT) == KEY_DOWN)
+	{
+		word.append("@");
+	}
+	
+	if (GetKey(SDLK_DOLLAR) == KEY_DOWN)
+	{
+		word.append("$");
+	}
+
+	if(GetKey(SDLK_QUESTION) == KEY_DOWN)
+	{
+		word.append("?");
+	}
+	
+	if(GetKey(SDL_SCANCODE_APOSTROPHE) == KEY_DOWN)
+	{
+		word.append("'");
+	}
+	
+	if(GetKey(SDLK_CARET) == KEY_DOWN)
+	{
+		word.append("^");
+	}
+	
+	if(GetKey(SDLK_PLUS) == KEY_DOWN)
+	{
+		word.append("+");
+	}
+	
+	if(GetKey(SDLK_EQUALS) == KEY_DOWN)
+	{
+		word.append("=");
+	}
+	
+	/*if(GetKey(SDLK_ASTERISK) == KEY_DOWN)
+	{
+		word.append("*");
+	}*/
+	
+	if(GetKey(SDLK_EXCLAIM) == KEY_DOWN)
+	{
+		word.append("!");
+	}	
+	
+	if(GetKey(SDLK_HASH) == KEY_DOWN)
+	{
+		word.append("#");
+	}
+	
+	if(GetKey(SDLK_LEFTPAREN) == KEY_DOWN)
+	{
+		word.append("(");
+	}
+	
+	if(GetKey(SDLK_PERCENT) == KEY_DOWN)
+	{
+		word.append("%");
+	}
+	
+	if(GetKey(SDLK_RIGHTPAREN) == KEY_DOWN)
+	{
+		word.append(")");
+	}
+	
+	//if(GetKey(SDLK_QUOTEDBL) == KEY_DOWN)
+	//{
+	//	word.append(""");
+	//}
+	
+	if(GetKey(SDLK_LESS) == KEY_DOWN)
+	{
+		word.append("<");
+	}
+	
+	if(GetKey(SDLK_GREATER) == KEY_DOWN)
+	{
+		word.append(">");
+	}
 }

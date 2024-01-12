@@ -59,6 +59,8 @@ public:
 		return mouse_y_motion;
 	}
 
+	void ReadInput(string& word);
+
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
@@ -67,5 +69,7 @@ private:
 	int mouse_z;
 	int mouse_x_motion;
 	int mouse_y_motion;
+
+	const Uint8* keys;
 	//int mouse_z_motion;
 };

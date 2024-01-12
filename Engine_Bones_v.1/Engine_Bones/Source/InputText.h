@@ -10,6 +10,7 @@
 #include "TextureManager.h"
 #include "ModuleFont.h"
 #include "ComponentMesh.h"
+#include "Timer.h"
 
 #include <vector>
 #include <functional>
@@ -34,6 +35,8 @@ public:
 
 	FONTS actualFonts;
 
+	Timer timeWait;
+
 public:
 	InputText(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
 	~InputText();
@@ -44,7 +47,7 @@ public:
 
 	void OnClick(ComponentUI* UI_Element);
 
-	void ModifyText();
+	void Update(ComponentUI* UI_Element);
 
 	void RecreateText(string new_Text, GameObject* gm, uint width, uint heigth, uint _posX, uint _posY);
 };

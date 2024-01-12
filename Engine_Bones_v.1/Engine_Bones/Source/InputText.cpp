@@ -41,12 +41,74 @@ InputText::InputText(UI_Type type, GameObject* gameObject, uint width, uint heig
 	actualText = Text;
 	newText = Text;
 
+	timeWait.Restart();
+	timeWait.Stop();
+
 	DoText();
 }
 
 InputText::~InputText()
 {
 
+}
+
+void InputText::Update(ComponentUI* UI_Element)
+{
+	if(UI_Element->actualText == "")
+	{
+		Texture* texture = new Texture();
+		ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+		Importer::ImporterTexture::Load(texture, "Assets/Textures/Unchecked-checkbox.png");
+		mat->SetTexture(texture);
+	}
+
+	if(UI_Element->IsTextEditing && app->scene->GameTime.running && !app->scene->GameTime.paused)
+	{
+		app->scene->isTyping = true;
+
+		/*if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+		{*/
+
+		if(!timeWait.running)
+		{
+			timeWait.Start();
+		}
+
+		if (timeWait.ReadDt() > 0.2f)
+		{
+			app->input->ReadInput(UI_Element->newText);
+
+			if (UI_Element->newText != "")
+			{
+				if (app->input->GetKey(SDLK_ASTERISK) == KEY_DOWN)
+				{
+					UI_Element->newText.pop_back();
+				}
+			}
+
+			if (UI_Element->actualText != UI_Element->newText)
+			{
+				UI_Element->actualText = UI_Element->newText;
+
+				RecreateText(UI_Element->actualText, UI_Element->gmAtached, UI_Element->widthPanel, UI_Element->heigthPanel, UI_Element->positionX, UI_Element->positionY);
+				timeWait.Restart();
+			}
+		}
+
+		/*app->scene->isTyping = false;
+		compUI->IsTextEditing = false;*/
+		//}
+
+		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+		{
+			UI_Element->newText = UI_Element->actualText;
+			UI_Element->IsTextEditing = false;
+		}
+		/*if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		{
+
+		}*/
+	}
 }
 
 void InputText::OnClick(ComponentUI* UI_Element)
@@ -78,28 +140,26 @@ void InputText::ShowInfo(ComponentUI* compUI, string actText, string newText, Ga
 		{
 			app->scene->isTyping = true;
 
-			/*if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-			{*/
-			actText = newText;
-
-			RecreateText(actText, gm, width, heigth, _posX, _posY);
-
-			compUI->actualText = actText;
-			compUI->newText = actText;
-
-			/*app->scene->isTyping = false;
-			compUI->IsTextEditing = false;*/
-			//}
-
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+			{
+				app->input->ReadInput(newText);
+
+				actText = newText;
+
+				RecreateText(actText, gm, width, heigth, _posX, _posY);
+
+				compUI->actualText = actText;
+				compUI->newText = actText;
+
+				app->scene->isTyping = false;
+				compUI->IsTextEditing = false;
+			}
+
+			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 			{
 				newText = actText;
 				compUI->IsTextEditing = false;
 			}
-			/*if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-			{
-
-			}*/
 		}
 
 		if (ImGui::Button("Font"))

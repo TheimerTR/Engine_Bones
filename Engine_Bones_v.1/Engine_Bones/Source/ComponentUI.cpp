@@ -102,6 +102,12 @@ bool ComponentUI::Update()
 {
 	MousePicker();
 
+	if (ui_Type == INPUT_TEXT)
+	{
+		InputText* inputText = (InputText*)this;
+		inputText->Update(this);
+	}
+
 	if (app->editor->isRunning)
 	{
 		switch (actualMouseState)
@@ -303,6 +309,16 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint 
 		break;
 	default:
 		break;
+	}
+
+	if (app->editor->Canvas != nullptr)
+	{
+		if (app->editor->Canvas->childrens.size() > 1)
+		{
+			GameObject* first = app->editor->Canvas->childrens[0];
+			app->editor->Canvas->childrens[0] = app->editor->Canvas->childrens[app->editor->Canvas->childrens.size() - 1];
+			app->editor->Canvas->childrens[app->editor->Canvas->childrens.size() - 1] = first;
+		}
 	}
 
 	return comp_UI;

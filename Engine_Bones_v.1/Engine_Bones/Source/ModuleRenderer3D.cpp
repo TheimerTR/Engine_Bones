@@ -586,7 +586,7 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	if (UI_Element->ui_Type != UI_Type::TEXT)
+	if (UI_Element->textCH == "")
 	{
 		if (texture != nullptr)
 		{
@@ -623,7 +623,7 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 	}
 	else
 	{
-		ComponentText* text = UI_Element->textComp;
+		//ComponentText* text = UI_Element->textComp;
 		const char* letters = UI_Element->textCH.c_str();
 
 		std::vector<ComponentManager*> objectPanels = gm->GetComponentsGameObject(ComponentType::MESH);
