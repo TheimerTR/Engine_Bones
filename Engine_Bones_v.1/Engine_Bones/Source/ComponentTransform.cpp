@@ -129,7 +129,7 @@ void ComponentTransform::UpdateTransformation()
 
 	
 
-		if (Owner->GetComponentGameObject(ComponentType::UI) != nullptr){
+		/*if (Owner->GetComponentGameObject(ComponentType::UI) != nullptr){
 
 			float3 glPosition, glScale, mlPosition, mlScale; 
 			Quat glRotation, mlRotation; 
@@ -157,10 +157,10 @@ void ComponentTransform::UpdateTransformation()
 			objectsToTransform->mGlobalMatrix.FromTRS(objectsToTransform->gPosition, objectsToTransform->gRotation, objectsToTransform->gScale);
 		}
 
-		else {
+		else {*/
 
 			objectsToTransform->mGlobalMatrix = parent->mGlobalMatrix * objectsToTransform->mLocalMatrix;
-		}
+		//}
 
 		objectsToTransform->UpdateBox(); 
 
@@ -173,7 +173,7 @@ void ComponentTransform::UpdateGuizmoTransformation(float4x4 &globalTransformati
 
 	ComponentTransform* parent = Owner->mParent->mTransform;
 
-	if (Owner->GetComponentGameObject(ComponentType::UI) != nullptr) {
+	/*if (Owner->GetComponentGameObject(ComponentType::UI) != nullptr) {
 
 		float3 posGlobal, scaleGlobal; 
 		Quat rotGlobal;
@@ -202,15 +202,15 @@ void ComponentTransform::UpdateGuizmoTransformation(float4x4 &globalTransformati
 		mLocalMatrix.Decompose(mPosition, mRotation, mScale);
 
 		mRotationEuler = mRotation.ToEulerXYZ() * RADTODEG;
-	}
+	}*/
 
-	else {
+	//else {
 		mLocalMatrix = parent->mGlobalMatrix.Inverted() * mGlobalMatrix;
 
 		mLocalMatrix.Decompose(mPosition, mRotation, mScale);
 
 		mRotationEuler = mRotation.ToEulerXYZ() * RADTODEG;
-	}
+	//}
 
 	UpdateTransformation(); 
 }

@@ -57,11 +57,53 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 		}
 	}
 
-	CreatePanel(PlaneInScene->vertex, gameObject->mTransform->mPosition, width, heigth);
+	float3 position, scale;
+	Quat rotation;
 
-	//transform = { (float)PosX, (float)PosY, 0 };
+	//gameObject->mTransform->mPosition = { (float)PosX, (float)PosY, 0 };
+	if(gameObject->childrens.size() > 0)
+	{
+		float4x4 newTransformation = gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mLocalMatrix = gameObject->childrens[gameObject->childrens.size() - 1]->mParent->mTransform->GetGlobalMatrix().Inverted() * gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->GetGlobalMatrix();
 
-	CreatePanel(PlaneInGame->vertex, gameObject->mTransform->mPosition, width, heigth);
+		newTransformation.Decompose(position, rotation, scale);
+
+		gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mPosition = position;
+		gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mRotation = rotation;
+		gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mScale = scale;
+
+		gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mRotationEuler = rotation.ToEulerXYZ() * RADTODEG;
+
+		gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->UpdateTransformation();
+
+		//gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->SetTransform(gameObject->childrens[gameObject->childrens.size() - 1], { (float)PosX, (float)PosY, 0 }, { (float)width, (float)heigth, 0 }, { 0, 0, 0, 0 });
+		//gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mScale = { (float)width, (float)heigth, 0};
+		CreatePanel(PlaneInScene->vertex, gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mPosition, width, heigth);
+
+		//transform = { (float)PosX, (float)PosY, 0 };
+
+		CreatePanel(PlaneInGame->vertex, gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mPosition, width, heigth);
+	}
+	else
+	{
+		float4x4 newTransformation = gameObject->mTransform->mLocalMatrix = gameObject->mParent->mTransform->GetGlobalMatrix().Inverted() * gameObject->mTransform->GetGlobalMatrix();
+
+		newTransformation.Decompose(position, rotation, scale);
+
+		gameObject->mTransform->mPosition = position;
+		gameObject->mTransform->mRotation = rotation;
+		gameObject->mTransform->mScale = scale;
+
+		gameObject->mTransform->mRotationEuler = rotation.ToEulerXYZ() * RADTODEG;
+
+		gameObject->mTransform->UpdateTransformation();
+
+		CreatePanel(PlaneInScene->vertex, gameObject->mTransform->mPosition, width, heigth);
+
+		//transform = { (float)PosX, (float)PosY, 0 };
+
+		CreatePanel(PlaneInGame->vertex, gameObject->mTransform->mPosition, width, heigth);
+	
+	}
 
 	PlaneInScene->uv[0] = float2(0, 1);
 	PlaneInScene->uv[1] = float2(1, 1);

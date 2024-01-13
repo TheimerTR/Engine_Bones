@@ -305,11 +305,11 @@ void ModuleScene::DemoScene()
 {
 	CreateGameCamera();
 
-	CanvasUI* canv_UI = new CanvasUI(Root, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0);
-
 	ComponentUI* canv_Comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr);
 
 	canv_Comp_UI = canv_Comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
+
+	CanvasUI* canv_UI = new CanvasUI(App->editor->Canvas, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0);
 	
 	ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->editor->Canvas, 80, 40, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 12), nullptr);
 	

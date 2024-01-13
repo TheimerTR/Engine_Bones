@@ -34,9 +34,9 @@ Application::Application()
 	AddModule(font);
 
 	// Renderer last!
+	AddModule(scene);
 	AddModule(renderer3D);
 	AddModule(editor);
-	AddModule(scene);
 }
 
 Application::~Application()

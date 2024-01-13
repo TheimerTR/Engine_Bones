@@ -329,10 +329,12 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 				{
 					RenderCanvas(App->scene->AllGameObjectManagers[i], canvas_UI);
 				}
-
-				if (objectUI != nullptr)
+				else
 				{
-					RenderUI(App->scene->AllGameObjectManagers[i], objectUI, true, objectTexture);
+					if (objectUI != nullptr)
+					{
+						RenderUI(App->scene->AllGameObjectManagers[i], objectUI, true, objectTexture);
+					}
 				}
 			}
 		}
@@ -542,6 +544,8 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 {
 	UIPlane* ui_Plane = nullptr;
 
+	ComponentTransform* transform = dynamic_cast<ComponentTransform*>(gm->GetComponentGameObject(ComponentType::TRANSFORM));
+
 	//Put plane cases! if game or editor
 
 	if(!isGameMode)
@@ -674,14 +678,19 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 
 	//if (!isGameMode)
 		glPopMatrix();
+
+	transform->UpdateTransformation();
 }
 
 void ModuleRenderer3D::RenderCanvas(GameObject* gm, CanvasUI* UI_Canvas)
 {
 	if (App->editor->Canvas != nullptr)
 	{
+		ComponentTransform* transform = dynamic_cast<ComponentTransform*>(gm->GetComponentGameObject(ComponentType::TRANSFORM));
 		CanvasUI* canvasUI = (CanvasUI*)(App->editor->Canvas->GetComponentGameObject(ComponentType::CANVAS));
 		canvasUI->Draw();
+
+		transform->UpdateTransformation();
 	}
 }
 

@@ -1,8 +1,10 @@
 #include "CanvasUI.h"
 #include "GameObject.h"
 #include "Application.h"
+#include "GameObject.h"
 
 #include "FileSystemManager.h"
+#include "ComponentTransform.h"
 
 CanvasUI::CanvasUI(GameObject* gameObject, float width, float heigth, uint PosX, uint PosY) : ComponentManager(gameObject)
 {
@@ -19,6 +21,22 @@ CanvasUI::CanvasUI(GameObject* gameObject, float width, float heigth, uint PosX,
 	comp_transform = dynamic_cast<ComponentTransform*>(gmAtached->GetComponentGameObject(ComponentType::TRANSFORM));
 	comp_transform->mScale.x = widthPanel;
 	comp_transform->mScale.y = heigthPanel;
+	comp_transform->mRotation = { 0, 0, 0, 1};
+
+	float3 position, scale;
+	Quat rotation;
+
+	float4x4 newTransformation = gameObject->mTransform->mLocalMatrix = gameObject->mParent->mTransform->GetGlobalMatrix().Inverted() * gameObject->mTransform->GetGlobalMatrix();
+
+	newTransformation.Decompose(position, rotation, scale);
+
+	gameObject->mTransform->mPosition = position;
+	gameObject->mTransform->mRotation = rotation;
+	gameObject->mTransform->mScale = scale;
+
+	gameObject->mTransform->mRotationEuler = rotation.ToEulerXYZ() * RADTODEG;
+
+	gameObject->mTransform->UpdateTransformation();
 }
 
 
@@ -36,6 +54,8 @@ bool CanvasUI::Update()
 {
 	comp_transform->mScale.x = app->editor->GameWindowSize.x;
 	comp_transform->mScale.y = app->editor->GameWindowSize.y;
+
+	//comp_transform->UpdateTransformation();
 
 	return true;
 }
