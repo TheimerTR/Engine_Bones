@@ -236,6 +236,11 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 		if (objectUI != nullptr)
 		{
+			if (App->scene->AllGameObjectManagers[i]->mParent != App->editor->Canvas && App->scene->AllGameObjectManagers[i]->mParent != App->scene->pause)
+			{
+				App->scene->AllGameObjectManagers[i]->ChangeParent(App->editor->Canvas);
+			}
+
 			RenderUI(App->scene->AllGameObjectManagers[i], objectUI, false, objectTexture);
 		}
 	}

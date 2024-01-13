@@ -1,5 +1,4 @@
 #include "ComponentUI.h"
-#include "Application.h"
 #include "GameObject.h"
 #include "ImporterTexture.h"
 #include "ComponentTransform.h"
@@ -8,6 +7,7 @@
 #include "ImageUI.h"
 #include "ComponentText.h"
 #include "InputText.h"
+#include "Application.h"
 
 #include "FileSystemManager.h"
 
@@ -207,7 +207,7 @@ void ComponentUI::Disable()
 	
 }
 
-ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm ,UI_Type type, uint width, uint heigth, uint posX, uint posY, const char* imagePath, const char* text, int buttonFuntion, const char* imagePathDisabled)
+ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint width, uint heigth, uint posX, uint posY, const char* imagePath, const char* text, int buttonFuntion, const char* imagePathDisabled)
 {
 	ComponentUI* comp_UI = nullptr;
 
