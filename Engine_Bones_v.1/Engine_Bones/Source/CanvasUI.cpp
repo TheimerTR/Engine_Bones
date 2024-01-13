@@ -88,7 +88,9 @@ void CanvasUI::ShowInfo()
 {
 	if (ImGui::TreeNode("Canvas"))
 	{
-		if (ImGui::DragFloat("Width in Scene", &comp_transform->mScale.x))
+		ImGui::Checkbox("Rescaling", &app->scene->isRescaleUI);
+
+		/*if (ImGui::DragFloat("Width in Scene", &comp_transform->mScale.x))
 		{
 			comp_transform->UpdateTransformation();
 		}
@@ -96,7 +98,7 @@ void CanvasUI::ShowInfo()
 		if (ImGui::DragFloat("Heigth in Scene", &comp_transform->mScale.y))
 		{
 			comp_transform->UpdateTransformation();
-		}
+		}*/
 
 		ImGui::TreePop();
 	}

@@ -53,6 +53,7 @@ public:
 	bool openPauseMenu;
 	bool draggable;
 	bool restartScene;
+	bool isRescaleUI;
 
 	int actual_UI_Object;
 

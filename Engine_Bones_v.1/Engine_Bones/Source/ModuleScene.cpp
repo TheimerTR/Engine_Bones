@@ -16,6 +16,7 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 	openPauseMenu = false;
 	draggable = false;
 	restartScene = false;
+	isRescaleUI = false;
 
 	actual_UI_Object = 0;
 
@@ -305,27 +306,25 @@ void ModuleScene::DemoScene()
 {
 	CreateGameCamera();
 
-	ComponentUI* canv_Comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr);
+	ComponentUI* comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, 0, 0, 0, 0, nullptr);
 
-	canv_Comp_UI = canv_Comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
+	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
+	//ComponentUI* canv_Comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr);
 
 	CanvasUI* canv_UI = new CanvasUI(App->editor->Canvas, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0);
-	
+
+	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::TEXT, 80, 40, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 12), nullptr, "START");
 	ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->scene->Root, 80, 40, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 12), nullptr);
-	
-	start_Text = start_Text->CreateGameObjectUI(App->scene->Root, UI_Type::TEXT, 80, 40, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 12), nullptr, "START");
-	
+
 	//start_Text->Owner->ChangeParent(app->editor->Canvas);
 
+	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::BUTTON, 140, 70, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), "Assets/Textures/Button3.png", nullptr, 0);
 	ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->scene->Root, 140, 70, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), "Assets/Textures/Button3.png");
-
-	start_Button = start_Button->CreateGameObjectUI(App->scene->Root, UI_Type::BUTTON, 140, 70, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), "Assets/Textures/Button3.png", nullptr, 0);
 
 	//start_Button->Owner->ChangeParent(app->editor->Canvas);
 
+	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png", nullptr);
 	ComponentUI* background_Img = new ComponentUI(UI_Type::DEF, App->scene->Root, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png");
-
-	background_Img = background_Img->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png", nullptr);
 
 	//background_Img->Owner->ChangeParent(app->editor->Canvas);
 }

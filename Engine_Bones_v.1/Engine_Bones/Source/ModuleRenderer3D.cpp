@@ -223,6 +223,19 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 		}
 	}
 
+	//for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
+	//{
+	//	ComponentUI* objectUI = dynamic_cast<ComponentUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
+
+	//	if (objectUI != nullptr)
+	//	{
+	//		if (App->scene->AllGameObjectManagers[i]->mParent != App->editor->Canvas && App->scene->AllGameObjectManagers[i]->mParent != App->scene->pause)
+	//		{
+	//			App->scene->AllGameObjectManagers[i]->ChangeParent(App->editor->Canvas);
+	//		}
+	//	}
+	//}
+
 	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 	{
 		ComponentMaterial* objectTexture = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::MATERIAL));
@@ -565,7 +578,7 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 		ui_Plane = UI_Element->PlaneInScene;
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0.0, App->editor->GameWindowSize.x, App->editor->GameWindowSize.y, 0.0, 1.0, -1.0);
+		glOrtho(0.0, App->editor->GameWindowSize.x, App->editor->GameWindowSize.y, 0.0, 0, -1.0);
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
@@ -684,7 +697,7 @@ void ModuleRenderer3D::RenderUI(GameObject* gm, ComponentUI* UI_Element, bool is
 	//if (!isGameMode)
 		glPopMatrix();
 
-	transform->UpdateTransformation();
+	transform->UpdateTransformation(App->scene->isRescaleUI);
 }
 
 void ModuleRenderer3D::RenderCanvas(GameObject* gm, CanvasUI* UI_Canvas)
@@ -695,7 +708,7 @@ void ModuleRenderer3D::RenderCanvas(GameObject* gm, CanvasUI* UI_Canvas)
 		CanvasUI* canvasUI = (CanvasUI*)(App->editor->Canvas->GetComponentGameObject(ComponentType::CANVAS));
 		canvasUI->Draw();
 
-		transform->UpdateTransformation();
+		transform->UpdateTransformation(App->scene->isRescaleUI);
 	}
 }
 

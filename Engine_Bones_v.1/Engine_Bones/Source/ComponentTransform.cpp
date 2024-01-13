@@ -113,7 +113,7 @@ const float* ComponentTransform::GetGlobalTransposed()
 	return mGlobalMatrix.Transposed().ptr(); 
 }
 
-void ComponentTransform::UpdateTransformation() 
+void ComponentTransform::UpdateTransformation(bool isUI)
 {
 	mRotation = Quat::FromEulerXYZ(mRotationEuler.x * DEGTORAD, mRotationEuler.y * DEGTORAD, mRotationEuler.z * DEGTORAD).Normalized(); 
 	
@@ -126,8 +126,6 @@ void ComponentTransform::UpdateTransformation()
 		ComponentTransform* objectsToTransform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::TRANSFORM));
 
 		ComponentTransform* parent = objectsToTransform->Owner->mParent->mTransform; 
-
-	
 
 		/*if (Owner->GetComponentGameObject(ComponentType::UI) != nullptr){
 
@@ -159,7 +157,24 @@ void ComponentTransform::UpdateTransformation()
 
 		else {*/
 
+		if(!isUI)
+		{
 			objectsToTransform->mGlobalMatrix = parent->mGlobalMatrix * objectsToTransform->mLocalMatrix;
+		}
+		else
+		{
+			objectsToTransform->mGlobalMatrix = parent->mGlobalMatrix * objectsToTransform->mLocalMatrix;
+
+			float3 position, scale;
+			Quat rotation;
+
+			objectsToTransform->mGlobalMatrix.Decompose(position, rotation, scale);
+
+			position.z = 0;
+
+			objectsToTransform->mGlobalMatrix = float4x4::FromTRS(position, rotation, mScale * 400);
+		}
+
 		//}
 
 		objectsToTransform->UpdateBox(); 

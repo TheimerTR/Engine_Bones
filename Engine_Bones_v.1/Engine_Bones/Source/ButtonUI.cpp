@@ -20,6 +20,9 @@ ButtonUI::ButtonUI(UI_Type type, GameObject* gameObject, uint width, uint heigt,
 
 	positionX = PosX;
 	positionY = PosY;
+
+	widthPanel = width;
+	heigthPanel = heigt;
 }
 
 ButtonUI::~ButtonUI()

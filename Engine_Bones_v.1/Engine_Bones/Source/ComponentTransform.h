@@ -36,7 +36,7 @@ public:
 
 	void SetTransform(GameObject* gameObject, float3 position, float3 scale, Quat rotation);
 
-	void UpdateTransformation(); 
+	void UpdateTransformation(bool isUI = false); 
 
 	void UpdateGuizmoTransformation(float4x4& globalTransformation); 
 

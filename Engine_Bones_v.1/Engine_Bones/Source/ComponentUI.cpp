@@ -218,9 +218,11 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 			GameObject* Button = new GameObject("Button", gm);
 			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Button->GetComponentGameObject(ComponentType::TRANSFORM));
 			transform->mPosition = { (float)posX, (float)posY, 0};
-			comp_UI = (ComponentUI*)(Button->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
+			Button->mTransform->mPosition = { (float)posX, (float)posY, 0};
+			comp_UI = dynamic_cast<ComponentUI*>(Button->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			ButtonUI but_UI = ButtonUI(type, Button, width, heigth, posX, posY, imagePath);
 			but_UI.actualFunction = (functions)buttonFuntion;
+			comp_UI->gmAtached = Button;
 			comp_UI->actualButtonAction = buttonFuntion;
 			comp_UI->positionX = but_UI.positionX;
 			comp_UI->positionY = but_UI.positionY;
@@ -242,6 +244,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 			GameObject* Text = new GameObject("Text", gm);
 			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Text->GetComponentGameObject(ComponentType::TRANSFORM));
 			transform->mPosition = { (float)posX, (float)posY, 0 };
+			Text->mTransform->mPosition = { (float)posX, (float)posY, 0 };
 			comp_UI = dynamic_cast<ComponentUI*>(Text->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			ComponentText text_UI = ComponentText(type, Text, width, heigth, posX, posY, text);
 			comp_UI->textComp = &text_UI;
@@ -271,6 +274,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 		GameObject* Text = new GameObject("Input Text", gm);
 		ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Text->GetComponentGameObject(ComponentType::TRANSFORM));
 		transform->mPosition = { (float)posX, (float)posY, 0 };
+		Text->mTransform->mPosition = { (float)posX, (float)posY, 0 };
 		comp_UI = dynamic_cast<ComponentUI*>(Text->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 		InputText text_UI = InputText(type, Text, width, heigth, posX, posY, "");
 		comp_UI->InputTextComp = &text_UI;
@@ -300,6 +304,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 			GameObject* Image = new GameObject("Image", gm);
 			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Image->GetComponentGameObject(ComponentType::TRANSFORM));
 			transform->mPosition = { (float)posX, (float)posY, 0 };
+			Image->mTransform->mPosition = { (float)posX, (float)posY, 0 };
 			comp_UI = (ComponentUI*)(Image->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			ImageUI* img_UI = new ImageUI(type, Image, width, heigth, posX, posY, imagePath);
 			comp_UI = (ComponentUI*)img_UI;
@@ -321,6 +326,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 			GameObject* Checker = new GameObject("Checker", gm);
 			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Checker->GetComponentGameObject(ComponentType::TRANSFORM));
 			transform->mPosition = { (float)posX, (float)posY, 0 };
+			Checker->mTransform->mPosition = { (float)posX, (float)posY, 0 };
 			comp_UI = dynamic_cast<ComponentUI*>(Checker->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			CheckerUI check_UI = CheckerUI(type, Checker, width, heigth, posX, posY, imagePath, imagePathDisabled);
 			comp_UI->actualChecker = (_functions)buttonFuntion;
@@ -346,6 +352,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 	case UI_Type::CANV:
 		{
 			app->editor->Canvas = new GameObject("Canvas", gm);
+			app->editor->Canvas->mTransform->mPosition = { (float)posX, (float)posY, 0 };
 			CanvasUI* canv_UI = (CanvasUI*)(app->editor->Canvas->AddComponent(ComponentType::CANVAS, type, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr));
 		}
 		break;
