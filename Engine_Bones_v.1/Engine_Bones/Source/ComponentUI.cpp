@@ -42,6 +42,9 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 	widthPanel = width;
 	heigthPanel = heigth;
 
+	positionX = PosX;
+	positionY = PosY;
+
 	this->UUID = app->RandomIntGenerator();
 
 	texture = nullptr;
@@ -61,39 +64,36 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 	Quat rotation;
 
 	//gameObject->mTransform->mPosition = { (float)PosX, (float)PosY, 0 };
-	if(gameObject->childrens.size() > 0)
+	//if(gameObject->childrens.size() > 0)
+	//{
+	//	float4x4 newTransformation = gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mLocalMatrix = gameObject->childrens[gameObject->childrens.size() - 1]->mParent->mTransform->GetGlobalMatrix().Inverted() * gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->GetGlobalMatrix();
+
+	//	newTransformation.Decompose(position, rotation, scale);
+
+	//	gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mPosition = position;
+	//	gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mRotation = rotation;
+	//	gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mScale = scale;
+
+	//	gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mRotationEuler = rotation.ToEulerXYZ() * RADTODEG;
+
+	//	gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->UpdateTransformation();
+
+	//	//gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->SetTransform(gameObject->childrens[gameObject->childrens.size() - 1], { (float)PosX, (float)PosY, 0 }, { (float)width, (float)heigth, 0 }, { 0, 0, 0, 0 });
+	//	//gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mScale = { (float)width, (float)heigth, 0};
+	//	CreatePanel(PlaneInScene->vertex, gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mPosition, width, heigth);
+
+	//	//transform = { (float)PosX, (float)PosY, 0 };
+
+	//	CreatePanel(PlaneInGame->vertex, gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mPosition, width, heigth);
+	//}
+	//else
+	//{
+
+	if (gameObject->mParent != nullptr)
 	{
-		float4x4 newTransformation = gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mLocalMatrix = gameObject->childrens[gameObject->childrens.size() - 1]->mParent->mTransform->GetGlobalMatrix().Inverted() * gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->GetGlobalMatrix();
-
-		newTransformation.Decompose(position, rotation, scale);
-
-		gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mPosition = position;
-		gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mRotation = rotation;
-		gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mScale = scale;
-
-		gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mRotationEuler = rotation.ToEulerXYZ() * RADTODEG;
-
-		gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->UpdateTransformation();
-
-		//gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->SetTransform(gameObject->childrens[gameObject->childrens.size() - 1], { (float)PosX, (float)PosY, 0 }, { (float)width, (float)heigth, 0 }, { 0, 0, 0, 0 });
-		//gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mScale = { (float)width, (float)heigth, 0};
-		CreatePanel(PlaneInScene->vertex, gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mPosition, width, heigth);
-
-		//transform = { (float)PosX, (float)PosY, 0 };
-
-		CreatePanel(PlaneInGame->vertex, gameObject->childrens[gameObject->childrens.size() - 1]->mTransform->mPosition, width, heigth);
-	}
-	else
-	{
-		float4x4 newTransformation = gameObject->mTransform->mLocalMatrix = gameObject->mParent->mTransform->GetGlobalMatrix().Inverted() * gameObject->mTransform->GetGlobalMatrix();
-
-		newTransformation.Decompose(position, rotation, scale);
-
-		gameObject->mTransform->mPosition = position;
-		gameObject->mTransform->mRotation = rotation;
-		gameObject->mTransform->mScale = scale;
-
-		gameObject->mTransform->mRotationEuler = rotation.ToEulerXYZ() * RADTODEG;
+		gameObject->mTransform->mPosition = { (float)positionX, (float)positionY, 0 };
+		gameObject->mTransform->mScale = { (float)widthPanel, (float)heigthPanel, 1 };
+		gameObject->mTransform->mRotation = { 0, 0, 0, 1 };
 
 		gameObject->mTransform->UpdateTransformation();
 
@@ -102,8 +102,8 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 		//transform = { (float)PosX, (float)PosY, 0 };
 
 		CreatePanel(PlaneInGame->vertex, gameObject->mTransform->mPosition, width, heigth);
-	
 	}
+	//}
 
 	PlaneInScene->uv[0] = float2(0, 1);
 	PlaneInScene->uv[1] = float2(1, 1);
@@ -207,7 +207,7 @@ void ComponentUI::Disable()
 	
 }
 
-ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint width, uint heigth, uint posX, uint posY, const char* imagePath, const char* text, int buttonFuntion, const char* imagePathDisabled)
+ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint width, uint heigth, uint posX, uint posY, const char* imagePath, const char* text, int buttonFuntion, const char* imagePathDisabled, uint OrinigalPosX, uint OrinigalPosY, uint OrinigalWidth, uint Orinigalheight)
 {
 	ComponentUI* comp_UI = nullptr;
 
@@ -217,9 +217,8 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 		{
 			GameObject* Button = new GameObject("Button", gm);
 			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Button->GetComponentGameObject(ComponentType::TRANSFORM));
-			transform->mPosition = { (float)posX, (float)posY, 0};
-			Button->mTransform->mPosition = { (float)posX, (float)posY, 0};
 			comp_UI = dynamic_cast<ComponentUI*>(Button->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
+			comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
 			ButtonUI but_UI = ButtonUI(type, Button, width, heigth, posX, posY, imagePath);
 			but_UI.actualFunction = (functions)buttonFuntion;
 			comp_UI->gmAtached = Button;
@@ -243,10 +242,9 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 		{
 			GameObject* Text = new GameObject("Text", gm);
 			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Text->GetComponentGameObject(ComponentType::TRANSFORM));
-			transform->mPosition = { (float)posX, (float)posY, 0 };
-			Text->mTransform->mPosition = { (float)posX, (float)posY, 0 };
 			comp_UI = dynamic_cast<ComponentUI*>(Text->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
-			ComponentText text_UI = ComponentText(type, Text, width, heigth, posX, posY, text);
+			ComponentText text_UI = ComponentText(type, Text, Text->mTransform->mScale.x, Text->mTransform->mScale.y, Text->mTransform->mPosition.x, Text->mTransform->mPosition.y, text);
+			comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
 			comp_UI->textComp = &text_UI;
 			comp_UI->gmAtached = Text;
 			comp_UI->textCH = text_UI.text;
@@ -273,10 +271,9 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 	{
 		GameObject* Text = new GameObject("Input Text", gm);
 		ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Text->GetComponentGameObject(ComponentType::TRANSFORM));
-		transform->mPosition = { (float)posX, (float)posY, 0 };
-		Text->mTransform->mPosition = { (float)posX, (float)posY, 0 };
 		comp_UI = dynamic_cast<ComponentUI*>(Text->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 		InputText text_UI = InputText(type, Text, width, heigth, posX, posY, "");
+		comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
 		comp_UI->InputTextComp = &text_UI;
 		comp_UI->gmAtached = Text;
 		comp_UI->textCH = text_UI.text;
@@ -303,10 +300,9 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 		{
 			GameObject* Image = new GameObject("Image", gm);
 			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Image->GetComponentGameObject(ComponentType::TRANSFORM));
-			transform->mPosition = { (float)posX, (float)posY, 0 };
-			Image->mTransform->mPosition = { (float)posX, (float)posY, 0 };
 			comp_UI = (ComponentUI*)(Image->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			ImageUI* img_UI = new ImageUI(type, Image, width, heigth, posX, posY, imagePath);
+			comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
 			comp_UI = (ComponentUI*)img_UI;
 
 			ComponentMaterial* mat = (ComponentMaterial*)(Image->AddComponent(ComponentType::MATERIAL));
@@ -325,10 +321,9 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 		{
 			GameObject* Checker = new GameObject("Checker", gm);
 			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Checker->GetComponentGameObject(ComponentType::TRANSFORM));
-			transform->mPosition = { (float)posX, (float)posY, 0 };
-			Checker->mTransform->mPosition = { (float)posX, (float)posY, 0 };
 			comp_UI = dynamic_cast<ComponentUI*>(Checker->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			CheckerUI check_UI = CheckerUI(type, Checker, width, heigth, posX, posY, imagePath, imagePathDisabled);
+			comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
 			comp_UI->actualChecker = (_functions)buttonFuntion;
 			comp_UI->positionX = check_UI.positionX;
 			comp_UI->positionY = check_UI.positionY;
@@ -444,9 +439,9 @@ bool ComponentUI::MouseIsInside(float2 mouse)
 
 	if (app->renderer3D->cameraGame != nullptr && gmAtached->isActive)
 	{
-		if (positionX >= 0 && positionY >= 0 && mouse.x >= 0 && mouse.y >= 0)
+		if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < app->editor->GameWindowSize.x && mouse.y < app->editor->GameWindowSize.y)
 		{
-			if (mouse.x >= positionX && mouse.x <= positionX + widthPanel && mouse.y >= positionY && mouse.y <= positionY + heigthPanel)
+			if (mouse.x >= AsRootPositionX && mouse.x <= AsRootPositionX + AsRootWidthPanel && mouse.y >= AsRootPositionY && mouse.y <= AsRootPositionY + AsRootHeigthPanel)
 			{
 				ret = true;
 			}
@@ -458,8 +453,8 @@ bool ComponentUI::MouseIsInside(float2 mouse)
 
 void ComponentUI::CreatePanel(float3 vertex[], float3 transform, uint width, uint heigth)
 {
-	vertex[0] = float3(transform.x, transform.y + heigth, transform.z);
-	vertex[1] = float3(transform.x + width, transform.y + heigth, transform.z);
-	vertex[3] = float3(transform.x + width, transform.y, transform.z);
+	vertex[0] = float3(transform.x, transform.y + 1, transform.z);
+	vertex[1] = float3(transform.x + 1, transform.y + 1, transform.z);
+	vertex[3] = float3(transform.x + 1, transform.y, transform.z);
 	vertex[2] = float3(transform.x, transform.y, transform.z);
 }

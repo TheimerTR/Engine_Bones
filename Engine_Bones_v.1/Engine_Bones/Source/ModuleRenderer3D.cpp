@@ -223,18 +223,18 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 		}
 	}
 
-	//for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
-	//{
-	//	ComponentUI* objectUI = dynamic_cast<ComponentUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
+	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
+	{
+		ComponentUI* objectUI = dynamic_cast<ComponentUI*>(App->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
 
-	//	if (objectUI != nullptr)
-	//	{
-	//		if (App->scene->AllGameObjectManagers[i]->mParent != App->editor->Canvas && App->scene->AllGameObjectManagers[i]->mParent != App->scene->pause)
-	//		{
-	//			App->scene->AllGameObjectManagers[i]->ChangeParent(App->editor->Canvas);
-	//		}
-	//	}
-	//}
+		if (objectUI != nullptr)
+		{
+			if (App->scene->AllGameObjectManagers[i]->mParent != App->editor->Canvas && App->scene->AllGameObjectManagers[i]->mParent != App->scene->pause)
+			{
+				App->scene->AllGameObjectManagers[i]->ChangeParent(App->editor->Canvas);
+			}
+		}
+	}
 
 	for (int i = 0; i < App->scene->AllGameObjectManagers.size(); i++)
 	{
@@ -249,11 +249,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 		if (objectUI != nullptr)
 		{
-			if (App->scene->AllGameObjectManagers[i]->mParent != App->editor->Canvas && App->scene->AllGameObjectManagers[i]->mParent != App->scene->pause)
-			{
-				App->scene->AllGameObjectManagers[i]->ChangeParent(App->editor->Canvas);
-			}
-
 			RenderUI(App->scene->AllGameObjectManagers[i], objectUI, false, objectTexture);
 		}
 	}

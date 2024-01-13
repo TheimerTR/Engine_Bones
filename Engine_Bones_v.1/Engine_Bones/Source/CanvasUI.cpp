@@ -18,25 +18,17 @@ CanvasUI::CanvasUI(GameObject* gameObject, float width, float heigth, uint PosX,
 
 	this->UUID = app->RandomIntGenerator();
 
+	gameObject->mTransform->mPosition = { (float)posX, (float)posY, 0 };
+	gameObject->mTransform->mScale = { (float)widthPanel, (float)heigthPanel, 1 };
+	gameObject->mTransform->mRotation = { 0, 0, 0, 0 };
+
+	gameObject->mTransform->UpdateTransformation();
+
 	comp_transform = dynamic_cast<ComponentTransform*>(gmAtached->GetComponentGameObject(ComponentType::TRANSFORM));
 	comp_transform->mScale.x = widthPanel;
 	comp_transform->mScale.y = heigthPanel;
-	comp_transform->mRotation = { 0, 0, 0, 1};
-
-	float3 position, scale;
-	Quat rotation;
-
-	float4x4 newTransformation = gameObject->mTransform->mLocalMatrix = gameObject->mParent->mTransform->GetGlobalMatrix().Inverted() * gameObject->mTransform->GetGlobalMatrix();
-
-	newTransformation.Decompose(position, rotation, scale);
-
-	gameObject->mTransform->mPosition = position;
-	gameObject->mTransform->mRotation = rotation;
-	gameObject->mTransform->mScale = scale;
-
-	gameObject->mTransform->mRotationEuler = rotation.ToEulerXYZ() * RADTODEG;
-
-	gameObject->mTransform->UpdateTransformation();
+	comp_transform->mScale.z = 1;
+	comp_transform->mRotation = { 0, 0, 0, 1 };
 }
 
 

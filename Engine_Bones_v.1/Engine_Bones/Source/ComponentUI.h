@@ -54,6 +54,9 @@ public:
 
 	uint widthPanel;
 	uint heigthPanel;
+	
+	uint AsRootWidthPanel;
+	uint AsRootHeigthPanel;
 
 	MouseState actualMouseState;
 
@@ -61,6 +64,9 @@ public:
 
 	int positionX;
 	int positionY;
+	
+	int AsRootPositionX;
+	int AsRootPositionY;
 
 	float4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
@@ -102,7 +108,7 @@ public:
 	bool Update() override;
 	void Disable() override;
 
-	ComponentUI* CreateGameObjectUI(GameObject* gm, UI_Type type = UI_Type::DEF, uint width = 20, uint heigth = 20, uint posX = 0, uint posY = 0, const char* imagePath = nullptr, const char* text = "Text", int buttonFuntion = 1, const char* imagePathDisabled = nullptr);
+	ComponentUI* CreateGameObjectUI(GameObject* gm, UI_Type type = UI_Type::DEF, uint width = 20, uint heigth = 20, uint posX = 0, uint posY = 0, const char* imagePath = nullptr, const char* text = "Text", int buttonFuntion = 1, const char* imagePathDisabled = nullptr, uint OrinigalPosX = 0, uint OrinigalPosY = 0, uint OrinigalWidth = 0, uint Orinigalheight = 0);
 
 private:
 

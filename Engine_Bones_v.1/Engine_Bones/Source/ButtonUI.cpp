@@ -178,11 +178,15 @@ void ButtonUI::PassScene()
 	CreatePauseMenu();
 
 	ComponentTransform* transform = dynamic_cast<ComponentTransform*>(app->editor->Canvas->GetComponentGameObject(ComponentType::TRANSFORM));
+	ComponentTransform* transformPivot = nullptr;
 	
-	ComponentUI* crosshair = new ComponentUI(UI_Type::IMAGE, app->editor->Canvas, 40, 40, (transform->mScale.x / 2) - 30, (transform->mScale.y / 2) - 20, "Assets/Textures/Crosshair.png");
+	ComponentUI* comp_UI = new ComponentUI(UI_Type::DEF, app->scene->Root, 0, 0, 0, 0, nullptr);
 
-	crosshair = crosshair->CreateGameObjectUI(app->scene->Root, UI_Type::IMAGE, 40, 40, (transform->mScale.x / 2) - 30, (transform->mScale.y / 2) - 20, "Assets/Textures/Crosshair.png");
+	comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::IMAGE, 40, 40, 0, 0, "Assets/Textures/Crosshair.png");
 	app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->mName = "Crosshair";
+	transformPivot = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
+	transformPivot->mPosition = { (float)((transform->mScale.x / 2) - 30), (float)((transform->mScale.y / 2) - 20), 0 };
+
 	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
 	mat->colorTexture.r = 255;
 	mat->colorTexture.g = 0;

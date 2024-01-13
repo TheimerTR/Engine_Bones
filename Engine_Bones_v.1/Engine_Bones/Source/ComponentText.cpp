@@ -158,7 +158,7 @@ void ComponentText::DoText()
 
 		for (int i = 0; i < text.length(); i++)
 		{
-			uint position_of_character = positionX + size_of_character * i;
+			uint position_of_character = positionX + 1 * i;
 
 			ComponentMesh* mesh = dynamic_cast<ComponentMesh*>(gmAtached->AddComponent(ComponentType::MESH));
 
