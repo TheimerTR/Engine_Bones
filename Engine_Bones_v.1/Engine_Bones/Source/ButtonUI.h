@@ -33,7 +33,7 @@ public:
 	uint widthPanel;
 	uint heigthPanel;
 
-	bool isPressed;
+	bool isPressed = false;
 
 	functions actualFunction;
 

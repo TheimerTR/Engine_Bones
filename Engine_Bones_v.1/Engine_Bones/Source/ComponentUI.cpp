@@ -157,6 +157,10 @@ bool ComponentUI::Update()
 		case IDLE_UI:
 			break;
 		case HOVER_UI:
+			if (ui_Type == BUTTON) {
+				ButtonUI* button = (ButtonUI*)this;
+				button->OnHover();
+			}
 			break;
 		case CLICK_UI:
 			if (ui_Type == BUTTON)
@@ -188,7 +192,7 @@ bool ComponentUI::Update()
 			}
 			if (ui_Type == INPUT_TEXT)
 			{
-				InputText* inputText = (InputText*)this;
+				InputText* inputText = (InputText*)this; 
 				//inputText->OnClicked(this);
 			}
 			break;
@@ -395,6 +399,12 @@ void ComponentUI::GenerateBuffers(uint buffer[], float3 vertex[], float2 uv[])
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * 4, uv, GL_STATIC_DRAW);
 }
 
+void ComponentUI::RegenerateBuffers(uint buffer[], float3 vertex[]) {
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffer[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * 4, vertex, GL_STATIC_DRAW);
+}
+
 void ComponentUI::MousePicker()
 {
 	float2 originPoint = float2(app->editor->mousePosInViewport.x, app->editor->mousePosInViewport.y);
@@ -467,8 +477,19 @@ void ComponentUI::MoveComponent()
 	int dy = -app->input->GetMouseYMotion();
 
 	PlaneInScene->vertex[0] = float3(transform->mPosition.x + dx, transform->mPosition.y + heigthPanel + dy, transform->mPosition.z); 
-	PlaneInScene->vertex[0] = float3(transform->mPosition.x + widthPanel + dx, transform->mPosition.y + heigthPanel + dy, transform->mPosition.z); 
-	PlaneInScene->vertex[0] = float3(transform->mPosition.x + widthPanel +  dx, transform->mPosition.y + dy, transform->mPosition.z); 
-	PlaneInScene->vertex[0] = float3(transform->mPosition.x + dx, transform->mPosition.y + dy, transform->mPosition.z); 
+	PlaneInScene->vertex[1] = float3(transform->mPosition.x + widthPanel + dx, transform->mPosition.y + heigthPanel + dy, transform->mPosition.z); 
+	PlaneInScene->vertex[3] = float3(transform->mPosition.x + widthPanel +  dx, transform->mPosition.y + dy, transform->mPosition.z); 
+	PlaneInScene->vertex[2] = float3(transform->mPosition.x + dx, transform->mPosition.y + dy, transform->mPosition.z); 
 
+	positionX += dx; 
+	positionY += dy; 
+
+	PlaneInGame->vertex[0] = float3(positionX, positionY + heigthPanel, transform->mPosition.z); 
+	PlaneInGame->vertex[0] = float3(positionX + widthPanel, positionY + heigthPanel, transform->mPosition.z); 
+	PlaneInGame->vertex[0] = float3(positionX + widthPanel, positionY, transform->mPosition.z); 
+	PlaneInGame->vertex[0] = float3(positionX, positionY, transform->mPosition.z); 
+
+	RegenerateBuffers(PlaneInScene->buffer, PlaneInScene->vertex); 
+	RegenerateBuffers(PlaneInGame->buffer, PlaneInGame->vertex); 
+	
 }

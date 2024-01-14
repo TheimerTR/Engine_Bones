@@ -44,10 +44,17 @@ bool ButtonUI::OnClicked()
 
 bool ButtonUI::OnHover()
 {
-	if(!isDragabble && !isPressed)
-	{
-		color = float4(0.5, 0.5, 0.5, 0.5);
-	}
+	//if(!isPressed)
+	////{
+	//	color = float4(0.5, 0.5, 0.5, 0.5);
+
+	/*	float col[4] = { 0.5, 0.5, 0.5, 0.5 };*/
+	//ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
+	//mat->colorTexture.r = 0.5; 
+	//mat->colorTexture.g = 0.5; 
+	//mat->colorTexture.b = 0.5; 
+	//mat->colorTexture.a = 0.5; 
+	//}
 
 	return true;
 }
@@ -84,17 +91,18 @@ void ButtonUI::ShowInfo(int* action)
 		}
 		else
 		{
-			color[3] = 255;
+			color[3] = 50;
 		}
 
 		float col[4] = { color[0], color[1], color[2], color[3] };
 
 		ImGui::ColorEdit4("Material Color", col);
 
-		color[0] = col[0];
-		color[1] = col[1];
-		color[2] = col[2];
-		color[3] = col[3];
+			color[0] = col[0];
+			color[1] = col[1];
+			color[2] = col[2];
+			color[3] = col[3];
+		
 
 		if (ImGui::Button("Action"))
 		{

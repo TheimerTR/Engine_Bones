@@ -103,6 +103,7 @@ public:
 
 	void CreatePanel(float3 vertex[], float3 transform, uint width, uint heigth);
 	void GenerateBuffers(uint buffer[], float3 vertex[], float2 uv[]);
+	void RegenerateBuffers(uint buffer[], float3 vertex[]);
 
 	void Enable() override;
 	bool Update() override;
