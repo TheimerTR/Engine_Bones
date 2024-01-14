@@ -483,7 +483,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas == nullptr)
 						{
-							comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV);
+							comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
 						}
 						else
 						{
@@ -495,7 +495,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::BUTTON);
+							comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::BUTTON, 160, 80, 0, 0, "Assets/Textures/Button3.png", nullptr, 0, nullptr, 0, 0, 160, 80);
 						}
 						else
 						{
@@ -507,7 +507,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::IMAGE);
+							comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, 160, 40, 0, 0, "Assets/Textures/Unchecked-checkbox.png", nullptr, 0, 0, 160, 40);
 						}
 						else
 						{
@@ -519,7 +519,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::TEXT);
+							comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::TEXT, 25, 25, 0, 0, nullptr, "START", 1, nullptr, 0, 0, 25, 25);
 						}
 						else
 						{
@@ -531,7 +531,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::INPUT_TEXT);
+							comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::INPUT_TEXT, 20, 20, 0, 0, "Assets/Textures/Input_Text_Empty.png", "", 1, nullptr, 0, 0, 20, 20);
 						}
 						else
 						{
@@ -543,7 +543,7 @@ bool ModuleEditor::DrawEditor()
 					{
 						if (Canvas != nullptr)
 						{
-							comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::CHECKER);
+							comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, CHECKER, 30, 30, 0, 0, "Assets/Textures/Ckeck-checkedbox.png", nullptr, 0, "Assets/Textures/Unchecked-checkbox.png", 0, 0, 30, 30);
 						}
 						else
 						{
@@ -1616,7 +1616,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObject* gameObject)
 						{
 							if (Canvas == nullptr)
 							{
-								comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV);
+								comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
 							}
 							else
 							{
@@ -1628,7 +1628,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObject* gameObject)
 						{
 							if (Canvas != nullptr)
 							{
-								comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::BUTTON);
+								comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::BUTTON, 160, 80, 0, 0, "Assets/Textures/Button3.png", nullptr, 0, nullptr, 0, 0, 160, 80);
 							}
 							else
 							{
@@ -1640,7 +1640,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObject* gameObject)
 						{
 							if (Canvas != nullptr)
 							{
-								comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::IMAGE);
+								comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, 160, 40, 0, 0, "Assets/Textures/Unchecked-checkbox.png", nullptr, 0, 0, 160, 40);
 							}
 							else
 							{
@@ -1652,7 +1652,19 @@ void ModuleEditor::HierarchyWindowDisplay(GameObject* gameObject)
 						{
 							if (Canvas != nullptr)
 							{
-								comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::TEXT);
+								comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::TEXT, 25, 25, 0, 0, nullptr, "START", 1, nullptr, 0, 0, 25, 25);
+							}
+							else
+							{
+								LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+							}
+						}
+
+						if (ImGui::MenuItem("Input Text"))
+						{
+							if (Canvas != nullptr)
+							{
+								comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::INPUT_TEXT, 20, 20, 0, 0, "Assets/Textures/Input_Text_Empty.png", "", 1, nullptr, 0, 0, 20, 20);
 							}
 							else
 							{
@@ -1664,7 +1676,7 @@ void ModuleEditor::HierarchyWindowDisplay(GameObject* gameObject)
 						{
 							if (Canvas != nullptr)
 							{
-								comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::CHECKER);
+								comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, CHECKER, 30, 30, 0, 0, "Assets/Textures/Ckeck-checkedbox.png", nullptr, 0, "Assets/Textures/Unchecked-checkbox.png", 0, 0, 30, 30);
 							}
 							else
 							{
@@ -2259,61 +2271,76 @@ void ModuleEditor::AddEntity(GameObject* gm)
 
 			if (ImGui::MenuItem("Canvas"))
 			{
-				if (Canvas == nullptr)
+				if (ImGui::MenuItem("Canvas"))
 				{
-					comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV);
+					if (Canvas == nullptr)
+					{
+						comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You already have a Canvas!");
+					}
 				}
-				else
-				{
-					LOG(LogTypeCase::L_WARNING, "You already have a Canvas!");
-				}
-			}
-			
-			if (ImGui::MenuItem("Button"))
-			{
-				if (Canvas != nullptr)
-				{
-					comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::BUTTON);
-				}
-				else
-				{
-					LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
-				}
-			}
 
-			if (ImGui::MenuItem("Image"))
-			{
-				if (Canvas != nullptr)
+				if (ImGui::MenuItem("Button"))
 				{
-					comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::IMAGE);
+					if (Canvas != nullptr)
+					{
+						comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::BUTTON, 160, 80, 0, 0, "Assets/Textures/Button3.png", nullptr, 0, nullptr, 0, 0, 160, 80);
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+					}
 				}
-				else
-				{
-					LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
-				}
-			}
 
-			if (ImGui::MenuItem("Text"))
-			{
-				if (Canvas != nullptr)
+				if (ImGui::MenuItem("Image"))
 				{
-					comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::TEXT);
+					if (Canvas != nullptr)
+					{
+						comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, 160, 40, 0, 0, "Assets/Textures/Unchecked-checkbox.png", nullptr, 0, 0, 160, 40);
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+					}
 				}
-				else
-				{
-					LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
-				}
-			}
 
-			if (ImGui::MenuItem("Checker"))
-			{
-				if (Canvas != nullptr)
+				if (ImGui::MenuItem("Text"))
 				{
-					comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::CHECKER);
+					if (Canvas != nullptr)
+					{
+						comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::TEXT, 25, 25, 0, 0, nullptr, "START", 1, nullptr, 0, 0, 25, 25);
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+					}
 				}
-				else
+
+				if (ImGui::MenuItem("Input Text"))
 				{
-					LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+					if (Canvas != nullptr)
+					{
+						comp_UI = comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::INPUT_TEXT, 20, 20, 0, 0, "Assets/Textures/Input_Text_Empty.png", "", 1, nullptr, 0, 0, 20, 20);
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+					}
+				}
+
+				if (ImGui::MenuItem("Checker"))
+				{
+					if (Canvas != nullptr)
+					{
+						comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, CHECKER, 30, 30, 0, 0, "Assets/Textures/Ckeck-checkedbox.png", nullptr, 0, "Assets/Textures/Unchecked-checkbox.png", 0, 0, 30, 30);
+					}
+					else
+					{
+						LOG(LogTypeCase::L_WARNING, "You need a Canvas!");
+					}
 				}
 			}
 		}

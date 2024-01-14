@@ -314,9 +314,13 @@ void ModuleScene::DemoScene()
 
 	CanvasUI* canv_UI = new CanvasUI(App->editor->Canvas, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0);
 
-	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::TEXT, 25, 25, 0, 0, nullptr, "START", 1, nullptr, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), 20, 20);
+	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::TEXT, 25, 25, 0, 0, nullptr, "START", 1, nullptr, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 8), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 9), 25, 25);
 	transform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
 	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 8)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 9)), 0 };
+	
+	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::INPUT_TEXT, 20, 20, 0, 0, "Assets/Textures/Input_Text_Empty.png", "", 1, nullptr, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 10), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 3.6), 160, 80);
+	transform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
+	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 10)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 3.6)), 0 };
 
 	//ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->scene->Root, 80, 40, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 12), nullptr);
 
@@ -328,8 +332,11 @@ void ModuleScene::DemoScene()
 	//ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->scene->Root, 140, 70, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), "Assets/Textures/Button3.png");
 
 	//start_Button->Owner->ChangeParent(app->editor->Canvas);
-
-	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png", nullptr, 0, 0, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel);
+	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, 160, 40, 0, 0, "Assets/Textures/Unchecked-checkbox.png", nullptr, 0, 0, 160, 40);
+	transform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
+	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 6)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 4)), 0 };
+	
+	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png", nullptr, 1, nullptr, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0);
 	
 	//ComponentUI* background_Img = new ComponentUI(UI_Type::DEF, App->scene->Root, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png");
 

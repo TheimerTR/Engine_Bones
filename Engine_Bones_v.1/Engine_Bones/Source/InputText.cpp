@@ -54,14 +54,6 @@ InputText::~InputText()
 
 void InputText::Update(ComponentUI* UI_Element)
 {
-	if(UI_Element->actualText == "")
-	{
-		Texture* texture = new Texture();
-		ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
-		Importer::ImporterTexture::Load(texture, "Assets/Textures/Unchecked-checkbox.png");
-		mat->SetTexture(texture);
-	}
-
 	if(UI_Element->IsTextEditing && app->scene->GameTime.running && !app->scene->GameTime.paused)
 	{
 		app->scene->isTyping = true;
@@ -74,23 +66,41 @@ void InputText::Update(ComponentUI* UI_Element)
 			timeWait.Start();
 		}
 
-		if (timeWait.ReadDt() > 0.2f)
+		if (timeWait.ReadDt() > 0.01f)
 		{
 			app->input->ReadInput(UI_Element->newText);
 
 			if (UI_Element->newText != "")
 			{
+				color[3] = 0;
+
 				if (app->input->GetKey(SDLK_ASTERISK) == KEY_DOWN)
 				{
 					UI_Element->newText.pop_back();
 				}
 			}
-
-			if (UI_Element->actualText != UI_Element->newText)
+			else
 			{
+				color[3] = 255;
+			}
+
+			if (UI_Element->textCH != UI_Element->newText)
+			{
+				UI_Element->textCH = UI_Element->newText;
 				UI_Element->actualText = UI_Element->newText;
 
-				RecreateText(UI_Element->actualText, UI_Element->gmAtached, UI_Element->widthPanel, UI_Element->heigthPanel, UI_Element->positionX, UI_Element->positionY);
+				UI_Element->gmAtached->ChangeParent(app->scene->Root);
+
+				ComponentTransform* transform = nullptr;
+				transform = dynamic_cast<ComponentTransform*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::TRANSFORM));
+				transform->mPosition = { 0, 0, 0 };
+				transform->UpdateTransformation();
+
+				RecreateText(UI_Element->textCH, UI_Element->gmAtached, UI_Element->widthPanel, UI_Element->heigthPanel, UI_Element->positionX, UI_Element->positionY);
+
+				transform->mPosition = { (float)UI_Element->AsRootPositionX, (float)UI_Element->AsRootPositionY, 0 };
+				transform->UpdateTransformation();
+
 				timeWait.Restart();
 			}
 		}
@@ -101,7 +111,7 @@ void InputText::Update(ComponentUI* UI_Element)
 
 		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 		{
-			UI_Element->newText = UI_Element->actualText;
+			UI_Element->newText = UI_Element->textCH;
 			UI_Element->IsTextEditing = false;
 		}
 		/*if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
@@ -142,11 +152,21 @@ void InputText::ShowInfo(ComponentUI* compUI, string actText, string newText, Ga
 
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
-				app->input->ReadInput(newText);
+				//app->input->ReadInput(newText);
 
 				actText = newText;
 
+				compUI->gmAtached->ChangeParent(app->scene->Root);
+
+				ComponentTransform* transform = nullptr;
+				transform = dynamic_cast<ComponentTransform*>(compUI->gmAtached->GetComponentGameObject(ComponentType::TRANSFORM));
+				transform->mPosition = { 0, 0, 0 };
+				transform->UpdateTransformation();
+
 				RecreateText(actText, gm, width, heigth, _posX, _posY);
+
+				transform->mPosition = { (float)compUI->AsRootPositionX, (float)compUI->AsRootPositionY, 0 };
+				transform->UpdateTransformation();
 
 				compUI->actualText = actText;
 				compUI->newText = actText;
@@ -228,7 +248,7 @@ void InputText::DoText()
 
 		for (int i = 0; i < text.length(); i++)
 		{
-			uint position_of_character = positionX + size_of_character * i;
+			uint position_of_character = positionX + 1 * i;
 
 			ComponentMesh* mesh = dynamic_cast<ComponentMesh*>(gmAtached->AddComponent(ComponentType::MESH));
 
@@ -267,7 +287,7 @@ void InputText::RecreateText(string new_Text, GameObject* gm, uint width, uint h
 
 		for (int i = 0; i < new_Text.length(); i++)
 		{
-			uint position_of_character = _posX + size_of_character * i;
+			uint position_of_character = _posX + 1 * i;
 
 			ComponentMesh* mesh = dynamic_cast<ComponentMesh*>(gm->AddComponent(ComponentType::MESH));
 

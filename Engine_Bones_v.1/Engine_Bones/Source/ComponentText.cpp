@@ -76,7 +76,17 @@ void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText
 			{
 				actText = newText;
 
-				RecreateText(actText, gm, width, heigth, _posX, _posY);
+				compUI->gmAtached->ChangeParent(app->scene->Root);
+
+				ComponentTransform* transform = nullptr;
+				transform = dynamic_cast<ComponentTransform*>(compUI->gmAtached->GetComponentGameObject(ComponentType::TRANSFORM));
+				transform->mPosition = { 0, 0, 0 };
+				transform->UpdateTransformation();
+
+				RecreateText(actText, compUI->gmAtached, compUI->widthPanel, compUI->heigthPanel, compUI->positionX, compUI->positionY);
+
+				transform->mPosition = { (float)compUI->AsRootPositionX, (float)compUI->AsRootPositionY, 0 };
+				transform->UpdateTransformation();
 
 				compUI->actualText = actText;
 				compUI->newText = actText;
@@ -197,7 +207,7 @@ void ComponentText::RecreateText(string new_Text, GameObject* gm, uint width, ui
 
 		for (int i = 0; i < new_Text.length(); i++)
 		{
-			uint position_of_character = _posX + size_of_character * i;
+			uint position_of_character = _posX + 1 * i;
 
 			ComponentMesh* mesh = dynamic_cast<ComponentMesh*>(gm->AddComponent(ComponentType::MESH));
 

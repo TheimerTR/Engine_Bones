@@ -330,6 +330,10 @@ void GameObject::DeleteChild(GameObject* gameObject)
 		{
 			app->scene->pause = nullptr;
 		}
+		if(gameObject == app->editor->Canvas)
+		{
+			app->editor->Canvas = nullptr;
+		}
 
 		gameObject->mParent->childrens.erase(find(childrens.begin(), childrens.end(), gameObject));
 		delete gameObject;

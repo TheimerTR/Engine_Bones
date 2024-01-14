@@ -146,6 +146,12 @@ bool ComponentUI::Update()
 
 	if (ui_Type == INPUT_TEXT)
 	{
+		ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+		if (actualText == "")
+		{
+			mat->SetTexture(texture);
+		}
+
 		InputText* inputText = (InputText*)this;
 		inputText->Update(this);
 	}
@@ -307,6 +313,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 			comp_UI = (ComponentUI*)(Image->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			ImageUI* img_UI = new ImageUI(type, Image, width, heigth, posX, posY, imagePath);
 			comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
+			comp_UI->gmAtached = Image;
 			comp_UI = (ComponentUI*)img_UI;
 
 			ComponentMaterial* mat = (ComponentMaterial*)(Image->AddComponent(ComponentType::MATERIAL));
@@ -447,13 +454,16 @@ bool ComponentUI::MouseIsInside(float2 mouse)
 {
 	bool ret = false;
 
-	if (app->renderer3D->cameraGame != nullptr && gmAtached->isActive)
+	if (gmAtached != nullptr)
 	{
-		if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < app->editor->GameWindowSize.x && mouse.y < app->editor->GameWindowSize.y)
+		if (app->renderer3D->cameraGame != nullptr && gmAtached->isActive)
 		{
-			if (mouse.x >= AsRootPositionX && mouse.x <= AsRootPositionX + AsRootWidthPanel && mouse.y >= AsRootPositionY && mouse.y <= AsRootPositionY + AsRootHeigthPanel)
+			if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < app->editor->GameWindowSize.x && mouse.y < app->editor->GameWindowSize.y)
 			{
-				ret = true;
+				if (mouse.x >= AsRootPositionX && mouse.x <= AsRootPositionX + AsRootWidthPanel && mouse.y >= AsRootPositionY && mouse.y <= AsRootPositionY + AsRootHeigthPanel)
+				{
+					ret = true;
+				}
 			}
 		}
 	}
