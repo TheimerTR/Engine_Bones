@@ -146,6 +146,12 @@ bool ComponentUI::Update()
 
 	if (ui_Type == INPUT_TEXT)
 	{
+		ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+		if (actualText == "")
+		{
+			mat->SetTexture(texture);
+		}
+
 		InputText* inputText = (InputText*)this;
 		inputText->Update(this);
 	}
@@ -303,6 +309,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 			comp_UI = (ComponentUI*)(Image->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
 			ImageUI* img_UI = new ImageUI(type, Image, width, heigth, posX, posY, imagePath);
 			comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
+			comp_UI->gmAtached = Image;
 			comp_UI = (ComponentUI*)img_UI;
 
 			ComponentMaterial* mat = (ComponentMaterial*)(Image->AddComponent(ComponentType::MATERIAL));
