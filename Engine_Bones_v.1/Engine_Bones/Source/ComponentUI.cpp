@@ -31,6 +31,8 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 	//Input Text
 	IsTextEditing = true;
 
+	isDragabble = false;
+
 	ui_Type = type;
 	actualMouseState = MouseState::IDLE_UI;
 
@@ -220,10 +222,12 @@ bool ComponentUI::Update()
 			{
 				ButtonUI* button = (ButtonUI*)this;
 				button->OnIdle(this);
+				isDragabble = false;
 			}
 			if (ui_Type == CHECKER) {
 				CheckerUI* checker = (CheckerUI*)this;
 				checker->OnIdle(this);
+				isDragabble = false;
 			}
 			break;
 		default:
@@ -503,25 +507,43 @@ void ComponentUI::CreatePanel(float3 vertex[], float3 transform, uint width, uin
 
 void ComponentUI::MoveComponent()
 {
-	ComponentTransform* transform = Owner->mTransform; 
+	ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Owner->GetComponentGameObject(ComponentType::TRANSFORM)); 
 
-	int dx = -app->input->GetMouseXMotion();
-	int dy = -app->input->GetMouseYMotion();
+	//int dx = -app->input->GetMouseXMotion();
+	//int dy = -app->input->GetMouseYMotion();
 
-	PlaneInScene->vertex[0] = float3(transform->mPosition.x + dx, transform->mPosition.y + heigthPanel + dy, transform->mPosition.z); 
-	PlaneInScene->vertex[1] = float3(transform->mPosition.x + widthPanel + dx, transform->mPosition.y + heigthPanel + dy, transform->mPosition.z); 
-	PlaneInScene->vertex[3] = float3(transform->mPosition.x + widthPanel +  dx, transform->mPosition.y + dy, transform->mPosition.z); 
-	PlaneInScene->vertex[2] = float3(transform->mPosition.x + dx, transform->mPosition.y + dy, transform->mPosition.z); 
+	float2 originPoint = float2(app->editor->mousePosInViewport.x, app->editor->mousePosInViewport.y);
 
-	positionX += dx; 
-	positionY += dy; 
+	float2 mouse_pos = float2(originPoint.x, originPoint.y);
 
-	PlaneInGame->vertex[0] = float3(positionX, positionY + heigthPanel, transform->mPosition.z); 
-	PlaneInGame->vertex[0] = float3(positionX + widthPanel, positionY + heigthPanel, transform->mPosition.z); 
-	PlaneInGame->vertex[0] = float3(positionX + widthPanel, positionY, transform->mPosition.z); 
-	PlaneInGame->vertex[0] = float3(positionX, positionY, transform->mPosition.z); 
+	//ComponentTransform* parent = Owner->mParent->mTransform;
 
-	RegenerateBuffers(PlaneInScene->buffer, PlaneInScene->vertex); 
-	RegenerateBuffers(PlaneInGame->buffer, PlaneInGame->vertex); 
-	
+	//float4x4 mouse_Matrix = { {1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {mouse_pos.x , mouse_pos.y, 0, 1} };
+
+	//float4x4 mouse_mGlobalMatrix = parent->mGlobalMatrix * mouse_Matrix;
+
+	//Owner->ChangeParent(app->scene->Root);
+	//transform->mPosition = { 0, 0, 0 };
+
+	transform->gPosition.x = mouse_pos.x;
+	transform->gPosition.y = mouse_pos.y;
+
+	//PlaneInScene->vertex[0] = float3(transform->mPosition.x + mouse_pos.x, transform->mPosition.y + heigthPanel + mouse_pos.y, transform->mPosition.z);
+	//PlaneInScene->vertex[1] = float3(transform->mPosition.x + widthPanel + mouse_pos.x, transform->mPosition.y + heigthPanel + mouse_pos.y, transform->mPosition.z);
+	//PlaneInScene->vertex[3] = float3(transform->mPosition.x + widthPanel + mouse_pos.x, transform->mPosition.y + mouse_pos.y, transform->mPosition.z);
+	//PlaneInScene->vertex[2] = float3(transform->mPosition.x + mouse_pos.x, transform->mPosition.y + mouse_pos.y, transform->mPosition.z);
+
+	positionX += mouse_pos.x;
+	positionY += mouse_pos.y;
+
+	//PlaneInGame->vertex[0] = float3(positionX, positionY + heigthPanel, transform->mPosition.z); 
+	//PlaneInGame->vertex[0] = float3(positionX + widthPanel, positionY + heigthPanel, transform->mPosition.z); 
+	//PlaneInGame->vertex[0] = float3(positionX + widthPanel, positionY, transform->mPosition.z); 
+	//PlaneInGame->vertex[0] = float3(positionX, positionY, transform->mPosition.z); 
+
+	//RegenerateBuffers(PlaneInScene->buffer, PlaneInScene->vertex); 
+	//RegenerateBuffers(PlaneInGame->buffer, PlaneInGame->vertex); 
+
+	//transform->mPosition = { (float)AsRootPositionX, (float)AsRootPositionY, 0 };
+	transform->UpdateTransformation();
 }

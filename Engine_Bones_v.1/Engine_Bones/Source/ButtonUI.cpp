@@ -36,7 +36,7 @@ bool ButtonUI::OnClicked()
 {
 
 	LOG(LogTypeCase::L_CASUAL, "CLICKING");
-	if(isDragabble)
+	if(app->scene->draggable)
 	{
 		MoveComponent();
 	}

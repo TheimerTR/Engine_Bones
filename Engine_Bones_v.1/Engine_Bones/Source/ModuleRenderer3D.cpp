@@ -229,7 +229,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 		if (objectUI != nullptr)
 		{
-			if (App->scene->AllGameObjectManagers[i]->mParent != App->editor->Canvas && App->scene->AllGameObjectManagers[i]->mParent != App->scene->pause)
+			if (App->scene->AllGameObjectManagers[i]->mParent != App->editor->Canvas && App->scene->AllGameObjectManagers[i]->mParent != App->scene->pause && !objectUI->isDragabble)
 			{
 				App->scene->AllGameObjectManagers[i]->ChangeParent(App->editor->Canvas);
 			}

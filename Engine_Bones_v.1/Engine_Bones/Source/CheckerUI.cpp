@@ -43,6 +43,12 @@ CheckerUI::~CheckerUI()
 
 bool CheckerUI::OnClicked()
 {
+	LOG(LogTypeCase::L_CASUAL, "CLICKING");
+	if (app->scene->draggable)
+	{
+		MoveComponent();
+	}
+
 	return true;
 }
 
