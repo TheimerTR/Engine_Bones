@@ -332,7 +332,7 @@ void ModuleScene::DemoScene()
 	//ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->scene->Root, 140, 70, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), "Assets/Textures/Button3.png");
 
 	//start_Button->Owner->ChangeParent(app->editor->Canvas);
-	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, 160, 40, 0, 0, "Assets/Textures/Unchecked-checkbox.png", nullptr, 0, 0, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel);
+	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, 160, 40, 0, 0, "Assets/Textures/Unchecked-checkbox.png", nullptr, 0, 0, 160, 40);
 	transform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
 	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 6)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 4)), 0 };
 	
