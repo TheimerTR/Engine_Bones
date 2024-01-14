@@ -43,21 +43,32 @@ CheckerUI::~CheckerUI()
 
 bool CheckerUI::OnClicked()
 {
-	if (!isDragabble && !isSelected)
-	{
-		color = float4(0.2, 0.2, 0.2, 0.2);
-		isSelected = true;
-	}
-
-	return isSelected;
+	return true;
 }
 
-bool CheckerUI::OnHover()
+bool CheckerUI::OnIdle(ComponentUI* UI_Element)
 {
-	if (!isDragabble && !isSelected)
-	{
-		color = float4(0.5, 0.5, 0.5, 0.5);
-	}
+	color = float4(1, 1, 1, 1);
+
+	/*	float col[4] = { 0.5, 0.5, 0.5, 0.5 };*/
+	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+	mat->colorTexture.r = 1;
+	mat->colorTexture.g = 1;
+	mat->colorTexture.b = 1;
+	mat->colorTexture.a = 1;
+
+	return false;
+}
+
+bool CheckerUI::OnHover(ComponentUI* UI_Element)
+{
+	color = float4(0.5, 0.5, 0.5, 0.5);
+
+	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+	mat->colorTexture.r = 0;
+	mat->colorTexture.g = 1;
+	mat->colorTexture.b = 0;
+	mat->colorTexture.a = 1;
 
 	return true;
 }

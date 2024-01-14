@@ -50,7 +50,8 @@ public:
 
 	bool OnClick(ComponentUI* UI_Element);
 
-	bool OnHover();
+	bool OnIdle(ComponentUI* UI_Element);
+	bool OnHover(ComponentUI* UI_Element);
 	bool OnClicked();
 
 	void ShowInfo(ComponentUI* UI_Element);

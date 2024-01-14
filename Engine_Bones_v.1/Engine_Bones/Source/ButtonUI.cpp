@@ -23,6 +23,8 @@ ButtonUI::ButtonUI(UI_Type type, GameObject* gameObject, uint width, uint heigt,
 
 	widthPanel = width;
 	heigthPanel = heigt;
+
+	isPressed = false;
 }
 
 ButtonUI::~ButtonUI()
@@ -42,18 +44,32 @@ bool ButtonUI::OnClicked()
 	return true;
 }
 
-bool ButtonUI::OnHover()
+bool ButtonUI::OnIdle(ComponentUI* UI_Element)
 {
-	//if(!isPressed)
-	////{
-	//	color = float4(0.5, 0.5, 0.5, 0.5);
+	color = float4(1, 1, 1, 1);
 
 	/*	float col[4] = { 0.5, 0.5, 0.5, 0.5 };*/
-	//ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
-	//mat->colorTexture.r = 0.5; 
-	//mat->colorTexture.g = 0.5; 
-	//mat->colorTexture.b = 0.5; 
-	//mat->colorTexture.a = 0.5; 
+	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+	mat->colorTexture.r = 1;
+	mat->colorTexture.g = 1;
+	mat->colorTexture.b = 1;
+	mat->colorTexture.a = 1;
+
+	return false;
+}
+
+bool ButtonUI::OnHover(ComponentUI* UI_Element)
+{
+	//if(!isPressed)
+	//{
+		color = float4(0.5, 0.5, 0.5, 0.5);
+
+		/*	float col[4] = { 0.5, 0.5, 0.5, 0.5 };*/
+		ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+		mat->colorTexture.r = 0; 
+		mat->colorTexture.g = 1; 
+		mat->colorTexture.b = 0; 
+		mat->colorTexture.a = 1; 
 	//}
 
 	return true;
@@ -215,7 +231,7 @@ void ButtonUI::CreatePauseMenu()
 
 	app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->ChangeParent(app->scene->pause);
 
-	CreateGameObjectUI(app->scene->Root, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, 0, 0, "Assets/Textures/Ckeck-checkedbox.png", nullptr, 0, "Assets/Textures/Unchecked-checkbox.png", (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 5), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5), app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8);
+	CreateGameObjectUI(app->scene->Root, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, 0, 0, "Assets/Textures/Ckeck-checkedbox.png", nullptr, 0, "Assets/Textures/Unchecked-checkbox.png", (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4.3), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5), app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8);
 	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
 	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4.3)), (float)((app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5)), 0 };
 	transform->UpdateTransformation();
@@ -229,7 +245,7 @@ void ButtonUI::CreatePauseMenu()
 
 	app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->ChangeParent(app->scene->pause);
 
-	CreateGameObjectUI(app->scene->Root, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, 0, 0, "Assets/Textures/Ckeck-checkedbox.png", nullptr, 1, "Assets/Textures/Unchecked-checkbox.png", (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 5), (app->editor->GameWindowSize.y / 2), app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8);
+	CreateGameObjectUI(app->scene->Root, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, 0, 0, "Assets/Textures/Ckeck-checkedbox.png", nullptr, 1, "Assets/Textures/Unchecked-checkbox.png", (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4.3), (app->editor->GameWindowSize.y / 2), app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8);
 	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
 	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4.3)), (float)((app->editor->GameWindowSize.y / 2)), 0 };
 	transform->UpdateTransformation();

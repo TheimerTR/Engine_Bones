@@ -161,11 +161,24 @@ bool ComponentUI::Update()
 		switch (actualMouseState)
 		{
 		case IDLE_UI:
+			if (ui_Type == BUTTON) {
+				ButtonUI* button = (ButtonUI*)this;
+				button->OnIdle(this);
+			}
+			break;
+			if (ui_Type == CHECKER) {
+				CheckerUI* checker = (CheckerUI*)this;
+				checker->OnIdle(this);
+			}
 			break;
 		case HOVER_UI:
 			if (ui_Type == BUTTON) {
 				ButtonUI* button = (ButtonUI*)this;
-				button->OnHover();
+				button->OnHover(this);
+			}
+			if (ui_Type == CHECKER) {
+				CheckerUI* checker = (CheckerUI*)this;
+				checker->OnHover(this);
 			}
 			break;
 		case CLICK_UI:
@@ -203,6 +216,15 @@ bool ComponentUI::Update()
 			}
 			break;
 		case CLICKED_RELEASED_UI:
+			if (ui_Type == BUTTON) 
+			{
+				ButtonUI* button = (ButtonUI*)this;
+				button->OnIdle(this);
+			}
+			if (ui_Type == CHECKER) {
+				CheckerUI* checker = (CheckerUI*)this;
+				checker->OnIdle(this);
+			}
 			break;
 		default:
 			break;

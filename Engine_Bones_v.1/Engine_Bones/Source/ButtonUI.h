@@ -33,7 +33,7 @@ public:
 	uint widthPanel;
 	uint heigthPanel;
 
-	bool isPressed = false;
+	bool isPressed;
 
 	functions actualFunction;
 
@@ -43,7 +43,8 @@ public:
 
 	bool OnClick(int* action);
 
-	bool OnHover();
+	bool OnIdle(ComponentUI* UI_Element);
+	bool OnHover(ComponentUI* UI_Element);
 	bool OnClicked();
 
 	void ShowInfo(int* action);
