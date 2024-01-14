@@ -465,3 +465,17 @@ void ComponentUI::CreatePanel(float3 vertex[], float3 transform, uint width, uin
 	vertex[3] = float3(transform.x + 1, transform.y, transform.z);
 	vertex[2] = float3(transform.x, transform.y, transform.z);
 }
+
+void ComponentUI::MoveComponent()
+{
+	ComponentTransform* transform = Owner->mTransform; 
+
+	int dx = -app->input->GetMouseXMotion();
+	int dy = -app->input->GetMouseYMotion();
+
+	PlaneInScene->vertex[0] = float3(transform->mPosition.x + dx, transform->mPosition.y + heigthPanel + dy, transform->mPosition.z); 
+	PlaneInScene->vertex[0] = float3(transform->mPosition.x + widthPanel + dx, transform->mPosition.y + heigthPanel + dy, transform->mPosition.z); 
+	PlaneInScene->vertex[0] = float3(transform->mPosition.x + widthPanel +  dx, transform->mPosition.y + dy, transform->mPosition.z); 
+	PlaneInScene->vertex[0] = float3(transform->mPosition.x + dx, transform->mPosition.y + dy, transform->mPosition.z); 
+
+}

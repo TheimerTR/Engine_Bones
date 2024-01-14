@@ -108,6 +108,8 @@ public:
 	bool Update() override;
 	void Disable() override;
 
+	void MoveComponent(); 
+
 	ComponentUI* CreateGameObjectUI(GameObject* gm, UI_Type type = UI_Type::DEF, uint width = 20, uint heigth = 20, uint posX = 0, uint posY = 0, const char* imagePath = nullptr, const char* text = "Text", int buttonFuntion = 1, const char* imagePathDisabled = nullptr, uint OrinigalPosX = 0, uint OrinigalPosY = 0, uint OrinigalWidth = 0, uint Orinigalheight = 0);
 
 private:

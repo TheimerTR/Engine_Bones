@@ -32,13 +32,14 @@ ButtonUI::~ButtonUI()
 
 bool ButtonUI::OnClicked()
 {
-	if(!isDragabble && !isPressed)
+
+	LOG(LogTypeCase::L_CASUAL, "CLICKING");
+	if(isDragabble)
 	{
-		color = float4(0.2, 0.2, 0.2, 0.2);
-		isPressed = true;
+		MoveComponent();
 	}
 
-	return isPressed;
+	return true;
 }
 
 bool ButtonUI::OnHover()
