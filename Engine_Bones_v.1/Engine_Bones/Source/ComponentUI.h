@@ -91,6 +91,8 @@ public:
 	//Input Text
 	bool IsTextEditing;
 
+	bool isChildOfText;
+
 public:
 	ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
 	~ComponentUI();

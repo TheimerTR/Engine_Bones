@@ -352,6 +352,18 @@ void ModuleScene::OpenPauseMenu()
 	{
 		pause->childrens[i]->isActive = openPauseMenu;
 
+		if(pause->childrens[i]->childrens.size() > 0)
+		{
+			for(int j = 0; j < pause->childrens[i]->childrens.size(); j++)
+			{
+				pause->childrens[i]->childrens[j]->isActive = openPauseMenu;
+
+				ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(pause->childrens[i]->childrens[j]->GetComponentGameObject(ComponentType::MATERIAL));
+
+				mat->colorTexture.a = 100;
+			}
+		}
+
 		ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(pause->childrens[i]->GetComponentGameObject(ComponentType::MATERIAL));
 
 		mat->colorTexture.a = 100;
