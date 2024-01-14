@@ -152,11 +152,21 @@ void InputText::ShowInfo(ComponentUI* compUI, string actText, string newText, Ga
 
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
-				app->input->ReadInput(newText);
+				//app->input->ReadInput(newText);
 
 				actText = newText;
 
+				compUI->gmAtached->ChangeParent(app->scene->Root);
+
+				ComponentTransform* transform = nullptr;
+				transform = dynamic_cast<ComponentTransform*>(compUI->gmAtached->GetComponentGameObject(ComponentType::TRANSFORM));
+				transform->mPosition = { 0, 0, 0 };
+				transform->UpdateTransformation();
+
 				RecreateText(actText, gm, width, heigth, _posX, _posY);
+
+				transform->mPosition = { (float)compUI->AsRootPositionX, (float)compUI->AsRootPositionY, 0 };
+				transform->UpdateTransformation();
 
 				compUI->actualText = actText;
 				compUI->newText = actText;

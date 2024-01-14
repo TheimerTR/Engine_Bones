@@ -444,13 +444,16 @@ bool ComponentUI::MouseIsInside(float2 mouse)
 {
 	bool ret = false;
 
-	if (app->renderer3D->cameraGame != nullptr && gmAtached->isActive)
+	if (gmAtached != nullptr)
 	{
-		if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < app->editor->GameWindowSize.x && mouse.y < app->editor->GameWindowSize.y)
+		if (app->renderer3D->cameraGame != nullptr && gmAtached->isActive)
 		{
-			if (mouse.x >= AsRootPositionX && mouse.x <= AsRootPositionX + AsRootWidthPanel && mouse.y >= AsRootPositionY && mouse.y <= AsRootPositionY + AsRootHeigthPanel)
+			if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < app->editor->GameWindowSize.x && mouse.y < app->editor->GameWindowSize.y)
 			{
-				ret = true;
+				if (mouse.x >= AsRootPositionX && mouse.x <= AsRootPositionX + AsRootWidthPanel && mouse.y >= AsRootPositionY && mouse.y <= AsRootPositionY + AsRootHeigthPanel)
+				{
+					ret = true;
+				}
 			}
 		}
 	}
