@@ -112,8 +112,8 @@ update_status ModuleScene::Update(float dt)
 				}
 
 				ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(AllInteractuableUI[actual_UI_Object]->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
-				mat->colorTexture.r = 1;
-				mat->colorTexture.g = 0.7;
+				mat->colorTexture.r = 0;
+				mat->colorTexture.g = 1;
 				mat->colorTexture.b = 0;
 				mat->colorTexture.a = 1;
 			}
@@ -314,17 +314,17 @@ void ModuleScene::DemoScene()
 
 	CanvasUI* canv_UI = new CanvasUI(App->editor->Canvas, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0);
 
-	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::TEXT, 20, 20, 0, 0, nullptr, "START", 1, nullptr, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), 20, 20);
+	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::TEXT, 25, 25, 0, 0, nullptr, "START", 1, nullptr, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), 20, 20);
 	transform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
-	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20)), 0 };
+	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 8)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 9)), 0 };
 
 	//ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->scene->Root, 80, 40, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 12), nullptr);
 
 	//start_Text->Owner->ChangeParent(app->editor->Canvas);
 
-	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::BUTTON, 140, 70, 0, 0, "Assets/Textures/Button3.png", nullptr, 0, nullptr, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), 140, 70);
+	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::BUTTON, 160, 80, 0, 0, "Assets/Textures/Button3.png", nullptr, 0, nullptr, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 6), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), 160, 80);
 	transform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
-	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20)), 0 };
+	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 6)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20)), 0 };
 	//ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->scene->Root, 140, 70, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), "Assets/Textures/Button3.png");
 
 	//start_Button->Owner->ChangeParent(app->editor->Canvas);
@@ -366,6 +366,7 @@ void ModuleScene::RestartScene()
 	}
 
 	App->editor->actualMesh = nullptr;
+	app->scene->AllInteractuableUI.clear();
 
 	DemoScene();
 	pause = new GameObject("Pause", App->editor->Canvas);
