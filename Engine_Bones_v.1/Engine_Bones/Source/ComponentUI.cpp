@@ -27,12 +27,18 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 
 	//Checker
 	CheckSelected = false;
+	active = new Texture();
+	Importer::ImporterTexture::Load(active, "Assets/Textures/Ckeck-checkedbox.png");
+
+	disabled = new Texture();
+	Importer::ImporterTexture::Load(disabled, "Assets/Textures/Unchecked-checkbox.png");
 
 	//Input Text
-	IsTextEditing = true;
+	IsTextEditing = false;
 
 	isDragabble = false;
 	isChildOfText = false;
+	isSelected = false;
 
 	ui_Type = type;
 	actualMouseState = MouseState::IDLE_UI;
@@ -327,8 +333,8 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 			comp_UI->positionY = check_UI.positionY;
 			comp_UI->widthPanel = check_UI.widthPanel;
 			comp_UI->heigthPanel = check_UI.heigthPanel;
-			comp_UI->active = check_UI.textureActive;
-			comp_UI->disabled = check_UI.textureDisabled;
+			//comp_UI->active = check_UI.textureActive;
+			//comp_UI->disabled = check_UI.textureDisabled;
 
 			ComponentMaterial* mat = (ComponentMaterial*)(Checker->AddComponent(ComponentType::MATERIAL));
 			mat->colorTexture.r = 255;

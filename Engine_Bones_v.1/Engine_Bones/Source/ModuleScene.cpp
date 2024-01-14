@@ -98,6 +98,7 @@ update_status ModuleScene::Update(float dt)
 				mat->colorTexture.g = 1;
 				mat->colorTexture.b = 1;
 				mat->colorTexture.a = 1;
+				AllInteractuableUI[j]->isSelected = false;
 			}
 
 			if (GameTime.running && !GameTime.paused)
@@ -116,6 +117,7 @@ update_status ModuleScene::Update(float dt)
 				mat->colorTexture.g = 1;
 				mat->colorTexture.b = 0;
 				mat->colorTexture.a = 1;
+				AllInteractuableUI[actual_UI_Object]->isSelected = true;
 			}
 		}
 	}

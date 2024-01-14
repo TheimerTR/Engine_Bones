@@ -40,14 +40,17 @@ bool ButtonUI::OnClicked()
 
 bool ButtonUI::OnIdle(ComponentUI* UI_Element)
 {
-	color = float4(1, 1, 1, 1);
+	if (!UI_Element->isSelected)
+	{
+		color = float4(1, 1, 1, 1);
 
-	/*	float col[4] = { 0.5, 0.5, 0.5, 0.5 };*/
-	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
-	mat->colorTexture.r = 1;
-	mat->colorTexture.g = 1;
-	mat->colorTexture.b = 1;
-	mat->colorTexture.a = 1;
+		/*	float col[4] = { 0.5, 0.5, 0.5, 0.5 };*/
+		ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+		mat->colorTexture.r = 1;
+		mat->colorTexture.g = 1;
+		mat->colorTexture.b = 1;
+		mat->colorTexture.a = 1;
+	}
 
 	return false;
 }

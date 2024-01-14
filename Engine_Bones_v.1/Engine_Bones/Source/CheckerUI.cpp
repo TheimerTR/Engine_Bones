@@ -23,7 +23,7 @@ CheckerUI::CheckerUI(UI_Type type, GameObject* gameObject, uint width, uint heig
 	widthPanel = width;
 	heigthPanel = heigt;
 
-	if (textureActive != nullptr)
+	/*if (textureActive != nullptr)
 	{
 		textureActive = new Texture();
 		Importer::ImporterTexture::Load(textureActive, imagePathActive);
@@ -33,7 +33,7 @@ CheckerUI::CheckerUI(UI_Type type, GameObject* gameObject, uint width, uint heig
 	{
 		textureDisabled = new Texture();
 		Importer::ImporterTexture::Load(textureDisabled, imagePathDisabled);
-	}
+	}*/
 }
 
 CheckerUI::~CheckerUI()
@@ -49,14 +49,17 @@ bool CheckerUI::OnClicked()
 
 bool CheckerUI::OnIdle(ComponentUI* UI_Element)
 {
-	color = float4(1, 1, 1, 1);
+	if (!UI_Element->isSelected)
+	{
+		color = float4(1, 1, 1, 1);
 
-	/*	float col[4] = { 0.5, 0.5, 0.5, 0.5 };*/
-	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
-	mat->colorTexture.r = 1;
-	mat->colorTexture.g = 1;
-	mat->colorTexture.b = 1;
-	mat->colorTexture.a = 1;
+		/*	float col[4] = { 0.5, 0.5, 0.5, 0.5 };*/
+		ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
+		mat->colorTexture.r = 1;
+		mat->colorTexture.g = 1;
+		mat->colorTexture.b = 1;
+		mat->colorTexture.a = 1;
+	}
 
 	return false;
 }
@@ -121,7 +124,7 @@ void CheckerUI::ShowInfo(ComponentUI* UI_Element)
 
 		ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(UI_Element->gmAtached->GetComponentGameObject(ComponentType::MATERIAL));
 
-		if (texture != nullptr)
+		if (UI_Element->active != nullptr && UI_Element->disabled != nullptr)
 		{
 			ImGui::Image((void*)texture->TextureID, ImVec2(texture->imageWidth, texture->imageHeight));
 			ImGui::Text("Texture path: %s", texture->path);
