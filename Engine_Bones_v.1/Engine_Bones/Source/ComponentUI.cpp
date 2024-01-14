@@ -26,7 +26,7 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 	actualButtonAction = 1;
 
 	//Checker
-	CheckSelected = true;
+	CheckSelected = false;
 
 	//Input Text
 	IsTextEditing = true;
@@ -321,7 +321,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* gm, UI_Type type, uint 
 		{
 			GameObject* Checker = new GameObject("Checker", gm);
 			ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Checker->GetComponentGameObject(ComponentType::TRANSFORM));
-			comp_UI = dynamic_cast<ComponentUI*>(Checker->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePath));
+			comp_UI = dynamic_cast<ComponentUI*>(Checker->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePathDisabled));
 			CheckerUI check_UI = CheckerUI(type, Checker, width, heigth, posX, posY, imagePath, imagePathDisabled);
 			comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
 			comp_UI->actualChecker = (_functions)buttonFuntion;

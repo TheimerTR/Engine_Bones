@@ -28,6 +28,7 @@ CheckerUI::CheckerUI(UI_Type type, GameObject* gameObject, uint width, uint heig
 		textureActive = new Texture();
 		Importer::ImporterTexture::Load(textureActive, imagePathActive);
 	}
+
 	if (textureDisabled != nullptr)
 	{
 		textureDisabled = new Texture();
