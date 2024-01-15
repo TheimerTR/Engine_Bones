@@ -56,7 +56,8 @@ Makes it possible to start, stop and pause a simulation.
 
 Engine Bones has a UI implementation based on the Unity system that uses a canvas to place the UI elements. It allows the creation of customizable buttons, input texts, chechers, text and images, which can be moved and rescaled with the guizmos in the editor window and with a drag in the game window. 
 
-UI customizable basada en el sistema de unity que utiliza un canvas para colocar la ui. Permite la creación de botones, Input Texts, checkers, texto e imagenes, pudiendose mover y adaptar con los guizmos en la pantalla de editor y utilizar un drag en la pantalla de game 
+![gif1](https://github.com/TheimerTR/Engine_Bones/assets/99950351/9bcd8783-e945-4b05-a592-0a4145fab40a)
+![gif2](https://github.com/TheimerTR/Engine_Bones/assets/99950351/4081de75-906f-45fb-a45f-f992880613f6)
 
 
 
