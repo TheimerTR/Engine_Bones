@@ -138,7 +138,7 @@ void ComponentUI::Enable()
 
 bool ComponentUI::Update()
 {
-	float2 mouse = MousePicker();
+	MousePicker();
 
 	if (ui_Type == INPUT_TEXT)
 	{
@@ -180,14 +180,6 @@ bool ComponentUI::Update()
 		case CLICK_UI:
 			if (ui_Type == INPUT_TEXT)
 			{
-				if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < app->editor->GameWindowSize.x && mouse.y < app->editor->GameWindowSize.y)
-				{
-					if (mouse.x <= AsRootPositionX || mouse.x >= AsRootPositionX + AsRootWidthPanel || mouse.y <= AsRootPositionY || mouse.y >= AsRootPositionY + AsRootHeigthPanel)
-					{
-						IsTextEditing = false;
-					}
-				}
-
 				InputText* inputText = (InputText*)this;
 				inputText->OnClick(this);
 			}
@@ -431,7 +423,7 @@ void ComponentUI::RegenerateBuffers(uint buffer[], float3 vertex[]) {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * 4, vertex, GL_STATIC_DRAW);
 }
 
-float2 ComponentUI::MousePicker()
+void ComponentUI::MousePicker()
 {
 	float2 originPoint = float2(app->editor->mousePosInViewport.x, app->editor->mousePosInViewport.y);
 
@@ -467,8 +459,6 @@ float2 ComponentUI::MousePicker()
 		actualMouseState = IDLE_UI;
 		break;
 	}
-
-	return mouse_pos;
 }
 
 bool ComponentUI::MouseIsInside(float2 mouse)
@@ -484,6 +474,17 @@ bool ComponentUI::MouseIsInside(float2 mouse)
 				if (mouse.x >= AsRootPositionX && mouse.x <= AsRootPositionX + AsRootWidthPanel && mouse.y >= AsRootPositionY && mouse.y <= AsRootPositionY + AsRootHeigthPanel)
 				{
 					ret = true;
+				}
+			}
+		}
+
+		if(ui_Type == INPUT_TEXT)
+		{
+			if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < app->editor->GameWindowSize.x && mouse.y < app->editor->GameWindowSize.y)
+			{
+				if (mouse.x <= AsRootPositionX || mouse.x >= AsRootPositionX + AsRootWidthPanel || mouse.y <= AsRootPositionY || mouse.y >= AsRootPositionY + AsRootHeigthPanel)
+				{
+					IsTextEditing = false;
 				}
 			}
 		}
