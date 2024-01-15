@@ -29,7 +29,6 @@ ButtonUI::ButtonUI(UI_Type type, GameObject* gameObject, uint width, uint heigt,
 
 ButtonUI::~ButtonUI()
 {
-
 }
 
 bool ButtonUI::OnClicked()
@@ -191,6 +190,7 @@ void ButtonUI::PassScene()
 	}
 
 	app->scene->AllInteractuableUI.clear();
+	app->scene->All_UI.clear();
 
 	/*for (int i = 0; i < objectsUI.size(); i++)
 	{
@@ -255,7 +255,7 @@ void ButtonUI::CreatePauseMenu()
 
 	GameObject* gm4 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
 
-	comp_UI = CreateGameObjectUI(app->scene->Root, TEXT, app->editor->GameWindowSize.x / 20, app->editor->GameWindowSize.y / 10, 0, 0, nullptr, "DRAGABLE", 1, nullptr);
+	comp_UI = CreateGameObjectUI(app->scene->Root, TEXT, app->editor->GameWindowSize.x / 20, app->editor->GameWindowSize.y / 10, 0, 0, nullptr, "DRAGABLE", 1, nullptr, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 10), (app->editor->GameWindowSize.y / 1.95), app->editor->GameWindowSize.x / 20, app->editor->GameWindowSize.y / 10);
 	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
 	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 10)), (float)((app->editor->GameWindowSize.y / 1.95)), 0 };
 	transform->UpdateTransformation();

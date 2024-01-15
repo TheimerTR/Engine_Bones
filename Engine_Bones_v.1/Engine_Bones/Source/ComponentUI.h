@@ -93,6 +93,7 @@ public:
 
 	bool isChildOfText;
 	bool isSelected;
+	bool isBeeingClicked;
 
 public:
 	ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
@@ -102,7 +103,7 @@ public:
 	bool MouseIsInside(float2 mouse);
 	Texture* GetTexture();
 	
-	void MousePicker();
+	float2 MousePicker();
 
 	void CreatePanel(float3 vertex[], float3 transform, uint width, uint heigth);
 	void GenerateBuffers(uint buffer[], float3 vertex[], float2 uv[]);

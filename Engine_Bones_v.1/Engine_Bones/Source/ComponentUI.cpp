@@ -39,6 +39,7 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 	isDragabble = false;
 	isChildOfText = false;
 	isSelected = false;
+	isBeeingClicked = false;
 
 	ui_Type = type;
 	actualMouseState = MouseState::IDLE_UI;
@@ -102,7 +103,22 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 
 ComponentUI::~ComponentUI()
 {
+	delete texture;
 	texture = nullptr;
+	
+	delete InputTextComp;
+	InputTextComp = nullptr;
+
+	font = nullptr;
+
+	active = nullptr;
+
+	disabled = nullptr;
+
+	PlaneInScene = nullptr;
+	PlaneInGame = nullptr;
+
+	gmAtached = nullptr;
 }
 
 void ComponentUI::SetTexture(Texture* T_Texture)
@@ -122,7 +138,7 @@ void ComponentUI::Enable()
 
 bool ComponentUI::Update()
 {
-	MousePicker();
+	float2 mouse = MousePicker();
 
 	if (ui_Type == INPUT_TEXT)
 	{
@@ -162,6 +178,19 @@ bool ComponentUI::Update()
 			}
 			break;
 		case CLICK_UI:
+			if (ui_Type == INPUT_TEXT)
+			{
+				if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < app->editor->GameWindowSize.x && mouse.y < app->editor->GameWindowSize.y)
+				{
+					if (mouse.x <= AsRootPositionX || mouse.x >= AsRootPositionX + AsRootWidthPanel || mouse.y <= AsRootPositionY || mouse.y >= AsRootPositionY + AsRootHeigthPanel)
+					{
+						IsTextEditing = false;
+					}
+				}
+
+				InputText* inputText = (InputText*)this;
+				inputText->OnClick(this);
+			}
 			if (ui_Type == BUTTON)
 			{
 				ButtonUI* button = (ButtonUI*)this;
@@ -172,11 +201,6 @@ bool ComponentUI::Update()
 				CheckerUI* checker = (CheckerUI*)this;
 				checker->OnClick(this);
 			}
-			if (ui_Type == INPUT_TEXT)
-			{
-				InputText* inputText = (InputText*)this;
-				inputText->OnClick(this);
-			}
 			break;
 		case CLICKED_UI:
 			if(app->scene->draggable)
@@ -185,6 +209,8 @@ bool ComponentUI::Update()
 			}
 			break;
 		case CLICKED_RELEASED_UI:
+			this->isBeeingClicked = false;
+
 			if (ui_Type == BUTTON) 
 			{
 				ButtonUI* button = (ButtonUI*)this;
@@ -405,7 +431,7 @@ void ComponentUI::RegenerateBuffers(uint buffer[], float3 vertex[]) {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * 4, vertex, GL_STATIC_DRAW);
 }
 
-void ComponentUI::MousePicker()
+float2 ComponentUI::MousePicker()
 {
 	float2 originPoint = float2(app->editor->mousePosInViewport.x, app->editor->mousePosInViewport.y);
 
@@ -441,6 +467,8 @@ void ComponentUI::MousePicker()
 		actualMouseState = IDLE_UI;
 		break;
 	}
+
+	return mouse_pos;
 }
 
 bool ComponentUI::MouseIsInside(float2 mouse)
@@ -482,23 +510,43 @@ void ComponentUI::MoveComponent()
 	{
 		ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Owner->GetComponentGameObject(ComponentType::TRANSFORM));
 
+		float3 gPos;
+		float3 gSca;
+		Quat gRot;
+
+		transform->mGlobalMatrix.Decompose(gPos, gRot, gSca);
+
+		float distx = mouse_pos.x - gPos.x;
+		float disty = mouse_pos.y - gPos.y;
+
+		ComponentUI* comp_UI = this;
+
 		int dx = app->input->GetMouseXMotion();
 		int dy = app->input->GetMouseYMotion();
-
-		float2 originPoint = float2(app->editor->mousePosInViewport.x, app->editor->mousePosInViewport.y);
-
-		float2 mouse_pos = float2(originPoint.x, originPoint.y);
 
 		transform->mPosition.x += dx * 0.001;
 		transform->mPosition.y += dy * 0.001;
 		transform->mPosition.z = 0;
 
-		AsRootPositionX += dx * 0.001;
-		AsRootPositionY += dy * 0.001;
+		if (comp_UI->Owner->childrens.size() > 0)
+		{
+			comp_UI->AsRootPositionX += dx * 0.00001;
+			comp_UI->AsRootPositionY += dy * 0.00001;
 
-		positionX += dx * 0.001;
-		positionY += dy * 0.001;
+			comp_UI->positionX += dx * 0.001;
+			comp_UI->positionY += dy * 0.001;
+		}
+
+		if (comp_UI->Owner->childrens.size() == 0)
+		{
+			comp_UI->AsRootPositionX += dx * 1;
+			comp_UI->AsRootPositionY += dy * 1;
+
+			comp_UI->positionX += dx * 0.001;
+			comp_UI->positionY += dy * 0.001;
+		}
 
 		transform->UpdateTransformation();
+		
 	}
 }

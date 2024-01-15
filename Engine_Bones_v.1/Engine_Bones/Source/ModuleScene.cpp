@@ -338,7 +338,7 @@ void ModuleScene::DemoScene()
 	transform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
 	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 6)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 4)), 0 };
 	
-	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png", nullptr, 1, nullptr, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0);
+	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png", nullptr, 1, nullptr, 0, 0, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel);
 	
 	//ComponentUI* background_Img = new ComponentUI(UI_Type::DEF, App->scene->Root, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png");
 
@@ -388,6 +388,7 @@ void ModuleScene::RestartScene()
 
 	App->editor->actualMesh = nullptr;
 	app->scene->AllInteractuableUI.clear();
+	app->scene->All_UI.clear();
 
 	DemoScene();
 	pause = new GameObject("Pause", App->editor->Canvas);

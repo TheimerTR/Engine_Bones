@@ -26,8 +26,11 @@ ImageUI::ImageUI(UI_Type type, GameObject* gameObject, uint width, uint heigt, u
 
 ImageUI::~ImageUI()
 {
-
+	gmAtached = nullptr;
+	delete image_Path;
+	image_Path = nullptr;
 }
+
 void ImageUI::ShowInfo()
 {
 	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(gmAtached->GetComponentGameObject(ComponentType::MATERIAL));

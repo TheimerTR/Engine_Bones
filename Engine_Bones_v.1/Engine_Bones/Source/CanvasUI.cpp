@@ -34,7 +34,9 @@ CanvasUI::CanvasUI(GameObject* gameObject, float width, float heigth, uint PosX,
 
 CanvasUI::~CanvasUI()
 {
+	gmAtached = nullptr;
 
+	comp_transform = nullptr;
 }
 
 void CanvasUI::Enable()

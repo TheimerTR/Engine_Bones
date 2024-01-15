@@ -45,7 +45,8 @@ ComponentText::ComponentText(UI_Type type, GameObject* gameObject, uint width, u
 
 ComponentText::~ComponentText()
 {
-
+	gmAtached = nullptr;
+	font = nullptr;
 }
 
 void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText, GameObject* gm, FONTS* actFont, uint width, uint heigth, uint _posX, uint _posY)

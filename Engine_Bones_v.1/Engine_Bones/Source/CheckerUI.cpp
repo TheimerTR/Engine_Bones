@@ -38,7 +38,7 @@ CheckerUI::CheckerUI(UI_Type type, GameObject* gameObject, uint width, uint heig
 
 CheckerUI::~CheckerUI()
 {
-
+	gmAtached = nullptr;
 }
 
 bool CheckerUI::OnClicked()
