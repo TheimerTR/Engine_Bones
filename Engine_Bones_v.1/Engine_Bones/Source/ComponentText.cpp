@@ -138,15 +138,15 @@ void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText
 					{
 					case (int)FONTS::ARIAL:
 						*actFont = ARIAL;
-						ui->font = app->font->FontLoader(120, "./Assets/Fonts/Arial.ttf");
+						ui->font = app->font->FontLoader(128, "./Assets/Fonts/Arial.ttf");
 						break;
 					case (int)FONTS::ROBOTO:
 						*actFont = ROBOTO;
-						ui->font = app->font->FontLoader(120, "./Assets/Fonts/Roboto.ttf");
+						ui->font = app->font->FontLoader(128, "./Assets/Fonts/Roboto.ttf");
 						break;
 					case (int)FONTS::ELIANTO:
 						*actFont = ELIANTO;
-						ui->font = app->font->FontLoader(120, "./Assets/Fonts/Elianto.otf");
+						ui->font = app->font->FontLoader(128, "./Assets/Fonts/Elianto.otf");
 						break;
 					default:
 						break;
