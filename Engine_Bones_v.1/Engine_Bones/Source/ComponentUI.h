@@ -103,7 +103,7 @@ public:
 	bool MouseIsInside(float2 mouse);
 	Texture* GetTexture();
 	
-	float2 MousePicker();
+	void MousePicker();
 
 	void CreatePanel(float3 vertex[], float3 transform, uint width, uint heigth);
 	void GenerateBuffers(uint buffer[], float3 vertex[], float2 uv[]);
