@@ -67,8 +67,8 @@ bool ModuleEditor::Init()
 	AssetWindow = true;
 	isMovingParent = false;
 	isMovingChild = false;
-	RGB_Mode = true;
-	RGB = true;
+	RGB_Mode = false;
+	RGB = false;
 	PauseAndPlayWindow = true;
 	isRunning = false;
 	aabbDraw = true;
