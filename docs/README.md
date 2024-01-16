@@ -59,7 +59,8 @@ Engine Bones has a UI implementation based on the Unity system that uses a canva
 ![gif1](https://raw.githubusercontent.com/TheimerTR/Engine_Bones/main/docs/images/gif1.gif)
 ![gif2](https://raw.githubusercontent.com/TheimerTR/Engine_Bones/main/docs/images/gif2.gif)
 
-<video scr="(https://github.com/TheimerTR/Engine_Bones/assets/99950351/edd6eff5-8571-4bf0-a159-be90b17dabf2.mp4"></video>
+[![Watch the video]([https://i3.ytimg.com/vi/PWlJe6fUvys/maxresdefault.jpg](https://i3.ytimg.com/vi/PWlJe6fUvys/maxresdefault.jpg))](https://www.youtube.com/watch?v=PWlJe6fUvys)
+
 
 
 
