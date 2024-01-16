@@ -17,6 +17,7 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 	draggable = false;
 	restartScene = false;
 	isRescaleUI = false;
+	isFading = false;
 
 	actual_UI_Object = 0;
 
@@ -51,6 +52,15 @@ update_status ModuleScene::Update(float dt)
 			DemoScene();
 			pause = new GameObject("Pause", App->editor->Canvas);
 			Demo = false;
+		}
+	}
+
+	if(isFading)
+	{
+		if(FadeToBlack(dt))
+		{
+			PassScene();
+			isFading = false;
 		}
 	}
 
@@ -310,9 +320,9 @@ void ModuleScene::DemoScene()
 
 	ComponentUI* comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, 0, 0, 0, 0, nullptr);
 	ComponentTransform* transform;
+	ComponentMaterial* mat = nullptr;
 
 	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::CANV, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
-	//ComponentUI* canv_Comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0, nullptr);
 
 	CanvasUI* canv_UI = new CanvasUI(App->editor->Canvas, app->editor->GameWindowSize.x, app->editor->GameWindowSize.y, 0, 0);
 
@@ -320,29 +330,54 @@ void ModuleScene::DemoScene()
 	transform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
 	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 8)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 9)), 0 };
 	
+	mat = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
+
+	if (mat != nullptr)
+	{
+		mat->colorTexture.a = 1;
+	}
+
 	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::INPUT_TEXT, 20, 20, 0, 0, "Assets/Textures/Input_Text_Empty.png", "", 1, nullptr, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 10), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 3.6), 160, 80);
 	transform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
 	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 10)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 3.6)), 0 };
 
-	//ComponentUI* start_Text = new ComponentUI(UI_Type::DEF, App->scene->Root, 80, 40, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 12), nullptr);
+	mat = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
 
-	//start_Text->Owner->ChangeParent(app->editor->Canvas);
+	if (mat != nullptr)
+	{
+		mat->colorTexture.a = 1;
+	}
 
 	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::BUTTON, 160, 80, 0, 0, "Assets/Textures/Button3.png", nullptr, 0, nullptr, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 6), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), 160, 80);
 	transform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
 	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 6)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20)), 0 };
-	//ComponentUI* start_Button = new ComponentUI(UI_Type::DEF, App->scene->Root, 140, 70, (canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 4.9), (canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 20), "Assets/Textures/Button3.png");
 
-	//start_Button->Owner->ChangeParent(app->editor->Canvas);
+	mat = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
+
+	if (mat != nullptr)
+	{
+		mat->colorTexture.a = 1;
+	}
+
 	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, 160, 40, 0, 0, "Assets/Textures/Unchecked-checkbox.png", nullptr, 0, 0, 160, 40);
 	transform = dynamic_cast<ComponentTransform*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
 	transform->mPosition = { (float)((canv_UI->widthPanel / 2) - (canv_UI->widthPanel / 6)), (float)((canv_UI->heigthPanel / 2) + (canv_UI->heigthPanel / 4)), 0 };
 	
+	mat = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
+
+	if (mat != nullptr)
+	{
+		mat->colorTexture.a = 1;
+	}
+
 	comp_UI->CreateGameObjectUI(App->scene->Root, UI_Type::IMAGE, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png", nullptr, 1, nullptr, 0, 0, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel);
 	
-	//ComponentUI* background_Img = new ComponentUI(UI_Type::DEF, App->scene->Root, (uint)canv_UI->widthPanel, (uint)canv_UI->heigthPanel, 0, 0, "Assets/Textures/TheStreetHouse.png");
+	mat = dynamic_cast<ComponentMaterial*>(App->scene->AllGameObjectManagers[App->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
 
-	//background_Img->Owner->ChangeParent(app->editor->Canvas);
+	if (mat != nullptr)
+	{
+		mat->colorTexture.a = 1;
+	}
 }
 
 void ModuleScene::OpenPauseMenu()
@@ -392,4 +427,161 @@ void ModuleScene::RestartScene()
 
 	DemoScene();
 	pause = new GameObject("Pause", App->editor->Canvas);
+}
+
+bool ModuleScene::FadeToBlack(float dt)
+{
+	bool ret = false;
+
+	for(int i = 0; i < app->editor->Canvas->childrens.size(); i++)
+	{
+		ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->editor->Canvas->childrens[i]->GetComponentGameObject(ComponentType::MATERIAL));
+		
+		if (mat != nullptr)
+		{
+			if (mat->colorTexture.a <= 0.0005)
+			{
+				app->editor->Canvas->childrens[i]->isActive = false;
+				ret = true;
+			}
+			else
+			{
+				mat->colorTexture.a -= 0.5 * dt;
+			}
+		}
+	}
+
+	return ret;
+}
+
+void ModuleScene::PassScene()
+{
+	LOG(LogTypeCase::L_CASUAL, "Pass Scene!");
+
+	ResourceManager::ResourceLoader("Assets/ModelsFbx/Street.fbx");
+	app->scene->Selected_GameObject = app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1);
+	app->editor->actualMesh = app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1);
+	app->editor->actualMesh->isSelected = true;
+
+	app->editor->actualResource = app->resource->AllResourcesMap.begin()->second;
+
+	vector<ComponentUI*> objectsUI;
+
+	for (int i = 0; i < app->scene->AllGameObjectManagers.size(); i++)
+	{
+		ComponentUI* objectUI = dynamic_cast<ComponentUI*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
+
+		if (objectUI != nullptr && objectUI->ui_Type != CANV)
+		{
+			app->scene->AllGameObjectManagers[i]->isActive = false;
+			//objectsUI.push_back(objectUI);
+		}
+	}
+
+	app->scene->AllInteractuableUI.clear();
+	app->scene->All_UI.clear();
+
+	/*for (int i = 0; i < objectsUI.size(); i++)
+	{
+		objectsUI[i]->Owner->mParent->DeleteChild(objectsUI[i]->Owner);
+	}*/
+
+	CreatePauseMenu();
+
+	ComponentTransform* transform = dynamic_cast<ComponentTransform*>(app->editor->Canvas->GetComponentGameObject(ComponentType::TRANSFORM));
+	ComponentTransform* transformPivot = nullptr;
+
+	ComponentUI* comp_UI = new ComponentUI(UI_Type::DEF, app->scene->Root, 0, 0, 0, 0, nullptr);
+
+	comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::IMAGE, 40, 40, 0, 0, "Assets/Textures/Crosshair.png", nullptr, 1, nullptr, ((transform->mScale.x / 2) - 30), ((transform->mScale.y / 2) - 20), 40, 40);
+	app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->mName = "Crosshair";
+	transformPivot = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
+	transformPivot->mPosition = { (float)((transform->mScale.x / 2) - 30), (float)((transform->mScale.y / 2) - 20), 0 };
+
+	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
+	mat->colorTexture.r = 255;
+	mat->colorTexture.g = 0;
+	mat->colorTexture.b = 0;
+
+	app->scene->isOnScene = true;
+}
+
+void ModuleScene::CreatePauseMenu()
+{
+	pause->isActive = true;
+	ComponentTransform* transform;
+
+	ComponentUI* comp_UI = new ComponentUI(UI_Type::DEF, App->scene->Root, 0, 0, 0, 0, nullptr);
+
+	comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, TEXT, app->editor->GameWindowSize.x / 10, app->editor->GameWindowSize.y / 8, 0, 0, nullptr, "PAUSE", 0, nullptr, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 2.5), app->editor->GameWindowSize.x / 10, app->editor->GameWindowSize.y / 8);
+	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
+	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4)), (float)((app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 2.5)), 0 };
+	transform->UpdateTransformation();
+	comp_UI->isChildOfText = true;
+
+	GameObject* gm1 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
+
+	comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, 0, 0, "Assets/Textures/Ckeck-checkedbox.png", nullptr, 0, "Assets/Textures/Unchecked-checkbox.png", (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4.3), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5), app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8);
+	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
+	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4.3)), (float)((app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5)), 0 };
+	transform->UpdateTransformation();
+	comp_UI->isChildOfText = true;
+
+	GameObject* gm2 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
+
+	comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, TEXT, app->editor->GameWindowSize.x / 20, app->editor->GameWindowSize.y / 10, 0, 0, nullptr, "VSYNC", 0, nullptr, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 10), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5.5), app->editor->GameWindowSize.x / 20, app->editor->GameWindowSize.y / 10);
+	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
+	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 10)), (float)((app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5.5)), 0 };
+	transform->UpdateTransformation();
+	comp_UI->isChildOfText = true;
+
+	GameObject* gm3 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
+
+	comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, 0, 0, "Assets/Textures/Ckeck-checkedbox.png", nullptr, 1, "Assets/Textures/Unchecked-checkbox.png", (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4.3), (app->editor->GameWindowSize.y / 2), app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8);
+	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
+	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4.3)), (float)((app->editor->GameWindowSize.y / 2)), 0 };
+	transform->UpdateTransformation();
+	comp_UI->isChildOfText = true;
+
+	GameObject* gm4 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
+
+	comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, TEXT, app->editor->GameWindowSize.x / 20, app->editor->GameWindowSize.y / 10, 0, 0, nullptr, "DRAGABLE", 1, nullptr, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 10), (app->editor->GameWindowSize.y / 1.95), app->editor->GameWindowSize.x / 20, app->editor->GameWindowSize.y / 10);
+	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
+	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 10)), (float)((app->editor->GameWindowSize.y / 1.95)), 0 };
+	transform->UpdateTransformation();
+	comp_UI->isChildOfText = true;
+
+	GameObject* gm5 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
+
+	comp_UI = comp_UI->CreateGameObjectUI(app->scene->Root, IMAGE, app->editor->GameWindowSize.x - (app->editor->GameWindowSize.x / 4), app->editor->GameWindowSize.y - (app->editor->GameWindowSize.y / 20), 0, 0, "Assets/Textures/BackgroundPause.jpg", nullptr, 1, nullptr, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 2.6), (app->editor->GameWindowSize.y / 20), app->editor->GameWindowSize.x - (app->editor->GameWindowSize.x / 4), app->editor->GameWindowSize.y - (app->editor->GameWindowSize.y / 20));
+	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
+	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 2.6)), (float)((app->editor->GameWindowSize.y / 20)), 0 };
+	transform->UpdateTransformation();
+	comp_UI->isChildOfText = true;
+
+	GameObject* gm6 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
+
+	app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->ChangeParent(app->scene->pause);
+
+	gm1->ChangeParent(gm6);
+	gm1->isActive = false;
+	gm2->ChangeParent(gm6);
+	gm2->isActive = false;
+	gm3->ChangeParent(gm6);
+	gm3->isActive = false;
+	gm4->ChangeParent(gm6);
+	gm4->isActive = false;
+	gm5->ChangeParent(gm6);
+	gm5->isActive = false;
+
+	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
+
+	mat->colorTexture.a = 0.5;
+
+	app->scene->pause->isActive = false;
+
+	for (int i = 0; i < app->scene->pause->childrens.size(); i++)
+	{
+		app->scene->pause->childrens[i]->isActive = false;
+	}
 }

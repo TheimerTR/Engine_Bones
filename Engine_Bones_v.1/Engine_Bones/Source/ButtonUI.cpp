@@ -39,7 +39,7 @@ bool ButtonUI::OnClicked()
 
 bool ButtonUI::OnIdle(ComponentUI* UI_Element)
 {
-	if (!UI_Element->isSelected)
+	if (!UI_Element->isSelected && !app->scene->isFading)
 	{
 		color = float4(1, 1, 1, 1);
 
@@ -56,8 +56,8 @@ bool ButtonUI::OnIdle(ComponentUI* UI_Element)
 
 bool ButtonUI::OnHover(ComponentUI* UI_Element)
 {
-	//if(!isPressed)
-	//{
+	if(!app->scene->isFading)
+	{
 		color = float4(0.5, 0.5, 0.5, 0.5);
 
 		/*	float col[4] = { 0.5, 0.5, 0.5, 0.5 };*/
@@ -66,7 +66,7 @@ bool ButtonUI::OnHover(ComponentUI* UI_Element)
 		mat->colorTexture.g = 1; 
 		mat->colorTexture.b = 0; 
 		mat->colorTexture.a = 1; 
-	//}
+	}
 
 	return true;
 }
@@ -76,7 +76,7 @@ bool ButtonUI::OnClick(int* action)
 	switch ((functions)*action)
 	{
 		case functions::PASS_SCENE:
-			PassScene();
+			app->scene->isFading = true;
 			break;
 		default:
 			break;
@@ -162,136 +162,5 @@ void ButtonUI::ShowInfo(int* action)
 		}
 
 		ImGui::TreePop();
-	}
-}
-
-void ButtonUI::PassScene()
-{
-	LOG(LogTypeCase::L_CASUAL, "Pass Scene!");
-
-	ResourceManager::ResourceLoader("Assets/ModelsFbx/Street.fbx");
-	app->scene->Selected_GameObject = app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1);
-	app->editor->actualMesh = app->scene->AllGameObjectManagers.at(app->scene->AllGameObjectManagers.size() - 1);
-	app->editor->actualMesh->isSelected = true;
-
-	app->editor->actualResource = app->resource->AllResourcesMap.begin()->second;
-
-	vector<ComponentUI*> objectsUI;
-
-	for (int i = 0; i < app->scene->AllGameObjectManagers.size(); i++)
-	{
-		ComponentUI* objectUI = dynamic_cast<ComponentUI*>(app->scene->AllGameObjectManagers[i]->GetComponentGameObject(ComponentType::UI));
-
-		if (objectUI != nullptr && objectUI->ui_Type != CANV)
-		{
-			app->scene->AllGameObjectManagers[i]->isActive = false;
-			//objectsUI.push_back(objectUI);
-		}
-	}
-
-	app->scene->AllInteractuableUI.clear();
-	app->scene->All_UI.clear();
-
-	/*for (int i = 0; i < objectsUI.size(); i++)
-	{
-		objectsUI[i]->Owner->mParent->DeleteChild(objectsUI[i]->Owner);
-	}*/
-
-	CreatePauseMenu();
-
-	ComponentTransform* transform = dynamic_cast<ComponentTransform*>(app->editor->Canvas->GetComponentGameObject(ComponentType::TRANSFORM));
-	ComponentTransform* transformPivot = nullptr;
-	
-	ComponentUI* comp_UI = new ComponentUI(UI_Type::DEF, app->scene->Root, 0, 0, 0, 0, nullptr);
-
-	comp_UI->CreateGameObjectUI(app->scene->Root, UI_Type::IMAGE, 40, 40, 0, 0, "Assets/Textures/Crosshair.png", nullptr, 1, nullptr, ((transform->mScale.x / 2) - 30), ((transform->mScale.y / 2) - 20), 40, 40);
-	app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->mName = "Crosshair";
-	transformPivot = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
-	transformPivot->mPosition = { (float)((transform->mScale.x / 2) - 30), (float)((transform->mScale.y / 2) - 20), 0 };
-
-	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
-	mat->colorTexture.r = 255;
-	mat->colorTexture.g = 0;
-	mat->colorTexture.b = 0;
-
-	app->scene->isOnScene = true;
-}
-
-void ButtonUI::CreatePauseMenu()
-{
-	ComponentTransform* transform;
-
-	ComponentUI* comp_UI = nullptr;
-
-	comp_UI = CreateGameObjectUI(app->scene->Root, TEXT, app->editor->GameWindowSize.x / 10, app->editor->GameWindowSize.y / 8, 0, 0, nullptr, "PAUSE", 0, nullptr, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 2.5), app->editor->GameWindowSize.x / 10, app->editor->GameWindowSize.y / 8);
-	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
-	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4)), (float)((app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 2.5)), 0 };
-	transform->UpdateTransformation();
-	comp_UI->isChildOfText = true;
-
-	GameObject* gm1 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
-
-	comp_UI = CreateGameObjectUI(app->scene->Root, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, 0, 0, "Assets/Textures/Ckeck-checkedbox.png", nullptr, 0, "Assets/Textures/Unchecked-checkbox.png", (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4.3), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5), app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8);
-	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
-	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4.3)), (float)((app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5)), 0 };
-	transform->UpdateTransformation();
-	comp_UI->isChildOfText = true;
-
-	GameObject* gm2 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
-
-	comp_UI = CreateGameObjectUI(app->scene->Root, TEXT, app->editor->GameWindowSize.x / 20, app->editor->GameWindowSize.y / 10, 0, 0, nullptr, "VSYNC", 0, nullptr, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 10), (app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5.5), app->editor->GameWindowSize.x / 20, app->editor->GameWindowSize.y / 10);
-	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
-	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 10)), (float)((app->editor->GameWindowSize.y / 2) - (app->editor->GameWindowSize.y / 5.5)), 0 };
-	transform->UpdateTransformation();
-	comp_UI->isChildOfText = true;
-
-	GameObject* gm3 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
-
-	comp_UI = CreateGameObjectUI(app->scene->Root, CHECKER, app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8, 0, 0, "Assets/Textures/Ckeck-checkedbox.png", nullptr, 1, "Assets/Textures/Unchecked-checkbox.png", (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4.3), (app->editor->GameWindowSize.y / 2), app->editor->GameWindowSize.x / 8, app->editor->GameWindowSize.x / 8);
-	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
-	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 4.3)), (float)((app->editor->GameWindowSize.y / 2)), 0 };
-	transform->UpdateTransformation();
-	comp_UI->isChildOfText = true;
-
-	GameObject* gm4 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
-
-	comp_UI = CreateGameObjectUI(app->scene->Root, TEXT, app->editor->GameWindowSize.x / 20, app->editor->GameWindowSize.y / 10, 0, 0, nullptr, "DRAGABLE", 1, nullptr, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 10), (app->editor->GameWindowSize.y / 1.95), app->editor->GameWindowSize.x / 20, app->editor->GameWindowSize.y / 10);
-	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
-	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 10)), (float)((app->editor->GameWindowSize.y / 1.95)), 0 };
-	transform->UpdateTransformation();
-	comp_UI->isChildOfText = true;
-
-	GameObject* gm5 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
-
-	comp_UI = CreateGameObjectUI(app->scene->Root, IMAGE, app->editor->GameWindowSize.x - (app->editor->GameWindowSize.x / 4), app->editor->GameWindowSize.y - (app->editor->GameWindowSize.y / 20), 0, 0, "Assets/Textures/BackgroundPause.jpg", nullptr, 1, nullptr, (app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 2.6), (app->editor->GameWindowSize.y / 20), app->editor->GameWindowSize.x - (app->editor->GameWindowSize.x / 4), app->editor->GameWindowSize.y - (app->editor->GameWindowSize.y / 20));
-	transform = dynamic_cast<ComponentTransform*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::TRANSFORM));
-	transform->mPosition = { (float)((app->editor->GameWindowSize.x / 2) - (app->editor->GameWindowSize.x / 2.6)), (float)((app->editor->GameWindowSize.y / 20)), 0 };
-	transform->UpdateTransformation();
-	comp_UI->isChildOfText = true;
-
-	GameObject* gm6 = app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1];
-
-	app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->ChangeParent(app->scene->pause);
-
-	gm1->ChangeParent(gm6);
-	gm1->isActive = false;
-	gm2->ChangeParent(gm6);
-	gm2->isActive = false;
-	gm3->ChangeParent(gm6);
-	gm3->isActive = false;
-	gm4->ChangeParent(gm6);
-	gm4->isActive = false;
-	gm5->ChangeParent(gm6);
-	gm5->isActive = false;
-
-	ComponentMaterial* mat = dynamic_cast<ComponentMaterial*>(app->scene->AllGameObjectManagers[app->scene->AllGameObjectManagers.size() - 1]->GetComponentGameObject(ComponentType::MATERIAL));
-
-	mat->colorTexture.a = 0.5;
-
-	app->scene->pause->isActive = false;
-
-	for(int i = 0; i < app->scene->pause->childrens.size(); i++)
-	{
-		app->scene->pause->childrens[i]->isActive = false;
 	}
 }

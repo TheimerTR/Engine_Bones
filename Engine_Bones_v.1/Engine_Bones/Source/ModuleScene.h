@@ -36,6 +36,11 @@ public:
 	void OpenPauseMenu();
 	void RestartScene();
 
+	bool FadeToBlack(float dt);
+
+	void PassScene();
+	void CreatePauseMenu();
+
 public:
 	vector<GameObject*> AllGameObjectManagers;
 	GameObject* Root = nullptr;
@@ -54,6 +59,7 @@ public:
 	bool draggable;
 	bool restartScene;
 	bool isRescaleUI;
+	bool isFading;
 
 	int actual_UI_Object;
 

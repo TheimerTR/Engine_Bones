@@ -48,10 +48,6 @@ public:
 	bool OnClicked();
 
 	void ShowInfo(int* action);
-
-	void PassScene();
-
-	void CreatePauseMenu();
 };
 
 #endif // BUTTONUI_H_
