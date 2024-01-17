@@ -27,6 +27,11 @@ Engine Bones is an amazing 3D Engine for your amazing 3D games :D
 #### Game Camera
 You can add different game cameras from assets and move them using guizmos
 
+#### UI Components
+* Use tab to move around the interactuable components UI, like buttons or Checkers.
+* Use left mouse click to interact with buttons, checkers or input text. Also to move the components with the Draggable mode on.
+* Use your keyboard to fill text on the Input Text component, and Enter to submit the text.
+
 ### Guizmos
 
 * W -> moving
