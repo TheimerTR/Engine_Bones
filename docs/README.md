@@ -9,6 +9,7 @@ Engine Bones is a 3D Game Engine developed as a part of the Videogame Engine sub
 ![image](https://raw.githubusercontent.com/TheimerTR/Engine_Bones/main/docs/images/imageEngine.png)
 
 ## Team Members
+<img src="https://raw.githubusercontent.com/TheimerTR/Engine_Bones/main/docs/images/FotoMotores.jpg" width=50% height=50%>
 
 **Alberto Hidalgo García**
 
